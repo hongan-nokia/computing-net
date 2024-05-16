@@ -11,7 +11,7 @@
       "node_name": "c_node1",
       "description": "Computing Node-1",
       "node_ip": "localhost",
-      "node_port": 10081,
+      "node_port": 10080,
       "conn_type": "tcp_client"
     },
     {
@@ -19,7 +19,7 @@
       "node_name": "c_node2",
       "description": "Computing Node-2",
       "node_ip": "localhost",
-      "node_port": 10082,
+      "node_port": 10081,
       "conn_type": "tcp_client"
     },
     {
@@ -27,7 +27,47 @@
       "node_name": "c_node3",
       "description": "Computing Node-3",
       "node_ip": "localhost",
+      "node_port": 10082,
+      "conn_type": "tcp_client"
+    },
+    {
+      "node_id": 3,
+      "node_name": "first_pkg",
+      "description": "First Package Response Latency Test",
+      "node_ip": "localhost",
       "node_port": 10083,
+      "conn_type": "tcp_client"
+    },
+    {
+      "node_id": 4,
+      "node_name": "service_addr",
+      "description": "Service Addressing Test",
+      "node_ip": "localhost",
+      "node_port": 10084,
+      "conn_type": "tcp_client"
+    },
+    {
+      "node_id": 5,
+      "node_name": "computing_addr",
+      "description": "Computing Addressing Test",
+      "node_ip": "localhost",
+      "node_port": 10085,
+      "conn_type": "tcp_client"
+    },
+    {
+      "node_id": 6,
+      "node_name": "content_addr",
+      "description": "Content Addressing Test",
+      "node_ip": "localhost",
+      "node_port": 10086,
+      "conn_type": "tcp_client"
+    },
+    {
+      "node_id": 7,
+      "node_name": "load_test",
+      "description": "Single Node Loading Test",
+      "node_ip": "localhost",
+      "node_port": 10087,
       "conn_type": "tcp_client"
     }
   ],
@@ -112,6 +152,210 @@
       "monitoring_source_id": 3,
       "monitoring_source_name": "c_node1_disk",
       "monitoring_source_description": "c_node1 disk io",
+      "data_API": {
+        "backend_tool": "Glances",
+        "keyword": "disk",
+        "disk_id": "eth2",
+        "url": "http://localhost:61208/api/3/diskio",
+        "refresh_interval": 5
+      },
+      "simulation": {
+        "default": [
+          30,
+          40
+        ],
+        "up": [
+          60,
+          65
+        ],
+        "down": [
+          30,
+          40
+        ]
+      }
+    },
+    {
+      "monitoring_source_id": 4,
+      "monitoring_source_name": "c_node2_cpu",
+      "monitoring_source_description": "c_node2 cpu utilization",
+      "data_API": {
+        "backend_tool": "Glances",
+        "keyword": "cpu",
+        "url": "http://localhost:61208/api/3/cpu",
+        "refresh_interval": 3
+      },
+      "simulation": {
+        "default": [
+          30,
+          35
+        ],
+        "up": [
+          50,
+          55
+        ],
+        "down": [
+          30,
+          35
+        ]
+      }
+    },
+    {
+      "monitoring_source_id": 5,
+      "monitoring_source_name": "c_node2_mem",
+      "monitoring_source_description": "c_node2 memory",
+      "data_API": {
+        "backend_tool": "Glances",
+        "keyword": "memory",
+        "url": "http://localhost:61208/api/3/mem/percent",
+        "refresh_interval": 3
+      },
+      "simulation": {
+        "default": [
+          30,
+          35
+        ],
+        "up": [
+          50,
+          55
+        ],
+        "down": [
+          30,
+          35
+        ]
+      }
+    },
+    {
+      "monitoring_source_id": 6,
+      "monitoring_source_name": "c_node2_net",
+      "monitoring_source_description": "c_node2 net bandwidth (tx, rx)",
+      "data_API": {
+        "backend_tool": "Glances",
+        "keyword": "net",
+        "net_interface": "Ethernet 6",
+        "url": "http://localhost:61208/api/3/network/interface_name/",
+        "refresh_interval": 3
+      },
+      "simulation": {
+        "default": [
+          25,
+          30
+        ],
+        "up": [
+          35,
+          40
+        ],
+        "down": [
+          25,
+          30
+        ]
+      }
+    },
+    {
+      "monitoring_source_id": 7,
+      "monitoring_source_name": "c_node2_disk",
+      "monitoring_source_description": "c_node2 disk io",
+      "data_API": {
+        "backend_tool": "Glances",
+        "keyword": "disk",
+        "disk_id": "eth2",
+        "url": "http://localhost:61208/api/3/diskio",
+        "refresh_interval": 5
+      },
+      "simulation": {
+        "default": [
+          30,
+          40
+        ],
+        "up": [
+          60,
+          65
+        ],
+        "down": [
+          30,
+          40
+        ]
+      }
+    },
+    {
+      "monitoring_source_id": 8,
+      "monitoring_source_name": "c_node3_cpu",
+      "monitoring_source_description": "c_node3 cpu utilization",
+      "data_API": {
+        "backend_tool": "Glances",
+        "keyword": "cpu",
+        "url": "http://localhost:61208/api/3/cpu",
+        "refresh_interval": 3
+      },
+      "simulation": {
+        "default": [
+          30,
+          35
+        ],
+        "up": [
+          50,
+          55
+        ],
+        "down": [
+          30,
+          35
+        ]
+      }
+    },
+    {
+      "monitoring_source_id": 9,
+      "monitoring_source_name": "c_node3_mem",
+      "monitoring_source_description": "c_node3 memory",
+      "data_API": {
+        "backend_tool": "Glances",
+        "keyword": "memory",
+        "url": "http://localhost:61208/api/3/mem/percent",
+        "refresh_interval": 3
+      },
+      "simulation": {
+        "default": [
+          30,
+          35
+        ],
+        "up": [
+          50,
+          55
+        ],
+        "down": [
+          30,
+          35
+        ]
+      }
+    },
+    {
+      "monitoring_source_id": 10,
+      "monitoring_source_name": "c_node3_net",
+      "monitoring_source_description": "c_node3 net bandwidth (tx, rx)",
+      "data_API": {
+        "backend_tool": "Glances",
+        "keyword": "net",
+        "net_interface": "Ethernet 6",
+        "url": "http://localhost:61208/api/3/network/interface_name/",
+        "refresh_interval": 3
+      },
+      "simulation": {
+        "default": [
+          25,
+          30
+        ],
+        "up": [
+          35,
+          40
+        ],
+        "down": [
+          25,
+          30
+        ]
+      }
+    },
+    {
+      "monitoring_source_id": 11,
+      "monitoring_source_name": "c_node3_disk",
+      "monitoring_source_description": "c_node3 disk io",
       "data_API": {
         "backend_tool": "Glances",
         "keyword": "disk",
