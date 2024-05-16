@@ -52,11 +52,12 @@ class StateMonitor(object):
             if bknd_tool == 'Glances':  # decided by config file, 'backend_tool' character
                 k = self.demo_config.get_monitoring_keyword(monitor)
                 if k == 'cpu':
-                    # uri = http://localhost:61208/api/3/cpu
+                    # uri = http://localhost:61208/api/3/cpu/totaltotal
                     print("GlancesHandler CPU Data")
                     t = GlancesHandler(result_q=queues[mi],
                                        get_period=self.demo_config.get_monitoring_source(monitor)['data_API']['refresh_interval'],
                                        server_url=self.demo_config.get_monitoring_url(monitor),
+                                       key_word=k,
                                        autostart=True)
 
                 elif k == 'memory':
@@ -65,22 +66,28 @@ class StateMonitor(object):
                     t = GlancesHandler(result_q=queues[mi],
                                        get_period=self.demo_config.get_monitoring_source(monitor)['data_API']['refresh_interval'],
                                        server_url=self.demo_config.get_monitoring_url(monitor),
+                                       key_word=k,
                                        autostart=True)
                 elif k == 'net':
                     # uri = http://localhost:61208/api/3/network/interface_name/
                     print("GlancesHandler network Data")
+                    server_uri = self.demo_config.get_monitoring_url(monitor) + self.demo_config.get_monitoring_source(monitor)['data_API']['net_interface']
                     t = GlancesHandler(result_q=queues[mi],
                                        get_period=self.demo_config.get_monitoring_source(monitor)['data_API']['refresh_interval'],
-                                       server_url=self.demo_config.get_monitoring_url(monitor),
+                                       server_url=server_uri,
+                                       key_word=k,
                                        net_ifname=self.demo_config.get_monitoring_source(monitor)['data_API']['net_interface'],
                                        autostart=True)
 
                 elif k == 'disk':
+                    # uri = http://localhost:61208/api/3/diskio/disk_name/
                     print("GlancesHandler Disk Data")
+                    server_uri = self.demo_config.get_monitoring_url(monitor) + self.demo_config.get_monitoring_source(monitor)['data_API']['disk_id']
                     t = GlancesHandler(result_q=queues[mi],
                                        get_period=self.demo_config.get_monitoring_source(monitor)['data_API']['refresh_interval'],
-                                       server_url=self.demo_config.get_monitoring_url(monitor),
+                                       server_url=server_uri,
                                        disk_id=self.demo_config.get_monitoring_source(monitor)['data_API']['disk_id'],
+                                       key_word=k,
                                        autostart=True)
                 else:
                     t = None

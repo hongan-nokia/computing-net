@@ -11,7 +11,7 @@ from utils.cfndemomanager import CfnDemoManager
 from utils.configparser import DemoConfigParser
 
 if __name__ == '__main__':
-    configuration = DemoConfigParser("cfn_config.json")
+    configuration = DemoConfigParser("cpn_config-test.json")
     inter_process_resource_NodeMan = [(i['node_name'], Pipe()) for i in configuration.nodes]
     inter_process_resource_StatMon = [(i['monitoring_source_name'], Queue(15)) for i in configuration.monitoring_sources]
     process_manager = CfnDemoManager(configuration, inter_process_resource_NodeMan, inter_process_resource_StatMon)

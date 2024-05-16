@@ -49,14 +49,14 @@ class GlancesHandler(object):
 
         self._lock = Lock()  # to safely operate on self.client
 
-        self._netif = kwargs.get('net_ifname', 'lo')
+        self.plugin = kwargs.get('key_word', '')
         self._disk_id = kwargs.get('disk_id', '')
-
+        autostart = kwargs.get('autostart', False)
+        self._netif = kwargs.get('net_ifname', 'lo')
         self.retry_times = kwargs.get('retry_times', 300)
 
-        autostart = kwargs.get('autostart', False)
+        self.metrics = self._infer_metrics_from_url() if server_url else ('', [])
 
-        self.plugin, self.metrics = self._infer_metrics_from_url() if server_url else ('', [])
         self.q = result_q  # message queue
         self.period_s = get_period
         self.err_times = 0
@@ -69,23 +69,101 @@ class GlancesHandler(object):
         self.plugin, self.metrics = self._infer_metrics_from_url()
 
     def _infer_metrics_from_url(self):
-        url_items = self.url.split('/')
-        plugin = url_items[-2] if self.url[-1] == '/' else url_items[-1]
-        if plugin == 'cpu':
+        if self.plugin == 'cpu':
             metrics = ['total']
-        elif plugin == 'mem':
+        elif self.plugin == 'memory':
             metrics = ['percent']
-        elif plugin == 'network':
+        elif self.plugin == 'net':
             if self._netif == 'lo':
                 print(f"WARNING: Monitoring 'lo' statistics ({self.url})")
             metrics = ['tx', 'rx']
+        elif self.plugin == 'disk':
+            metrics = ['read_count', 'write_count']
         else:
             raise ValueError('GlancesHandler: unsupported API')
-        return plugin, metrics  # network, ['tx', 'rx']
+        return metrics  # network, ['tx', 'rx']
+
+    def _get_data(self):
+        result = None
+        try:
+            temp_err = None
+            self._lock.acquire()
+            try:
+                result = self.client.get(self.url)  # 从这里开始得到通过请求 url:http://localhost:61208/api/3/cpu 获取到的数据
+            except Exception as err:
+                temp_err = err
+            finally:
+                self._lock.release()
+            if temp_err:
+                raise temp_err
+            if result.status_code != 200:
+                print(f"{'-' * 50}\n{self.url} responding {result}\n{'-' * 50}")
+                self.err_times += 1
+            else:
+                r_dict = {}
+                cpu_result = {"total": 11}
+                mem_result = {"percent": 87.5}
+                net_result = {
+                    "Ethernet 6": [
+                        {
+                            "interface_name": "Ethernet 6",
+                            "alias": None,
+                            "time_since_update": 48.253194093704224,
+                            "cumulative_rx": 0,
+                            "rx": 0,
+                            "cumulative_tx": 0,
+                            "tx": 0,
+                            "cumulative_cx": 0,
+                            "cx": 0,
+                            "is_up": True,
+                            "speed": 1048576000,
+                            "key": "interface_name"
+                        }
+                    ]
+                }
+                disk_result = {
+                    "PhysicalDrive0": [
+                        {
+                            "time_since_update": 11.724727153778076,
+                            "disk_name": "PhysicalDrive0",
+                            "read_count": 893,
+                            "write_count": 391,
+                            "read_bytes": 39071744,
+                            "write_bytes": 3153920,
+                            "key": "disk_name"
+                        }
+                    ]
+                }
+                if self.plugin in ['cpu', 'memory']:
+                    r_dict[self.metrics[0]] = result.json()[self.metrics[0]]
+
+                elif self.plugin == 'net':
+                    net_result = result.json()[self._netif][0]
+                    for metric in self.metrics:
+                        r_dict[metric] = 0
+                        r_dict[metric] = net_result[metric]
+                elif self.plugin == 'disk':
+                    disk_result = result.json()[self._disk_id][0]
+                    for metric in self.metrics:
+                        r_dict[metric] = [0]
+                        r_dict[metric] = disk_result[metric]
+                if not self.q.full():
+                    self.q.put([float(r_dict.get(item)) for item in self.metrics])  # 将收集到的数据放入队列 self.q 中  [0.0, 0.0]
+                else:
+                    for i in range(6):
+                        self.q.get_nowait()
+
+        except Exception as err:
+            self.err_times += 1
+            if (self.err_times % 4) == 1:
+                print(f"{'-' * 50}\nERROR: glances handler {self.url} fails {self.err_times} times:\n{err}\n{'-' * 50}")
+        if self.err_times == self.retry_times:
+            print(f"Glances handler for {self.url} aborting. Check server status.")
+            self.pause()
 
     def set_netifname(self, ifname: str):
         """ Change the network interface name in the url. Only valid if the metrics is network. """
-        if self.plugin == 'network':
+        if self.plugin == 'net':
             self._netif = ifname
             print(f"INFO: Changed Glances handler for {self.url} to monitor netif: '{self._netif}'")
         else:
@@ -117,48 +195,6 @@ class GlancesHandler(object):
             print(f"WARNING: list_netifname not applicable to plugin '{self.plugin}'")
             return ret
 
-    def _get_data(self):
-        result = None
-        try:
-            temp_err = None
-            self._lock.acquire()
-            try:
-                result = self.client.get(self.url)  # 从这里开始得到通过请求 url:http://localhost:61208/api/3/cpu 获取到的数据
-            except Exception as err:
-                temp_err = err
-            finally:
-                self._lock.release()
-            if temp_err:
-                raise temp_err
-            if result.status_code != 200:
-                # print(f"{'-' * 50}\n{self.url} responding {result}\n{'-' * 50}")
-                self.err_times += 1
-            else:
-                r_dict = {}
-                if self.plugin == 'network':
-                    for item in result.json():
-                        if item['interface_name'] == self._netif:
-                            r_dict = item
-                    if r_dict == {}:
-                        r_dict.update({'tx': 0, 'rx': 0})
-                        raise ValueError(f"network interface '{self._netif}' not found")
-                else:
-                    r_dict = result.json()
-                for i in self.metrics:
-                    if i != 'total':
-                        r_dict[i] /= 1000
-                if not self.q.full():
-                    self.q.put([float(r_dict.get(item)) for item in self.metrics])  # 将收集到的数据放入队列 self.q 中  [0.0,0.0 ]
-
-        except Exception as err:
-            self.err_times += 1
-            if (self.err_times % 4) == 1:
-                print(f"{'-' * 50}\nERROR: glances handler {self.url} fails {self.err_times} times:\n{err}\n{'-' * 50}")
-
-        if self.err_times == self.retry_times:
-            print(f"Glances handler for {self.url} aborting. Check server status.")
-            self.pause()
-
     def start(self):
         if self.url == '' or self.metrics == []:
             print(f"{'-' * 50}\nIGNORE: GlancesHandler: No valid url or metrics set yet!\n{'-' * 50}")
@@ -186,6 +222,7 @@ if __name__ == '__main__':
                         autostart=True)
 
     sleep(1)
+
 
     def print_result(n):
         for i in range(n):
