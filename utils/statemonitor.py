@@ -56,30 +56,32 @@ class StateMonitor(object):
                     print("GlancesHandler CPU Data")
                     t = GlancesHandler(result_q=queues[mi],
                                        get_period=self.demo_config.get_monitoring_source(monitor)['data_API']['refresh_interval'],
-                                       server_url=self.demo_config.get_monitoring_url(monitor))
+                                       server_url=self.demo_config.get_monitoring_url(monitor),
+                                       autostart=True)
 
                 elif k == 'memory':
                     # uri = http://localhost:61208/api/3/mem/percent
                     print("GlancesHandler memory Data")
                     t = GlancesHandler(result_q=queues[mi],
                                        get_period=self.demo_config.get_monitoring_source(monitor)['data_API']['refresh_interval'],
-                                       server_url=self.demo_config.get_monitoring_url(monitor))
+                                       server_url=self.demo_config.get_monitoring_url(monitor),
+                                       autostart=True)
                 elif k == 'net':
                     # uri = http://localhost:61208/api/3/network/interface_name/
                     print("GlancesHandler network Data")
                     t = GlancesHandler(result_q=queues[mi],
                                        get_period=self.demo_config.get_monitoring_source(monitor)['data_API']['refresh_interval'],
                                        server_url=self.demo_config.get_monitoring_url(monitor),
-                                       net_ifname=self.demo_config.get_monitoring_source(monitor)['data_API']['net_interface'])
-                    print(f"{monitor}: {t.list_netifname()}")
+                                       net_ifname=self.demo_config.get_monitoring_source(monitor)['data_API']['net_interface'],
+                                       autostart=True)
 
                 elif k == 'disk':
                     print("GlancesHandler Disk Data")
                     t = GlancesHandler(result_q=queues[mi],
                                        get_period=self.demo_config.get_monitoring_source(monitor)['data_API']['refresh_interval'],
                                        server_url=self.demo_config.get_monitoring_url(monitor),
-                                       disk_id=self.demo_config.get_monitoring_source(monitor)['data_API']['net_interface'])
-                    print(f"{monitor}: {t.list_netifname()}")
+                                       disk_id=self.demo_config.get_monitoring_source(monitor)['data_API']['disk_id'],
+                                       autostart=True)
                 else:
                     t = None
                     print(f"DEBUG: key {k} not supported.")

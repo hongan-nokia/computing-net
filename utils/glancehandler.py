@@ -48,8 +48,12 @@ class GlancesHandler(object):
         self.client = httpx.Client(timeout=timeout)
 
         self._lock = Lock()  # to safely operate on self.client
+
         self._netif = kwargs.get('net_ifname', 'lo')
+        self._disk_id = kwargs.get('disk_id', '')
+
         self.retry_times = kwargs.get('retry_times', 300)
+
         autostart = kwargs.get('autostart', False)
 
         self.plugin, self.metrics = self._infer_metrics_from_url() if server_url else ('', [])

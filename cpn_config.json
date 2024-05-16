@@ -79,7 +79,7 @@
       "data_API": {
         "backend_tool": "Glances",
         "keyword": "cpu",
-        "url": "http://localhost:61208/api/3/cpu",
+        "url": "http://localhost:61208/api/3/cpu/",
         "refresh_interval": 3
       },
       "simulation": {
@@ -104,7 +104,7 @@
       "data_API": {
         "backend_tool": "Glances",
         "keyword": "memory",
-        "url": "http://localhost:61208/api/3/mem/percent",
+        "url": "http://localhost:61208/api/3/mem/percent/",
         "refresh_interval": 3
       },
       "simulation": {
@@ -155,8 +155,8 @@
       "data_API": {
         "backend_tool": "Glances",
         "keyword": "disk",
-        "disk_id": "eth2",
-        "url": "http://localhost:61208/api/3/diskio",
+        "disk_id": "PhysicalDrive0",
+        "url": "http://localhost:61208/api/3/diskio/disk_name/",
         "refresh_interval": 5
       },
       "simulation": {
@@ -181,7 +181,7 @@
       "data_API": {
         "backend_tool": "Glances",
         "keyword": "cpu",
-        "url": "http://localhost:61208/api/3/cpu",
+        "url": "http://localhost:61208/api/3/cpu/",
         "refresh_interval": 3
       },
       "simulation": {
@@ -206,7 +206,7 @@
       "data_API": {
         "backend_tool": "Glances",
         "keyword": "memory",
-        "url": "http://localhost:61208/api/3/mem/percent",
+        "url": "http://localhost:61208/api/3/mem/percent/",
         "refresh_interval": 3
       },
       "simulation": {
@@ -257,8 +257,8 @@
       "data_API": {
         "backend_tool": "Glances",
         "keyword": "disk",
-        "disk_id": "eth2",
-        "url": "http://localhost:61208/api/3/diskio",
+        "disk_id": "PhysicalDrive0",
+        "url": "http://localhost:61208/api/3/diskio/disk_name/",
         "refresh_interval": 5
       },
       "simulation": {
@@ -283,7 +283,7 @@
       "data_API": {
         "backend_tool": "Glances",
         "keyword": "cpu",
-        "url": "http://localhost:61208/api/3/cpu",
+        "url": "http://localhost:61208/api/3/cpu/",
         "refresh_interval": 3
       },
       "simulation": {
@@ -308,7 +308,7 @@
       "data_API": {
         "backend_tool": "Glances",
         "keyword": "memory",
-        "url": "http://localhost:61208/api/3/mem/percent",
+        "url": "http://localhost:61208/api/3/mem/percent/",
         "refresh_interval": 3
       },
       "simulation": {
@@ -359,8 +359,8 @@
       "data_API": {
         "backend_tool": "Glances",
         "keyword": "disk",
-        "disk_id": "eth2",
-        "url": "http://localhost:61208/api/3/diskio",
+        "disk_id": "PhysicalDrive0",
+        "url": "http://localhost:61208/api/3/diskio/disk_name/",
         "refresh_interval": 5
       },
       "simulation": {
