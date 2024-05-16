@@ -110,16 +110,19 @@ class CfnDemoManager(object):
         self.demo_config = demo_config
         self.resource_NodeMan = dict(resource_NodeMan)  # inter process resource for node_manager
         self.resource_StatMon = dict(resource_StatMon)
+
         self.app_ip = demo_config.gui_controller_host_ip  # IP address of the host, for nodes/monitor sources to connect.
         self.app_port = demo_config.gui_controller_host_port  # TCP port the GUI listens on (for nodes to connect).
+
         # socket : 10.70.16.250:10070
         self.n_nodes = demo_config.n_nodes  # account of nodes
         self.node_names = [n['node_name'] for n in demo_config.nodes]
         self.monitor_names = [n['monitoring_source_name'] for n in demo_config.monitoring_sources]
+
         # 首先定义所有的跟前端互动的Qt signal。根据具体demo情景，修改`init_qt_signals()`函数
         self.signal_emitter = SgnlEmitter(self)
 
-        # start GUI signal generation thread（nodes communication）
+        # start GUI signal generation thread (nodes communication)
         self.gui_sig_gen_thread = Thread(target=self._gui_sgnl_gen, args=([i[1][0] for i in resource_NodeMan],))
         # (i[1][0]) : for node_StateMon
         # (i[1][0]) : <multiprocessing.connection.PipeConnection object at 0x000001C309C839D0> for resource_Nodeman

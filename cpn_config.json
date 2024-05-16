@@ -1,0 +1,133 @@
+{
+  "gui_controller": {
+    "description": "主界面程序(同时负责资源监控，服务部署和调度) Windows",
+    "version": 230812,
+    "host_ip": "10.70.16.251",
+    "host_port": 10070
+  },
+  "nodes": [
+    {
+      "node_id": 0,
+      "node_name": "neat_host",
+      "node_ip": "10.70.30.163",
+      "node_port": 10086,
+      "conn_type": "tcp_client"
+    },
+    {
+      "node_id": 1,
+      "node_name": "jump_server",
+      "description": "Computing and Network resource collector",
+      "node_ip": "192.168.16.173",
+      "node_port": 10086,
+      "conn_type": "tcp_client"
+    },
+    {
+      "node_id": 2,
+      "node_name": "master",
+      "node_ip": "10.70.30.163",
+      "node_port": 10088,
+      "conn_type": "tcp_client",
+      "eth_face": "enp4s0f2"
+    },
+    {
+      "node_id": 3,
+      "node_name": "worker1",
+      "node_ip": "192.168.67.64",
+      "node_port": 10086,
+      "conn_type": "tcp_client",
+      "eth_face": "eth0"
+    },
+    {
+      "node_id": 4,
+      "node_name": "worker2",
+      "node_ip": "192.168.67.65",
+      "node_port": 10086,
+      "conn_type": "tcp_client",
+      "eth_face": "eth2"
+    },
+    {
+      "node_id": 5,
+      "node_name": "k8s_master",
+      "node_ip": "192.168.67.66",
+      "node_port": 10086,
+      "conn_type": "tcp_client"
+    },
+    {
+      "node_id": 6,
+      "node_name": "stream_server",
+      "node_ip": "10.70.30.170",
+      "node_port": 10086,
+      "conn_type": "tcp_client"
+    }
+  ],
+
+  "monitoring_source": [
+    {
+      "monitoring_source_id": 0,
+      "monitoring_source_name": "node1_bw",
+      "monitoring_source_description": "master(node1) bandwidth",
+      "data_API": {
+        "backend_tool": "Glances",
+        "keyword": "net",
+        "net_interface": "enp4s0f2",
+        "url": "http://10.70.30.163:61208/api/3/network",
+        "refresh_interval": 4
+      },
+      "simulation": {
+        "default": [30, 35],
+        "up": [50, 55],
+        "down": [30, 35]
+      }
+    },
+    {
+      "monitoring_source_id": 1,
+      "monitoring_source_name": "node1_cp",
+      "monitoring_source_description": "master(node1) computing",
+      "data_API": {
+        "backend_tool": "Glances",
+        "keyword": "cpu",
+        "url": "http://172.23.103.193:61208/api/3/cpu",
+        "refresh_interval": 4
+      },
+      "simulation": {
+        "default": [10, 15],
+        "up": [50, 55],
+        "down": [10, 15]
+      }
+    },
+    {
+      "monitoring_source_id": 1,
+      "monitoring_source_name": "node2_bw",
+      "monitoring_source_description": "worker1(node2) bandwidth",
+      "data_API": {
+        "backend_tool": "Glances",
+        "keyword": "net",
+        "net_interface": "eth0",
+        "url": "http://192.168.67.64:61208/api/3/network",
+        "refresh_interval": 4
+      },
+      "simulation": {
+        "default": [25, 30],
+        "up": [35, 40],
+        "down": [25, 30]
+      }
+    },
+    {
+      "monitoring_source_id": 2,
+      "monitoring_source_name": "node3_bw",
+      "monitoring_source_description": "worker2(node3) bandwidth",
+      "data_API": {
+        "backend_tool": "Glances",
+        "keyword": "net",
+        "net_interface": "eth2",
+        "url": "http://192.168.67.65:61208/api/3/network",
+        "refresh_interval": 4
+      },
+      "simulation": {
+        "default": [30, 40],
+        "up": [60, 65],
+        "down": [30, 40]
+      }
+    }
+  ]
+}
