@@ -36,7 +36,7 @@ def node_handler_node2gui(node_name: str, node_conn: Connection, gui_conn: Conne
         # 从node发来的消息格式，一般是(cmd: str, arg: Any)，这里把它加上一个node_name标识转发给GUI，变成：
         # （node_name: str, cmd:str, arg: Any）
 
-        if type(msg) == tuple:
+        if type(msg) is tuple:
             (cmd, arg) = msg
         else:
             cmd = msg

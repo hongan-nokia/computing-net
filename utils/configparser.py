@@ -70,9 +70,9 @@ class DemoConfigParser:
         """
         `config` may be a dictionary, or a string specifying the path of a json file.
         """
-        if type(config) == dict:
+        if type(config) is dict:
             self._config_dict = AttrDict(config)
-        elif type(config) == str:
+        elif type(config) is str:
             with open(config, encoding='utf-8') as fp:
                 self._config_dict = AttrDict(json.load(fp))
         else:
@@ -104,23 +104,23 @@ class DemoConfigParser:
         """
         Return the node's parameters as a dict.
         """
-        if type(n) == str:
+        if type(n) is str:
             n = self.node_names.index(n)
         # print(f"self.nodes[n] is: {self.nodes[n]}")
         return NodeConfig(self.nodes[n])
 
     def get_monitoring_source(self, m: Union[int, str]) -> dict:
-        if type(m) == str:
+        if type(m) is str:
             m = self.monitoring_names.index(m)
         return self.monitoring_sources[m]
 
     def _get_monitor_API_id_or_name(self, monitor: Union[int, str, dict]) -> dict:
-        if type(monitor) == str:
+        if type(monitor) is str:
             if m := self.get_monitoring_source(monitor):
                 return m['data_API']
             else:
                 raise ValueError(f"Monitor name {monitor} not found!")
-        elif type(monitor) == dict:
+        elif type(monitor) is dict:
             return monitor['data_API']
         else:
             raise ValueError("argument type error.")
@@ -140,6 +140,6 @@ class DemoConfigParser:
         return self._get_monitor_API_id_or_name(monitor)['url']
 
     def get_monitor_sim_conf(self, m: Union[int, str, dict]) -> dict:
-        if not type(m) == dict:
+        if not type(m) is dict:
             m = self.get_monitoring_source(m)
         return m['simulation']

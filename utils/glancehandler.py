@@ -43,10 +43,10 @@ class GlancesHandler(object):
         autostart: if True, the get_data_thread is started immediately. Or you need to call start() manually.
         """
         self.url = server_url  # E.g. 'http://localhost:61208/api/3/net'
-        print(f"@@@@@@@@@@@@@ server_url is: {server_url}")
-        # timeout = httpx.Timeout(100.0, connect=100.0)  # global time out for get()/post() is 3s. Connect timeout 15s.
+        # print(f"@@@@@@@@@@@@@ server_url is: {server_url}")
         timeout = httpx.Timeout(100.0)  # global time out for get()/post() is 3s. Connect timeout 15s.
         self.client = httpx.Client(timeout=timeout)
+
         self._lock = Lock()  # to safely operate on self.client
         self._netif = kwargs.get('net_ifname', 'lo')
         self.retry_times = kwargs.get('retry_times', 300)
@@ -54,7 +54,7 @@ class GlancesHandler(object):
 
         self.plugin, self.metrics = self._infer_metrics_from_url() if server_url else ('', [])
         self.q = result_q  # message queue
-        self.period_s = get_period / 1000  # ms
+        self.period_s = get_period
         self.err_times = 0
         self.get_data_thread = repeatTimer(self.period_s, self._get_data, args=[], autostart=autostart)  # data collect
         self.close = self.stop  # add an alias for stop()

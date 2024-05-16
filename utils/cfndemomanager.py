@@ -128,11 +128,10 @@ class CfnDemoManager(object):
         # (i[1][0]) : <multiprocessing.connection.PipeConnection object at 0x000001C309C839D0> for resource_Nodeman
         self.gui_sig_gen_thread.start()
 
-        # start subprocesses
+        # start subprocesses (including communication Threads and resource monitoring Threads)
         self._start_subprocesses()
 
     def _start_subprocesses(self):
-
         self.node_manager = NodeManager(self.resource_NodeMan, self.demo_config)
         self.state_monitor = StateMonitor(self.resource_StatMon, self.demo_config)
         self.node_manager.start()

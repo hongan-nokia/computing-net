@@ -23,7 +23,7 @@ class StateMonitor(object):
         self.monitors_to_connect = list(resources.keys())  # 列出要监控的对象（worker节点）
         self.queues = list(resources.values())  # worker节点对应的值, init size:15
         self.proc = Process(target=self._mainfunc,
-                            args=(self.monitors_to_connect, self.queues,),
+                            args=(self.monitors_to_connect, self.queues),
                             name='state_monitor')
         self._cmd = Queue(1)
         self._threads = []
@@ -47,25 +47,41 @@ class StateMonitor(object):
                 print(f"(StateMonitor) - DEBUG: unknown command {cmd, arg}")
 
     def _mainfunc(self, monitors: list, queues: list):
-        for i, m in enumerate(monitors):
-            bknd_tool = self.demo_config.get_monitoring_source(m)['data_API']["backend_tool"]
+        for mi, monitor in enumerate(monitors):
+            bknd_tool = self.demo_config.get_monitoring_source(monitor)['data_API']["backend_tool"]
             if bknd_tool == 'Glances':  # decided by config file, 'backend_tool' character
-                k = self.demo_config.get_monitoring_keyword(m)
-                if k == 'net':
-                    print("GlancesHandler Network Data")
-                    t = GlancesHandler(result_q=queues[i],
-                                       get_period=1000 * (
-                                           self.demo_config.get_monitoring_source(m)['data_API']['refresh_interval']),
-                                       server_url=self.demo_config.get_monitoring_url(m),
-                                       net_ifname=self.demo_config.get_monitoring_source(m)['data_API'][
-                                           'net_interface'])
-                    print(f"{m}: {t.list_netifname()}")
-                elif k == 'cpu':
-                    t = GlancesHandler(result_q=queues[i],
-                                       get_period=1000 * (
-                                           self.demo_config.get_monitoring_source(m)['data_API']['refresh_interval']),
-                                       server_url=self.demo_config.get_monitoring_url(m), )
+                k = self.demo_config.get_monitoring_keyword(monitor)
+                if k == 'cpu':
+                    # uri = http://localhost:61208/api/3/cpu
+                    print("GlancesHandler CPU Data")
+                    t = GlancesHandler(result_q=queues[mi],
+                                       get_period=self.demo_config.get_monitoring_source(monitor)['data_API']['refresh_interval'],
+                                       server_url=self.demo_config.get_monitoring_url(monitor))
+
+                elif k == 'memory':
+                    # uri = http://localhost:61208/api/3/mem/percent
+                    print("GlancesHandler memory Data")
+                    t = GlancesHandler(result_q=queues[mi],
+                                       get_period=self.demo_config.get_monitoring_source(monitor)['data_API']['refresh_interval'],
+                                       server_url=self.demo_config.get_monitoring_url(monitor))
+                elif k == 'net':
+                    # uri = http://localhost:61208/api/3/network/interface_name/
+                    print("GlancesHandler network Data")
+                    t = GlancesHandler(result_q=queues[mi],
+                                       get_period=self.demo_config.get_monitoring_source(monitor)['data_API']['refresh_interval'],
+                                       server_url=self.demo_config.get_monitoring_url(monitor),
+                                       net_ifname=self.demo_config.get_monitoring_source(monitor)['data_API']['net_interface'])
+                    print(f"{monitor}: {t.list_netifname()}")
+
+                elif k == 'disk':
+                    print("GlancesHandler Disk Data")
+                    t = GlancesHandler(result_q=queues[mi],
+                                       get_period=self.demo_config.get_monitoring_source(monitor)['data_API']['refresh_interval'],
+                                       server_url=self.demo_config.get_monitoring_url(monitor),
+                                       disk_id=self.demo_config.get_monitoring_source(monitor)['data_API']['net_interface'])
+                    print(f"{monitor}: {t.list_netifname()}")
                 else:
+                    t = None
                     print(f"DEBUG: key {k} not supported.")
             else:
                 raise ValueError(f"Monitoring interface type {bknd_tool} Not implemented yet!")
