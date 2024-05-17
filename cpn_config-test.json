@@ -1,0 +1,178 @@
+{
+  "gui_controller": {
+    "description": "主界面程序(同时负责资源监控，服务部署和调度) Windows",
+    "version": 240516,
+    "host_ip": "localhost",
+    "host_port": 10070
+  },
+  "nodes": [
+    {
+      "node_id": 0,
+      "node_name": "c_node1",
+      "description": "Computing Node-1",
+      "node_ip": "localhost",
+      "node_port": 10080,
+      "conn_type": "tcp_client"
+    },
+    {
+      "node_id": 1,
+      "node_name": "c_node2",
+      "description": "Computing Node-2",
+      "node_ip": "localhost",
+      "node_port": 10081,
+      "conn_type": "tcp_client"
+    },
+    {
+      "node_id": 2,
+      "node_name": "c_node3",
+      "description": "Computing Node-3",
+      "node_ip": "localhost",
+      "node_port": 10082,
+      "conn_type": "tcp_client"
+    },
+    {
+      "node_id": 3,
+      "node_name": "first_pkg",
+      "description": "First Package Response Latency Test",
+      "node_ip": "localhost",
+      "node_port": 10083,
+      "conn_type": "tcp_client"
+    },
+    {
+      "node_id": 4,
+      "node_name": "service_addr",
+      "description": "Service Addressing Test",
+      "node_ip": "localhost",
+      "node_port": 10084,
+      "conn_type": "tcp_client"
+    },
+    {
+      "node_id": 5,
+      "node_name": "computing_addr",
+      "description": "Computing Addressing Test",
+      "node_ip": "localhost",
+      "node_port": 10085,
+      "conn_type": "tcp_client"
+    },
+    {
+      "node_id": 6,
+      "node_name": "content_addr",
+      "description": "Content Addressing Test",
+      "node_ip": "localhost",
+      "node_port": 10086,
+      "conn_type": "tcp_client"
+    },
+    {
+      "node_id": 7,
+      "node_name": "load_test",
+      "description": "Single Node Loading Test",
+      "node_ip": "localhost",
+      "node_port": 10087,
+      "conn_type": "tcp_client"
+    }
+  ],
+  "monitoring_source": [
+    {
+      "monitoring_source_id": 0,
+      "monitoring_source_name": "c_node1_cpu",
+      "monitoring_source_description": "c_node1 cpu utilization",
+      "data_API": {
+        "backend_tool": "Glances",
+        "keyword": "cpu",
+        "url": "http://localhost:61208/api/3/cpu/total",
+        "refresh_interval": 3
+      },
+      "simulation": {
+        "default": [
+          30,
+          35
+        ],
+        "up": [
+          50,
+          55
+        ],
+        "down": [
+          30,
+          35
+        ]
+      }
+    },
+    {
+      "monitoring_source_id": 1,
+      "monitoring_source_name": "c_node1_mem",
+      "monitoring_source_description": "c_node1 memory",
+      "data_API": {
+        "backend_tool": "Glances",
+        "keyword": "memory",
+        "url": "http://localhost:61208/api/3/mem/percent",
+        "refresh_interval": 3
+      },
+      "simulation": {
+        "default": [
+          30,
+          35
+        ],
+        "up": [
+          50,
+          55
+        ],
+        "down": [
+          30,
+          35
+        ]
+      }
+    },
+    {
+      "monitoring_source_id": 2,
+      "monitoring_source_name": "c_node1_net",
+      "monitoring_source_description": "c_node1 net bandwidth (tx, rx)",
+      "data_API": {
+        "backend_tool": "Glances",
+        "keyword": "net",
+        "net_interface": "Ethernet 6",
+        "url": "http://localhost:61208/api/3/network/interface_name/",
+        "refresh_interval": 3
+      },
+      "simulation": {
+        "default": [
+          25,
+          30
+        ],
+        "up": [
+          35,
+          40
+        ],
+        "down": [
+          25,
+          30
+        ]
+      }
+    },
+    {
+      "monitoring_source_id": 3,
+      "monitoring_source_name": "c_node1_disk",
+      "monitoring_source_description": "c_node1 disk io",
+      "data_API": {
+        "backend_tool": "Glances",
+        "keyword": "disk",
+        "disk_id": "PhysicalDrive0",
+        "url": "http://localhost:61208/api/3/diskio/disk_name/",
+        "refresh_interval": 5
+      },
+      "simulation": {
+        "default": [
+          30,
+          40
+        ],
+        "up": [
+          60,
+          65
+        ],
+        "down": [
+          30,
+          40
+        ]
+      }
+    }
+  ]
+}
