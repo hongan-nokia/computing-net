@@ -32,6 +32,14 @@
     },
     {
       "node_id": 3,
+      "node_name": "client",
+      "description": "Test Client",
+      "node_ip": "localhost",
+      "node_port": 10083,
+      "conn_type": "tcp_client"
+    },
+    {
+      "node_id": 4,
       "node_name": "first_pkg",
       "description": "First Package Response Latency Test",
       "node_ip": "localhost",
@@ -39,7 +47,7 @@
       "conn_type": "tcp_client"
     },
     {
-      "node_id": 4,
+      "node_id": 5,
       "node_name": "service_addr",
       "description": "Service Addressing Test",
       "node_ip": "localhost",
@@ -47,7 +55,7 @@
       "conn_type": "tcp_client"
     },
     {
-      "node_id": 5,
+      "node_id": 6,
       "node_name": "computing_addr",
       "description": "Computing Addressing Test",
       "node_ip": "localhost",
@@ -55,7 +63,7 @@
       "conn_type": "tcp_client"
     },
     {
-      "node_id": 6,
+      "node_id": 7,
       "node_name": "content_addr",
       "description": "Content Addressing Test",
       "node_ip": "localhost",
@@ -63,7 +71,7 @@
       "conn_type": "tcp_client"
     },
     {
-      "node_id": 7,
+      "node_id": 8,
       "node_name": "load_test",
       "description": "Single Node Loading Test",
       "node_ip": "localhost",
