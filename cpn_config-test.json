@@ -137,7 +137,7 @@
       "data_API": {
         "backend_tool": "Glances",
         "keyword": "net",
-        "net_interface": "Ethernet 6",
+        "net_interface": "Ethernet",
         "url": "http://127.0.0.1:61208/api/3/network/interface_name/",
         "refresh_interval": 10
       },
@@ -239,7 +239,7 @@
       "data_API": {
         "backend_tool": "Glances",
         "keyword": "net",
-        "net_interface": "Ethernet 6",
+        "net_interface": "Ethernet",
         "url": "http://127.0.0.1:61208/api/3/network/interface_name/",
         "refresh_interval": 10
       },
@@ -341,7 +341,7 @@
       "data_API": {
         "backend_tool": "Glances",
         "keyword": "net",
-        "net_interface": "Ethernet 6",
+        "net_interface": "Ethernet",
         "url": "http://127.0.0.1:61208/api/3/network/interface_name/",
         "refresh_interval": 10
       },

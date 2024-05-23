@@ -40,6 +40,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.cfn_manager = demo_manager
         # self.node_names = demo_manager.node_names
         self.mainTitle = QtWidgets.QLabel(parent=self)
+        self._initResMonitorQueue()
         self._initView()
         self._initMainTitle()
         self._initTestScenes()
@@ -49,12 +50,31 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.mouse_pos_mon = repeatTimer(1, self.get_mouse_position, autostart=True)
         self.mouse_pos_mon.start()
 
+    def _initResMonitorQueue(self):
+        self.c_node1_cpu_queue = self.cfn_manager.resource_StatMon['c_node1_cpu']
+        self.c_node2_cpu_queue = self.cfn_manager.resource_StatMon['c_node2_cpu']
+        self.c_node2_cpu_queue = self.cfn_manager.resource_StatMon['c_node2_cpu']
+        self.data_visual_queue_dict = {
+            "c_node1_cpu_q": self.cfn_manager.resource_StatMon['c_node1_cpu'],
+            "c_node2_cpu_q": self.cfn_manager.resource_StatMon['c_node2_cpu'],
+            "c_node3_cpu_q": self.cfn_manager.resource_StatMon['c_node3_cpu'],
+            "c_node1_mem_q": self.cfn_manager.resource_StatMon['c_node1_mem'],
+            "c_node2_mem_q": self.cfn_manager.resource_StatMon['c_node2_mem'],
+            "c_node3_mem_q": self.cfn_manager.resource_StatMon['c_node3_mem'],
+            "c_node1_net_q": self.cfn_manager.resource_StatMon['c_node1_net'],
+            "c_node2_net_q": self.cfn_manager.resource_StatMon['c_node2_net'],
+            "c_node3_net_q": self.cfn_manager.resource_StatMon['c_node3_net'],
+            "c_node1_disk_q": self.cfn_manager.resource_StatMon['c_node1_disk'],
+            "c_node2_disk_q": self.cfn_manager.resource_StatMon['c_node2_disk'],
+            "c_node3_disk_q": self.cfn_manager.resource_StatMon['c_node3_disk'],
+        }
+
     def _initTestScenes(self):
         self.CPAARWidget = ComputingPowerAwareAddressRouteWindow(self, cfn_manager)
         self.CPAARWidget.setVisible(False)
 
     def _initDataVisualize(self):
-        self.data_visual = data_visualize(parent=self, bw_list=self.monitor_q_net_list)
+        self.data_visual = data_visualize(parent=self, res_quene_dict=self.data_visual_queue_dict)
         self.data_visual.setVisible(False)
 
     def _initView(self):

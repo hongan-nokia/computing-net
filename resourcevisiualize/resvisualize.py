@@ -8,7 +8,7 @@ Description:
 
 import random
 from multiprocessing import Queue
-from typing import List
+from typing import List, Dict
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
@@ -43,7 +43,7 @@ class DataVisualizationWindow(QWidget):
 
 
 class data_visualize(QWidget):
-    def __init__(self, parent=None, bw_list=List):
+    def __init__(self, parent=None, res_quene_dict=Dict):
 
         super().__init__()
         self.layout = QtWidgets.QHBoxLayout(self)
@@ -53,7 +53,7 @@ class data_visualize(QWidget):
                                     "border: none;\n"
                                     "border-radius: 3px;\n"
                                     "background-color: #001135;")
-        self.nodesBandWidthList = bw_list
+        self.node_res_monitor_queue_dict = res_quene_dict
         geo = {
             'top': 0,
             'left': 0,
@@ -156,7 +156,7 @@ class data_visualize(QWidget):
         font.setPointSize(19)
         self.node1_resource.setFont(font)
         self.node1_resource.setStyleSheet("color: rgb(255, 255, 255);\n"
-                                      "border: none;")
+                                          "border: none;")
         self.node1_resource.setTitle("")
         self.node1_resource.setObjectName("resource_1")
         self.node1_res_gridLayout = QtWidgets.QGridLayout(self.node1_resource)
@@ -212,56 +212,6 @@ class data_visualize(QWidget):
         self.node1_cpu_num.setStyleSheet("color: rgb(255, 255, 255);")
         self.node1_cpu_num.setObjectName("cpu_num_1")
         self.node1_res_gridLayout.addWidget(self.node1_cpu_num, 0, 3, 1, 1)
-
-        """
-        # gpu
-        self.node1_gpu_label = QtWidgets.QLabel(self.node1_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node1_gpu_label.sizePolicy().hasHeightForWidth())
-        self.node1_gpu_label.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.node1_gpu_label.setFont(font)
-        self.node1_gpu_label.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node1_gpu_label.setObjectName("node1_gpu")
-        self.node1_res_gridLayout.addWidget(self.node1_gpu_label, 1, 0, 1, 1)
-
-        # gpu bar
-        self.node1_gpu_bar = QtWidgets.QProgressBar(self.node1_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node1_gpu_bar.sizePolicy().hasHeightForWidth())
-        self.node1_gpu_bar.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(10)
-        self.node1_gpu_bar.setFont(font)
-        self.node1_gpu_bar.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node1_gpu_bar.setProperty("value", 0)
-        self.node1_gpu_bar.setTextVisible(False)
-        self.node1_gpu_bar.setFixedHeight(28)
-        self.node1_gpu_bar.setObjectName("node1_gpu_bar")
-        self.node1_res_gridLayout.addWidget(self.node1_gpu_bar, 1, 1, 1, 1)
-
-        # gpu num
-        self.node1_gpu_num = QtWidgets.QLabel(self.node1_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node1_gpu_num.sizePolicy().hasHeightForWidth())
-        self.node1_gpu_num.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.node1_gpu_num.setFont(font)
-        self.node1_gpu_num.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node1_gpu_num.setObjectName("node1_gpu_num")
-        self.node1_res_gridLayout.addWidget(self.node1_gpu_num, 1, 2, 1, 1)
-        """
 
         # mem
         self.node1_mem_label = QtWidgets.QLabel(self.node1_resource)
@@ -489,56 +439,6 @@ class data_visualize(QWidget):
         self.node1_disk_write_value.setObjectName("node1_disk_write_value")
         self.node1_res_gridLayout.addWidget(self.node1_disk_write_value, 5, 4, 1, 1)
 
-        """
-        # bw
-        self.bw_1 = QtWidgets.QLabel(self.node1_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.bw_1.sizePolicy().hasHeightForWidth())
-        self.bw_1.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.bw_1.setFont(font)
-        self.bw_1.setStyleSheet("color: rgb(255, 255, 255);")
-        self.bw_1.setObjectName("bw_1")
-        self.node1_res_gridLayout.addWidget(self.bw_1, 4, 0, 1, 1)
-
-        # bw bar
-        # self.bw_bar_1 = QtWidgets.QProgressBar(self.resource_1)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        # sizePolicy.setHorizontalStretch(0)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.bw_bar_1.sizePolicy().hasHeightForWidth())
-        # self.bw_bar_1.setSizePolicy(sizePolicy)
-        # font = QtGui.QFont()
-        # font.setFamily("Arial")
-        # font.setPointSize(10)
-        # self.bw_bar_1.setFont(font)
-        # self.bw_bar_1.setStyleSheet("color: rgb(255, 255, 255);")
-        # self.bw_bar_1.setProperty("value", 24)
-        # self.bw_bar_1.setTextVisible(False)
-        # self.bw_bar_1.setFixedHeight(28)
-        # self.bw_bar_1.setObjectName("bw_bar_1")
-        # self.gridLayout_1.addWidget(self.bw_bar_1, 4, 1, 1, 1)
-
-        # bw num
-        self.bw_num_1 = QtWidgets.QLabel(self.node1_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.bw_num_1.sizePolicy().hasHeightForWidth())
-        self.bw_num_1.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.bw_num_1.setFont(font)
-        self.bw_num_1.setStyleSheet("color: rgb(255, 255, 255);")
-        self.bw_num_1.setObjectName("bw_num_1")
-        self.node1_res_gridLayout.addWidget(self.bw_num_1, 4, 2, 1, 1)
-        """
-
         self.node1_res_gridLayout.setColumnStretch(0, 3)
         self.node1_res_gridLayout.setColumnStretch(1, 8)
         self.node1_res_gridLayout.setColumnStretch(2, 2)
@@ -683,56 +583,6 @@ class data_visualize(QWidget):
         self.node2_cpu_num.setStyleSheet("color: rgb(255, 255, 255);")
         self.node2_cpu_num.setObjectName("cpu_num_1")
         self.node2_res_gridLayout.addWidget(self.node2_cpu_num, 0, 3, 1, 1)
-
-        """
-        # gpu
-        self.node2_gpu_label = QtWidgets.QLabel(self.node2_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node2_gpu_label.sizePolicy().hasHeightForWidth())
-        self.node2_gpu_label.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.node2_gpu_label.setFont(font)
-        self.node2_gpu_label.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node2_gpu_label.setObjectName("node2_gpu_label")
-        self.node2_res_gridLayout.addWidget(self.node2_gpu_label, 1, 0, 1, 1)
-
-        # gpu bar
-        self.node2_gpu_bar = QtWidgets.QProgressBar(self.node2_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node2_gpu_bar.sizePolicy().hasHeightForWidth())
-        self.node2_gpu_bar.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(10)
-        self.node2_gpu_bar.setFont(font)
-        self.node2_gpu_bar.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node2_gpu_bar.setProperty("value", 0)
-        self.node2_gpu_bar.setTextVisible(False)
-        self.node2_gpu_bar.setFixedHeight(28)
-        self.node2_gpu_bar.setObjectName("node2_gpu_bar")
-        self.node2_res_gridLayout.addWidget(self.node2_gpu_bar, 1, 1, 1, 1)
-
-        # gpu num
-        self.node2_gpu_num = QtWidgets.QLabel(self.node2_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node2_gpu_num.sizePolicy().hasHeightForWidth())
-        self.node2_gpu_num.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.node2_gpu_num.setFont(font)
-        self.node2_gpu_num.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node2_gpu_num.setObjectName("node2_gpu_num")
-        self.node2_res_gridLayout.addWidget(self.node2_gpu_num, 1, 2, 1, 1)
-        """
 
         # mem
         self.node2_mem_label = QtWidgets.QLabel(self.node2_resource)
@@ -960,56 +810,6 @@ class data_visualize(QWidget):
         self.node2_disk_write_value.setObjectName("node2_disk_write_value")
         self.node2_res_gridLayout.addWidget(self.node2_disk_write_value, 5, 4, 1, 1)
 
-        """
-        # bw
-        self.bw_2 = QtWidgets.QLabel(self.node2_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.bw_2.sizePolicy().hasHeightForWidth())
-        self.bw_2.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.bw_2.setFont(font)
-        self.bw_2.setStyleSheet("color: rgb(255, 255, 255);")
-        self.bw_2.setObjectName("bw_1")
-        self.node2_res_gridLayout.addWidget(self.bw_2, 4, 0, 1, 1)
-
-        # bw bar
-        # self.bw_bar_2 = QtWidgets.QProgressBar(self.resource_2)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        # sizePolicy.setHorizontalStretch(0)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.bw_bar_2.sizePolicy().hasHeightForWidth())
-        # self.bw_bar_2.setSizePolicy(sizePolicy)
-        # font = QtGui.QFont()
-        # font.setFamily("Arial")
-        # font.setPointSize(10)
-        # self.bw_bar_2.setFont(font)
-        # self.bw_bar_2.setStyleSheet("color: rgb(255, 255, 255);")
-        # self.bw_bar_2.setProperty("value", 24)
-        # self.bw_bar_2.setTextVisible(False)
-        # self.bw_bar_2.setFixedHeight(28)
-        # self.bw_bar_2.setObjectName("bw_bar_2")
-        # self.gridLayout_2.addWidget(self.bw_bar_2, 4, 1, 1, 1)
-
-        # bw num
-        self.bw_num_2 = QtWidgets.QLabel(self.node2_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.bw_num_2.sizePolicy().hasHeightForWidth())
-        self.bw_num_2.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.bw_num_2.setFont(font)
-        self.bw_num_2.setStyleSheet("color: rgb(255, 255, 255);")
-        self.bw_num_2.setObjectName("bw_num_2")
-        self.node2_res_gridLayout.addWidget(self.bw_num_2, 4, 2, 1, 1)
-        """
-
         self.node2_res_gridLayout.setColumnStretch(0, 3)
         self.node2_res_gridLayout.setColumnStretch(1, 8)
         self.node2_res_gridLayout.setColumnStretch(2, 2)
@@ -1154,56 +954,6 @@ class data_visualize(QWidget):
         self.node3_cpu_num.setStyleSheet("color: rgb(255, 255, 255);")
         self.node3_cpu_num.setObjectName("node3_cpu_num")
         self.node3_res_gridLayout.addWidget(self.node3_cpu_num, 0, 3, 1, 1)
-
-        """
-        # gpu
-        self.node3_gpu_label = QtWidgets.QLabel(self.node3_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node3_gpu_label.sizePolicy().hasHeightForWidth())
-        self.node3_gpu_label.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.node3_gpu_label.setFont(font)
-        self.node3_gpu_label.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node3_gpu_label.setObjectName("node3_gpu_label")
-        self.node3_res_gridLayout.addWidget(self.node3_gpu_label, 1, 0, 1, 1)
-
-        # gpu bar
-        self.node3_gpu_bar = QtWidgets.QProgressBar(self.node3_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node3_gpu_bar.sizePolicy().hasHeightForWidth())
-        self.node3_gpu_bar.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(10)
-        self.node3_gpu_bar.setFont(font)
-        self.node3_gpu_bar.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node3_gpu_bar.setProperty("value", 0)
-        self.node3_gpu_bar.setTextVisible(False)
-        self.node3_gpu_bar.setFixedHeight(28)
-        self.node3_gpu_bar.setObjectName("node3_gpu_bar")
-        self.node3_res_gridLayout.addWidget(self.node3_gpu_bar, 1, 1, 1, 1)
-
-        # gpu num
-        self.node3_gpu_num = QtWidgets.QLabel(self.node3_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node3_gpu_num.sizePolicy().hasHeightForWidth())
-        self.node3_gpu_num.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.node3_gpu_num.setFont(font)
-        self.node3_gpu_num.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node3_gpu_num.setObjectName("node3_gpu_num")
-        self.node3_res_gridLayout.addWidget(self.node3_gpu_num, 1, 2, 1, 1)
-        """
 
         # mem
         self.node3_mem_label = QtWidgets.QLabel(self.node3_resource)
@@ -1431,56 +1181,6 @@ class data_visualize(QWidget):
         self.node3_disk_write_value.setObjectName("node3_disk_write_value")
         self.node3_res_gridLayout.addWidget(self.node3_disk_write_value, 5, 4, 1, 1)
 
-        """
-        # bw
-        self.bw_2 = QtWidgets.QLabel(self.node2_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.bw_2.sizePolicy().hasHeightForWidth())
-        self.bw_2.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.bw_2.setFont(font)
-        self.bw_2.setStyleSheet("color: rgb(255, 255, 255);")
-        self.bw_2.setObjectName("bw_1")
-        self.node2_res_gridLayout.addWidget(self.bw_2, 4, 0, 1, 1)
-
-        # bw bar
-        # self.bw_bar_2 = QtWidgets.QProgressBar(self.resource_2)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        # sizePolicy.setHorizontalStretch(0)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.bw_bar_2.sizePolicy().hasHeightForWidth())
-        # self.bw_bar_2.setSizePolicy(sizePolicy)
-        # font = QtGui.QFont()
-        # font.setFamily("Arial")
-        # font.setPointSize(10)
-        # self.bw_bar_2.setFont(font)
-        # self.bw_bar_2.setStyleSheet("color: rgb(255, 255, 255);")
-        # self.bw_bar_2.setProperty("value", 24)
-        # self.bw_bar_2.setTextVisible(False)
-        # self.bw_bar_2.setFixedHeight(28)
-        # self.bw_bar_2.setObjectName("bw_bar_2")
-        # self.gridLayout_2.addWidget(self.bw_bar_2, 4, 1, 1, 1)
-
-        # bw num
-        self.bw_num_2 = QtWidgets.QLabel(self.node2_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.bw_num_2.sizePolicy().hasHeightForWidth())
-        self.bw_num_2.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.bw_num_2.setFont(font)
-        self.bw_num_2.setStyleSheet("color: rgb(255, 255, 255);")
-        self.bw_num_2.setObjectName("bw_num_2")
-        self.node2_res_gridLayout.addWidget(self.bw_num_2, 4, 2, 1, 1)
-        """
-
         self.node3_res_gridLayout.setColumnStretch(0, 3)
         self.node3_res_gridLayout.setColumnStretch(1, 8)
         self.node3_res_gridLayout.setColumnStretch(2, 2)
@@ -1625,56 +1325,6 @@ class data_visualize(QWidget):
         self.node4_cpu_num.setStyleSheet("color: rgb(255, 255, 255);")
         self.node4_cpu_num.setObjectName("node4_cpu_num")
         self.node4_res_gridLayout.addWidget(self.node4_cpu_num, 0, 3, 1, 1)
-
-        """
-        # gpu
-        self.node4_gpu_label = QtWidgets.QLabel(self.node4_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node4_gpu_label.sizePolicy().hasHeightForWidth())
-        self.node4_gpu_label.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.node4_gpu_label.setFont(font)
-        self.node4_gpu_label.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node4_gpu_label.setObjectName("node4_gpu_label")
-        self.node4_res_gridLayout.addWidget(self.node4_gpu_label, 1, 0, 1, 1)
-
-        # gpu bar
-        self.node4_gpu_bar = QtWidgets.QProgressBar(self.node4_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node4_gpu_bar.sizePolicy().hasHeightForWidth())
-        self.node4_gpu_bar.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(10)
-        self.node4_gpu_bar.setFont(font)
-        self.node4_gpu_bar.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node4_gpu_bar.setProperty("value", 0)
-        self.node4_gpu_bar.setTextVisible(False)
-        self.node4_gpu_bar.setFixedHeight(28)
-        self.node4_gpu_bar.setObjectName("node4_gpu_bar")
-        self.node4_res_gridLayout.addWidget(self.node4_gpu_bar, 1, 1, 1, 1)
-
-        # gpu num
-        self.node4_gpu_num = QtWidgets.QLabel(self.node4_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node4_gpu_num.sizePolicy().hasHeightForWidth())
-        self.node4_gpu_num.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.node4_gpu_num.setFont(font)
-        self.node4_gpu_num.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node4_gpu_num.setObjectName("node4_gpu_num")
-        self.node4_res_gridLayout.addWidget(self.node4_gpu_num, 1, 2, 1, 1)
-        """
 
         # mem
         self.node4_mem_label = QtWidgets.QLabel(self.node4_resource)
@@ -1902,56 +1552,6 @@ class data_visualize(QWidget):
         self.node4_disk_write_value.setObjectName("node4_disk_write_value")
         self.node4_res_gridLayout.addWidget(self.node4_disk_write_value, 5, 4, 1, 1)
 
-        """
-        # bw
-        self.bw_2 = QtWidgets.QLabel(self.node2_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.bw_2.sizePolicy().hasHeightForWidth())
-        self.bw_2.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.bw_2.setFont(font)
-        self.bw_2.setStyleSheet("color: rgb(255, 255, 255);")
-        self.bw_2.setObjectName("bw_1")
-        self.node2_res_gridLayout.addWidget(self.bw_2, 4, 0, 1, 1)
-
-        # bw bar
-        # self.bw_bar_2 = QtWidgets.QProgressBar(self.resource_2)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        # sizePolicy.setHorizontalStretch(0)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.bw_bar_2.sizePolicy().hasHeightForWidth())
-        # self.bw_bar_2.setSizePolicy(sizePolicy)
-        # font = QtGui.QFont()
-        # font.setFamily("Arial")
-        # font.setPointSize(10)
-        # self.bw_bar_2.setFont(font)
-        # self.bw_bar_2.setStyleSheet("color: rgb(255, 255, 255);")
-        # self.bw_bar_2.setProperty("value", 24)
-        # self.bw_bar_2.setTextVisible(False)
-        # self.bw_bar_2.setFixedHeight(28)
-        # self.bw_bar_2.setObjectName("bw_bar_2")
-        # self.gridLayout_2.addWidget(self.bw_bar_2, 4, 1, 1, 1)
-
-        # bw num
-        self.bw_num_2 = QtWidgets.QLabel(self.node2_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.bw_num_2.sizePolicy().hasHeightForWidth())
-        self.bw_num_2.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.bw_num_2.setFont(font)
-        self.bw_num_2.setStyleSheet("color: rgb(255, 255, 255);")
-        self.bw_num_2.setObjectName("bw_num_2")
-        self.node2_res_gridLayout.addWidget(self.bw_num_2, 4, 2, 1, 1)
-        """
-
         self.node4_res_gridLayout.setColumnStretch(0, 3)
         self.node4_res_gridLayout.setColumnStretch(1, 8)
         self.node4_res_gridLayout.setColumnStretch(2, 2)
@@ -1962,7 +1562,6 @@ class data_visualize(QWidget):
         self.node4_verticalLayout.setStretch(2, 4)
         self.node4_verticalLayout.setStretch(3, 4)
         self.status_monitor_layout.addWidget(self.node4)
-
 
         self.horizontalLayout.addLayout(self.status_monitor_layout)
 
@@ -2012,11 +1611,6 @@ class data_visualize(QWidget):
         self.layout_1 = QVBoxLayout()
         self.layout_1.addWidget(self.speed_meter_1)
 
-        # self.workload1 = QLabel("0")
-        # self.setFont(font)
-        # self.workload1.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignCenter)
-        # self.layout_1.addWidget(self.workload1)
-
         self.hlayout_1 = QHBoxLayout()
 
         self.plot_button1 = QPushButton("History", self)
@@ -2041,11 +1635,6 @@ class data_visualize(QWidget):
         self.layout_2 = QVBoxLayout()
         self.layout_2.addWidget(self.speed_meter_2)
 
-        # self.workload2 = QLabel("0")
-        # self.setFont(font)
-        # self.workload2.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignCenter)
-        # self.layout_2.addWidget(self.workload2)
-
         self.hlayout_2 = QHBoxLayout()
 
         self.plot_button2 = QPushButton("History", self)
@@ -2068,11 +1657,6 @@ class data_visualize(QWidget):
         self.speed_meter_3 = SpeedMeter('', '', 0, 100)
         self.layout_3 = QVBoxLayout()
         self.layout_3.addWidget(self.speed_meter_3)
-
-        # self.workload3 = QLabel("0")
-        # self.setFont(font)
-        # self.workload3.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignCenter)
-        # self.layout_3.addWidget(self.workload3)
 
         self.hlayout_3 = QHBoxLayout()
 
@@ -2097,11 +1681,6 @@ class data_visualize(QWidget):
         self.speed_meter_4 = SpeedMeter('', '', 0, 100)
         self.layout_4 = QVBoxLayout()
         self.layout_4.addWidget(self.speed_meter_4)
-
-        # self.workload4 = QLabel("0")
-        # self.setFont(font)
-        # self.workload4.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignCenter)
-        # self.layout_4.addWidget(self.workload4)
 
         self.hlayout_4 = QHBoxLayout()
 
@@ -2143,8 +1722,6 @@ class data_visualize(QWidget):
         self.node1_wl_label.setText("Workload")
         self.node1_cpu_label.setText("CPU")
         self.node1_cpu_num.setText("0.0%")
-        # self.node1_gpu_label.setText("GPU")
-        # self.node1_gpu_num.setText("NA")
         self.node1_mem_label.setText("MEM")
         self.node1_mem_num.setText("0.0%")
         self.node1_net_label.setText("NET I/O")
@@ -2159,15 +1736,11 @@ class data_visualize(QWidget):
         self.node1_disk_name.setText("PhysicalDrive0")
         self.node1_disk_read_value.setText("10M")
         self.node1_disk_write_value.setText("2M")
-        # self.bw_1.setText("Occupied BW")
-        # self.bw_num_1.setText("1000Mbps")
 
         self.node2_label.setText("C-Node2")
         self.node2_wl_label.setText("Workload")
         self.node2_cpu_label.setText("CPU")
         self.node2_cpu_num.setText("0.0%")
-        # self.node1_gpu_label.setText("GPU")
-        # self.node1_gpu_num.setText("NA")
         self.node2_mem_label.setText("MEM")
         self.node2_mem_num.setText("0.0%")
         self.node2_net_label.setText("NET I/O")
@@ -2221,230 +1794,168 @@ class data_visualize(QWidget):
         self.node4_disk_read_value.setText("10M")
         self.node4_disk_write_value.setText("2M")
 
-    def set_data(self, display_node_num, data):
+    def update_datav(self):
+        self._updateCPUInfo()
+        self._updateMemInfo()
+        self._updateNetInfo()
+        self._updateDiskInfo()
 
-        cpu, gpu, mem, delay, bw = data
-        _translate = QtCore.QCoreApplication.translate
+    def _updateCPUInfo(self):
+        CPU_Nums = [
+            self.node1_cpu_num,
+            self.node2_cpu_num,
+            self.node3_cpu_num,
+            self.node4_cpu_num,
+        ]
+        CPU_Bars = [
+            self.node1_cpu_bar,
+            self.node2_cpu_bar,
+            self.node3_cpu_bar,
+            self.node4_cpu_bar,
+        ]
+        CPU_SpeedMeters = [
+            self.speed_meter_1,
+            self.speed_meter_2,
+            self.speed_meter_3,
+            self.speed_meter_4,
+        ]
+        CPU_Qs = [
+            self.node_res_monitor_queue_dict['c_node1_cpu_q'],
+            self.node_res_monitor_queue_dict['c_node2_cpu_q'],
+            self.node_res_monitor_queue_dict['c_node3_cpu_q'],
+        ]
+        CPU_Utilize = [0, 0, 0, 0]
 
-        eval("self.cpu_num_" + str(display_node_num) + ".setText(_translate(\"window\", str(cpu) + \"%\"))")
-        eval("self.cpu_bar_" + str(display_node_num) + ".setProperty(\"value\", cpu)")
-        if cpu <= 50.0:
-            eval("self.cpu_bar_" + str(
-                display_node_num) + ".setStyleSheet(\"QProgressBar::chunk {background-color: rgb(\" + str(int(2.55 * "
-                                    "cpu * 2)) + \",\" + \"255\" + \",0);}\")")
-        else:
-            eval("self.cpu_bar_" + str(
-                display_node_num) + ".setStyleSheet(\"QProgressBar::chunk {background-color: rgb(\" + \"255\" + \","
-                                    "\" + str(int(2.55 * (100 - ((cpu - 50) * 2)))) + \",0);}\")")
+        for i, cpu_q in enumerate(CPU_Qs):
+            if not cpu_q.empty():
+                cpu_q = reverseQueue(cpu_q)
+                cpu_v = cpu_q.get()
+                CPU_Utilize[i] = cpu_v[0]
+        CPU_Utilize[-1] = sum(CPU_Utilize[:-1]) / len(CPU_Utilize[:-1])
 
-        # eval("self.gpu_num_" + str(display_node_num) + ".setText(_translate(\"window\", str(gpu) + \"%\"))")
-        # eval("self.gpu_bar_" + str(display_node_num) + ".setProperty(\"value\", gpu)")
-        #
-        # if gpu <= 50.0:
-        #     eval("self.gpu_bar_" + str(
-        #         display_node_num) + ".setStyleSheet(\"QProgressBar::chunk {background-color: rgb(\" + str(int(2.55 * "
-        #                             "gpu * 2)) + \",\" + \"255\" + \",0);}\")")
-        # else:
-        #     eval("self.gpu_bar_" + str(
-        #         display_node_num) + ".setStyleSheet(\"QProgressBar::chunk {background-color: rgb(\" + \"255\" + \","
-        #                             "\" + str(int(2.55 * (100 - ((gpu - 50) * 2)))) + \",0);}\")")
+        for i, cu in enumerate(CPU_Utilize):
+            eval(f"{CPU_Nums[i]}" + f".setText(_translate(\"window\", str({cu}) + \"%\"))")
+            eval(f"{CPU_SpeedMeters[i]}" + ".setSpeed(cu)")
+            eval(f"{CPU_Bars[i]}" + ".setProperty(\"value\", cu)")
+            if cu <= 50.0:
+                eval(f"{CPU_Bars[i]}" + ".setStyleSheet(\"QProgressBar::chunk {background-color: rgb(\" + str(int(2.55 * "
+                                        "cu * 2)) + \",\" + \"255\" + \",0);}\")")
+            else:
+                eval(f"{CPU_Bars[i]}" + ".setStyleSheet(\"QProgressBar::chunk {background-color: rgb(\" + \"255\" + \","
+                                        "\" + str(int(2.55 * (100 - ((cu - 50) * 2)))) + \",0);}\")")
 
-        if mem < 1:
-            mem = round(mem * 10, 1)
-            eval("self.mem_num_" + str(display_node_num) + ".setText(_translate(\"window\", str(mem) + \"‰\"))")
-            eval("self.mem_bar_" + str(display_node_num) + ".setProperty(\"value\", mem)")
-        else:
-            mem = round(mem, 1)
-            eval("self.mem_num_" + str(display_node_num) + ".setText(_translate(\"window\", str(mem) + \"%\"))")
-            eval("self.mem_bar_" + str(display_node_num) + ".setProperty(\"value\", mem)")
+    def _updateMemInfo(self):
+        Mem_Nums = [
+            self.node1_mem_num,
+            self.node2_mem_num,
+            self.node3_mem_num,
+            self.node4_mem_num,
+        ]
+        Mem_Bars = [
+            self.node1_mem_bar,
+            self.node2_mem_bar,
+            self.node3_mem_bar,
+            self.node4_mem_bar,
+        ]
 
-        if mem <= 50.0:
-            eval("self.mem_bar_" + str(
-                display_node_num) + ".setStyleSheet(\"QProgressBar::chunk {background-color: rgb(\" + str(int(2.55 * "
-                                    "mem * 2)) + \",\" + \"255\" + \",0);}\")")
+        Mem_Qs = [
+            self.node_res_monitor_queue_dict['c_node1_mem_q'],
+            self.node_res_monitor_queue_dict['c_node2_mem_q'],
+            self.node_res_monitor_queue_dict['c_node3_mem_q'],
+        ]
+        Mem_Utilize = [0, 0, 0, 0]
 
-        else:
-            eval("self.mem_bar_" + str(
-                display_node_num) + ".setStyleSheet(\"QProgressBar::chunk {background-color: rgb(\" + \"255\" + \","
-                                    "\" + str(int(2.55 * (100 - ((mem - 50) * 2)))) + \",0);}\")")
+        for i, mem_q in enumerate(Mem_Qs):
+            if not mem_q.empty():
+                mem_q = reverseQueue(mem_q)
+                mem_v = mem_q.get()
+                Mem_Utilize[i] = mem_v[0]
+        Mem_Utilize[-1] = sum(Mem_Utilize[:-1]) / len(Mem_Utilize[:-1])
 
-        eval("self.delay_num_" + str(display_node_num) + ".setText(_translate(\"window\", str(delay) + \"ms\"))")
-        delay_percent = (delay / 50.0) * 100
-        if delay <= 50:
-            eval("self.delay_bar_" + str(display_node_num) + ".setProperty(\"value\", delay_percent)")
-        else:
-            eval("self.delay_bar_" + str(display_node_num) + ".setProperty(\"value\", 100)")
+        for i, mu in enumerate(Mem_Utilize):
+            eval(f"{Mem_Nums[i]}" + f".setText(_translate(\"window\", str({mu}) + \"%\"))")
+            eval(f"{Mem_Bars[i]}" + ".setProperty(\"value\", mu)")
+            if mu <= 50.0:
+                eval(f"{Mem_Bars[i]}" + ".setStyleSheet(\"QProgressBar::chunk {background-color: rgb(\" + str(int(2.55 * "
+                                        "mu * 2)) + \",\" + \"255\" + \",0);}\")")
+            else:
+                eval(f"{Mem_Bars[i]}" + ".setStyleSheet(\"QProgressBar::chunk {background-color: rgb(\" + \"255\" + \","
+                                        "\" + str(int(2.55 * (100 - ((mu - 50) * 2)))) + \",0);}\")")
 
-        # if delay <= 50:
-        #     eval("self.delay_bar_" + str(
-        #         display_node_num) + ".setStyleSheet(\"QProgressBar::chunk {background-color: rgb(\" + str(int(2.55 * "
-        #                             "delay * 2)) + \",\" + \"255\" + \",0);}\")")
-        # else:
-        #     eval("self.delay_bar_" + str(
-        #         display_node_num) + ".setStyleSheet(\"QProgressBar::chunk {background-color: rgb(\" + \"255\" + \","
-        #                             "\" + str(int(2.55 * (100 - ((delay - 50) * 2)))) + \",0);}\")")
+    def _updateNetInfo(self):
+        Net_Info = [
+            [self.node1_net_read_value, self.node1_net_write_value],
+            [self.node2_net_read_value, self.node2_net_write_value],
+            [self.node3_net_read_value, self.node3_net_write_value],
+            [self.node4_net_read_value, self.node4_net_write_value],
+        ]
+        Net_Qs = [
+            self.node_res_monitor_queue_dict['c_node1_net_q'],
+            self.node_res_monitor_queue_dict['c_node2_net_q'],
+            self.node_res_monitor_queue_dict['c_node3_net_q'],
+        ]
+        Net_TxDx = [[0, 0], [0, 0], [0, 0], [0, 0]]
 
-        if delay < 18:
+        for i, net_q in enumerate(Net_Qs):
+            if not net_q.empty():
+                net_q = reverseQueue(net_q)
+                Net_TxDx[i] = net_q.get()
+        tx_sum, dx_sum = sum(Net_TxDx[i][0] for i in range(3)), sum(Net_TxDx[i][1] for i in range(3))
+        Net_TxDx[-1][0], Net_TxDx[-1][1] = tx_sum / 3, dx_sum / 3
 
-            eval("self.delay_bar_" + str(
-                display_node_num) + ".setStyleSheet(\"QProgressBar::chunk {background-color: rgb(\" + str(int(0*"
-                                    "0)) + \",\" + \"255\" + \",0);}\")")
-        elif delay < 30:
-            eval("self.delay_bar_" + str(
-                display_node_num) + ".setStyleSheet(\"QProgressBar::chunk {background-color: rgb(\" + str(int(255"
-                                    ")) + \",\" + \"165\" + \",0);}\")")
-        else:
-            eval("self.delay_bar_" + str(
-                display_node_num) + ".setStyleSheet(\"QProgressBar::chunk {background-color: rgb(\" + str(int(255"
-                                    ")) + \",\" + \"0\" + \",0);}\")")
+        for i, net_txdx in enumerate(Net_TxDx):
+            tx_tag, dx_tag = "", ""
+            if (net_txdx[0] / 1000) < 1:
+                tx_tag = f"{net_txdx[0]} b/s"
+            if 1 < (net_txdx[0] / 1000) < 1000:
+                tx_tag = f"{net_txdx[0] / 1000} kb/s"
+            if 1 < (net_txdx[0] / 1000000) < 1000:
+                tx_tag = f"{net_txdx[0] / 1000000} Mb/s"
 
-        # eval("self.bw_num_" + str(display_node_num) + ".setText(_translate(\"window\", str(bw) + \"Mbps\"))")
-        # eval("self.bw_bar_" + str(display_node_num) + ".setProperty(\"value\", bw)")
+            if (net_txdx[1] / 1000) < 1:
+                dx_tag = f"{net_txdx[1]} b/s"
+            if 1 < (net_txdx[1] / 1000) < 1000:
+                dx_tag = f"{net_txdx[1] / 1000} kb/s"
+            if 1 < (net_txdx[1] / 1000000) < 1000:
+                dx_tag = f"{net_txdx[1] / 1000000} Mb/s"
+            eval(f"{Net_Info[i][0]}" + f".setText(_translate(\"window\", {tx_tag}))")
+            eval(f"{Net_Info[i][1]}" + f".setText(_translate(\"window\", {dx_tag}))")
 
-        # if bw <= 50:
-        #     eval("self.bw_bar_" + str(
-        #         display_node_num) + ".setStyleSheet(\"QProgressBar::chunk {background-color: rgb(\" + str(int(2.55 * "
-        #                             "bw * 2)) + \",\" + \"255\" + \",0);}\")")
-        # else:
-        #     eval("self.bw_bar_" + str(
-        #         display_node_num) + ".setStyleSheet(\"QProgressBar::chunk {background-color: rgb(\" + \"255\" + \","
-        #                             "\" + str(int(2.55 * (100 - ((bw - 50) * 2)))) + \",0);}\")")
+    def _updateDiskInfo(self):
+        Disk_Info = [
+            [self.node1_disk_read_value, self.node1_disk_write_value],
+            [self.node2_disk_read_value, self.node2_disk_write_value],
+            [self.node3_disk_read_value, self.node3_disk_write_value],
+            [self.node4_disk_read_value, self.node4_disk_write_value],
+        ]
+        Disk_Qs = [
+            self.node_res_monitor_queue_dict['c_node1_disk_q'],
+            self.node_res_monitor_queue_dict['c_node2_disk_q'],
+            self.node_res_monitor_queue_dict['c_node3_disk_q'],
+        ]
+        Disk_RW = [[0, 0], [0, 0], [0, 0], [0, 0]]
 
-        eval("self.speed_meter_" + str(display_node_num) + ".setSpeed(cpu)")
+        for i, disk_q in enumerate(Disk_RW):
+            if not disk_q.empty():
+                disk_q = reverseQueue(disk_q)
+                Disk_RW[i] = disk_q.get()
+        r_sum, w_sum = sum(Disk_RW[i][0] for i in range(3)), sum(Disk_RW[i][1] for i in range(3))
+        Disk_RW[-1][0], Disk_RW[-1][1] = r_sum / 3, w_sum / 3
 
-    def update_start(self, cfndata):
-        worker1, worker2, ocp = self.read_json(cfndata)
-        self.set_data(1, ocp)
-        self.set_data(2, worker1)
-        self.set_data(3, worker2)
-        self.set_WN_Bandwidth()
+        for i, disk_rw in enumerate(Disk_RW):
+            r_tag, w_tag = "", ""
+            if (disk_rw[0] / 1000) < 1:
+                r_tag = f"{disk_rw[0]} b/s"
+            if 1 < (disk_rw[0] / 1000) < 1000:
+                r_tag = f"{disk_rw[0] / 1000} kb/s"
+            if 1 < (disk_rw[0] / 1000000) < 1000:
+                r_tag = f"{disk_rw[0] / 1000000} Mb/s"
 
-    def read_json(self, cfndata):
-        worker1 = []
-        worker2 = []
-        ocp = []
-
-        data = cfndata['compute']
-
-        worker1_data = data['worker1']
-        worker2_data = data['worker2']
-        ocp_data = data['ocp']
-
-        cpu_w1 = worker1_data['cpu']
-        tmp = (float(cpu_w1['total']) - float(cpu_w1['available'])) / (float(cpu_w1['total']) + 0.0001)
-        tmp = round(tmp * 100, 1)
-        worker1.append(tmp)
-
-        gpu_w1 = worker1_data['gpu']
-        # tmp = (int(gpu_w1['total']) - int(gpu_w1['available'])) / (int(gpu_w1['total']) + 0.0001)
-        # tmp = round(tmp, 1) * 100
-        tmp = 'NA'
-        worker1.append(tmp)
-
-        memory_w1 = worker1_data['memory']
-        tmp = (int(memory_w1['total'][:-2]) - int(memory_w1['available'][:-2])) / (
-                int(memory_w1['total'][:-2]) + 0.0001)
-        memory = round(tmp * 100, 1)
-        worker1.append(memory)
-
-        if cfndata['network'][:-2] == "0s":
-            worker1.append(16)
-        else:
-            try:
-                worker1.append(int(float(cfndata['network'][:-2])) + random.randint(1, 2))
-            except Exception as e:
-                worker1.append(16)
-                print(e)
-        worker1.append(1000)
-
-        cpu_w2 = worker2_data['cpu']
-        tmp = (float(cpu_w2['total']) - float(cpu_w2['available'])) / (float(cpu_w2['total']) + 0.0001)
-        tmp = round(tmp * 100, 1)
-        worker2.append(tmp)
-
-        gpu_w2 = worker2_data['gpu']
-        # tmp = (int(gpu_w2['total']) - int(gpu_w2['available'])) / (int(gpu_w2['total']) + 0.0001)
-        # tmp = round(tmp, 1) * 100
-        tmp = 'NA'
-        worker2.append(tmp)
-
-        memory_w2 = worker2_data['memory']
-        tmp = (int(memory_w2['total'][:-2]) - int(memory_w2['available'][:-2])) / (
-                int(memory_w2['total'][:-2]) + 0.0001)
-        memory = round(tmp * 100, 1)
-        worker2.append(memory)
-
-        if cfndata['network'][:-2] == "0s":
-            worker2.append(15)
-        else:
-            try:
-                worker2.append(int(float(cfndata['network'][:-2])))
-            except Exception as e:
-                worker2.append(15)
-                print(e)
-        worker2.append(1000)
-
-        cpu_o = ocp_data['cpu']
-        tmp = (float(cpu_o['total']) - float(cpu_o['available'])) / (float(cpu_o['total']) + 0.0001)
-        tmp = round(tmp * 100, 1)
-        ocp.append(tmp)
-
-        gpu_o = ocp_data['gpu']
-        # tmp = (int(gpu_o['total']) - int(gpu_o['available'])) / (int(gpu_o['total']) + 0.0001)
-        # tmp = round(tmp, 1) * 100
-        tmp = 'NA'
-        ocp.append(tmp)
-
-        memory_o = ocp_data['memory']
-        tmp = (int(memory_o['total'][:-2]) - int(memory_o['available'][:-2])) / (int(memory_o['total'][:-2]) + 0.0001)
-        memory = round(tmp * 100, 1)
-        ocp.append(memory)
-
-        if cfndata['network'][:-2] == "0s":
-            ocp.append(10)
-        else:
-            try:
-                # ocp.append(int(float(cfndata['network'][:-2])) - random.randint(4, 6))
-                ocp.append(int(float(cfndata['network'][:-2])) - random.randint(1, 2))
-            except Exception as e:
-                ocp.append(10)
-                print(e)
-        ocp.append(1000)
-
-        self.history_cpu_1.put(ocp[0])  # cpu1
-        self.history_cpu_2.put(worker1[0])  # cpu2
-        self.history_cpu_3.put(worker2[0])  # cpu3
-        self.history_delay_1.put(ocp[3])  # network
-        self.history_delay_2.put(worker1[3])  # network
-        self.history_delay_3.put(worker2[3])  # network
-
-        return worker1, worker2, ocp
-
-    def set_WN1_Bandwidth(self):
-        self.bw_num_2.setText("1.5Mbps")
-
-    def unset_WN1_Bandwidth(self):
-        self.bw_num_2.setText("1000Mbps")
-
-    def set_WN_Bandwidth(self):
-        bw_num_list = [self.bw_num_1, self.bw_num_2, self.bw_num_3]
-        for i, bw_q in enumerate(self.nodesBandWidthList):
-            if not bw_q.empty():
-                bw_q = reverseQueue(bw_q)
-                net_metrics = bw_q.get()  # ['tx', 'rx']
-                net_metrics[0] /= 1000
-                rx = net_metrics[1] / 1000
-                if 0 <= rx < 0.1:
-                    bw_num_list[i].setText(f"{str(round(net_metrics[1], 2))}Kbps")
-                else:
-                    bw_num_list[i].setText(f"{str(round(rx, 2))}Mbps")
-
-
-if __name__ == "__main__":
-    import sys
-
-    app = QtWidgets.QApplication(sys.argv)
-    window = data_visualize()
-    window.show()
-    # window.update_start()
-    sys.exit(app.exec_())
+            if (disk_rw[1] / 1000) < 1:
+                w_tag = f"{disk_rw[1]} b/s"
+            if 1 < (disk_rw[1] / 1000) < 1000:
+                w_tag = f"{disk_rw[1] / 1000} kb/s"
+            if 1 < (disk_rw[1] / 1000000) < 1000:
+                w_tag = f"{disk_rw[1] / 1000000} Mb/s"
+            eval(f"{Disk_Info[i][0]}" + f".setText(_translate(\"window\", {r_tag}))")
+            eval(f"{Disk_Info[i][1]}" + f".setText(_translate(\"window\", {w_tag}))")
