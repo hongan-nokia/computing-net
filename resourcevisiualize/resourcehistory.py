@@ -22,21 +22,21 @@ class HistoryWindow(QChart):
         # self.legend().hide()
         # 设置画笔
         self.cpu_q = cpu_q
-        self.delay_q = delay_q
+        # self.delay_q = delay_q
         self.cpu = QSplineSeries(self)
         self.cpu.setName("CPU")
-        self.delay = QSplineSeries(self)
-        self.delay.setName("Delay")
+        # self.delay = QSplineSeries(self)
+        # self.delay.setName("Delay")
 
         self.setBackgroundBrush(Qt.white)
 
         self.cpu.setPen(
             QPen(QColor(38, 2, 190), 3, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
-        self.delay.setPen(
-            QPen(QColor(249, 132, 19), 3, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
+        # self.delay.setPen(
+        #     QPen(QColor(249, 132, 19), 3, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
 
         self.addSeries(self.cpu)
-        self.addSeries(self.delay)
+        # self.addSeries(self.delay)
         # x轴
         self.m_axisX = QDateTimeAxis(self)
         self.m_axisX.setTickCount(self.m_count + 20)  # 设置刻度数量
@@ -55,35 +55,35 @@ class HistoryWindow(QChart):
         self.m_axisY_left.setLabelsColor(QColor(38, 2, 190))
 
         # 右边y轴
-        self.m_axisY_right = QValueAxis(self)
-        self.m_axisY_right.setLabelFormat('%dms')  # 设置文本格式为毫秒
-        self.m_axisY_right.setTickCount(self.m_count + 1)
-        self.m_axisY_right.setRange(0, 40)  # 设置范围
-        self.addAxis(self.m_axisY_right, Qt.AlignRight)
-        self.m_axisY_right.setLabelsColor(QColor(249, 132, 19))
+        # self.m_axisY_right = QValueAxis(self)
+        # self.m_axisY_right.setLabelFormat('%dms')  # 设置文本格式为毫秒
+        # self.m_axisY_right.setTickCount(self.m_count + 1)
+        # self.m_axisY_right.setRange(0, 40)  # 设置范围
+        # self.addAxis(self.m_axisY_right, Qt.AlignRight)
+        # self.m_axisY_right.setLabelsColor(QColor(249, 132, 19))
 
         font = QFont("Arial", 10)
         font.setBold(True)
         self.m_axisX.setLabelsFont(font)
-        self.m_axisY_right.setLabelsFont(font)
+        # self.m_axisY_right.setLabelsFont(font)
         self.m_axisY_left.setLabelsFont(font)
 
         # 将CPU和延迟数据的曲线与左右两个y轴关联
         self.cpu.attachAxis(self.m_axisX)
         self.cpu.attachAxis(self.m_axisY_left)  # 左边y轴
 
-        self.delay.attachAxis(self.m_axisX)
-        self.delay.attachAxis(self.m_axisY_right)  # 右边y轴
+        # self.delay.attachAxis(self.m_axisX)
+        # self.delay.attachAxis(self.m_axisY_right)  # 右边y轴
 
         self.cpu.append(
             [QPointF(now.addSecs(-i).toMSecsSinceEpoch(), 0) for i in range(self.m_count + 20, -1, -1)])
-        self.delay.append(
-            [QPointF(now.addSecs(-i).toMSecsSinceEpoch(), 0) for i in range(self.m_count + 20, -1, -1)])
+        # self.delay.append(
+        #     [QPointF(now.addSecs(-i).toMSecsSinceEpoch(), 0) for i in range(self.m_count + 20, -1, -1)])
 
         # 定时器获取数据
         self.m_timer = QTimer()
         self.m_timer.timeout.connect(self.update_data_home)
-        self.m_timer.timeout.connect(self.update_data_office)
+        # self.m_timer.timeout.connect(self.update_data_office)
         self.m_timer.start(5500)
 
     def update_data_home(self):

@@ -6,6 +6,7 @@
 Description:
 """
 import sys
+import threading
 from multiprocessing import Pipe, Queue
 from time import sleep
 
@@ -76,9 +77,11 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         # self.data_visual = data_visualize(parent=self, res_queue_dict=self.data_visual_queue_dict)
         self.data_visual = data_visualize(parent=self, res_queue_dict={})
         self.data_visual.setVisible(False)
+
+        self.data_mon = repeatTimer(5, self.data_visual.updateSyntheticResource, autostart=True)
+        self.data_mon.start()
+
         print("_initDataVisualize Done ")
-        self.computing_res_mon = repeatTimer(1.5, self.data_visual.update_datav, autostart=True)
-        self.computing_res_mon.start()
 
     def _initView(self):
         self.setWindowTitle(" ")
