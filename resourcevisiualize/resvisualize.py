@@ -43,7 +43,7 @@ class DataVisualizationWindow(QWidget):
 
 
 class data_visualize(QWidget):
-    def __init__(self, parent=None, res_quene_dict=Dict):
+    def __init__(self, parent=None, res_queue_dict=None):
 
         super().__init__()
         self.layout = QtWidgets.QHBoxLayout(self)
@@ -53,7 +53,7 @@ class data_visualize(QWidget):
                                     "border: none;\n"
                                     "border-radius: 3px;\n"
                                     "background-color: #001135;")
-        self.node_res_monitor_queue_dict = res_quene_dict
+        self.node_res_monitor_queue_dict = res_queue_dict
         geo = {
             'top': 0,
             'left': 0,
@@ -1935,7 +1935,7 @@ class data_visualize(QWidget):
         ]
         Disk_RW = [[0, 0], [0, 0], [0, 0], [0, 0]]
 
-        for i, disk_q in enumerate(Disk_RW):
+        for i, disk_q in enumerate(Disk_Qs):
             if not disk_q.empty():
                 disk_q = reverseQueue(disk_q)
                 Disk_RW[i] = disk_q.get()
@@ -1959,3 +1959,13 @@ class data_visualize(QWidget):
                 w_tag = f"{disk_rw[1] / 1000000} Mb/s"
             eval(f"{Disk_Info[i][0]}" + f".setText(_translate(\"window\", {r_tag}))")
             eval(f"{Disk_Info[i][1]}" + f".setText(_translate(\"window\", {w_tag}))")
+
+
+if __name__ == "__main__":
+    import sys
+
+    app = QtWidgets.QApplication(sys.argv)
+    window = data_visualize()
+    window.show()
+    # window.update_start()
+    sys.exit(app.exec_())

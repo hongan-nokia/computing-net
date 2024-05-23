@@ -54,6 +54,8 @@ class StateMonitor(object):
                 if k == 'cpu':
                     # uri = http://localhost:61208/api/3/cpu/totaltotal
                     print("GlancesHandler CPU Data")
+
+                    print(f"refresh_interval : {self.demo_config.get_monitoring_source(monitor)['data_API']['refresh_interval']}")
                     t = GlancesHandler(result_q=queues[mi],
                                        get_period=self.demo_config.get_monitoring_source(monitor)['data_API']['refresh_interval'],
                                        server_url=self.demo_config.get_monitoring_url(monitor),

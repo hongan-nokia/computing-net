@@ -113,7 +113,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
     #     self.serviceResourceInfo.hide()
 
     def _initDataVisualize(self):
-        self.data_visual = data_visualize(parent=self, res_quene_dict=self.monitor_q_net_list)
+        self.data_visual = data_visualize(parent=self, res_queue_dict=self.monitor_q_net_list)
         self.data_visual.setVisible(False)
 
     # from scenario3 switch to scenario2, need switch the background?

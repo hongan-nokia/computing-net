@@ -74,8 +74,11 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.CPAARWidget.setVisible(False)
 
     def _initDataVisualize(self):
-        self.data_visual = data_visualize(parent=self, res_quene_dict=self.data_visual_queue_dict)
+        self.data_visual = data_visualize(parent=self, res_queue_dict=self.data_visual_queue_dict)
         self.data_visual.setVisible(False)
+        print("_initDataVisualize Done ")
+        # self.computing_res_mon = repeatTimer(15, self.data_visual.update_datav, autostart=True)
+        # self.computing_res_mon.start()
 
     def _initView(self):
         self.setWindowTitle(" ")
@@ -154,24 +157,27 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         palette.setColor(QPalette.ButtonText, QColor(255, 255, 255))  # 设置按钮上字体的颜色为红色
         self.test3_btn.setPalette(palette)
 
-        # self.net_compute_aware_btn.clicked.connect(self._resourceAwarenessShow)
         self.net_compute_aware_btn.show()
         self.main_page_btn.show()
         self.test1_btn.show()
         self.test2_btn.show()
         self.test3_btn.show()
 
+        self.net_compute_aware_btn.clicked.connect(self._resourceAwarenessShow)
         self.main_page_btn.clicked.connect(self._showMainPage)
         self.test1_btn.clicked.connect(self._showTestScene1)
 
     def _resourceAwarenessShow(self):
+        print("_resourceAwarenessShow")
         if self.data_visual.isVisible():
+            print("self.data_visual.isVisible() -> True")
             self.data_visual.setVisible(False)
             self.data_visual.history1.setVisible(False)
             self.data_visual.history2.setVisible(False)
             self.data_visual.history3.setVisible(False)
         else:
-            self.data_visual.show()
+            print("self.data_visual.isVisible() -> False")
+            self.data_visual.setVisible(True)
 
     def _showMainPage(self):
         self.CPAARWidget.setVisible(False)
