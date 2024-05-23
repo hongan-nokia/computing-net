@@ -39,7 +39,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.cfn_manager = demo_manager
         # self.node_names = demo_manager.node_names
         self.mainTitle = QtWidgets.QLabel(parent=self)
-        self._initResMonitorQueue()
+        # self._initResMonitorQueue()
         self._initView()
         self._initMainTitle()
         self._initTestScenes()
@@ -73,10 +73,11 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.CPAARWidget.setVisible(False)
 
     def _initDataVisualize(self):
-        self.data_visual = data_visualize(parent=self, res_queue_dict=self.data_visual_queue_dict)
+        # self.data_visual = data_visualize(parent=self, res_queue_dict=self.data_visual_queue_dict)
+        self.data_visual = data_visualize(parent=self, res_queue_dict={})
         self.data_visual.setVisible(False)
         print("_initDataVisualize Done ")
-        self.computing_res_mon = repeatTimer(15, self.data_visual.update_datav, autostart=True)
+        self.computing_res_mon = repeatTimer(1.5, self.data_visual.update_datav, autostart=True)
         self.computing_res_mon.start()
 
     def _initView(self):

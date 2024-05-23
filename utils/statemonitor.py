@@ -39,9 +39,11 @@ class StateMonitor(object):
             elif cmd == 'sim':  # 仿真行为控制。这种命令的argument格式是: (monitor_id:int, monitor_action:str) (up or down or the others)
                 (monitor_id, monitor_action) = arg
                 if self.demo_config.get_monitoring_source(monitor_id)['data_API']['backend_tool'] != 'Simulation':
-                    print(f"StateMonitor - WARNING - trying to send `sim` command to non-simulated monitor (id {monitor_id}). Ignoring.")
+                    print(
+                        f"StateMonitor - WARNING - trying to send `sim` command to non-simulated monitor (id {monitor_id}). Ignoring.")
                 else:
-                    print(f"StateMonitor send command `{monitor_action}` to simulated monitoring source {self.monitors_to_connect[monitor_id]}")
+                    print(
+                        f"StateMonitor send command `{monitor_action}` to simulated monitoring source {self.monitors_to_connect[monitor_id]}")
                     self._threads[monitor_id].execute(monitor_action)  # 这里的monitor_action，是配置文件里相应simulation字段支持的str
             else:
                 print(f"(StateMonitor) - DEBUG: unknown command {cmd, arg}")
@@ -55,9 +57,11 @@ class StateMonitor(object):
                     # uri = http://localhost:61208/api/3/cpu/totaltotal
                     print("GlancesHandler CPU Data")
 
-                    print(f"refresh_interval : {self.demo_config.get_monitoring_source(monitor)['data_API']['refresh_interval']}")
+                    print(
+                        f"refresh_interval : {self.demo_config.get_monitoring_source(monitor)['data_API']['refresh_interval']}")
                     t = GlancesHandler(result_q=queues[mi],
-                                       get_period=self.demo_config.get_monitoring_source(monitor)['data_API']['refresh_interval'],
+                                       get_period=self.demo_config.get_monitoring_source(monitor)['data_API'][
+                                           'refresh_interval'],
                                        server_url=self.demo_config.get_monitoring_url(monitor),
                                        key_word=k,
                                        autostart=True)
@@ -66,27 +70,34 @@ class StateMonitor(object):
                     # uri = http://localhost:61208/api/3/mem/percent
                     print("GlancesHandler memory Data")
                     t = GlancesHandler(result_q=queues[mi],
-                                       get_period=self.demo_config.get_monitoring_source(monitor)['data_API']['refresh_interval'],
+                                       get_period=self.demo_config.get_monitoring_source(monitor)['data_API'][
+                                           'refresh_interval'],
                                        server_url=self.demo_config.get_monitoring_url(monitor),
                                        key_word=k,
                                        autostart=True)
                 elif k == 'net':
                     # uri = http://localhost:61208/api/3/network/interface_name/
                     print("GlancesHandler network Data")
-                    server_uri = self.demo_config.get_monitoring_url(monitor) + self.demo_config.get_monitoring_source(monitor)['data_API']['net_interface']
+                    # server_uri = self.demo_config.get_monitoring_url(monitor) + self.demo_config.get_monitoring_source(monitor)['data_API']['net_interface']
+                    server_uri = self.demo_config.get_monitoring_url(monitor)
                     t = GlancesHandler(result_q=queues[mi],
-                                       get_period=self.demo_config.get_monitoring_source(monitor)['data_API']['refresh_interval'],
+                                       get_period=self.demo_config.get_monitoring_source(monitor)['data_API'][
+                                           'refresh_interval'],
                                        server_url=server_uri,
                                        key_word=k,
-                                       net_ifname=self.demo_config.get_monitoring_source(monitor)['data_API']['net_interface'],
+                                       net_ifname=self.demo_config.get_monitoring_source(monitor)['data_API'][
+                                           'net_interface'],
                                        autostart=True)
 
                 elif k == 'disk':
                     # uri = http://localhost:61208/api/3/diskio/disk_name/
                     print("GlancesHandler Disk Data")
-                    server_uri = self.demo_config.get_monitoring_url(monitor) + self.demo_config.get_monitoring_source(monitor)['data_API']['disk_id']
+                    # server_uri = self.demo_config.get_monitoring_url(monitor) + \
+                    #              self.demo_config.get_monitoring_source(monitor)['data_API']['disk_id']
+                    server_uri = self.demo_config.get_monitoring_url(monitor)
                     t = GlancesHandler(result_q=queues[mi],
-                                       get_period=self.demo_config.get_monitoring_source(monitor)['data_API']['refresh_interval'],
+                                       get_period=self.demo_config.get_monitoring_source(monitor)['data_API'][
+                                           'refresh_interval'],
                                        server_url=server_uri,
                                        disk_id=self.demo_config.get_monitoring_source(monitor)['data_API']['disk_id'],
                                        key_word=k,

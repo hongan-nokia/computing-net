@@ -46,6 +46,7 @@ class data_visualize(QWidget):
     def __init__(self, parent=None, res_queue_dict=None):
 
         super().__init__()
+        self._initResourceUri()
         self.layout = QtWidgets.QHBoxLayout(self)
         self.setParent(parent)
         self.groupBox = QGroupBox("")
@@ -1793,6 +1794,11 @@ class data_visualize(QWidget):
         self.node4_disk_name.setText("PhysicalDrive0")
         self.node4_disk_read_value.setText("10M")
         self.node4_disk_write_value.setText("2M")
+
+    def _initResourceUri(self):
+        self.node1_resource_uri = "http://127.0.0.1:8000/synthetic"
+        self.node2_resource_uri = "http://127.0.0.1:8000/synthetic"
+        self.node3_resource_uri = "http://127.0.0.1:8000/synthetic"
 
     def update_datav(self):
         self._updateCPUInfo()

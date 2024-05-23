@@ -133,9 +133,9 @@ class CfnDemoManager(object):
 
     def _start_subprocesses(self):
         self.node_manager = NodeManager(self.resource_NodeMan, self.demo_config)
-        self.state_monitor = StateMonitor(self.resource_StatMon, self.demo_config)
+        # self.state_monitor = StateMonitor(self.resource_StatMon, self.demo_config)
         self.node_manager.start()
-        self.state_monitor.start()
+        # self.state_monitor.start()
 
     def _gui_sgnl_gen(self, gui_pipes):
         """
@@ -179,9 +179,9 @@ class CfnDemoManager(object):
             with Client((self.app_ip, self.app_port)) as conn:
                 conn.send(_EXIT_DEMO_SIGNAL)
         self.node_manager.close()
-        self.state_monitor.close()
+        # self.state_monitor.close()
         self.node_manager.proc.join()
-        self.state_monitor.proc.join()
+        # self.state_monitor.proc.join()
         # end the gui_sgnl_gen thread
         try:
             list(self.resource_NodeMan.values())[0][1].send(('', _EXIT_DEMO_SIGNAL, None))
