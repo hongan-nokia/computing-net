@@ -226,7 +226,7 @@ class Canvas(QWidget):
 
     def _initNokiaLogo(self):
         self.nokia_logo = QtWidgets.QLabel()
-        self.nokia_logo.setPixmap(QtGui.QPixmap(f"{Path.cwd()}/front_page/img/bell_logo.png"))
+        self.nokia_logo.setPixmap(QtGui.QPixmap("./images/bell_logo.png"))
         self.nokia_logo.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         self.nokia_logo_layout = QtWidgets.QHBoxLayout()
         self.nokia_logo_layout.addStretch(19)
