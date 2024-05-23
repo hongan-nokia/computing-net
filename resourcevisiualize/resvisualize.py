@@ -174,28 +174,28 @@ class data_v(QWidget):
         self.node1_cpu_label.setFont(font)
         self.node1_cpu_label.setStyleSheet("color: rgb(255, 255, 255);")
         self.node1_cpu_label.setObjectName("cpu_1")
-        self.node1_res_gridLayout.addWidget(self.node1_cpu_label, 0, 0, 1, 4)
+        self.node1_res_gridLayout.addWidget(self.node1_cpu_label, 0, 0, 1, 1)
 
         # cpu bar
-        # self.node1_cpu_bar = QtWidgets.QProgressBar(self.node1_resource)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        # sizePolicy.setHorizontalStretch(0)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.node1_cpu_bar.sizePolicy().hasHeightForWidth())
-        # self.node1_cpu_bar.setSizePolicy(sizePolicy)
-        # font = QtGui.QFont()
-        # font.setFamily("Arial")
-        # font.setPointSize(10)
-        # font.setKerning(True)
-        # self.node1_cpu_bar.setFont(font)
-        # self.node1_cpu_bar.setLayoutDirection(QtCore.Qt.LeftToRight)
-        # self.node1_cpu_bar.setAutoFillBackground(False)
-        # self.node1_cpu_bar.setStyleSheet("color: rgb(255, 255, 255);")
-        # self.node1_cpu_bar.setProperty("value", 0)
-        # self.node1_cpu_bar.setTextVisible(False)
-        # self.node1_cpu_bar.setFixedHeight(28)
-        # self.node1_cpu_bar.setObjectName("cpu_bar_1")
-        # self.node1_res_gridLayout.addWidget(self.node1_cpu_bar, 0, 1, 1, 1)
+        self.node1_cpu_bar = QtWidgets.QProgressBar(self.node1_resource)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.node1_cpu_bar.sizePolicy().hasHeightForWidth())
+        self.node1_cpu_bar.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(10)
+        font.setKerning(True)
+        self.node1_cpu_bar.setFont(font)
+        self.node1_cpu_bar.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.node1_cpu_bar.setAutoFillBackground(False)
+        self.node1_cpu_bar.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node1_cpu_bar.setProperty("value", 0)
+        self.node1_cpu_bar.setTextVisible(False)
+        self.node1_cpu_bar.setFixedHeight(28)
+        self.node1_cpu_bar.setObjectName("cpu_bar_1")
+        self.node1_res_gridLayout.addWidget(self.node1_cpu_bar, 0, 1, 1, 1)
 
         # cpu num
         self.node1_cpu_num = QtWidgets.QLabel(self.node1_resource)
@@ -210,7 +210,7 @@ class data_v(QWidget):
         self.node1_cpu_num.setFont(font)
         self.node1_cpu_num.setStyleSheet("color: rgb(255, 255, 255);")
         self.node1_cpu_num.setObjectName("cpu_num_1")
-        self.node1_res_gridLayout.addWidget(self.node1_cpu_num, 0, 4, 1, 2)
+        self.node1_res_gridLayout.addWidget(self.node1_cpu_num, 0, 3, 1, 1)
 
         """
         # gpu
@@ -275,25 +275,25 @@ class data_v(QWidget):
         self.node1_mem_label.setFont(font)
         self.node1_mem_label.setStyleSheet("color: rgb(255, 255, 255);")
         self.node1_mem_label.setObjectName("mem_1")
-        self.node1_res_gridLayout.addWidget(self.node1_mem_label, 1, 0, 1, 4)
+        self.node1_res_gridLayout.addWidget(self.node1_mem_label, 1, 0, 1, 1)
 
         # mem bar
-        # self.node1_mem_bar = QtWidgets.QProgressBar(self.node1_resource)
-        # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        # sizePolicy.setHorizontalStretch(0)
-        # sizePolicy.setVerticalStretch(0)
-        # sizePolicy.setHeightForWidth(self.node1_mem_bar.sizePolicy().hasHeightForWidth())
-        # self.node1_mem_bar.setSizePolicy(sizePolicy)
-        # font = QtGui.QFont()
-        # font.setFamily("Arial")
-        # font.setPointSize(10)
-        # self.node1_mem_bar.setFont(font)
-        # self.node1_mem_bar.setStyleSheet("color: rgb(255, 255, 255);")
-        # self.node1_mem_bar.setProperty("value", 0)
-        # self.node1_mem_bar.setTextVisible(False)
-        # self.node1_mem_bar.setFixedHeight(28)
-        # self.node1_mem_bar.setObjectName("mem_bar_1")
-        # self.node1_res_gridLayout.addWidget(self.node1_mem_bar, 1, 1, 1, 1)
+        self.node1_mem_bar = QtWidgets.QProgressBar(self.node1_resource)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.node1_mem_bar.sizePolicy().hasHeightForWidth())
+        self.node1_mem_bar.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(10)
+        self.node1_mem_bar.setFont(font)
+        self.node1_mem_bar.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node1_mem_bar.setProperty("value", 0)
+        self.node1_mem_bar.setTextVisible(False)
+        self.node1_mem_bar.setFixedHeight(28)
+        self.node1_mem_bar.setObjectName("mem_bar_1")
+        self.node1_res_gridLayout.addWidget(self.node1_mem_bar, 1, 1, 1, 1)
 
         # mem num
         self.node1_mem_num = QtWidgets.QLabel(self.node1_resource)
@@ -308,7 +308,7 @@ class data_v(QWidget):
         self.node1_mem_num.setFont(font)
         self.node1_mem_num.setStyleSheet("color: rgb(255, 255, 255);")
         self.node1_mem_num.setObjectName("mem_usage_1")
-        self.node1_res_gridLayout.addWidget(self.node1_mem_num, 1, 4, 1, 2)
+        self.node1_res_gridLayout.addWidget(self.node1_mem_num, 1, 3, 1, 1)
 
         # Disk
         self.node1_net_label = QtWidgets.QLabel(self.node1_resource)
@@ -323,7 +323,7 @@ class data_v(QWidget):
         self.node1_net_label.setFont(font)
         self.node1_net_label.setStyleSheet("color: rgb(255, 255, 255);")
         self.node1_net_label.setObjectName("node1_net_label")
-        self.node1_res_gridLayout.addWidget(self.node1_net_label, 2, 0, 1, 4)
+        self.node1_res_gridLayout.addWidget(self.node1_net_label, 2, 0, 1, 1)
 
         # disk_read
         self.node1_net_read_label = QtWidgets.QLabel(self.node1_resource)
@@ -338,7 +338,7 @@ class data_v(QWidget):
         self.node1_net_read_label.setFont(font)
         self.node1_net_read_label.setStyleSheet("color: rgb(255, 255, 255);")
         self.node1_net_read_label.setObjectName("node1_net_read_label")
-        self.node1_res_gridLayout.addWidget(self.node1_net_read_label, 2, 4, 1, 1)
+        self.node1_res_gridLayout.addWidget(self.node1_net_read_label, 2, 2, 1, 1)
 
         # disk_write
         self.node1_net_write_label = QtWidgets.QLabel(self.node1_resource)
@@ -353,7 +353,7 @@ class data_v(QWidget):
         self.node1_net_write_label.setFont(font)
         self.node1_net_write_label.setStyleSheet("color: rgb(255, 255, 255);")
         self.node1_net_write_label.setObjectName("node1_net_write_label")
-        self.node1_res_gridLayout.addWidget(self.node1_net_write_label, 2, 5, 1, 1)
+        self.node1_res_gridLayout.addWidget(self.node1_net_write_label, 2, 4, 1, 1)
 
         self.node1_net_name = QtWidgets.QLabel(self.node1_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
@@ -367,7 +367,7 @@ class data_v(QWidget):
         self.node1_net_name.setFont(font)
         self.node1_net_name.setStyleSheet("color: rgb(255, 255, 255);")
         self.node1_net_name.setObjectName("node1_net_name")
-        self.node1_res_gridLayout.addWidget(self.node1_net_name, 3, 0, 1, 4)
+        self.node1_res_gridLayout.addWidget(self.node1_net_name, 3, 0, 1, 1)
 
         # disk_read
         self.node1_net_read_value = QtWidgets.QLabel(self.node1_resource)
@@ -382,7 +382,7 @@ class data_v(QWidget):
         self.node1_net_read_value.setFont(font)
         self.node1_net_read_value.setStyleSheet("color: rgb(255, 255, 255);")
         self.node1_net_read_value.setObjectName("node1_net_read_value")
-        self.node1_res_gridLayout.addWidget(self.node1_net_read_value, 3, 4, 1, 1)
+        self.node1_res_gridLayout.addWidget(self.node1_net_read_value, 3, 2, 1, 1)
 
         # disk_write
         self.node1_net_write_value = QtWidgets.QLabel(self.node1_resource)
@@ -397,7 +397,7 @@ class data_v(QWidget):
         self.node1_net_write_value.setFont(font)
         self.node1_net_write_value.setStyleSheet("color: rgb(255, 255, 255);")
         self.node1_net_write_value.setObjectName("node1_net_write_value")
-        self.node1_res_gridLayout.addWidget(self.node1_net_write_value, 3, 5, 1, 1)
+        self.node1_res_gridLayout.addWidget(self.node1_net_write_value, 3, 4, 1, 1)
         #################################
         # Disk
         self.node1_disk_label = QtWidgets.QLabel(self.node1_resource)
@@ -412,7 +412,7 @@ class data_v(QWidget):
         self.node1_disk_label.setFont(font)
         self.node1_disk_label.setStyleSheet("color: rgb(255, 255, 255);")
         self.node1_disk_label.setObjectName("delay_1")
-        self.node1_res_gridLayout.addWidget(self.node1_disk_label, 4, 0, 1, 4)
+        self.node1_res_gridLayout.addWidget(self.node1_disk_label, 4, 0, 1, 1)
 
         # disk_read
         self.node1_disk_read_label = QtWidgets.QLabel(self.node1_resource)
@@ -427,7 +427,7 @@ class data_v(QWidget):
         self.node1_disk_read_label.setFont(font)
         self.node1_disk_read_label.setStyleSheet("color: rgb(255, 255, 255);")
         self.node1_disk_read_label.setObjectName("node1_disk_read_label")
-        self.node1_res_gridLayout.addWidget(self.node1_disk_read_label, 4, 4, 1, 1)
+        self.node1_res_gridLayout.addWidget(self.node1_disk_read_label, 4, 2, 1, 1)
 
         # disk_write
         self.node1_disk_write_label = QtWidgets.QLabel(self.node1_resource)
@@ -442,7 +442,7 @@ class data_v(QWidget):
         self.node1_disk_write_label.setFont(font)
         self.node1_disk_write_label.setStyleSheet("color: rgb(255, 255, 255);")
         self.node1_disk_write_label.setObjectName("node1_disk_write_label")
-        self.node1_res_gridLayout.addWidget(self.node1_disk_write_label, 4, 5, 1, 1)
+        self.node1_res_gridLayout.addWidget(self.node1_disk_write_label, 4, 4, 1, 1)
 
         self.node1_disk_name = QtWidgets.QLabel(self.node1_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
@@ -456,7 +456,7 @@ class data_v(QWidget):
         self.node1_disk_name.setFont(font)
         self.node1_disk_name.setStyleSheet("color: rgb(255, 255, 255);")
         self.node1_disk_name.setObjectName("node1_disk_name")
-        self.node1_res_gridLayout.addWidget(self.node1_disk_name, 5, 0, 1, 4)
+        self.node1_res_gridLayout.addWidget(self.node1_disk_name, 5, 0, 1, 2)
 
         # disk_read
         self.node1_disk_read_value = QtWidgets.QLabel(self.node1_resource)
@@ -471,7 +471,7 @@ class data_v(QWidget):
         self.node1_disk_read_value.setFont(font)
         self.node1_disk_read_value.setStyleSheet("color: rgb(255, 255, 255);")
         self.node1_disk_read_value.setObjectName("node1_disk_read_value")
-        self.node1_res_gridLayout.addWidget(self.node1_disk_read_value, 5, 4, 1, 1)
+        self.node1_res_gridLayout.addWidget(self.node1_disk_read_value, 5, 2, 1, 1)
 
         # disk_write
         self.node1_disk_write_value = QtWidgets.QLabel(self.node1_resource)
@@ -486,7 +486,7 @@ class data_v(QWidget):
         self.node1_disk_write_value.setFont(font)
         self.node1_disk_write_value.setStyleSheet("color: rgb(255, 255, 255);")
         self.node1_disk_write_value.setObjectName("node1_disk_write_value")
-        self.node1_res_gridLayout.addWidget(self.node1_disk_write_value, 5, 5, 1, 1)
+        self.node1_res_gridLayout.addWidget(self.node1_disk_write_value, 5, 4, 1, 1)
 
         """
         # bw
@@ -927,7 +927,7 @@ class data_v(QWidget):
         self.node2_disk_name.setFont(font)
         self.node2_disk_name.setStyleSheet("color: rgb(255, 255, 255);")
         self.node2_disk_name.setObjectName("node2_disk_name")
-        self.node2_res_gridLayout.addWidget(self.node2_disk_name, 5, 0, 1, 1)
+        self.node2_res_gridLayout.addWidget(self.node2_disk_name, 5, 0, 1, 2)
 
         # disk_read
         self.node2_disk_read_value = QtWidgets.QLabel(self.node2_resource)
@@ -1398,7 +1398,7 @@ class data_v(QWidget):
         self.node3_disk_name.setFont(font)
         self.node3_disk_name.setStyleSheet("color: rgb(255, 255, 255);")
         self.node3_disk_name.setObjectName("node3_disk_name")
-        self.node3_res_gridLayout.addWidget(self.node3_disk_name, 5, 0, 1, 1)
+        self.node3_res_gridLayout.addWidget(self.node3_disk_name, 5, 0, 1, 2)
 
         # disk_read
         self.node3_disk_read_value = QtWidgets.QLabel(self.node3_resource)
@@ -1869,7 +1869,7 @@ class data_v(QWidget):
         self.node4_disk_name.setFont(font)
         self.node4_disk_name.setStyleSheet("color: rgb(255, 255, 255);")
         self.node4_disk_name.setObjectName("node4_disk_name")
-        self.node4_res_gridLayout.addWidget(self.node4_disk_name, 5, 0, 1, 1)
+        self.node4_res_gridLayout.addWidget(self.node4_disk_name, 5, 0, 1, 2)
 
         # disk_read
         self.node4_disk_read_value = QtWidgets.QLabel(self.node4_resource)
