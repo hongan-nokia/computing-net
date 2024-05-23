@@ -87,8 +87,8 @@
       "data_API": {
         "backend_tool": "Glances",
         "keyword": "cpu",
-        "url": "http://localhost:61208/api/3/cpu/total",
-        "refresh_interval": 3
+        "url": "http://127.0.0.1:61208/api/3/cpu/total",
+        "refresh_interval": 10
       },
       "simulation": {
         "default": [
@@ -112,8 +112,8 @@
       "data_API": {
         "backend_tool": "Glances",
         "keyword": "memory",
-        "url": "http://localhost:61208/api/3/mem/percent",
-        "refresh_interval": 3
+        "url": "http://127.0.0.1:61208/api/3/mem/percent",
+        "refresh_interval": 10
       },
       "simulation": {
         "default": [
@@ -138,8 +138,8 @@
         "backend_tool": "Glances",
         "keyword": "net",
         "net_interface": "Ethernet 6",
-        "url": "http://localhost:61208/api/3/network/interface_name/",
-        "refresh_interval": 3
+        "url": "http://127.0.0.1:61208/api/3/network/interface_name/",
+        "refresh_interval": 10
       },
       "simulation": {
         "default": [
@@ -164,8 +164,8 @@
         "backend_tool": "Glances",
         "keyword": "disk",
         "disk_id": "PhysicalDrive0",
-        "url": "http://localhost:61208/api/3/diskio/disk_name/",
-        "refresh_interval": 5
+        "url": "http://127.0.0.1:61208/api/3/diskio/disk_name/",
+        "refresh_interval": 10
       },
       "simulation": {
         "default": [
@@ -189,8 +189,8 @@
       "data_API": {
         "backend_tool": "Glances",
         "keyword": "cpu",
-        "url": "http://localhost:61208/api/3/cpu/total",
-        "refresh_interval": 3
+        "url": "http://127.0.0.1:61208/api/3/cpu/total",
+        "refresh_interval": 10
       },
       "simulation": {
         "default": [
@@ -215,7 +215,7 @@
         "backend_tool": "Glances",
         "keyword": "memory",
         "url": " ",
-        "refresh_interval": 3
+        "refresh_interval": 10
       },
       "simulation": {
         "default": [
@@ -240,8 +240,8 @@
         "backend_tool": "Glances",
         "keyword": "net",
         "net_interface": "Ethernet 6",
-        "url": "http://localhost:61208/api/3/network/interface_name/",
-        "refresh_interval": 3
+        "url": "http://127.0.0.1:61208/api/3/network/interface_name/",
+        "refresh_interval": 10
       },
       "simulation": {
         "default": [
@@ -266,8 +266,8 @@
         "backend_tool": "Glances",
         "keyword": "disk",
         "disk_id": "PhysicalDrive0",
-        "url": "http://localhost:61208/api/3/diskio/disk_name/",
-        "refresh_interval": 5
+        "url": "http://127.0.0.1:61208/api/3/diskio/disk_name/",
+        "refresh_interval": 10
       },
       "simulation": {
         "default": [
@@ -291,8 +291,8 @@
       "data_API": {
         "backend_tool": "Glances",
         "keyword": "cpu",
-        "url": "http://localhost:61208/api/3/cpu/total",
-        "refresh_interval": 3
+        "url": "http://127.0.0.1:61208/api/3/cpu/total",
+        "refresh_interval": 10
       },
       "simulation": {
         "default": [
@@ -316,8 +316,8 @@
       "data_API": {
         "backend_tool": "Glances",
         "keyword": "memory",
-        "url": "http://localhost:61208/api/3/mem/percent",
-        "refresh_interval": 3
+        "url": "http://127.0.0.1:61208/api/3/mem/percent",
+        "refresh_interval": 10
       },
       "simulation": {
         "default": [
@@ -342,8 +342,8 @@
         "backend_tool": "Glances",
         "keyword": "net",
         "net_interface": "Ethernet 6",
-        "url": "http://localhost:61208/api/3/network/interface_name/",
-        "refresh_interval": 3
+        "url": "http://127.0.0.1:61208/api/3/network/interface_name/",
+        "refresh_interval": 10
       },
       "simulation": {
         "default": [
@@ -368,8 +368,8 @@
         "backend_tool": "Glances",
         "keyword": "disk",
         "disk_id": "PhysicalDrive0",
-        "url": "http://localhost:61208/api/3/diskio/disk_name/",
-        "refresh_interval": 5
+        "url": "http://127.0.0.1:61208/api/3/diskio/disk_name/",
+        "refresh_interval": 10
       },
       "simulation": {
         "default": [

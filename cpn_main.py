@@ -15,13 +15,14 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import pyqtSlot, Qt, QTimer
 from PyQt5.QtGui import QPalette, QColor, QBrush, QPixmap, QIcon
 from PyQt5.QtWidgets import QApplication, QHBoxLayout, QPushButton, QLabel, QGroupBox, QVBoxLayout, QTableWidgetItem, \
-    QHeaderView, QTableWidget
+    QHeaderView, QTableWidget, QWidget
 
 from guiwidgets.exitdialog import ExitDialog
 from guiwidgets.fadingpic import BlinkingPic
 from guiwidgets.heatmap import HeatMap
 from nodemodels.cfndemomanager import CfnDemoManager
 from resourcevisiualize.resvisualize import data_visualize
+from testscenes.computingpowerawareaddressroute import ComputingPowerAwareAddressRouteWindow
 from utils.configparser import DemoConfigParser
 from utils.repeatimer import repeatTimer
 
@@ -41,24 +42,20 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.mainTitle = QtWidgets.QLabel(parent=self)
         self._initView()
         self._initMainTitle()
+        self._initTestScenes()
         # self._initDataVisualize()
         self._initScenarioButtons()
         self.mouse = PyWinMouse.Mouse()
         self.mouse_pos_mon = repeatTimer(1, self.get_mouse_position, autostart=True)
         self.mouse_pos_mon.start()
 
+    def _initTestScenes(self):
+        self.CPAARWidget = ComputingPowerAwareAddressRouteWindow(self, cfn_manager)
+        self.CPAARWidget.setVisible(False)
+
     def _initDataVisualize(self):
         self.data_visual = data_visualize(parent=self, bw_list=self.monitor_q_net_list)
         self.data_visual.setVisible(False)
-
-    def _resourceAwarenessShow(self):
-        if self.data_visual.isVisible():
-            self.data_visual.setVisible(False)
-            self.data_visual.history1.setVisible(False)
-            self.data_visual.history2.setVisible(False)
-            self.data_visual.history3.setVisible(False)
-        else:
-            self.data_visual.show()
 
     def _initView(self):
         self.setWindowTitle(" ")
@@ -90,40 +87,79 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.net_compute_aware_btn = QPushButton(parent=self)
         self.net_compute_aware_btn.setText("实时算网资源")
         self.net_compute_aware_btn.setFont(btn_font)
-        self.net_compute_aware_btn.setGeometry(40, 1000, 378, 60)
+        self.net_compute_aware_btn.setGeometry(30, 1000, 378, 60)
         self.net_compute_aware_btn.setStyleSheet(
             "border-radius:8px;border-style:outset;border:none;background-color: {}".format(QColor(0, 45, 127).name()))
         palette = self.net_compute_aware_btn.palette()
         palette.setColor(QPalette.ButtonText, QColor(255, 255, 255))  # 设置按钮上字体的颜色为红色
         self.net_compute_aware_btn.setPalette(palette)
 
-        self.service_deploy_btn = QPushButton(parent=self)
-        self.service_deploy_btn.setText("服务部署")
-        self.service_deploy_btn.setFont(btn_font)
-        self.service_deploy_btn.setGeometry(538, 990, 378, 60)
-        self.service_deploy_btn.setStyleSheet(
+        self.main_page_btn = QPushButton(parent=self)
+        self.main_page_btn.setText("主页")
+        self.main_page_btn.setFont(btn_font)
+        self.main_page_btn.setGeometry(20, 40, 100, 60)
+        self.main_page_btn.setStyleSheet(
             "border-radius:8px;border-style:outset;border:none;background-color: {}".format(QColor(0, 45, 127).name()))
-        palette = self.service_deploy_btn.palette()
+        palette = self.main_page_btn.palette()
         palette.setColor(QPalette.ButtonText, QColor(255, 255, 255))  # 设置按钮上字体的颜色为红色
-        self.service_deploy_btn.setPalette(palette)
+        self.main_page_btn.setPalette(palette)
 
-        self.dynamic_scheduling_btn = QPushButton(parent=self)
-        self.dynamic_scheduling_btn.setText("动态调度")
-        self.dynamic_scheduling_btn.setFont(btn_font)
-        self.dynamic_scheduling_btn.setGeometry(1036, 990, 378, 60)
-        self.dynamic_scheduling_btn.setStyleSheet(
+        self.test1_btn = QPushButton(parent=self)
+        self.test1_btn.setText("测试一")
+        self.test1_btn.setFont(btn_font)
+        self.test1_btn.setGeometry(20, 110, 100, 60)
+        self.test1_btn.setStyleSheet(
             "border-radius:8px;border-style:outset;border:none;background-color: {}".format(QColor(0, 45, 127).name()))
-        palette = self.dynamic_scheduling_btn.palette()
+        palette = self.test1_btn.palette()
         palette.setColor(QPalette.ButtonText, QColor(255, 255, 255))  # 设置按钮上字体的颜色为红色
-        self.dynamic_scheduling_btn.setPalette(palette)
+        self.test1_btn.setPalette(palette)
 
-        self.net_compute_aware_btn.clicked.connect(self._resourceAwarenessShow)
-        # self.service_deploy_btn.clicked.connect(self._serviceDeploymentShow)
-        # self.dynamic_scheduling_btn.clicked.connect(self._switchScenario3)
+        self.test2_btn = QPushButton(parent=self)
+        self.test2_btn.setText("测试二")
+        self.test2_btn.setFont(btn_font)
+        self.test2_btn.setGeometry(20, 180, 100, 60)
+        self.test2_btn.setStyleSheet(
+            "border-radius:8px;border-style:outset;border:none;background-color: {}".format(QColor(0, 45, 127).name()))
+        palette = self.test2_btn.palette()
+        palette.setColor(QPalette.ButtonText, QColor(255, 255, 255))  # 设置按钮上字体的颜色为红色
+        self.test2_btn.setPalette(palette)
 
+        self.test3_btn = QPushButton(parent=self)
+        self.test3_btn.setText("测试三")
+        self.test3_btn.setFont(btn_font)
+        self.test3_btn.setGeometry(20, 250, 100, 60)
+        self.test3_btn.setStyleSheet(
+            "border-radius:8px;border-style:outset;border:none;background-color: {}".format(QColor(0, 45, 127).name()))
+        palette = self.test3_btn.palette()
+        palette.setColor(QPalette.ButtonText, QColor(255, 255, 255))  # 设置按钮上字体的颜色为红色
+        self.test3_btn.setPalette(palette)
+
+        # self.net_compute_aware_btn.clicked.connect(self._resourceAwarenessShow)
         self.net_compute_aware_btn.show()
-        self.service_deploy_btn.show()
-        self.dynamic_scheduling_btn.show()
+        self.main_page_btn.show()
+        self.test1_btn.show()
+        self.test2_btn.show()
+        self.test3_btn.show()
+
+        self.main_page_btn.clicked.connect(self._showMainPage)
+        self.test1_btn.clicked.connect(self._showTestScene1)
+
+    def _resourceAwarenessShow(self):
+        if self.data_visual.isVisible():
+            self.data_visual.setVisible(False)
+            self.data_visual.history1.setVisible(False)
+            self.data_visual.history2.setVisible(False)
+            self.data_visual.history3.setVisible(False)
+        else:
+            self.data_visual.show()
+
+    def _showMainPage(self):
+        self.CPAARWidget.setVisible(False)
+        print("Show Main Page")
+
+    def _showTestScene1(self):
+        self.CPAARWidget.setVisible(True)
+        print("This is TestScene1")
 
     def keyPressEvent(self, KEvent):
         k = KEvent.key()
@@ -134,17 +170,23 @@ class CpnAppWindow(QtWidgets.QMainWindow):
 
     def get_mouse_position(self):
         x, y = self.mouse.get_mouse_pos()
-        if y < 990:
+        if y < 900:
             self.net_compute_aware_btn.setVisible(False)
-            self.service_deploy_btn.setVisible(False)
-            self.dynamic_scheduling_btn.setVisible(False)
         else:
             self.net_compute_aware_btn.setVisible(True)
-            self.service_deploy_btn.setVisible(True)
-            self.dynamic_scheduling_btn.setVisible(True)
+        if x < 100:
+            self.test1_btn.setVisible(True)
+            self.test2_btn.setVisible(True)
+            self.test3_btn.setVisible(True)
+            self.main_page_btn.setVisible(True)
+        else:
+            self.test1_btn.setVisible(False)
+            self.test2_btn.setVisible(False)
+            self.test3_btn.setVisible(False)
+            self.main_page_btn.setVisible(False)
 
     def reset(self):
-        pass
+        print("This is Reset")
 
 
 if __name__ == '__main__':
@@ -154,9 +196,8 @@ if __name__ == '__main__':
     inter_process_resource_NodeMan = [(i['node_name'], Pipe()) for i in configuration.nodes]
     inter_process_resource_StatMon = [(i['monitoring_source_name'], Queue(15)) for i in configuration.monitoring_sources]  # for state_monitor_process. new Queue()
 
-    # cfn_manager = CfnDemoManager(configuration, inter_process_resource_NodeMan, inter_process_resource_StatMon)
-    # print(cfn_manager.n_nodes)
-    cfn_manager = None
+    cfn_manager = CfnDemoManager(configuration, inter_process_resource_NodeMan, inter_process_resource_StatMon)
+    print(cfn_manager.n_nodes)
     mainWidget = CpnAppWindow(cfn_manager)
 
     mainWidget.show()
