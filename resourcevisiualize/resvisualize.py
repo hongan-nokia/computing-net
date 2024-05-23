@@ -8,6 +8,7 @@ Description:
 
 import random
 from multiprocessing import Queue
+from typing import List
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
@@ -41,8 +42,8 @@ class DataVisualizationWindow(QWidget):
         event.ignore()
 
 
-class data_v(QWidget):
-    def __init__(self, parent=None, bw_list=[]):
+class data_visualize(QWidget):
+    def __init__(self, parent=None, bw_list=List):
 
         super().__init__()
         self.layout = QtWidgets.QHBoxLayout(self)
@@ -2443,7 +2444,7 @@ if __name__ == "__main__":
     import sys
 
     app = QtWidgets.QApplication(sys.argv)
-    window = data_v()
+    window = data_visualize()
     window.show()
     # window.update_start()
     sys.exit(app.exec_())

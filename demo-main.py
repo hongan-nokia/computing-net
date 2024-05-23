@@ -20,7 +20,8 @@ from PyQt5.QtWidgets import QApplication, QHBoxLayout, QPushButton, QLabel, QGro
 from guiwidgets.exitdialog import ExitDialog
 from guiwidgets.fadingpic import BlinkingPic
 from guiwidgets.heatmap import HeatMap
-from utils.cfndemomanager import CfnDemoManager
+from nodemodels.cfndemomanager import CfnDemoManager
+from resourcevisiualize.resvisualize import data_visualize
 from utils.configparser import DemoConfigParser
 from utils.repeatimer import repeatTimer
 
@@ -112,7 +113,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
     #     self.serviceResourceInfo.hide()
 
     def _initDataVisualize(self):
-        self.data_visual = data_v(parent=self, bw_list=self.monitor_q_net_list)
+        self.data_visual = data_visualize(parent=self, bw_list=self.monitor_q_net_list)
         self.data_visual.setVisible(False)
 
     # from scenario3 switch to scenario2, need switch the background?
