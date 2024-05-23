@@ -18,12 +18,9 @@ import requests
 import yaml
 from PyQt5.QtWidgets import QFrame, QVBoxLayout, QWidget, QMainWindow, QApplication, QGroupBox, QHBoxLayout
 
-from util.computeResHandler import get_custom_resource
 
 import vlc
 
-from util.matrix import bk_computing
-from util.sdn import SDNController
 
 
 class VideoPlayerWindow(QMainWindow):
@@ -160,30 +157,7 @@ def vlc_sender(addr: str, port: int, file_path: str, start_pos: float, cmd_q: Si
             return
 
 
-def get_resource_from_kube(crd_group, crd_version, crd_plural, custom_resource_name,
-                           compute_config_file, net_config_file):
-    resource = {'compute': {}, 'network': []}
-    while True:
-        compute_resource = get_custom_resource(crd_group, crd_version, crd_plural, custom_resource_name,
-                                               compute_config_file)
-        ocp_resource = get_custom_resource(crd_group, crd_version, crd_plural, custom_resource_name, net_config_file)
-        if compute_resource is not None and ocp_resource is not None:
-            for c_res in compute_resource['status']['nodes']:
-                if c_res['nodeName'] == 'worker1':
-                    resource['compute']['worker1'] = c_res
-                elif c_res['nodeName'] == 'worker2':
-                    resource['compute']['worker2'] = c_res
-            resource['compute']['ocp'] = ocp_resource['status']['nodes'][0]
-            resource['network'] = ocp_resource['status']['ueRTT']
-
-        else:
-            continue
-        if resource['compute'] and resource['compute']:
-            return resource
-        else:
-            continue
-
-
+"""
 def cfnResHandler(cmd_q: SimpleQueue, cancel_task_id: Value, terminate_event: Event) -> float:
     pid = os.getpid()
     cmd_q.put(("_PID", ('cfnres report', pid)))
@@ -213,86 +187,10 @@ def cfnResHandler(cmd_q: SimpleQueue, cancel_task_id: Value, terminate_event: Ev
             print(f'(PID-{pid})' + s)
             cmd_q.put(('_abort', pid, s))
             return
+"""
 
 
-def onos_handler(pid_args):
-    post_tag = False
-    params = pid_args.split("#")
-    outPorts = ['6', '8', '10']
-    multicast_ip, in_port, cur_out_port, tar_out_port, flow_priority = \
-        str(params[0]), str(params[1]), str(params[2]), str(params[3]), int(params[4])
 
-    multicast_ip += '/24'
-    cur_src_ip = "192.168.68.0/24"  # Stream Server sender IP
-
-    sdn_ctrl = SDNController(username='onos', password='rocks', controller_IP='192.168.1.38')
-    cur_device = sdn_ctrl.getAllDevices()[0]
-    cur_device_id = cur_device['id']
-
-    post_tag = sdn_ctrl.postDeviceFlows(
-        priority=flow_priority, device_id=cur_device_id, tar_addr=multicast_ip, src_addr=cur_src_ip,
-        source_port=in_port, target_port=tar_out_port)
-    print(f">> ... onos_handler post flow inport is: {in_port} , outport is: {tar_out_port}")
-
-    if (cur_out_port in outPorts) and (cur_out_port != tar_out_port):  # avoid delete the same flow rules
-        print(f">> ... onos_handler delete outport from {cur_out_port} , to {tar_out_port}")
-        del_flow_id = sdn_ctrl.getFlowIDByIPAndPort(
-            device_id=cur_device_id, src_port=in_port, tar_port=cur_out_port, addr=cur_src_ip[:-3])
-
-        if del_flow_id:
-            sdn_ctrl.deleteDeviceFlows(device_id=cur_device_id, flow_id=del_flow_id)
-    print(f"<< ... onos_handler delete outport from {cur_out_port} , to {tar_out_port}")
-    return post_tag
-
-
-# scenario-3
-# 1. delete all flows
-# 2.
-def onos_del_all_flow(pid_args):
-    del_tag = False
-    params = pid_args.split("#")
-    m1_ip, m2_ip, m3_ip = str(params[0]), str(params[1]), str(params[2])
-    sdn_ctrl = SDNController(username='onos', password='rocks', controller_IP='192.168.1.38')
-    cur_device = sdn_ctrl.getAllDevices()[0]
-    cur_device_id = cur_device['id']
-    m1_ip_flowId = sdn_ctrl.getFlowIDByMulticastIP(device_id=cur_device_id, multicast_ip=m1_ip)
-    m2_ip_flowId = sdn_ctrl.getFlowIDByMulticastIP(device_id=cur_device_id, multicast_ip=m2_ip)
-    m3_ip_flowId = sdn_ctrl.getFlowIDByMulticastIP(device_id=cur_device_id, multicast_ip=m3_ip)
-    print(f"\nm1_ip_flowId is:{m1_ip_flowId}"
-          f"m2_ip_flowId is:{m2_ip_flowId}"
-          f"m3_ip_flowId is:{m3_ip_flowId}\n")
-    if m1_ip_flowId:
-        del_tag = sdn_ctrl.deleteDeviceFlows(device_id=cur_device_id, flow_id=m1_ip_flowId)
-    if m2_ip_flowId:
-        del_tag = sdn_ctrl.deleteDeviceFlows(device_id=cur_device_id, flow_id=m2_ip_flowId)
-    if m3_ip_flowId:
-        del_tag = sdn_ctrl.deleteDeviceFlows(device_id=cur_device_id, flow_id=m3_ip_flowId)
-
-    return del_tag
-
-
-def onos_post_all_flow(pid_args):
-    inPort = '12'
-    outPorts = ['6', '8', '10']
-    onos_del_all_flow(pid_args)
-    params = pid_args.split("#")
-    source_ip = '192.168.68.0/24'
-    m1_ip, m2_ip, m3_ip, m4_ip = \
-        str(params[0]) + '/24', str(params[1]) + '/24', str(params[2]) + '/24', str(params[3]) + '/24'
-    multicast_ip = [m1_ip, m2_ip, m3_ip, m4_ip]
-
-    sdn_ctrl = SDNController(username='onos', password='rocks', controller_IP='192.168.1.38')
-    cur_device = sdn_ctrl.getAllDevices()[0]
-    cur_device_id = cur_device['id']
-
-    for m_ip in multicast_ip:
-        sdn_ctrl.deleteAllMulticastIPFlows(device_id=cur_device_id, multicast_IP=m_ip[:-3])
-
-    pos_tag = sdn_ctrl.postDeviceMultiFlows(priority=30000, device_id=cur_device_id, tar_addr=m1_ip, src_addr=source_ip)
-    pos_tag = sdn_ctrl.postDeviceMultiFlows(priority=30000, device_id=cur_device_id, tar_addr=m2_ip, src_addr=source_ip)
-    pos_tag = sdn_ctrl.postDeviceMultiFlows(priority=30000, device_id=cur_device_id, tar_addr=m3_ip, src_addr=source_ip)
-    pos_tag = sdn_ctrl.postDeviceMultiFlows(priority=30000, device_id=cur_device_id, tar_addr=m4_ip, src_addr=source_ip)
-    return pos_tag
 
 
 def kubernetes_pod_handler(task_name, pid_args, cmd_q: SimpleQueue,
@@ -339,7 +237,7 @@ def kubernetes_pod_handler(task_name, pid_args, cmd_q: SimpleQueue,
             cmd_q.put(('_abort', pid, s))
             return
 
-
+"""
 def glances_handler(crd_group, crd_version, crd_plural, custom_resource_name,
                     compute_config_file, net_config_file):
     nodes = ['ocp', 'worker1', 'worker2']
@@ -362,7 +260,7 @@ def glances_handler(crd_group, crd_version, crd_plural, custom_resource_name,
             ret_resource['compute'][node]['cpu'] = cpuResFromJson(node, cpu_response.json())
             ret_resource['compute'][node]['memory'] = memResFromJson(mem_response.json())
     return ret_resource
-
+"""
 
 def cpuResFromJson(node, cpu_json):
     if node == 'ocp':

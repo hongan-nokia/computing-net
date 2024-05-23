@@ -13,7 +13,7 @@ from typing import Union
 
 from PyQt5.QtCore import QObject, pyqtSignal
 
-from basemodel import GUI_msg_handler, GUI_task_cmd_handler, BaseNodeModel
+from nodemodels.basemodel import GUI_msg_handler, GUI_task_cmd_handler, BaseNodeModel
 from utils.computetaskutils import *
 
 

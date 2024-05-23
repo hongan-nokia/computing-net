@@ -7,12 +7,13 @@ Description:
 """
 import time
 from abc import ABC, abstractmethod
-from util import DemoConfigParser, NodeConfig
 from typing import Any, Callable, Tuple
 from threading import Lock, Thread
 from multiprocessing import Event, connection
 from time import sleep
 import sys
+
+from utils.configparser import DemoConfigParser, NodeConfig
 
 # 所有子进程通过判断下面这个event退出，以及用一个queue往主进程发消息（单向），一个task_cancel由主进程指示某个task结束
 demo_terminate_event = Event()

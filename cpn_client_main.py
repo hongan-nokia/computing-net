@@ -133,7 +133,7 @@ class Canvas(QWidget):
         self.task1_text1_layout = QtWidgets.QVBoxLayout(self.task1_text1_box)
 
         self.task1_text1 = QtWidgets.QLabel(self.task1_box)
-        self.task1_text1.setText("业务首包时延（秒）")
+        self.task1_text1.setText("业务首包时延（ms）")
         self.task1_text1.setFont(self.task_font_size)
         self.task1_text1.setAlignment(Qt.AlignCenter)
 
@@ -146,7 +146,7 @@ class Canvas(QWidget):
         self.task1_text2_layout = QtWidgets.QVBoxLayout(self.task1_text2_box)
 
         self.task1_text2 = QtWidgets.QLabel(self.task1_box)
-        self.task1_text2.setText("test")
+        self.task1_text2.setText("---")
         self.task1_text2.setFont(self.task_font_size)
         self.task1_text2.setStyleSheet("background: #fff;")
         self.task1_text2.setFixedWidth(200)
@@ -180,7 +180,6 @@ class Canvas(QWidget):
         self.task2_title.setText("测试三")
         self.task2_title.setFont(self.task_font_size)
         self.task2_title.setStyleSheet("color: #222;")
-
         self.task2_title.setAlignment(Qt.AlignCenter)
 
         self.task2_title_layout.addWidget(self.task2_title)
@@ -282,8 +281,9 @@ if __name__ == '__main__':
     GUI_ip, GUI_port = demo_config.gui_controller_host_ip, demo_config.gui_controller_host_port
     print(f"Will connect to GUI @ ({GUI_ip}, {GUI_port})")
 
-    node_model = CfnNodeModel(demo_config, node_config)
-    node_model.start()
+    # node_model = CfnNodeModel(demo_config, node_config)
+    # node_model.start()
+    node_model = None
 
     app = QApplication(sys.argv)
     if node_name in ['client']:
