@@ -130,7 +130,7 @@ class BaseNodeModel(ABC):
         self.node_conf = node_config
         self.process_GUI_msg = msg_process_fn
         self.terminate_event = demo_terminate_event
-        self.GUI_addr = (self.demo_conf.gui_app_host_ip, self.demo_conf.gui_app_host_port)
+        self.GUI_addr = (self.demo_conf.gui_controller_host_ip, self.demo_conf.gui_controller_host_port)
         self.conn_GUI = None  # 与主程序之间的通信连接接口
         self._conn_lock = Lock()
         self.terminateDemo = False

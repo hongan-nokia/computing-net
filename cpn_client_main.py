@@ -14,13 +14,14 @@ from nodemodels.cfnnodemodel import CfnNodeModel
 from utils.configparser import DemoConfigParser
 
 
-class Canvas(QWidget):
-    def __init__(self):
+class ClientCanvas(QWidget):
+    def __init__(self, client_mgn: CfnNodeModel):
         super().__init__()
         self.layout = QtWidgets.QHBoxLayout(self)
         self.setWindowTitle("")
         self.resize(1920, 1080)
         self.groupBox = QGroupBox("")
+        self.client_mgn = client_mgn
 
         # 最外层布局、字体、粗体、字体大小
         self.mainLayout = QtWidgets.QVBoxLayout(self.groupBox)
@@ -123,6 +124,7 @@ class Canvas(QWidget):
         self.task1_btn.setText("首包响应时延测试")
         self.task1_btn.setFont(self.task_font_size)
         self.task1_btn.setStyleSheet(self.btn_style)
+        self.task1_btn.clicked.connect(self._firstPkgRespLatency)
 
         self.task1_btn_layout.addWidget(self.task1_btn)
         self.task1_layout.addWidget(self.task1_btn_box)
@@ -167,65 +169,68 @@ class Canvas(QWidget):
         self.horizontalLayout.addWidget(self.task1_box)
 
     def _initTaskTwo(self):
-        self.teak2_box = QtWidgets.QGroupBox(self.view_box)
-        self.teak2_box.setStyleSheet("background: #ccc; border-radius: 50px;")
-        self.teak2_layout = QtWidgets.QVBoxLayout(self.teak2_box)
+        self.task2_box = QtWidgets.QGroupBox(self.view_box)
+        self.task2_box.setStyleSheet("background: #ccc; border-radius: 50px;")
+        self.task2_layout = QtWidgets.QVBoxLayout(self.task2_box)
 
         # ####
-        self.task2_title_box = QtWidgets.QGroupBox(self.teak2_box)
+        self.task2_title_box = QtWidgets.QGroupBox(self.task2_box)
         self.task2_title_box.setStyleSheet("border-radius: 20px; width: 400px;")
         self.task2_title_layout = QtWidgets.QVBoxLayout(self.task2_title_box)
 
-        self.task2_title = QtWidgets.QLabel(self.teak2_box)
+        self.task2_title = QtWidgets.QLabel(self.task2_box)
         self.task2_title.setText("测试三")
         self.task2_title.setFont(self.task_font_size)
         self.task2_title.setStyleSheet("color: #222;")
         self.task2_title.setAlignment(Qt.AlignCenter)
 
         self.task2_title_layout.addWidget(self.task2_title)
-        self.teak2_layout.addWidget(self.task2_title_box)
+        self.task2_layout.addWidget(self.task2_title_box)
 
         # ####
-        self.task2_btn1_box = QtWidgets.QGroupBox(self.teak2_box)
+        self.task2_btn1_box = QtWidgets.QGroupBox(self.task2_box)
         self.task2_btn1_layout = QtWidgets.QVBoxLayout(self.task2_btn1_box)
 
-        self.task2_btn1 = QtWidgets.QPushButton(self.teak2_box)
+        self.task2_btn1 = QtWidgets.QPushButton(self.task2_box)
         self.task2_btn1.setText("服务寻址测试")
         self.task2_btn1.setFont(self.task_font_size)
         self.task2_btn1.setStyleSheet(self.btn_style)
+        self.task2_btn1.clicked.connect(self._serviceAddress)
 
         self.task2_btn1_layout.addWidget(self.task2_btn1)
-        self.teak2_layout.addWidget(self.task2_btn1_box)
+        self.task2_layout.addWidget(self.task2_btn1_box)
 
-        self.horizontalLayout.addWidget(self.teak2_box)
+        self.horizontalLayout.addWidget(self.task2_box)
 
         # ####
-        self.task2_btn2_box = QtWidgets.QGroupBox(self.teak2_box)
+        self.task2_btn2_box = QtWidgets.QGroupBox(self.task2_box)
         self.task2_btn2_layout = QtWidgets.QVBoxLayout(self.task2_btn2_box)
 
-        self.teak2_btn2 = QtWidgets.QPushButton(self.teak2_box)
-        self.teak2_btn2.setText("算力寻址测试")
-        self.teak2_btn2.setFont(self.task_font_size)
-        self.teak2_btn2.setStyleSheet(self.btn_style)
+        self.task2_btn2 = QtWidgets.QPushButton(self.task2_box)
+        self.task2_btn2.setText("算力寻址测试")
+        self.task2_btn2.setFont(self.task_font_size)
+        self.task2_btn2.setStyleSheet(self.btn_style)
+        self.task2_btn2.clicked.connect(self._computingAddress)
 
-        self.task2_btn2_layout.addWidget(self.teak2_btn2)
-        self.teak2_layout.addWidget(self.task2_btn2_box)
+        self.task2_btn2_layout.addWidget(self.task2_btn2)
+        self.task2_layout.addWidget(self.task2_btn2_box)
 
-        self.horizontalLayout.addWidget(self.teak2_box)
+        self.horizontalLayout.addWidget(self.task2_box)
 
         # ####
-        self.teak2_btn3_box = QtWidgets.QGroupBox(self.teak2_box)
-        self.teak2_btn3_layout = QtWidgets.QVBoxLayout(self.teak2_btn3_box)
+        self.task2_btn3_box = QtWidgets.QGroupBox(self.task2_box)
+        self.task2_btn3_layout = QtWidgets.QVBoxLayout(self.task2_btn3_box)
 
-        self.teak2_btn3 = QtWidgets.QPushButton(self.teak2_box)
-        self.teak2_btn3.setText("内容寻址测试")
-        self.teak2_btn3.setFont(self.task_font_size)
-        self.teak2_btn3.setStyleSheet(self.btn_style)
+        self.task2_btn3 = QtWidgets.QPushButton(self.task2_box)
+        self.task2_btn3.setText("内容寻址测试")
+        self.task2_btn3.setFont(self.task_font_size)
+        self.task2_btn3.setStyleSheet(self.btn_style)
+        self.task2_btn3.clicked.connect(self._contentAddress)
 
-        self.teak2_btn3_layout.addWidget(self.teak2_btn3)
-        self.teak2_layout.addWidget(self.teak2_btn3_box)
+        self.task2_btn3_layout.addWidget(self.task2_btn3)
+        self.task2_layout.addWidget(self.task2_btn3_box)
 
-        self.horizontalLayout.addWidget(self.teak2_box)
+        self.horizontalLayout.addWidget(self.task2_box)
 
     def _initNokiaLogo(self):
         self.nokia_logo = QtWidgets.QLabel()
@@ -238,6 +243,22 @@ class Canvas(QWidget):
         self.nokia_logo.setStyleSheet("border: none;")
         self.mainLayout.addLayout(self.nokia_logo_layout)
 
+    def _firstPkgRespLatency(self):
+        print("This _firstPkgRespLatency func")
+        # self.client_manager.conn_GUI.send(('cpn_test', 'firstPkgLat'))
+
+    def _serviceAddress(self):
+        print("This _serviceAddress func")
+        # self.client_manager.conn_GUI.send(('cpn_test', 'serviceAddr'))
+
+    def _computingAddress(self):
+        print("This _serviceAddress func")
+        # self.client_manager.conn_GUI.send(('cpn_test', 'computingAddr'))
+
+    def _contentAddress(self):
+        print("This _contentAddress func")
+        # self.client_manager.conn_GUI.send(('cpn_test', 'contentAddr'))
+
 
 class ClientWindow(QWidget):
     def __init__(self, manager: CfnNodeModel):
@@ -245,7 +266,7 @@ class ClientWindow(QWidget):
         self.setWindowTitle(" ")
         self.setGeometry(0, 0, 1920, 1080)
         self.client_manager = manager
-        self.canvas = Canvas()
+        self.canvas = ClientCanvas(self.client_manager)
         self.setStyleSheet("border:none; background-color: {}".format(QColor(0, 17, 53).name()))
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.canvas)
@@ -282,8 +303,8 @@ if __name__ == '__main__':
     print(f"Will connect to GUI @ ({GUI_ip}, {GUI_port})")
 
     node_model = None
-    node_model = CfnNodeModel(demo_config, node_config)
-    node_model.start()
+    # node_model = CfnNodeModel(demo_config, node_config)
+    # node_model.start()
 
     app = QApplication(sys.argv)
     if node_name in ['client']:
