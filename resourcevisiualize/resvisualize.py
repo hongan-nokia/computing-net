@@ -1852,7 +1852,7 @@ class data_visualize(QWidget):
             [self.node3_disk_read_value, self.node3_disk_write_value],
             [self.node4_disk_read_value, self.node4_disk_write_value],
         ]
-        self.CPU_Historys = [self.history_cpu_1, self.history_cpu_2, self.history_cpu_3, self.history_cpu_4]
+        self.CPU_HistoryList = [self.history_cpu_1, self.history_cpu_2, self.history_cpu_3, self.history_cpu_4]
 
     def update_datav(self):
         self._updateCPUInfo()
@@ -2030,26 +2030,31 @@ class data_visualize(QWidget):
         print("_updateDiskInfo")
 
     def requestResourceInfo(self):
-        node1_client = requests.get(url=self.node1_resource_uri)
-        node2_client = requests.get(url=self.node2_resource_uri)
-        node3_client = requests.get(url=self.node3_resource_uri)
-        node1_info = node1_client.json()
-        node2_info = node2_client.json()
-        node3_info = node3_client.json()
-        nodes_info = [node1_info, node2_info, node3_info]
-        node4_info = {
-            "cpu": sum(ni['cpu'] for ni in nodes_info) / len(nodes_info),
-            "mem": sum(ni['mem'] for ni in nodes_info) / len(nodes_info),
-            "disk": [
-                sum(ni['disk'][0] for ni in nodes_info) / len(nodes_info),
-                sum(ni['disk'][1] for ni in nodes_info) / len(nodes_info)
-            ],
-            "net": [
-                sum(ni['net'][0] for ni in nodes_info) / len(nodes_info),
-                sum(ni['net'][1] for ni in nodes_info) / len(nodes_info)
-            ]
-        }
-        nodes_info.append(node4_info)
+        try:
+            node1_client = requests.get(url=self.node1_resource_uri)
+            node2_client = requests.get(url=self.node2_resource_uri)
+            node3_client = requests.get(url=self.node3_resource_uri)
+            node1_info = node1_client.json()
+            node2_info = node2_client.json()
+            node3_info = node3_client.json()
+            nodes_info = [node1_info, node2_info, node3_info]
+            node4_info = {
+                "cpu": sum(ni['cpu'] for ni in nodes_info) / len(nodes_info),
+                "mem": sum(ni['mem'] for ni in nodes_info) / len(nodes_info),
+                "disk": [
+                    sum(ni['disk'][0] for ni in nodes_info) / len(nodes_info),
+                    sum(ni['disk'][1] for ni in nodes_info) / len(nodes_info)
+                ],
+                "net": [
+                    sum(ni['net'][0] for ni in nodes_info) / len(nodes_info),
+                    sum(ni['net'][1] for ni in nodes_info) / len(nodes_info)
+                ]
+            }
+            nodes_info.append(node4_info)
+        except Exception as exp:
+            print(f"Get Info exp: {exp}")
+        finally:
+            pass
         return nodes_info
 
     def updateSyntheticResource(self):
@@ -2058,63 +2063,86 @@ class data_visualize(QWidget):
         for i, SRI in enumerate(syntheticResInfo):
             cu = SRI["cpu"]
             mu = SRI["mem"]
-            self.CPU_Historys[i].put(cu)
-            print("History CPU Info Stored")
-            self.CPU_Nums[i].setText((str(cu) + "%"))
-            self.CPU_SpeedMeters[i].setSpeed(cu)
-            self.CPU_Bars[i].setProperty("value", cu)
-            if cu <= 50.0:
-                self.CPU_Bars[i].setStyleSheet(
-                    "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * cu * 2)}'",'255','0')}")
-            else:
-                self.CPU_Bars[i].setStyleSheet(
-                    "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (cu - 50) * 2))}'",'255','0')}")
-            print("CPU Info Updated")
-            self.Mem_Nums[i].setText((str(mu) + "%"))
-            self.Mem_Bars[i].setProperty("value", mu)
-            if mu <= 50.0:
-                self.Mem_Bars[i].setStyleSheet(
-                    "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * mu * 2)}'",'255','0')}")
-            else:
-                self.Mem_Bars[i].setStyleSheet(
-                    "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
-            print("Memory Info Updated")
             tx, dx = SRI['net'][0], SRI['net'][1]
-            tx_tag, dx_tag = "", ""
-            if (tx / 1000) < 1:
-                tx_tag = f"{tx} b"
-            if 1 < (tx / 1000) < 1000:
-                tx_tag = f"{tx / 1000} kb"
-            if 1 < (tx / 1000000):
-                tx_tag = f"{tx / 1000000} Mb"
-            if (dx / 1000) < 1:
-                dx_tag = f"{dx} b"
-            if 1 < (dx / 1000) < 1000:
-                dx_tag = f"{dx / 1000} kb"
-            if 1 < (dx / 1000000):
-                dx_tag = f"{dx / 1000000} Mb"
-
-            self.Net_Info[i][0].setText(tx_tag)
-            self.Net_Info[i][1].setText(dx_tag)
-            print("Network Info Updated")
             rb, wb = SRI['disk'][0], SRI['disk'][1]
-            r_tag, w_tag = "", ""
-            if (rb / 1000) < 1:
-                r_tag = f"{rb} b"
-            if 1 < (rb / 1000) < 1000:
-                r_tag = f"{rb / 1000} kb"
-            if 1 < (rb / 1000000):
-                r_tag = f"{rb / 1000000} Mb"
+            try:
+                self.CPU_HistoryList[i].put(cu)
+                print("History CPU Info Stored")
+                self.CPU_Nums[i].setText((str(cu) + "%"))
+                self.CPU_SpeedMeters[i].setSpeed(cu)
+                self.CPU_Bars[i].setProperty("value", cu)
+                if cu <= 50.0:
+                    self.CPU_Bars[i].setStyleSheet(
+                        "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * cu * 2)}'",'255','0')}")
+                else:
+                    self.CPU_Bars[i].setStyleSheet(
+                        "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (cu - 50) * 2))}'",'255','0')}")
+            except Exception as exp:
+                print(f"CPU Info Updated: {exp}")
+            finally:
+                pass
+            try:
+                self.Mem_Nums[i].setText((str(mu) + "%"))
+                self.Mem_Bars[i].setProperty("value", mu)
+                if mu <= 50.0:
+                    self.Mem_Bars[i].setStyleSheet(
+                        "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * mu * 2)}'",'255','0')}")
+                else:
+                    self.Mem_Bars[i].setStyleSheet(
+                        "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
+            except Exception as exp:
+                print(f"Mem Info Updated: {exp}")
+            finally:
+                pass
 
-            if (wb / 1000) < 1:
-                w_tag = f"{wb} b"
-            if 1 < (wb / 1000) < 1000:
-                w_tag = f"{wb / 1000} kb"
-            if 1 < (wb / 1000000):
-                w_tag = f"{wb / 1000000} Mb"
-            self.Disk_Info[i][0].setText(r_tag)
-            self.Disk_Info[i][1].setText(w_tag)
-            print("Disk Info Updated")
+            try:
+                tx_tag, dx_tag = "", ""
+                if (tx / 1000) < 1:
+                    tx_tag = f"{tx} b"
+                elif 1 < (tx / 1000) < 1000:
+                    tx_tag = f"{round(tx / 1000, 2)} kb"
+                elif 1 < (tx / 1000000):
+                    tx_tag = f"{round(tx / 1000000, 2)} Mb"
+                if (dx / 1000) < 1:
+                    dx_tag = f"{dx} b"
+                elif 1 < (dx / 1000) < 1000:
+                    dx_tag = f"{round(dx / 1000, 2)} kb"
+                elif 1 < (dx / 1000000):
+                    dx_tag = f"{round(dx / 1000000, 2)} Mb"
+
+                self.Net_Info[i][0].setText(tx_tag)
+                self.Net_Info[i][1].setText(dx_tag)
+            except Exception as exp:
+                print(f"Net Info Updated: {exp}")
+            finally:
+                pass
+
+            try:
+                r_tag, w_tag = "", ""
+                if (rb / 1000) < 1:
+                    r_tag = f"{rb} b"
+                elif 1 < (rb / 1000) < 1000:
+                    r_tag = f"{round(rb / 1000, 2)} kb"
+                elif 1 < (rb / 1000000) < 1000:
+                    r_tag = f"{round(rb / 1000000, 2)} Mb"
+                elif 1 < (rb / 1000000000):
+                    r_tag = f"{round(rb / 1000000000, 2)} Gb"
+
+                if (wb / 1000) < 1:
+                    w_tag = f"{wb} b"
+                elif 1 < (wb / 1000) < 1000:
+                    w_tag = f"{round(wb / 1000, 2)} kb"
+                elif 1 < (wb / 1000000) < 1000:
+                    w_tag = f"{round(wb / 1000000, 2)} Mb"
+                elif 1 < (wb / 1000000000):
+                    w_tag = f"{round(wb / 1000000000, 2)} Gb"
+                self.Disk_Info[i][0].setText(r_tag)
+                self.Disk_Info[i][1].setText(w_tag)
+            except Exception as exp:
+                print(f"Disk Info Updated: {exp}")
+            finally:
+                pass
+
 
 if __name__ == "__main__":
     import sys
