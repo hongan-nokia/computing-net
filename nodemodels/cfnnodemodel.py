@@ -87,22 +87,22 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
         p = Process(target=vlc_receiver, args=(addr, eth_face, task_cmd_q, task_cancel, node_obj.terminate_event))
         node_obj.tasks[f'{taskname} {args}'] = -1
         p.start()
-    elif taskname == 'cfnres':
-        print(args)
-        p = Process(target=cfnResHandler, args=(task_cmd_q, task_cancel, node_obj.terminate_event))
-        node_obj.tasks[f'{taskname} {args}'] = -1
-        p.start()
-    elif taskname == 'onos':
-        onos_tag = onos_handler(pid_args=args)
-        print(f"onos_handler tag is: {onos_tag}")
-
-    elif taskname == 'onos_del_all':
-        onos_del_tag = onos_del_all_flow(pid_args=args)
-        print(f"onos_del_all_flow tag is: {onos_del_tag}")
-
-    elif taskname == 'onos_add_all':
-        onos_post_tag = onos_post_all_flow(pid_args=args)
-        print(f"onos_add_all_flow tag is: {onos_post_tag}")
+    # elif taskname == 'cfnres':
+    #     print(args)
+    #     p = Process(target=cfnResHandler, args=(task_cmd_q, task_cancel, node_obj.terminate_event))
+    #     node_obj.tasks[f'{taskname} {args}'] = -1
+    #     p.start()
+    # elif taskname == 'onos':
+    #     onos_tag = onos_handler(pid_args=args)
+    #     print(f"onos_handler tag is: {onos_tag}")
+    #
+    # elif taskname == 'onos_del_all':
+    #     onos_del_tag = onos_del_all_flow(pid_args=args)
+    #     print(f"onos_del_all_flow tag is: {onos_del_tag}")
+    #
+    # elif taskname == 'onos_add_all':
+    #     onos_post_tag = onos_post_all_flow(pid_args=args)
+    #     print(f"onos_add_all_flow tag is: {onos_post_tag}")
 
     elif taskname == 'kubernetes':
         p = Process(target=kubernetes_pod_handler, args=(taskname, args, task_cmd_q, task_cancel, node_obj.terminate_event))

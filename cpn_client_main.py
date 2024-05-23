@@ -281,9 +281,9 @@ if __name__ == '__main__':
     GUI_ip, GUI_port = demo_config.gui_controller_host_ip, demo_config.gui_controller_host_port
     print(f"Will connect to GUI @ ({GUI_ip}, {GUI_port})")
 
-    # node_model = CfnNodeModel(demo_config, node_config)
-    # node_model.start()
     node_model = None
+    node_model = CfnNodeModel(demo_config, node_config)
+    node_model.start()
 
     app = QApplication(sys.argv)
     if node_name in ['client']:
