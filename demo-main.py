@@ -69,17 +69,17 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.serviceResourceInfo_hide_timer.timeout.connect(self.serviceResourceInfo.hide)
         self.cfn_manager.send_command('jump_server', 'task', 'cfnres report')
 
-    def _initServiceDeployment(self):
-        self.primaryWidget = RectangleWidget(parent=self, color=QColor(55, 204, 115))
-        self.primaryWidget.setGeometry(0, 60, 605, 365)
-        self.primaryWidget.setPalette(QPalette(QColor(255, 255, 255)))
-        self.primaryWidget.setStyleSheet("background-color: white;")
-        self.primaryLayout = QHBoxLayout()
-        self.primaryWidget.setLayout(self.primaryLayout)
-
-        self.SDW = ServiceDeploymentWidgetCN(self.cfn_manager, self.res_q, self.monitor_q_net_list)
-        self.primaryLayout.addWidget(self.SDW)
-        self.primaryWidget.setVisible(False)
+    # def _initServiceDeployment(self):
+    #     self.primaryWidget = RectangleWidget(parent=self, color=QColor(55, 204, 115))
+    #     self.primaryWidget.setGeometry(0, 60, 605, 365)
+    #     self.primaryWidget.setPalette(QPalette(QColor(255, 255, 255)))
+    #     self.primaryWidget.setStyleSheet("background-color: white;")
+    #     self.primaryLayout = QHBoxLayout()
+    #     self.primaryWidget.setLayout(self.primaryLayout)
+    #
+    #     self.SDW = ServiceDeploymentWidgetCN(self.cfn_manager, self.res_q, self.monitor_q_net_list)
+    #     self.primaryLayout.addWidget(self.SDW)
+    #     self.primaryWidget.setVisible(False)
 
     def _initShowServiceResource(self):
         # 表格

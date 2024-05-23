@@ -10,8 +10,8 @@ from threading import Thread
 from multiprocessing.connection import wait, Client
 from typing import Union
 
+from nodemodels.nodehandler import NodeManager
 from utils.configparser import DemoConfigParser
-from utils.nodehandler import NodeManager
 from utils.statemonitor import StateMonitor
 
 _EXIT_DEMO_SIGNAL = 'demo terminate'  # 调试的时侯用于结束进程
