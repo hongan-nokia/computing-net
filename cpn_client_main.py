@@ -1,3 +1,4 @@
+import argparse
 import sys
 from pathlib import Path
 
@@ -8,6 +9,9 @@ from PyQt5.QtCore import QEvent, Qt
 from PyQt5.QtGui import QKeyEvent, QPixmap, QIcon, QColor
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QStackedWidget, QWidget, QVBoxLayout, QGroupBox, \
     QHBoxLayout, QSpacerItem, QSizePolicy
+
+from nodemodels.cfnnodemodel import CfnNodeModel
+from utils.configparser import DemoConfigParser
 
 
 class Canvas(QWidget):
@@ -236,12 +240,12 @@ class Canvas(QWidget):
         self.mainLayout.addLayout(self.nokia_logo_layout)
 
 
-class Window(QWidget):
-    def __init__(self):
+class ClientWindow(QWidget):
+    def __init__(self, manager: CfnNodeModel):
         super().__init__()
         self.setWindowTitle(" ")
         self.setGeometry(0, 0, 1920, 1080)
-        # self.slave_manager = slave_manager
+        self.client_manager = manager
         self.canvas = Canvas()
         self.setStyleSheet("border:none; background-color: {}".format(QColor(0, 17, 53).name()))
         self.layout = QVBoxLayout()
@@ -250,7 +254,39 @@ class Window(QWidget):
 
 
 if __name__ == '__main__':
+
+    GuiHosts = ['c_node1', 'c_node2', 'c_node3']
+    parser = argparse.ArgumentParser(description='cpn_node')
+    parser.add_argument('config', metavar="CONFIG_FILE", type=str, help="Demo configuration JSON file.",
+                        default="cpn_config-test.json")
+    parser.add_argument('node_name', metavar="NODE_NAME", type=str,
+                        help="Name of this node (should match the demo config file).")
+    args = parser.parse_args()
+
+    # 根据程序运行参数，读取demo配置信息
+    demo_config = DemoConfigParser(args.config)
+
+    # 根据程序运行参数，对照配置信息种自己的node_name，提取本node的配置参数
+    node_name = args.node_name
+    print(f"node_name is :{node_name}")
+    node_config = None
+    try:
+        node_config = demo_config.get_node(node_name)
+        print(f"node_config is :{node_config}")
+    except:
+        print(f"Node name `{node_name}` does not match configuration file. Aborting.")
+        sys.exit(1)
+    print(f"\nRunning as node {node_name}!",
+          '\n    ' + '    \n    '.join([str(k) + '=' + str(v) for k, v in node_config.items()]) + '\n')
+
+    GUI_ip, GUI_port = demo_config.gui_controller_host_ip, demo_config.gui_controller_host_port
+    print(f"Will connect to GUI @ ({GUI_ip}, {GUI_port})")
+
+    node_model = CfnNodeModel(demo_config, node_config)
+    node_model.start()
+
     app = QApplication(sys.argv)
-    window = Window()
-    window.show()
+    if node_name in ['client']:
+        c_window = ClientWindow(node_model)
+    c_window.show()
     sys.exit(app.exec_())
