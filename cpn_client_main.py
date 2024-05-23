@@ -29,14 +29,18 @@ class Canvas(QWidget):
             QPushButton {
                 border: 10px solid #2980b9;
                     color: blue;
-                    padding: 50px;
-                    border-radius: 50px;
+                    padding: 30px;
+                    border-radius: 30px;
                 }
                 QPushButton:hover {
                     color: red;
                     border: 10px inset #2980b9;
                 }
             """
+        self.task_font_size = QtGui.QFont()
+        self.task_font_size.setFamily("Arial")
+        self.task_font_size.setBold(True)
+        self.task_font_size.setPointSize(20)
 
         self._initTitle()
 
@@ -79,6 +83,7 @@ class Canvas(QWidget):
         self.title = QtWidgets.QLabel(self.title_box)
         self.title.setText(title)
         self.title.setFont(self.font)
+        self.title.setStyleSheet("font-size: 80px; padding: 75px;")
         self.title.setAlignment(Qt.AlignCenter)
         self.titleLayout.addWidget(self.title)
         self.mainLayout.addWidget(self.title_box)
@@ -92,63 +97,68 @@ class Canvas(QWidget):
         self.task1_box.setStyleSheet("background: #ccc; border-radius: 50px;")
         self.task1_layout = QtWidgets.QVBoxLayout(self.task1_box)
 
-        # spacerItem11 = QtWidgets.QSpacerItem(20, 100, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        # self.task1_layout.addItem(spacerItem11)
-
-        # self.font.setPointSize(20)
-
         # ####
         self.task1_title_box = QtWidgets.QGroupBox(self.task1_box)
-        self.task1_title_box.setStyleSheet("color: #222; border-radius: 20px;")
+        self.task1_title_box.setStyleSheet("color: #222; border-radius: 20px; width: 400px;")
         self.task1_title_box_layout = QtWidgets.QVBoxLayout(self.task1_title_box)
 
         self.task1_title = QtWidgets.QLabel(self.task1_box)
         self.task1_title.setText("测试一")
-        self.task1_title.setFont(self.font)
+        self.task1_title.setFont(self.task_font_size)
 
         self.task1_title.setAlignment(Qt.AlignCenter)
 
         self.task1_title_box_layout.addWidget(self.task1_title)
         self.task1_layout.addWidget(self.task1_title_box)
 
-        # spacerItem12 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        # self.task1_layout.addItem(spacerItem12)
-
         # ####
         self.task1_btn_box = QtWidgets.QGroupBox(self.task1_box)
         self.task1_btn_layout = QtWidgets.QVBoxLayout(self.task1_btn_box)
 
         self.task1_btn = QtWidgets.QPushButton(self.task1_box)
-        self.task1_btn.setText("首包相应时延测试")
-        self.task1_btn.setFont(self.font)
+        self.task1_btn.setText("首包响应时延测试")
+        self.task1_btn.setFont(self.task_font_size)
         self.task1_btn.setStyleSheet(self.btn_style)
 
         self.task1_btn_layout.addWidget(self.task1_btn)
         self.task1_layout.addWidget(self.task1_btn_box)
 
         # ####
-        self.task1_text_box = QtWidgets.QGroupBox(self.task1_box)
-        self.task1_text_box.setStyleSheet("color: #484889; border-radius: 3px;")
-        self.task1_text_layout = QtWidgets.QVBoxLayout(self.task1_text_box)
+        self.task1_text1_box = QtWidgets.QGroupBox(self.task1_box)
+        self.task1_text1_box.setStyleSheet("color: #484889; border-radius: 3px;")
+        self.task1_text1_layout = QtWidgets.QVBoxLayout(self.task1_text1_box)
 
-        self.task1_text = QtWidgets.QLabel(self.task1_box)
-        self.task1_text.setText("业务首包时延（秒）")
-        self.task1_text.setFont(self.font)
-        self.task1_text.setAlignment(Qt.AlignCenter)
+        self.task1_text1 = QtWidgets.QLabel(self.task1_box)
+        self.task1_text1.setText("业务首包时延（秒）")
+        self.task1_text1.setFont(self.task_font_size)
+        self.task1_text1.setAlignment(Qt.AlignCenter)
 
-        self.task1_text_layout.addWidget(self.task1_text)
-        self.task1_layout.addWidget(self.task1_text_box)
+        self.task1_text1_layout.addWidget(self.task1_text1)
+        self.task1_layout.addWidget(self.task1_text1_box)
 
         # ###
-        self.task1_input_box = QtWidgets.QGroupBox(self.task1_box)
-        self.task1_input_box.setStyleSheet("background: #fff; border-radius: 50px;")
-        self.task1_input_layout = QtWidgets.QVBoxLayout(self.task1_input_box)
+        self.task1_text2_box = QtWidgets.QGroupBox(self.task1_box)
+        self.task1_text2_box.setStyleSheet("border-radius: 30px;")
+        self.task1_text2_layout = QtWidgets.QVBoxLayout(self.task1_text2_box)
 
-        self.task1_input = QtWidgets.QLineEdit(self.task1_box)
-        self.task1_input.setFont(self.font)
+        self.task1_text2 = QtWidgets.QLabel(self.task1_box)
+        self.task1_text2.setText("test")
+        self.task1_text2.setFont(self.task_font_size)
+        self.task1_text2.setStyleSheet("background: #fff;")
+        self.task1_text2.setFixedWidth(200)
+        self.task1_text2.setAlignment(Qt.AlignCenter)
 
-        self.task1_input_layout.addWidget(self.task1_input)
-        self.task1_layout.addWidget(self.task1_input_box)
+        self.task1_text2_center_layout = QHBoxLayout()
+        self.spacer = QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.task1_text2_center_layout.addItem(self.spacer)
+
+        self.task1_text2_center_layout.addWidget(self.task1_text2)
+
+        self.spacer = QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.task1_text2_center_layout.addItem(self.spacer)
+
+        self.task1_text2_layout.addLayout(self.task1_text2_center_layout)
+        self.task1_layout.addWidget(self.task1_text2_box)
 
         self.horizontalLayout.addWidget(self.task1_box)
 
@@ -159,12 +169,12 @@ class Canvas(QWidget):
 
         # ####
         self.task2_title_box = QtWidgets.QGroupBox(self.teak2_box)
-        self.task2_title_box.setStyleSheet("border-radius: 20px;")
+        self.task2_title_box.setStyleSheet("border-radius: 20px; width: 400px;")
         self.task2_title_layout = QtWidgets.QVBoxLayout(self.task2_title_box)
 
         self.task2_title = QtWidgets.QLabel(self.teak2_box)
         self.task2_title.setText("测试三")
-        self.task2_title.setFont(self.font)
+        self.task2_title.setFont(self.task_font_size)
         self.task2_title.setStyleSheet("color: #222;")
 
         self.task2_title.setAlignment(Qt.AlignCenter)
@@ -178,7 +188,7 @@ class Canvas(QWidget):
 
         self.task2_btn1 = QtWidgets.QPushButton(self.teak2_box)
         self.task2_btn1.setText("服务寻址测试")
-        self.task2_btn1.setFont(self.font)
+        self.task2_btn1.setFont(self.task_font_size)
         self.task2_btn1.setStyleSheet(self.btn_style)
 
         self.task2_btn1_layout.addWidget(self.task2_btn1)
@@ -192,7 +202,7 @@ class Canvas(QWidget):
 
         self.teak2_btn2 = QtWidgets.QPushButton(self.teak2_box)
         self.teak2_btn2.setText("算力寻址测试")
-        self.teak2_btn2.setFont(self.font)
+        self.teak2_btn2.setFont(self.task_font_size)
         self.teak2_btn2.setStyleSheet(self.btn_style)
 
         self.task2_btn2_layout.addWidget(self.teak2_btn2)
@@ -206,7 +216,7 @@ class Canvas(QWidget):
 
         self.teak2_btn3 = QtWidgets.QPushButton(self.teak2_box)
         self.teak2_btn3.setText("内容寻址测试")
-        self.teak2_btn3.setFont(self.font)
+        self.teak2_btn3.setFont(self.task_font_size)
         self.teak2_btn3.setStyleSheet(self.btn_style)
 
         self.teak2_btn3_layout.addWidget(self.teak2_btn3)
