@@ -5,7 +5,6 @@
 @Email: honggang.yuan@nokia-sbell.com
 Description:
 """
-import socket
 import sys
 from multiprocessing import Pipe, Queue
 from time import sleep
@@ -44,7 +43,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self._initView()
         self._initMainTitle()
         self._initTestScenes()
-        # self._initDataVisualize()
+        self._initDataVisualize()
         self._initScenarioButtons()
         self.mouse = PyWinMouse.Mouse()
         self.mouse_pos_mon = repeatTimer(1, self.get_mouse_position, autostart=True)
@@ -77,8 +76,8 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.data_visual = data_visualize(parent=self, res_queue_dict=self.data_visual_queue_dict)
         self.data_visual.setVisible(False)
         print("_initDataVisualize Done ")
-        # self.computing_res_mon = repeatTimer(15, self.data_visual.update_datav, autostart=True)
-        # self.computing_res_mon.start()
+        self.computing_res_mon = repeatTimer(15, self.data_visual.update_datav, autostart=True)
+        self.computing_res_mon.start()
 
     def _initView(self):
         self.setWindowTitle(" ")

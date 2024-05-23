@@ -1801,6 +1801,7 @@ class data_visualize(QWidget):
         self._updateDiskInfo()
 
     def _updateCPUInfo(self):
+        print("_updateCPUInfo")
         CPU_Nums = [
             self.node1_cpu_num,
             self.node2_cpu_num,
@@ -1834,17 +1835,18 @@ class data_visualize(QWidget):
         CPU_Utilize[-1] = sum(CPU_Utilize[:-1]) / len(CPU_Utilize[:-1])
 
         for i, cu in enumerate(CPU_Utilize):
-            eval(f"{CPU_Nums[i]}" + f".setText(_translate(\"window\", str({cu}) + \"%\"))")
-            eval(f"{CPU_SpeedMeters[i]}" + ".setSpeed(cu)")
-            eval(f"{CPU_Bars[i]}" + ".setProperty(\"value\", cu)")
+            print(f"{i} ...cpu... {cu}")
+            CPU_Nums[i].setText((str(cu) + "%"))
+            CPU_SpeedMeters[i].setSpeed(cu)
+            CPU_Bars[i].setProperty("value", cu)
             if cu <= 50.0:
-                eval(f"{CPU_Bars[i]}" + ".setStyleSheet(\"QProgressBar::chunk {background-color: rgb(\" + str(int(2.55 * "
-                                        "cu * 2)) + \",\" + \"255\" + \",0);}\")")
+                CPU_Bars[i].setStyleSheet("QProgressBar::chunk {background-color:rgb("f'{int(2.55 * cu * 2)}'",'255','0')}")
             else:
-                eval(f"{CPU_Bars[i]}" + ".setStyleSheet(\"QProgressBar::chunk {background-color: rgb(\" + \"255\" + \","
-                                        "\" + str(int(2.55 * (100 - ((cu - 50) * 2)))) + \",0);}\")")
+                CPU_Bars[i].setStyleSheet("QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (cu - 50) * 2))}'",'255','0')}")
+        print("_updateCPUInfo")
 
     def _updateMemInfo(self):
+        print("_updateMemInfo")
         Mem_Nums = [
             self.node1_mem_num,
             self.node2_mem_num,
@@ -1873,14 +1875,14 @@ class data_visualize(QWidget):
         Mem_Utilize[-1] = sum(Mem_Utilize[:-1]) / len(Mem_Utilize[:-1])
 
         for i, mu in enumerate(Mem_Utilize):
-            eval(f"{Mem_Nums[i]}" + f".setText(_translate(\"window\", str({mu}) + \"%\"))")
-            eval(f"{Mem_Bars[i]}" + ".setProperty(\"value\", mu)")
+            print(f"{i} ...mem... {mu}")
+            Mem_Nums[i].setText((str(mu) + "%"))
+            Mem_Bars[i].setProperty("value", mu)
             if mu <= 50.0:
-                eval(f"{Mem_Bars[i]}" + ".setStyleSheet(\"QProgressBar::chunk {background-color: rgb(\" + str(int(2.55 * "
-                                        "mu * 2)) + \",\" + \"255\" + \",0);}\")")
+                Mem_Bars[i].setStyleSheet("QProgressBar::chunk {background-color:rgb("f'{int(2.55 * mu * 2)}'",'255','0')}")
             else:
-                eval(f"{Mem_Bars[i]}" + ".setStyleSheet(\"QProgressBar::chunk {background-color: rgb(\" + \"255\" + \","
-                                        "\" + str(int(2.55 * (100 - ((mu - 50) * 2)))) + \",0);}\")")
+                Mem_Bars[i].setStyleSheet("QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
+        print("_updateMemInfo")
 
     def _updateNetInfo(self):
         Net_Info = [
@@ -1906,20 +1908,22 @@ class data_visualize(QWidget):
         for i, net_txdx in enumerate(Net_TxDx):
             tx_tag, dx_tag = "", ""
             if (net_txdx[0] / 1000) < 1:
-                tx_tag = f"{net_txdx[0]} b/s"
+                tx_tag = f"{net_txdx[0]} b"
             if 1 < (net_txdx[0] / 1000) < 1000:
-                tx_tag = f"{net_txdx[0] / 1000} kb/s"
+                tx_tag = f"{net_txdx[0] / 1000} kb"
             if 1 < (net_txdx[0] / 1000000) < 1000:
-                tx_tag = f"{net_txdx[0] / 1000000} Mb/s"
+                tx_tag = f"{net_txdx[0] / 1000000} Mb"
 
             if (net_txdx[1] / 1000) < 1:
-                dx_tag = f"{net_txdx[1]} b/s"
+                dx_tag = f"{net_txdx[1]} b"
             if 1 < (net_txdx[1] / 1000) < 1000:
-                dx_tag = f"{net_txdx[1] / 1000} kb/s"
+                dx_tag = f"{net_txdx[1] / 1000} kb"
             if 1 < (net_txdx[1] / 1000000) < 1000:
-                dx_tag = f"{net_txdx[1] / 1000000} Mb/s"
-            eval(f"{Net_Info[i][0]}" + f".setText(_translate(\"window\", {tx_tag}))")
-            eval(f"{Net_Info[i][1]}" + f".setText(_translate(\"window\", {dx_tag}))")
+                dx_tag = f"{net_txdx[1] / 1000000} Mb"
+
+            Net_Info[i][0].setText(tx_tag)
+            Net_Info[i][1].setText(dx_tag)
+        print("_updateNetInfo")
 
     def _updateDiskInfo(self):
         Disk_Info = [
@@ -1945,20 +1949,21 @@ class data_visualize(QWidget):
         for i, disk_rw in enumerate(Disk_RW):
             r_tag, w_tag = "", ""
             if (disk_rw[0] / 1000) < 1:
-                r_tag = f"{disk_rw[0]} b/s"
+                r_tag = f"{disk_rw[0]} b"
             if 1 < (disk_rw[0] / 1000) < 1000:
-                r_tag = f"{disk_rw[0] / 1000} kb/s"
+                r_tag = f"{disk_rw[0] / 1000} kb"
             if 1 < (disk_rw[0] / 1000000) < 1000:
-                r_tag = f"{disk_rw[0] / 1000000} Mb/s"
+                r_tag = f"{disk_rw[0] / 1000000} Mb"
 
             if (disk_rw[1] / 1000) < 1:
-                w_tag = f"{disk_rw[1]} b/s"
+                w_tag = f"{disk_rw[1]} b"
             if 1 < (disk_rw[1] / 1000) < 1000:
-                w_tag = f"{disk_rw[1] / 1000} kb/s"
+                w_tag = f"{disk_rw[1] / 1000} kb"
             if 1 < (disk_rw[1] / 1000000) < 1000:
-                w_tag = f"{disk_rw[1] / 1000000} Mb/s"
-            eval(f"{Disk_Info[i][0]}" + f".setText(_translate(\"window\", {r_tag}))")
-            eval(f"{Disk_Info[i][1]}" + f".setText(_translate(\"window\", {w_tag}))")
+                w_tag = f"{disk_rw[1] / 1000000} Mb"
+            Disk_Info[i][0].setText(r_tag)
+            Disk_Info[i][1].setText(w_tag)
+        print("_updateDiskInfo")
 
 
 if __name__ == "__main__":
