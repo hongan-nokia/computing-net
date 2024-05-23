@@ -288,5 +288,5 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     if node_name in ['client']:
         c_window = ClientWindow(node_model)
-    c_window.show()
+        c_window.show()
     sys.exit(app.exec_())
