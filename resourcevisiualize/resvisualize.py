@@ -2033,9 +2033,9 @@ class data_visualize(QWidget):
     def requestResourceInfo(self):
         nodes_info = []
         try:
-            node1_client = requests.get(url=self.node1_resource_uri)
-            node2_client = requests.get(url=self.node2_resource_uri)
-            node3_client = requests.get(url=self.node3_resource_uri)
+            node1_client = requests.get(url=self.node1_resource_uri, timeout=3)
+            node2_client = requests.get(url=self.node2_resource_uri, timeout=3)
+            node3_client = requests.get(url=self.node3_resource_uri, timeout=3)
             node1_info = node1_client.json()
             node2_info = node2_client.json()
             node3_info = node3_client.json()
