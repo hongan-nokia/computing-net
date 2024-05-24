@@ -90,12 +90,12 @@ class CpnAppWindow(QtWidgets.QMainWindow):
                 self.scene3_heatMap_QueueL[i].put(queue.get())
 
     def _initTestScenes(self):
-        self.CPAARWidget = ComputingPowerAwareAddressRouteWindow(self, cfn_manager, self.scene1_heatMap_QueueL)
+        self.CPAARWidget = ComputingPowerAwareAddressRouteWindow(self, self.cfn_manager, self.scene1_heatMap_QueueL)
         self.CPAARWidget.setVisible(False)
 
     def _initDataVisualize(self):
         # self.data_visual = data_visualize(parent=self, res_queue_dict=self.data_visual_queue_dict)
-        self.data_visual = data_visualize(parent=self, res_queue_dict={})
+        self.data_visual = data_visualize(parent=self, demo_manager=self.cfn_manager, res_queue_dict={})
         self.data_visual.setVisible(False)
 
         # self.data_mon = repeatTimer(5, self.data_visual.updateNodesInfo, autostart=True)
