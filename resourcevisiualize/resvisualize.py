@@ -2147,6 +2147,259 @@ class data_visualize(QWidget):
             finally:
                 pass
 
+    def updateNodesInfo(self):
+        syntheticResInfo = self.requestResourceInfo()
+        while not syntheticResInfo:
+            syntheticResInfo = self.requestResourceInfo()
+            sleep(2)
+        self.updateNode1Info(syntheticResInfo[0])
+        self.updateNode2Info(syntheticResInfo[1])
+        self.updateNode3Info(syntheticResInfo[2])
+        self.updateNode4Info(syntheticResInfo[3])
+    def updateNode1Info(self, node1_info):
+        cu = node1_info['cpu']
+        mu = node1_info['mem']
+        tx, dx = node1_info['net'][0], node1_info['net'][1]
+        rb, wb = node1_info['disk'][0], node1_info['disk'][1]
+        self.history_cpu_1.put(cu)
+        self.node1_cpu_num.setText((str(cu) + "%"))
+        self.speed_meter_1.setSpeed(cu)
+        self.node1_cpu_bar.setProperty("value", cu)
+        if cu <= 50.0:
+            self.node1_cpu_bar.setStyleSheet(
+                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * cu * 2)}'",'255','0')}")
+        else:
+            self.node1_cpu_bar.setStyleSheet(
+                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (cu - 50) * 2))}'",'255','0')}")
+        self.node1_mem_num.setText((str(mu) + "%"))
+        self.node1_mem_bar.setProperty("value", mu)
+        if mu <= 50.0:
+            self.node1_mem_bar.setStyleSheet(
+                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * mu * 2)}'",'255','0')}")
+        else:
+            self.node1_mem_bar.setStyleSheet(
+                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
+        tx_tag, dx_tag = "", ""
+        if (tx / 1000) < 1:
+            tx_tag = f"{tx} b"
+        elif 1 < (tx / 1000) < 1000:
+            tx_tag = f"{round(tx / 1000, 2)} kb"
+        elif 1 < (tx / 1000000):
+            tx_tag = f"{round(tx / 1000000, 2)} Mb"
+        if (dx / 1000) < 1:
+            dx_tag = f"{dx} b"
+        elif 1 < (dx / 1000) < 1000:
+            dx_tag = f"{round(dx / 1000, 2)} kb"
+        elif 1 < (dx / 1000000):
+            dx_tag = f"{round(dx / 1000000, 2)} Mb"
+
+        self.node1_net_read_value.setText(tx_tag)
+        self.node1_net_write_value.setText(dx_tag)
+
+        r_tag, w_tag = "", ""
+        if (rb / 1000) < 1:
+            r_tag = f"{rb} b"
+        elif 1 < (rb / 1000) < 1000:
+            r_tag = f"{round(rb / 1000, 2)} kb"
+        elif 1 < (rb / 1000000) < 1000:
+            r_tag = f"{round(rb / 1000000, 2)} Mb"
+        elif 1 < (rb / 1000000000):
+            r_tag = f"{round(rb / 1000000000, 2)} Gb"
+
+        if (wb / 1000) < 1:
+            w_tag = f"{wb} b"
+        elif 1 < (wb / 1000) < 1000:
+            w_tag = f"{round(wb / 1000, 2)} kb"
+        elif 1 < (wb / 1000000) < 1000:
+            w_tag = f"{round(wb / 1000000, 2)} Mb"
+        elif 1 < (wb / 1000000000):
+            w_tag = f"{round(wb / 1000000000, 2)} Gb"
+        self.node1_disk_read_value.setText(r_tag)
+        self.node1_disk_write_value.setText(w_tag)
+
+    def updateNode2Info(self, node2_info):
+        cu = node2_info['cpu']
+        mu = node2_info['mem']
+        tx, dx = node2_info['net'][0], node2_info['net'][1]
+        rb, wb = node2_info['disk'][0], node2_info['disk'][1]
+        self.history_cpu_2.put(cu)
+        self.node2_cpu_num.setText((str(cu) + "%"))
+        self.speed_meter_2.setSpeed(cu)
+        self.node2_cpu_bar.setProperty("value", cu)
+        if cu <= 50.0:
+            self.node2_cpu_bar.setStyleSheet(
+                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * cu * 2)}'",'255','0')}")
+        else:
+            self.node2_cpu_bar.setStyleSheet(
+                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (cu - 50) * 2))}'",'255','0')}")
+        self.node2_mem_num.setText((str(mu) + "%"))
+        self.node2_mem_bar.setProperty("value", mu)
+        if mu <= 50.0:
+            self.node2_mem_bar.setStyleSheet(
+                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * mu * 2)}'",'255','0')}")
+        else:
+            self.node2_mem_bar.setStyleSheet(
+                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
+        tx_tag, dx_tag = "", ""
+        if (tx / 1000) < 1:
+            tx_tag = f"{tx} b"
+        elif 1 < (tx / 1000) < 1000:
+            tx_tag = f"{round(tx / 1000, 2)} kb"
+        elif 1 < (tx / 1000000):
+            tx_tag = f"{round(tx / 1000000, 2)} Mb"
+        if (dx / 1000) < 1:
+            dx_tag = f"{dx} b"
+        elif 1 < (dx / 1000) < 1000:
+            dx_tag = f"{round(dx / 1000, 2)} kb"
+        elif 1 < (dx / 1000000):
+            dx_tag = f"{round(dx / 1000000, 2)} Mb"
+
+        self.node2_net_read_value.setText(tx_tag)
+        self.node2_net_write_value.setText(dx_tag)
+
+        r_tag, w_tag = "", ""
+        if (rb / 1000) < 1:
+            r_tag = f"{rb} b"
+        elif 1 < (rb / 1000) < 1000:
+            r_tag = f"{round(rb / 1000, 2)} kb"
+        elif 1 < (rb / 1000000) < 1000:
+            r_tag = f"{round(rb / 1000000, 2)} Mb"
+        elif 1 < (rb / 1000000000):
+            r_tag = f"{round(rb / 1000000000, 2)} Gb"
+
+        if (wb / 1000) < 1:
+            w_tag = f"{wb} b"
+        elif 1 < (wb / 1000) < 1000:
+            w_tag = f"{round(wb / 1000, 2)} kb"
+        elif 1 < (wb / 1000000) < 1000:
+            w_tag = f"{round(wb / 1000000, 2)} Mb"
+        elif 1 < (wb / 1000000000):
+            w_tag = f"{round(wb / 1000000000, 2)} Gb"
+        self.node2_disk_read_value.setText(r_tag)
+        self.node2_disk_write_value.setText(w_tag)
+
+    def updateNode3Info(self, node3_info):
+        cu = node3_info['cpu']
+        mu = node3_info['mem']
+        tx, dx = node3_info['net'][0], node3_info['net'][1]
+        rb, wb = node3_info['disk'][0], node3_info['disk'][1]
+        self.history_cpu_3.put(cu)
+        self.node3_cpu_num.setText((str(cu) + "%"))
+        self.speed_meter_3.setSpeed(cu)
+        self.node3_cpu_bar.setProperty("value", cu)
+        if cu <= 50.0:
+            self.node3_cpu_bar.setStyleSheet(
+                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * cu * 2)}'",'255','0')}")
+        else:
+            self.node3_cpu_bar.setStyleSheet(
+                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (cu - 50) * 2))}'",'255','0')}")
+        self.node3_mem_num.setText((str(mu) + "%"))
+        self.node3_mem_bar.setProperty("value", mu)
+        if mu <= 50.0:
+            self.node3_mem_bar.setStyleSheet(
+                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * mu * 2)}'",'255','0')}")
+        else:
+            self.node3_mem_bar.setStyleSheet(
+                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
+        tx_tag, dx_tag = "", ""
+        if (tx / 1000) < 1:
+            tx_tag = f"{tx} b"
+        elif 1 < (tx / 1000) < 1000:
+            tx_tag = f"{round(tx / 1000, 2)} kb"
+        elif 1 < (tx / 1000000):
+            tx_tag = f"{round(tx / 1000000, 2)} Mb"
+        if (dx / 1000) < 1:
+            dx_tag = f"{dx} b"
+        elif 1 < (dx / 1000) < 1000:
+            dx_tag = f"{round(dx / 1000, 2)} kb"
+        elif 1 < (dx / 1000000):
+            dx_tag = f"{round(dx / 1000000, 2)} Mb"
+
+        self.node3_net_read_value.setText(tx_tag)
+        self.node3_net_write_value.setText(dx_tag)
+
+        r_tag, w_tag = "", ""
+        if (rb / 1000) < 1:
+            r_tag = f"{rb} b"
+        elif 1 < (rb / 1000) < 1000:
+            r_tag = f"{round(rb / 1000, 2)} kb"
+        elif 1 < (rb / 1000000) < 1000:
+            r_tag = f"{round(rb / 1000000, 2)} Mb"
+        elif 1 < (rb / 1000000000):
+            r_tag = f"{round(rb / 1000000000, 2)} Gb"
+
+        if (wb / 1000) < 1:
+            w_tag = f"{wb} b"
+        elif 1 < (wb / 1000) < 1000:
+            w_tag = f"{round(wb / 1000, 2)} kb"
+        elif 1 < (wb / 1000000) < 1000:
+            w_tag = f"{round(wb / 1000000, 2)} Mb"
+        elif 1 < (wb / 1000000000):
+            w_tag = f"{round(wb / 1000000000, 2)} Gb"
+        self.node3_disk_read_value.setText(r_tag)
+        self.node3_disk_write_value.setText(w_tag)
+
+    def updateNode4Info(self, node4_info):
+        cu = node4_info['cpu']
+        mu = node4_info['mem']
+        tx, dx = node4_info['net'][0], node4_info['net'][1]
+        rb, wb = node4_info['disk'][0], node4_info['disk'][1]
+        self.history_cpu_4.put(cu)
+        self.node4_cpu_num.setText((str(cu) + "%"))
+        self.speed_meter_4.setSpeed(cu)
+        self.node4_cpu_bar.setProperty("value", cu)
+        if cu <= 50.0:
+            self.node4_cpu_bar.setStyleSheet(
+                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * cu * 2)}'",'255','0')}")
+        else:
+            self.node4_cpu_bar.setStyleSheet(
+                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (cu - 50) * 2))}'",'255','0')}")
+        self.node4_mem_num.setText((str(mu) + "%"))
+        self.node4_mem_bar.setProperty("value", mu)
+        if mu <= 50.0:
+            self.node4_mem_bar.setStyleSheet(
+                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * mu * 2)}'",'255','0')}")
+        else:
+            self.node4_mem_bar.setStyleSheet(
+                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
+        tx_tag, dx_tag = "", ""
+        if (tx / 1000) < 1:
+            tx_tag = f"{tx} b"
+        elif 1 < (tx / 1000) < 1000:
+            tx_tag = f"{round(tx / 1000, 2)} kb"
+        elif 1 < (tx / 1000000):
+            tx_tag = f"{round(tx / 1000000, 2)} Mb"
+        if (dx / 1000) < 1:
+            dx_tag = f"{dx} b"
+        elif 1 < (dx / 1000) < 1000:
+            dx_tag = f"{round(dx / 1000, 2)} kb"
+        elif 1 < (dx / 1000000):
+            dx_tag = f"{round(dx / 1000000, 2)} Mb"
+
+        self.node4_net_read_value.setText(tx_tag)
+        self.node4_net_write_value.setText(dx_tag)
+
+        r_tag, w_tag = "", ""
+        if (rb / 1000) < 1:
+            r_tag = f"{rb} b"
+        elif 1 < (rb / 1000) < 1000:
+            r_tag = f"{round(rb / 1000, 2)} kb"
+        elif 1 < (rb / 1000000) < 1000:
+            r_tag = f"{round(rb / 1000000, 2)} Mb"
+        elif 1 < (rb / 1000000000):
+            r_tag = f"{round(rb / 1000000000, 2)} Gb"
+
+        if (wb / 1000) < 1:
+            w_tag = f"{wb} b"
+        elif 1 < (wb / 1000) < 1000:
+            w_tag = f"{round(wb / 1000, 2)} kb"
+        elif 1 < (wb / 1000000) < 1000:
+            w_tag = f"{round(wb / 1000000, 2)} Mb"
+        elif 1 < (wb / 1000000000):
+            w_tag = f"{round(wb / 1000000000, 2)} Gb"
+        self.node4_disk_read_value.setText(r_tag)
+        self.node4_disk_write_value.setText(w_tag)
+
 
 if __name__ == "__main__":
     import sys
