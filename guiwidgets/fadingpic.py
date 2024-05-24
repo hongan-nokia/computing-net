@@ -60,13 +60,14 @@ class FadingPic(QObject):
 class BlinkingPic(FadingPic):
     """ Based on FadingPic, use a timer to achieve blinking effect instead of fading animation. """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, parent, *args, **kwargs):
         """
         the following keyword arguments can be used to control blinking effect:
         blink_period: int - blink timer interval in ms
         auto_dim: bool - if True, hide the pic when blinking stops. default False.
         dim_opacity: float - the opacity leval (0~1) when the pic is dimmed
         """
+        self.setParent(parent)
         self._blink_period = kwargs.pop('blink_period', 600)
         self._auto_dim = kwargs.pop('auto_dim', False)
         self._dim_opacity = kwargs.pop('dim_opacity', 0)
