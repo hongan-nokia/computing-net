@@ -2040,15 +2040,15 @@ class data_visualize(QWidget):
             node3_info = node3_client.json()
             nodes_info = [node1_info, node2_info, node3_info]
             node4_info = {
-                "cpu": sum(ni['cpu'] for ni in nodes_info) / len(nodes_info),
-                "mem": sum(ni['mem'] for ni in nodes_info) / len(nodes_info),
+                "cpu": round(sum(ni['cpu'] for ni in nodes_info) / len(nodes_info), 2),
+                "mem": round(sum(ni['mem'] for ni in nodes_info) / len(nodes_info), 2),
                 "disk": [
-                    sum(ni['disk'][0] for ni in nodes_info) / len(nodes_info),
-                    sum(ni['disk'][1] for ni in nodes_info) / len(nodes_info)
+                    round(sum(ni['disk'][0] for ni in nodes_info) / len(nodes_info), 2),
+                    round(sum(ni['disk'][1] for ni in nodes_info) / len(nodes_info), 2)
                 ],
                 "net": [
-                    sum(ni['net'][0] for ni in nodes_info) / len(nodes_info),
-                    sum(ni['net'][1] for ni in nodes_info) / len(nodes_info)
+                    round(sum(ni['net'][0] for ni in nodes_info) / len(nodes_info), 2),
+                    round(sum(ni['net'][1] for ni in nodes_info) / len(nodes_info), 2)
                 ]
             }
             nodes_info.append(node4_info)
