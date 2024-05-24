@@ -2060,7 +2060,7 @@ class data_visualize(QWidget):
 
     def updateSyntheticResource(self):
         syntheticResInfo = self.requestResourceInfo()
-        while not syntheticResInfo:
+        while not (len(syntheticResInfo) == 4):
             syntheticResInfo = self.requestResourceInfo()
             sleep(2)
         for i, SRI in enumerate(syntheticResInfo):
@@ -2149,7 +2149,7 @@ class data_visualize(QWidget):
 
     def updateNodesInfo(self):
         syntheticResInfo = self.requestResourceInfo()
-        while not syntheticResInfo:
+        while not (len(syntheticResInfo) == 4):
             syntheticResInfo = self.requestResourceInfo()
             sleep(2)
         print(syntheticResInfo)
