@@ -1593,22 +1593,22 @@ class data_visualize(QWidget):
         # self.history_delay_3 = Queue(15000)
         # self.history_delay_4 = Queue(15000)
 
-        # self.history_delay_1 = None
-        # self.history_delay_2 = None
-        # self.history_delay_3 = None
-        # self.history_delay_4 = None
-        #
-        # self.history1 = DataVisualizationWindow(self.history_cpu_1, self.history_delay_1, "Node1")
-        # self.history1.setVisible(False)
-        #
-        # self.history2 = DataVisualizationWindow(self.history_cpu_2, self.history_delay_2, "Node2")
-        # self.history2.setVisible(False)
-        #
-        # self.history3 = DataVisualizationWindow(self.history_cpu_3, self.history_delay_3, "Node3")
-        # self.history3.setVisible(False)
-        #
-        # self.history4 = DataVisualizationWindow(self.history_cpu_4, self.history_delay_4, "Node4")
-        # self.history4.setVisible(False)
+        self.history_delay_1 = None
+        self.history_delay_2 = None
+        self.history_delay_3 = None
+        self.history_delay_4 = None
+
+        self.history1 = DataVisualizationWindow(self.history_cpu_1, self.history_delay_1, "Node1")
+        self.history1.setVisible(False)
+
+        self.history2 = DataVisualizationWindow(self.history_cpu_2, self.history_delay_2, "Node2")
+        self.history2.setVisible(False)
+
+        self.history3 = DataVisualizationWindow(self.history_cpu_3, self.history_delay_3, "Node3")
+        self.history3.setVisible(False)
+
+        self.history4 = DataVisualizationWindow(self.history_cpu_4, self.history_delay_4, "Node4")
+        self.history4.setVisible(False)
 
         self._initVariableGroup()
 
@@ -1627,7 +1627,7 @@ class data_visualize(QWidget):
         self.plot_button1.setFont(font)
         self.plot_button1.setFixedWidth(200)
         # self.plot_button1.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignCenter)
-        # self.plot_button1.clicked.connect(self.show_history1)
+        self.plot_button1.clicked.connect(self.show_history1)
         self.plot_button1.setStyleSheet("border: 1px solid;\n"
                                         "background-color: white;\n"
                                         "color: black")
@@ -1650,7 +1650,7 @@ class data_visualize(QWidget):
         self.plot_button2 = QPushButton("History", self)
         self.plot_button2.setFont(font)
         self.plot_button2.setFixedWidth(200)
-        # self.plot_button2.clicked.connect(self.show_history2)
+        self.plot_button2.clicked.connect(self.show_history2)
         self.plot_button2.setStyleSheet("border: 1px solid;\n"
                                         "background-color: white;\n"
                                         "color: black")
@@ -1673,7 +1673,7 @@ class data_visualize(QWidget):
         self.plot_button3 = QPushButton("History", self)
         self.plot_button3.setFont(font)
         self.plot_button3.setFixedWidth(200)
-        # self.plot_button3.clicked.connect(self.show_history3)
+        self.plot_button3.clicked.connect(self.show_history3)
         self.plot_button3.setStyleSheet("border: 1px solid;\n"
                                         "background-color: white;\n"
                                         "color: black")
@@ -1697,7 +1697,7 @@ class data_visualize(QWidget):
         self.plot_button4 = QPushButton("History", self)
         self.plot_button4.setFont(font)
         self.plot_button4.setFixedWidth(200)
-        # self.plot_button4.clicked.connect(self.show_history4)
+        self.plot_button4.clicked.connect(self.show_history4)
         self.plot_button4.setStyleSheet("border: 1px solid;\n"
                                         "background-color: white;\n"
                                         "color: black")
@@ -1852,7 +1852,7 @@ class data_visualize(QWidget):
             [self.node3_disk_read_value, self.node3_disk_write_value],
             [self.node4_disk_read_value, self.node4_disk_write_value],
         ]
-        # self.CPU_HistoryList = [self.history_cpu_1, self.history_cpu_2, self.history_cpu_3, self.history_cpu_4]
+        self.CPU_HistoryList = [self.history_cpu_1, self.history_cpu_2, self.history_cpu_3, self.history_cpu_4]
 
     def update_datav(self):
         self._updateCPUInfo()
@@ -2030,6 +2030,7 @@ class data_visualize(QWidget):
         print("_updateDiskInfo")
 
     def requestResourceInfo(self):
+        nodes_info = []
         try:
             node1_client = requests.get(url=self.node1_resource_uri)
             node2_client = requests.get(url=self.node2_resource_uri)
@@ -2059,14 +2060,15 @@ class data_visualize(QWidget):
 
     def updateSyntheticResource(self):
         syntheticResInfo = self.requestResourceInfo()
-        print(syntheticResInfo)
+        while not syntheticResInfo:
+            syntheticResInfo = self.requestResourceInfo()
         for i, SRI in enumerate(syntheticResInfo):
             cu = SRI["cpu"]
             mu = SRI["mem"]
             tx, dx = SRI['net'][0], SRI['net'][1]
             rb, wb = SRI['disk'][0], SRI['disk'][1]
             try:
-                # self.CPU_HistoryList[i].put(cu)
+                self.CPU_HistoryList[i].put(cu)
                 print("History CPU Info Stored")
                 self.CPU_Nums[i].setText((str(cu) + "%"))
                 self.CPU_SpeedMeters[i].setSpeed(cu)
