@@ -22,6 +22,7 @@ from guiwidgets.fadingpic import BlinkingPic
 from nodemodels.cfndemomanager import CfnDemoManager
 from resourcevisiualize.resvisualize import data_visualize
 from testscenes.computingpowerawareaddressroute import ComputingPowerAwareAddressRouteWindow
+from testscenes.systemsyntheticresutilize import SystemSyntheticResUtilize
 from utils.configparser import DemoConfigParser
 from utils.repeatimer import repeatTimer
 
@@ -92,6 +93,8 @@ class CpnAppWindow(QtWidgets.QMainWindow):
     def _initTestScenes(self):
         self.CPAARWidget = ComputingPowerAwareAddressRouteWindow(self, cfn_manager, self.scene1_heatMap_QueueL)
         self.CPAARWidget.setVisible(False)
+        self.SSRUWidget = SystemSyntheticResUtilize(self, cfn_manager)
+        self.SSRUWidget.setVisible(False)
 
     def _initDataVisualize(self):
         # self.data_visual = data_visualize(parent=self, res_queue_dict=self.data_visual_queue_dict)
@@ -190,6 +193,9 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.main_page_btn.clicked.connect(self._showMainPage)
         self.test1_btn.clicked.connect(self._showTestScene1)
 
+        self.test2_btn.clicked.connect(self._showTestScene2)
+        self.test3_btn.clicked.connect(self._showTestScene3)
+
     def _resourceAwarenessShow(self):
         print("_resourceAwarenessShow")
         if self.data_visual.isVisible():
@@ -204,12 +210,24 @@ class CpnAppWindow(QtWidgets.QMainWindow):
 
     def _showMainPage(self):
         self.CPAARWidget.setVisible(False)
+        self.SSRUWidget.setVisible(False)
         print("Show Main Page")
 
     def _showTestScene1(self):
+        self.SSRUWidget.setVisible(False)
         self.CPAARWidget.setVisible(True)
         print("This is TestScene1")
 
+    def _showTestScene2(self):
+        self.CPAARWidget.setVisible(False)
+
+        self.SSRUWidget.reset()
+
+        self.SSRUWidget.setVisible(True)
+        print("This is TestScene2")
+
+    def _showTestScene3(self):
+        pass
     def keyPressEvent(self, KEvent):
         k = KEvent.key()
         if k == QtCore.Qt.Key_R:
