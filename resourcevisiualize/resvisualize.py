@@ -1899,13 +1899,14 @@ class data_visualize(QWidget):
             print(f"{i} ...cpu... {cu}")
             CPU_Nums[i].setText((str(cu) + "%"))
             CPU_SpeedMeters[i].setSpeed(cu)
-            # CPU_Bars[i].setProperty("value", cu)
-            # if cu <= 50.0:
-            #     CPU_Bars[i].setStyleSheet(
-            #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * cu * 2)}'",'255','0')}")
-            # else:
-            #     CPU_Bars[i].setStyleSheet(
-            #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (cu - 50) * 2))}'",'255','0')}")
+            CPU_Bars[i].setProperty("value", cu)
+            if cu <= 50.0:
+                CPU_Bars[i].setStyleSheet(
+                    "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * cu * 2)}'",'255','0')}")
+            else:
+                CPU_Bars[i].setStyleSheet(
+                    "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (cu - 50) * 2))}'",'255','0')}")
+            CPU_Bars[i].sharedPainter()
         print("_updateCPUInfo")
 
     def _updateMemInfo(self):
