@@ -170,4 +170,4 @@ class SpeedMeter(QWidget):
         painter.setPen(self.speedTextColor)
         painter.setFont(speedFont)
         painter.drawText(leftPos, topPos, s_SpeedInt)
-        del painter
+        # del painter
