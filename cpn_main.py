@@ -19,7 +19,6 @@ from PyQt5.QtWidgets import QApplication, QHBoxLayout, QPushButton, QLabel, QGro
 
 from guiwidgets.exitdialog import ExitDialog
 from guiwidgets.fadingpic import BlinkingPic
-from guiwidgets.heatmap import HeatMap
 from nodemodels.cfndemomanager import CfnDemoManager
 from resourcevisiualize.resvisualize import data_visualize
 from testscenes.computingpowerawareaddressroute import ComputingPowerAwareAddressRouteWindow

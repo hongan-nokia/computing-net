@@ -17,11 +17,8 @@ from PyQt5.QtGui import QPalette, QColor, QBrush, QPixmap, QIcon
 from PyQt5.QtWidgets import QApplication, QHBoxLayout, QPushButton, QLabel, QGroupBox, QVBoxLayout, QTableWidgetItem, \
     QHeaderView, QTableWidget, QWidget
 
-from guiwidgets.exitdialog import ExitDialog
-from guiwidgets.fadingpic import BlinkingPic, FadingMovingPixmap
-from guiwidgets.heatmap import HeatMap
-from nodemodels.cfndemomanager import CfnDemoManager
-from resourcevisiualize.resvisualize import data_visualize
+from guiwidgets.fadingpic import BlinkingPic
+from utils.HeatMap import HeatMap
 from utils.configparser import DemoConfigParser
 from utils.imageLoader import ImageLoader
 from utils.repeatimer import repeatTimer

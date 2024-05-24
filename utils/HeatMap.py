@@ -48,6 +48,4 @@ class HeatMap(QWidget, QtCore.QObject):
             # print(f">>>>>>>>>>>>>>>>>> index is: {index}")
             self.tag_label.setPixmap(self.image2.copy(0, 0, self.width2, self.height2))
             self.tag_label.setGeometry(3, 2, self.width2, int(self.height2 * ((100 - index) / 100)))
-            self.tag_label.setVisible(True)
-            self.main_label.setVisible(True)
             self.tag_label.raise_()
