@@ -37,19 +37,33 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.setGeometry(geo['left'], geo['top'], geo['width'], geo['height'])
         self.nokia_blue = QtGui.QColor(18, 65, 145)
         self.cfn_manager = demo_manager
+        self.trfc_fig_timer = QtCore.QTimer(self)
+        self.trfc_fig_timer.setInterval(1500)
+        self.trfc_fig_timer.start()
         # self.node_names = demo_manager.node_names
         self.mainTitle = QtWidgets.QLabel(parent=self)
-        # self._initResMonitorQueue()
+        self._initResMonitorQueue()
         self._initView()
         self._initMainTitle()
         self._initTestScenes()
         self._initDataVisualize()
         self._initScenarioButtons()
+
         self.mouse = PyWinMouse.Mouse()
         self.mouse_pos_mon = repeatTimer(1, self.get_mouse_position, autostart=True)
         self.mouse_pos_mon.start()
 
     def _initResMonitorQueue(self):
+        self.scene1_heatMap_QueueL = [Queue(15) for i in range(3)]  # 这里一共有3个c_node节点
+        self.scene2_heatMap_QueueL = [Queue(15) for i in range(3)]
+        self.scene3_heatMap_QueueL = [Queue(15) for i in range(3)]
+        self.c_nodes_cpu_queues = [
+            self.cfn_manager.resource_StatMon['c_node1_cpu'],
+            self.cfn_manager.resource_StatMon['c_node2_cpu'],
+            self.cfn_manager.resource_StatMon['c_node3_cpu'],
+        ]
+        self.trfc_fig_timer.timeout.connect(self.scenesQueueInfoSync)
+        """
         self.c_node1_cpu_queue = self.cfn_manager.resource_StatMon['c_node1_cpu']
         self.c_node2_cpu_queue = self.cfn_manager.resource_StatMon['c_node2_cpu']
         self.c_node2_cpu_queue = self.cfn_manager.resource_StatMon['c_node2_cpu']
@@ -67,9 +81,17 @@ class CpnAppWindow(QtWidgets.QMainWindow):
             "c_node2_disk_q": self.cfn_manager.resource_StatMon['c_node2_disk'],
             "c_node3_disk_q": self.cfn_manager.resource_StatMon['c_node3_disk'],
         }
+        """
+
+    def scenesQueueInfoSync(self):
+        for i, queue in enumerate(self.c_nodes_cpu_queues):
+            if not queue.empty():
+                self.scene1_heatMap_QueueL[i].put(queue.get())
+                self.scene2_heatMap_QueueL[i].put(queue.get())
+                self.scene3_heatMap_QueueL[i].put(queue.get())
 
     def _initTestScenes(self):
-        self.CPAARWidget = ComputingPowerAwareAddressRouteWindow(self, cfn_manager)
+        self.CPAARWidget = ComputingPowerAwareAddressRouteWindow(self, cfn_manager, self.scene1_heatMap_QueueL)
         self.CPAARWidget.setVisible(False)
 
     def _initDataVisualize(self):

@@ -25,7 +25,7 @@ from utils.repeatimer import repeatTimer
 
 
 class ComputingPowerAwareAddressRouteWindow(QWidget):
-    def __init__(self, parent, demo_manager):
+    def __init__(self, parent, demo_manager, heat_map_queueL):
         super().__init__()
         geo = {
             'top': 0,
@@ -36,15 +36,15 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.nokia_blue = QtGui.QColor(18, 65, 145)
         self.cfn_manager = demo_manager
         self.setParent(parent)
-        self._initMonitorQueue()
+        self._initMonitorQueue(heat_map_queueL)
         self._initView()
         self._initHeapMap()
         self._initImageLoad()
 
-    def _initMonitorQueue(self):
-        self.monitor_q_cpu_hm_node1 = self.cfn_manager.resource_StatMon['c_node1_cpu']  # 算力节点1 CPU
-        self.monitor_q_cpu_hm_node2 = self.cfn_manager.resource_StatMon['c_node2_cpu']  # 算力节点2 CPU
-        self.monitor_q_cpu_hm_node3 = self.cfn_manager.resource_StatMon['c_node3_cpu']  # 算力节点3 CPU
+    def _initMonitorQueue(self, HeatMapQueueL):
+        self.monitor_q_cpu_hm_node1 = HeatMapQueueL[0]  # 算力节点1 CPU
+        self.monitor_q_cpu_hm_node2 = HeatMapQueueL[1]  # 算力节点2 CPU
+        self.monitor_q_cpu_hm_node3 = HeatMapQueueL[2]  # 算力节点3 CPU
 
     def _initHeapMap(self):
         self.cloud1_hm = HeatMap(parent=self, geo=[793, 405, 40, 80], interval=1000, data_q=self.monitor_q_cpu_hm_node1)
