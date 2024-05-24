@@ -1892,6 +1892,7 @@ class data_visualize(QWidget):
             if not cpu_q.empty():
                 cpu_q = reverseQueue(cpu_q)
                 cpu_v = cpu_q.get()
+                self.CPU_HistoryList[i].put(cpu_v)
                 CPU_Utilize[i] = round(cpu_v[0], 2)
         CPU_Utilize[-1] = round(sum(CPU_Utilize[:-1]) / len(CPU_Utilize[:-1]), 2)
 
