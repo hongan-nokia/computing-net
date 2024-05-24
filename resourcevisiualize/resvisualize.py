@@ -2152,10 +2152,12 @@ class data_visualize(QWidget):
         while not syntheticResInfo:
             syntheticResInfo = self.requestResourceInfo()
             sleep(2)
+        print(syntheticResInfo)
         self.updateNode1Info(syntheticResInfo[0])
         self.updateNode2Info(syntheticResInfo[1])
         self.updateNode3Info(syntheticResInfo[2])
         self.updateNode4Info(syntheticResInfo[3])
+
     def updateNode1Info(self, node1_info):
         cu = node1_info['cpu']
         mu = node1_info['mem']
