@@ -45,9 +45,10 @@ class DataVisualizationWindow(QWidget):
 
 
 class data_visualize(QWidget):
-    def __init__(self, parent=None, res_queue_dict=None):
+    def __init__(self, parent=None, demo_manager=None, res_queue_dict=None):
         super().__init__()
         self._initResourceUri()
+        self.cfn_manager = demo_manager
         self.updateFlag = False
         self.layout = QtWidgets.QHBoxLayout(self)
         self.setParent(parent)
