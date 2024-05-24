@@ -2166,21 +2166,21 @@ class data_visualize(QWidget):
         self.history_cpu_1.put(cu)
         self.node1_cpu_num.setText((str(cu) + "%"))
         self.speed_meter_1.setSpeed(cu)
-        self.node1_cpu_bar.setProperty("value", cu)
-        if cu <= 50.0:
-            self.node1_cpu_bar.setStyleSheet(
-                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * cu * 2)}'",'255','0')}")
-        else:
-            self.node1_cpu_bar.setStyleSheet(
-                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (cu - 50) * 2))}'",'255','0')}")
+        # self.node1_cpu_bar.setProperty("value", cu)
+        # if cu <= 50.0:
+        #     self.node1_cpu_bar.setStyleSheet(
+        #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * cu * 2)}'",'255','0')}")
+        # else:
+        #     self.node1_cpu_bar.setStyleSheet(
+        #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (cu - 50) * 2))}'",'255','0')}")
         self.node1_mem_num.setText((str(mu) + "%"))
-        self.node1_mem_bar.setProperty("value", mu)
-        if mu <= 50.0:
-            self.node1_mem_bar.setStyleSheet(
-                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * mu * 2)}'",'255','0')}")
-        else:
-            self.node1_mem_bar.setStyleSheet(
-                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
+        # self.node1_mem_bar.setProperty("value", mu)
+        # if mu <= 50.0:
+        #     self.node1_mem_bar.setStyleSheet(
+        #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * mu * 2)}'",'255','0')}")
+        # else:
+        #     self.node1_mem_bar.setStyleSheet(
+        #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
         tx_tag, dx_tag = "", ""
         if (tx / 1000) < 1:
             tx_tag = f"{tx} b"
@@ -2227,21 +2227,21 @@ class data_visualize(QWidget):
         self.history_cpu_2.put(cu)
         self.node2_cpu_num.setText((str(cu) + "%"))
         self.speed_meter_2.setSpeed(cu)
-        self.node2_cpu_bar.setProperty("value", cu)
-        if cu <= 50.0:
-            self.node2_cpu_bar.setStyleSheet(
-                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * cu * 2)}'",'255','0')}")
-        else:
-            self.node2_cpu_bar.setStyleSheet(
-                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (cu - 50) * 2))}'",'255','0')}")
+        # self.node2_cpu_bar.setProperty("value", cu)
+        # if cu <= 50.0:
+        #     self.node2_cpu_bar.setStyleSheet(
+        #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * cu * 2)}'",'255','0')}")
+        # else:
+        #     self.node2_cpu_bar.setStyleSheet(
+        #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (cu - 50) * 2))}'",'255','0')}")
         self.node2_mem_num.setText((str(mu) + "%"))
-        self.node2_mem_bar.setProperty("value", mu)
-        if mu <= 50.0:
-            self.node2_mem_bar.setStyleSheet(
-                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * mu * 2)}'",'255','0')}")
-        else:
-            self.node2_mem_bar.setStyleSheet(
-                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
+        # self.node2_mem_bar.setProperty("value", mu)
+        # if mu <= 50.0:
+        #     self.node2_mem_bar.setStyleSheet(
+        #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * mu * 2)}'",'255','0')}")
+        # else:
+        #     self.node2_mem_bar.setStyleSheet(
+        #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
         tx_tag, dx_tag = "", ""
         if (tx / 1000) < 1:
             tx_tag = f"{tx} b"
@@ -2288,21 +2288,21 @@ class data_visualize(QWidget):
         self.history_cpu_3.put(cu)
         self.node3_cpu_num.setText((str(cu) + "%"))
         self.speed_meter_3.setSpeed(cu)
-        self.node3_cpu_bar.setProperty("value", cu)
-        if cu <= 50.0:
-            self.node3_cpu_bar.setStyleSheet(
-                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * cu * 2)}'",'255','0')}")
-        else:
-            self.node3_cpu_bar.setStyleSheet(
-                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (cu - 50) * 2))}'",'255','0')}")
+        # self.node3_cpu_bar.setProperty("value", cu)
+        # if cu <= 50.0:
+        #     self.node3_cpu_bar.setStyleSheet(
+        #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * cu * 2)}'",'255','0')}")
+        # else:
+        #     self.node3_cpu_bar.setStyleSheet(
+        #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (cu - 50) * 2))}'",'255','0')}")
         self.node3_mem_num.setText((str(mu) + "%"))
-        self.node3_mem_bar.setProperty("value", mu)
-        if mu <= 50.0:
-            self.node3_mem_bar.setStyleSheet(
-                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * mu * 2)}'",'255','0')}")
-        else:
-            self.node3_mem_bar.setStyleSheet(
-                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
+        # self.node3_mem_bar.setProperty("value", mu)
+        # if mu <= 50.0:
+        #     self.node3_mem_bar.setStyleSheet(
+        #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * mu * 2)}'",'255','0')}")
+        # else:
+        #     self.node3_mem_bar.setStyleSheet(
+        #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
         tx_tag, dx_tag = "", ""
         if (tx / 1000) < 1:
             tx_tag = f"{tx} b"
@@ -2349,21 +2349,21 @@ class data_visualize(QWidget):
         self.history_cpu_4.put(cu)
         self.node4_cpu_num.setText((str(cu) + "%"))
         self.speed_meter_4.setSpeed(cu)
-        self.node4_cpu_bar.setProperty("value", cu)
-        if cu <= 50.0:
-            self.node4_cpu_bar.setStyleSheet(
-                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * cu * 2)}'",'255','0')}")
-        else:
-            self.node4_cpu_bar.setStyleSheet(
-                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (cu - 50) * 2))}'",'255','0')}")
+        # self.node4_cpu_bar.setProperty("value", cu)
+        # if cu <= 50.0:
+        #     self.node4_cpu_bar.setStyleSheet(
+        #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * cu * 2)}'",'255','0')}")
+        # else:
+        #     self.node4_cpu_bar.setStyleSheet(
+        #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (cu - 50) * 2))}'",'255','0')}")
         self.node4_mem_num.setText((str(mu) + "%"))
-        self.node4_mem_bar.setProperty("value", mu)
-        if mu <= 50.0:
-            self.node4_mem_bar.setStyleSheet(
-                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * mu * 2)}'",'255','0')}")
-        else:
-            self.node4_mem_bar.setStyleSheet(
-                "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
+        # self.node4_mem_bar.setProperty("value", mu)
+        # if mu <= 50.0:
+        #     self.node4_mem_bar.setStyleSheet(
+        #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * mu * 2)}'",'255','0')}")
+        # else:
+        #     self.node4_mem_bar.setStyleSheet(
+        #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
         tx_tag, dx_tag = "", ""
         if (tx / 1000) < 1:
             tx_tag = f"{tx} b"
