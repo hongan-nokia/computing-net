@@ -2062,6 +2062,7 @@ class data_visualize(QWidget):
         syntheticResInfo = self.requestResourceInfo()
         while not syntheticResInfo:
             syntheticResInfo = self.requestResourceInfo()
+            sleep(2)
         for i, SRI in enumerate(syntheticResInfo):
             cu = SRI["cpu"]
             mu = SRI["mem"]
