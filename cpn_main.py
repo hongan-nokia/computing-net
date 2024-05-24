@@ -38,11 +38,11 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.nokia_blue = QtGui.QColor(18, 65, 145)
         self.cfn_manager = demo_manager
         self.trfc_fig_timer = QtCore.QTimer(self)
-        self.trfc_fig_timer.setInterval(1500)
-        self.trfc_fig_timer.start()
+        self.trfc_fig_timer.setInterval(3000)
         # self.node_names = demo_manager.node_names
         self.mainTitle = QtWidgets.QLabel(parent=self)
         self._initResMonitorQueue()
+
         self._initView()
         self._initMainTitle()
         self._initTestScenes()
@@ -62,7 +62,6 @@ class CpnAppWindow(QtWidgets.QMainWindow):
             self.cfn_manager.resource_StatMon['c_node2_cpu'],
             self.cfn_manager.resource_StatMon['c_node3_cpu'],
         ]
-        self.trfc_fig_timer.timeout.connect(self.scenesQueueInfoSync)
         """
         self.c_node1_cpu_queue = self.cfn_manager.resource_StatMon['c_node1_cpu']
         self.c_node2_cpu_queue = self.cfn_manager.resource_StatMon['c_node2_cpu']
@@ -244,11 +243,11 @@ if __name__ == '__main__':
 
     configuration = DemoConfigParser("cpn_config-test.json")
     inter_process_resource_NodeMan = [(i['node_name'], Pipe()) for i in configuration.nodes]
-    inter_process_resource_StatMon = [(i['monitoring_source_name'], Queue(15)) for i in configuration.monitoring_sources]  # for state_monitor_process. new Queue()
+    inter_process_resource_StatMon = [(i['monitoring_source_name'], Queue(100)) for i in configuration.monitoring_sources]  # for state_monitor_process. new Queue()
 
     cfn_manager = CfnDemoManager(configuration, inter_process_resource_NodeMan, inter_process_resource_StatMon)
     print(cfn_manager.n_nodes)
     mainWidget = CpnAppWindow(cfn_manager)
-
+    sleep(10)
     mainWidget.show()
     sys.exit(app.exec())

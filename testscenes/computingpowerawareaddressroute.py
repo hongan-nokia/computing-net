@@ -42,14 +42,17 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self._initImageLoad()
 
     def _initMonitorQueue(self, HeatMapQueueL):
-        self.monitor_q_cpu_hm_node1 = HeatMapQueueL[0]  # 算力节点1 CPU
-        self.monitor_q_cpu_hm_node2 = HeatMapQueueL[1]  # 算力节点2 CPU
-        self.monitor_q_cpu_hm_node3 = HeatMapQueueL[2]  # 算力节点3 CPU
+        # self.monitor_q_cpu_hm_node1 = HeatMapQueueL[0]  # 算力节点1 CPU
+        # self.monitor_q_cpu_hm_node2 = HeatMapQueueL[1]  # 算力节点2 CPU
+        # self.monitor_q_cpu_hm_node3 = HeatMapQueueL[2]  # 算力节点3 CPU
+        self.monitor_q_cpu_hm_node1 = self.cfn_manager.resource_StatMon['c_node1_cpu']  # 算力节点1 CPU
+        self.monitor_q_cpu_hm_node2 = self.cfn_manager.resource_StatMon['c_node2_cpu']  # 算力节点2 CPU
+        self.monitor_q_cpu_hm_node3 = self.cfn_manager.resource_StatMon['c_node3_cpu']  # 算力节点3 CPU
 
     def _initHeapMap(self):
-        self.cloud1_hm = HeatMap(parent=self, geo=[793, 405, 40, 80], interval=1000, data_q=self.monitor_q_cpu_hm_node1)
-        self.cloud2_hm = HeatMap(parent=self, geo=[1058, 520, 40, 80], interval=1000, data_q=self.monitor_q_cpu_hm_node2)
-        self.cloud3_hm = HeatMap(parent=self, geo=[986, 857, 40, 80], interval=1000, data_q=self.monitor_q_cpu_hm_node3)
+        self.cloud1_hm = HeatMap(parent=self, geo=[793, 405, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node1)
+        self.cloud2_hm = HeatMap(parent=self, geo=[1058, 520, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node2)
+        self.cloud3_hm = HeatMap(parent=self, geo=[986, 857, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node3)
         self.cloud1_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.cloud2_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.cloud3_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
@@ -98,9 +101,9 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.c_node2_video.setVisible(True)
         self.c_node3_video.setVisible(True)
 
-        self.c_node1_video.start_blink()
-        self.c_node2_video.start_blink()
-        self.c_node3_video.start_blink()
+        # self.c_node1_video.start_blink()
+        # self.c_node2_video.start_blink()
+        # self.c_node3_video.start_blink()
 
         self.cloud1_hm_l1 = QtWidgets.QLabel(parent=self)
         self.cloud1_hm_l2 = QtWidgets.QLabel(parent=self)

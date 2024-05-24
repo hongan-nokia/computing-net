@@ -149,7 +149,8 @@ class GlancesHandler(object):
                         r_dict[metric] = disk_result[metric]
                 if not self.q.full():
                     # print(f"GlancesHandler -> r_dict: {r_dict}")
-                    self.q.put([float(r_dict.get(item)) for item in self.metrics])  # 将收集到的数据放入队列 self.q 中  [0.0, 0.0]
+                    for i in range(3):
+                        self.q.put([float(r_dict.get(item)) for item in self.metrics])  # 将收集到的数据放入队列 self.q 中  [0.0, 0.0]
                 # else:
                 #     for i in range(6):
                 #         self.q.get_nowait()

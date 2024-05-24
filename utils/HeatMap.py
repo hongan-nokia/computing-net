@@ -1,7 +1,11 @@
+from time import sleep
+
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QWidget, QLabel
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import QTimer
+
+from utils.reversequeue import reverseQueue
 
 
 class HeatMap(QWidget, QtCore.QObject):
@@ -44,8 +48,9 @@ class HeatMap(QWidget, QtCore.QObject):
     def _load_tagLabel(self):
         index = 10
         if not self.dataQ.empty():
+            self.dataQ = reverseQueue(self.dataQ)
             index = int(self.dataQ.get()[-1])
-            # print(f">>>>>>>>>>>>>>>>>> index is: {index}")
+            print(f">>>>>>>>>>>>>>>>>> index is: {index}")
             self.tag_label.setPixmap(self.image2.copy(0, 0, self.width2, self.height2))
             self.tag_label.setGeometry(3, 2, self.width2, int(self.height2 * ((100 - index) / 100)))
             self.tag_label.raise_()
