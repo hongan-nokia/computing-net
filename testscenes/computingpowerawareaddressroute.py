@@ -25,7 +25,7 @@ from utils.repeatimer import repeatTimer
 
 
 class ComputingPowerAwareAddressRouteWindow(QWidget):
-    def __init__(self, parent, demo_manager, heat_map_queueL):
+    def __init__(self, parent, demo_manager):
         super().__init__()
         geo = {
             'top': 0,
@@ -36,12 +36,12 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.nokia_blue = QtGui.QColor(18, 65, 145)
         self.cfn_manager = demo_manager
         self.setParent(parent)
-        self._initMonitorQueue(heat_map_queueL)
+        self._initMonitorQueue()
         self._initView()
         self._initHeapMap()
         self._initImageLoad()
 
-    def _initMonitorQueue(self, HeatMapQueueL):
+    def _initMonitorQueue(self):
         # self.monitor_q_cpu_hm_node1 = HeatMapQueueL[0]  # 算力节点1 CPU
         # self.monitor_q_cpu_hm_node2 = HeatMapQueueL[1]  # 算力节点2 CPU
         # self.monitor_q_cpu_hm_node3 = HeatMapQueueL[2]  # 算力节点3 CPU

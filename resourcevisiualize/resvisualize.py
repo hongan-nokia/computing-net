@@ -1899,13 +1899,13 @@ class data_visualize(QWidget):
             print(f"{i} ...cpu... {cu}")
             CPU_Nums[i].setText((str(cu) + "%"))
             CPU_SpeedMeters[i].setSpeed(cu)
-            CPU_Bars[i].setProperty("value", cu)
-            if cu <= 50.0:
-                CPU_Bars[i].setStyleSheet(
-                    "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * cu * 2)}'",'255','0')}")
-            else:
-                CPU_Bars[i].setStyleSheet(
-                    "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (cu - 50) * 2))}'",'255','0')}")
+            # CPU_Bars[i].setProperty("value", cu)
+            # if cu <= 50.0:
+            #     CPU_Bars[i].setStyleSheet(
+            #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * cu * 2)}'",'255','0')}")
+            # else:
+            #     CPU_Bars[i].setStyleSheet(
+            #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (cu - 50) * 2))}'",'255','0')}")
         print("_updateCPUInfo")
 
     def _updateMemInfo(self):
@@ -1940,13 +1940,13 @@ class data_visualize(QWidget):
         for i, mu in enumerate(Mem_Utilize):
             print(f"{i} ...mem... {mu}")
             Mem_Nums[i].setText((str(mu) + "%"))
-            Mem_Bars[i].setProperty("value", mu)
-            if mu <= 50.0:
-                Mem_Bars[i].setStyleSheet(
-                    "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * mu * 2)}'",'255','0')}")
-            else:
-                Mem_Bars[i].setStyleSheet(
-                    "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
+            # Mem_Bars[i].setProperty("value", mu)
+            # if mu <= 50.0:
+            #     Mem_Bars[i].setStyleSheet(
+            #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * mu * 2)}'",'255','0')}")
+            # else:
+            #     Mem_Bars[i].setStyleSheet(
+            #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
         print("_updateMemInfo")
 
     def _updateNetInfo(self):

@@ -55,6 +55,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.mouse_pos_mon.start()
 
     def _initResMonitorQueue(self):
+        """
         self.scene1_heatMap_QueueL = [Queue(15) for i in range(3)]  # 这里一共有3个c_node节点
         self.scene2_heatMap_QueueL = [Queue(15) for i in range(3)]
         self.scene3_heatMap_QueueL = [Queue(15) for i in range(3)]
@@ -81,7 +82,6 @@ class CpnAppWindow(QtWidgets.QMainWindow):
             "c_node2_disk_q": self.cfn_manager.resource_StatMon['c_node2_disk'],
             "c_node3_disk_q": self.cfn_manager.resource_StatMon['c_node3_disk'],
         }
-        """
 
     def scenesQueueInfoSync(self):
         for i, queue in enumerate(self.c_nodes_cpu_queues):
@@ -91,17 +91,17 @@ class CpnAppWindow(QtWidgets.QMainWindow):
                 self.scene3_heatMap_QueueL[i].put(queue.get())
 
     def _initTestScenes(self):
-        self.CPAARWidget = ComputingPowerAwareAddressRouteWindow(self, self.cfn_manager, self.scene1_heatMap_QueueL)
+        self.CPAARWidget = ComputingPowerAwareAddressRouteWindow(self, self.cfn_manager)
         self.CPAARWidget.setVisible(False)
         self.SSRUWidget = SystemSyntheticResUtilize(self, cfn_manager)
         self.SSRUWidget.setVisible(False)
 
     def _initDataVisualize(self):
         # self.data_visual = data_visualize(parent=self, res_queue_dict=self.data_visual_queue_dict)
-        self.data_visual = data_visualize(parent=self, demo_manager=self.cfn_manager, res_queue_dict={})
+        self.data_visual = data_visualize(parent=self, demo_manager=self.cfn_manager, res_queue_dict=self.data_visual_queue_dict)
         self.data_visual.setVisible(False)
 
-        self.data_mon = repeatTimer(3, self.data_visual.updateNodesInfo, autostart=True)
+        self.data_mon = repeatTimer(3, self.data_visual.update_datav, autostart=True)
         self.data_mon.start()
 
         print("_initDataVisualize Done ")
