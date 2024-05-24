@@ -1892,8 +1892,8 @@ class data_visualize(QWidget):
             if not cpu_q.empty():
                 cpu_q = reverseQueue(cpu_q)
                 cpu_v = cpu_q.get()
-                CPU_Utilize[i] = cpu_v[0]
-        CPU_Utilize[-1] = sum(CPU_Utilize[:-1]) / len(CPU_Utilize[:-1])
+                CPU_Utilize[i] = round(cpu_v[0], 2)
+        CPU_Utilize[-1] = round(sum(CPU_Utilize[:-1]) / len(CPU_Utilize[:-1]), 2)
 
         for i, cu in enumerate(CPU_Utilize):
             print(f"{i} ...cpu... {cu}")
@@ -1935,8 +1935,8 @@ class data_visualize(QWidget):
             if not mem_q.empty():
                 mem_q = reverseQueue(mem_q)
                 mem_v = mem_q.get()
-                Mem_Utilize[i] = mem_v[0]
-        Mem_Utilize[-1] = sum(Mem_Utilize[:-1]) / len(Mem_Utilize[:-1])
+                Mem_Utilize[i] = round(mem_v[0], 2)
+        Mem_Utilize[-1] = round(sum(Mem_Utilize[:-1]) / len(Mem_Utilize[:-1]), 2)
 
         for i, mu in enumerate(Mem_Utilize):
             print(f"{i} ...mem... {mu}")
@@ -1968,8 +1968,8 @@ class data_visualize(QWidget):
             if not net_q.empty():
                 net_q = reverseQueue(net_q)
                 Net_TxDx[i] = net_q.get()
-        tx_sum, dx_sum = sum(Net_TxDx[i][0] for i in range(3)), sum(Net_TxDx[i][1] for i in range(3))
-        Net_TxDx[-1][0], Net_TxDx[-1][1] = tx_sum / 3, dx_sum / 3
+        tx_sum, dx_sum = round(sum(Net_TxDx[i][0] for i in range(3)), 2), round(sum(Net_TxDx[i][1] for i in range(3)), 2)
+        Net_TxDx[-1][0], Net_TxDx[-1][1] = round(tx_sum / 3, 2), round(dx_sum / 3, 2)
 
         for i, net_txdx in enumerate(Net_TxDx):
             tx_tag, dx_tag = "", ""
@@ -2009,24 +2009,28 @@ class data_visualize(QWidget):
             if not disk_q.empty():
                 disk_q = reverseQueue(disk_q)
                 Disk_RW[i] = disk_q.get()
-        r_sum, w_sum = sum(Disk_RW[i][0] for i in range(3)), sum(Disk_RW[i][1] for i in range(3))
-        Disk_RW[-1][0], Disk_RW[-1][1] = r_sum / 3, w_sum / 3
+        r_sum, w_sum = round(sum(Disk_RW[i][0] for i in range(3)), 2), round(sum(Disk_RW[i][1] for i in range(3)), 2)
+        Disk_RW[-1][0], Disk_RW[-1][1] = round(r_sum / 3, 2), round(w_sum / 3, 2)
 
         for i, disk_rw in enumerate(Disk_RW):
             r_tag, w_tag = "", ""
             if (disk_rw[0] / 1000) < 1:
-                r_tag = f"{disk_rw[0]} b"
-            if 1 < (disk_rw[0] / 1000) < 1000:
-                r_tag = f"{disk_rw[0] / 1000} kb"
-            if 1 < (disk_rw[0] / 1000000) < 1000:
-                r_tag = f"{disk_rw[0] / 1000000} Mb"
+                r_tag = f"{round(disk_rw[0], 2)} b"
+            elif 1 < (disk_rw[0] / 1000) < 1000:
+                r_tag = f"{round(disk_rw[0] / 1000, 2)} kb"
+            elif 1 < (disk_rw[0] / 1000000) < 1000:
+                r_tag = f"{round(disk_rw[0] / 1000000, 2)} Mb"
+            elif 1 < (disk_rw[0] / 1000000000) < 1000:
+                r_tag = f"{round(disk_rw[0] / 1000000000, 2)} Gb"
 
             if (disk_rw[1] / 1000) < 1:
-                w_tag = f"{disk_rw[1]} b"
-            if 1 < (disk_rw[1] / 1000) < 1000:
-                w_tag = f"{disk_rw[1] / 1000} kb"
-            if 1 < (disk_rw[1] / 1000000) < 1000:
-                w_tag = f"{disk_rw[1] / 1000000} Mb"
+                w_tag = f"{round(disk_rw[1], 2)} b"
+            elif 1 < (disk_rw[1] / 1000) < 1000:
+                w_tag = f"{round(disk_rw[1] / 1000, 2)} kb"
+            elif 1 < (disk_rw[1] / 1000000) < 1000:
+                w_tag = f"{round(disk_rw[1] / 1000000, 2)} Mb"
+            elif 1 < (disk_rw[1] / 1000000000) < 1000:
+                w_tag = f"{round(disk_rw[1] / 1000000000, 2)} Gb"
             Disk_Info[i][0].setText(r_tag)
             Disk_Info[i][1].setText(w_tag)
         print("_updateDiskInfo")
