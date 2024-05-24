@@ -1941,14 +1941,16 @@ class data_visualize(QWidget):
         for i, mu in enumerate(Mem_Utilize):
             print(f"{i} ...mem... {mu}")
             Mem_Nums[i].setText((str(mu) + "%"))
-            # Mem_Bars[i].setProperty("value", mu)
-            # if mu <= 50.0:
-            #     Mem_Bars[i].setStyleSheet(
-            #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * mu * 2)}'",'255','0')}")
-            # else:
-            #     Mem_Bars[i].setStyleSheet(
-            #         "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
+            Mem_Bars[i].setProperty("value", mu)
+            if mu <= 50.0:
+                Mem_Bars[i].setStyleSheet(
+                    "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * mu * 2)}'",'255','0')}")
+            else:
+                Mem_Bars[i].setStyleSheet(
+                    "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
+            Mem_Bars[i].sharedPainter()
         print("_updateMemInfo")
+
 
     def _updateNetInfo(self):
         Net_Info = [
@@ -1974,18 +1976,18 @@ class data_visualize(QWidget):
         for i, net_txdx in enumerate(Net_TxDx):
             tx_tag, dx_tag = "", ""
             if (net_txdx[0] / 1000) < 1:
-                tx_tag = f"{net_txdx[0]} b"
+                tx_tag = f"{round(net_txdx[0], 2)} b"
             if 1 < (net_txdx[0] / 1000) < 1000:
-                tx_tag = f"{net_txdx[0] / 1000} kb"
+                tx_tag = f"{round(net_txdx[0] / 1000, 2)} kb"
             if 1 < (net_txdx[0] / 1000000) < 1000:
-                tx_tag = f"{net_txdx[0] / 1000000} Mb"
+                tx_tag = f"{round(net_txdx[0] / 1000000, 2)} Mb"
 
             if (net_txdx[1] / 1000) < 1:
-                dx_tag = f"{net_txdx[1]} b"
+                dx_tag = f"{round(net_txdx[1], 2)} b"
             if 1 < (net_txdx[1] / 1000) < 1000:
-                dx_tag = f"{net_txdx[1] / 1000} kb"
+                dx_tag = f"{round(net_txdx[1] / 1000, 2)} kb"
             if 1 < (net_txdx[1] / 1000000) < 1000:
-                dx_tag = f"{net_txdx[1] / 1000000} Mb"
+                dx_tag = f"{round(net_txdx[1] / 1000000, 2)} Mb"
 
             Net_Info[i][0].setText(tx_tag)
             Net_Info[i][1].setText(dx_tag)
