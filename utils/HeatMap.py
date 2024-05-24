@@ -1,12 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-@Time: 5/17/2024 9:55 AM
-@Author: Honggang Yuan
-@Email: honggang.yuan@nokia-sbell.com
-Description: 
-"""
-import random
-
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QWidget, QLabel
 from PyQt5.QtGui import QPixmap
@@ -21,7 +12,9 @@ class HeatMap(QWidget, QtCore.QObject):
         self.geo = kwargs.pop('geo', [0, 0, 0, 0])
         self.interval = kwargs.pop('interval', 1000)
         self.dataQ = kwargs.pop('data_q', None)
+
         super(HeatMap, self).__init__(parent, **kwargs)
+
         self.setGeometry(self.geo[0], self.geo[1], self.geo[2], self.geo[3])
         self.image1 = QPixmap('./images/hm3.png')
         self.image2 = QPixmap('./images/hm4.png')
@@ -50,18 +43,11 @@ class HeatMap(QWidget, QtCore.QObject):
 
     def _load_tagLabel(self):
         index = 10
-        # reverseQueue(self.dataQ)
-        self.tag_label.setPixmap(self.image2.copy(0, 0, self.width2, self.height2))
-        # if not self.dataQ.empty():
-        #     index = int(self.dataQ.get())
-        #     # print(f">>>>>>>>>>>>>>>>>> index is: {index}")
-        #     self.tag_label.setGeometry(3, 2, self.width2, int(self.height2 * ((100 - index) / 100)))
-        #     # self.tag_label.setVisible(True)
-        #     # self.main_label.setVisible(True)
-        #     self.tag_label.raise_()
-        # else:
-        index = random.randint(0, 100)
-        self.tag_label.setGeometry(3, 2, self.width2, int(self.height2 * ((100 - index) / 100)))
-        # self.tag_label.setVisible(True)
-        # self.main_label.setVisible(True)
-        self.tag_label.raise_()
+        if not self.dataQ.empty():
+            index = int(self.dataQ.get()[-1])
+            # print(f">>>>>>>>>>>>>>>>>> index is: {index}")
+            self.tag_label.setPixmap(self.image2.copy(0, 0, self.width2, self.height2))
+            self.tag_label.setGeometry(3, 2, self.width2, int(self.height2 * ((100 - index) / 100)))
+            self.tag_label.setVisible(True)
+            self.main_label.setVisible(True)
+            self.tag_label.raise_()

@@ -67,11 +67,11 @@ class BlinkingPic(FadingPic):
         auto_dim: bool - if True, hide the pic when blinking stops. default False.
         dim_opacity: float - the opacity leval (0~1) when the pic is dimmed
         """
-        self.setParent(parent)
         self._blink_period = kwargs.pop('blink_period', 600)
         self._auto_dim = kwargs.pop('auto_dim', False)
         self._dim_opacity = kwargs.pop('dim_opacity', 0)
         super().__init__(*args, **kwargs)
+        self.setParent(parent)
         self._state = 0  # switch between 0 and 1, which corresponds to opacity
         self.blink_timer = QTimer()
         self.blink_timer.setInterval(self._blink_period)

@@ -3,7 +3,7 @@ import sys
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import QTimer, QObject, pyqtSignal
+from PyQt5.QtCore import QTimer, QObject, pyqtSignal, QSize
 
 
 class ImageLoaderSignals(QObject):
@@ -44,7 +44,7 @@ class ImageLoader(QWidget, QtCore.QObject):
         self.scheduling_label.setGeometry(1070, 30, 180, 90)
         self.scheduling_label.setVisible(False)
         self.timer = None
-        self.image = QPixmap(self.image_url).scaled(width=self.img_scale_w, height=self.img_scale_h)
+        self.image = QPixmap(self.image_url).scaled(QSize(self.img_scale_w, self.img_scale_h))
         self.width = self.image.width()
         self.height = self.image.height()
         self.index = None
