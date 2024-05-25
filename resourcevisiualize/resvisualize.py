@@ -2177,8 +2177,8 @@ class data_visualize(QWidget):
         rb, wb = node1_info['disk'][0], node1_info['disk'][1]
         self.history_cpu_1.put(cu)
         self.history1.cpu_history.update_data_home()
-        self.node1_cpu_num.setText((str(cu) + "%"))
-        self.node1_mem_num.setText((str(mu) + "%"))
+        eval("self.node1_cpu_num.setText('"+str(cu)+"%'"+")")
+        eval("self.node1_mem_num.setText('"+str(mu)+"%'"+")")
         # self.speed_meter_1.setSpeed(cu)
         # self.speed_meter_1.sharedPainter()
         # self.node1_cpu_bar.setProperty("value", cu)
@@ -2204,15 +2204,20 @@ class data_visualize(QWidget):
             tx_tag = f"{round(tx / 1000, 2)} kb"
         elif 1 < (tx / 1000000):
             tx_tag = f"{round(tx / 1000000, 2)} Mb"
+        else:
+            tx_tag = f"{round(tx / 1000000000, 2)} Gb"
         if (dx / 1000) < 1:
             dx_tag = f"{dx} b"
         elif 1 < (dx / 1000) < 1000:
             dx_tag = f"{round(dx / 1000, 2)} kb"
         elif 1 < (dx / 1000000):
             dx_tag = f"{round(dx / 1000000, 2)} Mb"
+        else:
+            dx_tag = f"{round(dx / 1000000000, 2)} Gb"
 
-        self.node1_net_read_value.setText(tx_tag)
-        self.node1_net_write_value.setText(dx_tag)
+
+        eval("self.node1_net_read_value.setText('"+tx_tag+"')")
+        eval("self.node1_net_write_value.setText('"+dx_tag+"')")
 
         r_tag, w_tag = "", ""
         if (rb / 1000) < 1:
@@ -2221,7 +2226,7 @@ class data_visualize(QWidget):
             r_tag = f"{round(rb / 1000, 2)} kb"
         elif 1 < (rb / 1000000) < 1000:
             r_tag = f"{round(rb / 1000000, 2)} Mb"
-        elif 1 < (rb / 1000000000):
+        else:
             r_tag = f"{round(rb / 1000000000, 2)} Gb"
 
         if (wb / 1000) < 1:
@@ -2230,10 +2235,10 @@ class data_visualize(QWidget):
             w_tag = f"{round(wb / 1000, 2)} kb"
         elif 1 < (wb / 1000000) < 1000:
             w_tag = f"{round(wb / 1000000, 2)} Mb"
-        elif 1 < (wb / 1000000000):
+        else:
             w_tag = f"{round(wb / 1000000000, 2)} Gb"
-        self.node1_disk_read_value.setText(r_tag)
-        self.node1_disk_write_value.setText(w_tag)
+        eval("self.node1_disk_read_value.setText('" + r_tag + "')")
+        eval("self.node1_disk_write_value.setText('" + w_tag + "')")
 
     def updateNode2Info(self, node2_info):
         cu = node2_info['cpu']
@@ -2242,8 +2247,8 @@ class data_visualize(QWidget):
         rb, wb = node2_info['disk'][0], node2_info['disk'][1]
         self.history_cpu_2.put(cu)
         self.history2.cpu_history.update_data_home()
-        self.node2_cpu_num.setText((str(cu) + "%"))
-        self.node2_mem_num.setText((str(mu) + "%"))
+        eval("self.node2_cpu_num.setText('"+str(cu)+"%'"+")")
+        eval("self.node2_mem_num.setText('"+str(mu)+"%'"+")")
         # self.speed_meter_2.setSpeed(cu)
         # self.speed_meter_2.sharedPainter()
         # self.node2_cpu_bar.setProperty("value", cu)
@@ -2269,15 +2274,19 @@ class data_visualize(QWidget):
             tx_tag = f"{round(tx / 1000, 2)} kb"
         elif 1 < (tx / 1000000):
             tx_tag = f"{round(tx / 1000000, 2)} Mb"
+        else:
+            tx_tag = f"{round(tx / 1000000000, 2)} Gb"
         if (dx / 1000) < 1:
             dx_tag = f"{dx} b"
         elif 1 < (dx / 1000) < 1000:
             dx_tag = f"{round(dx / 1000, 2)} kb"
         elif 1 < (dx / 1000000):
             dx_tag = f"{round(dx / 1000000, 2)} Mb"
+        else:
+            dx_tag = f"{round(dx / 1000000000, 2)} Gb"
 
-        self.node2_net_read_value.setText(tx_tag)
-        self.node2_net_write_value.setText(dx_tag)
+        eval("self.node2_net_read_value.setText('" + tx_tag + "')")
+        eval("self.node2_net_write_value.setText('" + dx_tag + "')")
 
         r_tag, w_tag = "", ""
         if (rb / 1000) < 1:
@@ -2286,7 +2295,7 @@ class data_visualize(QWidget):
             r_tag = f"{round(rb / 1000, 2)} kb"
         elif 1 < (rb / 1000000) < 1000:
             r_tag = f"{round(rb / 1000000, 2)} Mb"
-        elif 1 < (rb / 1000000000):
+        else:
             r_tag = f"{round(rb / 1000000000, 2)} Gb"
 
         if (wb / 1000) < 1:
@@ -2295,10 +2304,10 @@ class data_visualize(QWidget):
             w_tag = f"{round(wb / 1000, 2)} kb"
         elif 1 < (wb / 1000000) < 1000:
             w_tag = f"{round(wb / 1000000, 2)} Mb"
-        elif 1 < (wb / 1000000000):
+        else:
             w_tag = f"{round(wb / 1000000000, 2)} Gb"
-        self.node2_disk_read_value.setText(r_tag)
-        self.node2_disk_write_value.setText(w_tag)
+        eval("self.node2_disk_read_value.setText('" + r_tag + "')")
+        eval("self.node2_disk_write_value.setText('" + w_tag + "')")
 
     def updateNode3Info(self, node3_info):
         cu = node3_info['cpu']
@@ -2307,8 +2316,8 @@ class data_visualize(QWidget):
         rb, wb = node3_info['disk'][0], node3_info['disk'][1]
         self.history_cpu_3.put(cu)
         self.history3.cpu_history.update_data_home()
-        self.node3_cpu_num.setText((str(cu) + "%"))
-        self.node3_mem_num.setText((str(mu) + "%"))
+        eval("self.node3_cpu_num.setText('"+str(cu)+"%'"+")")
+        eval("self.node3_mem_num.setText('"+str(mu)+"%'"+")")
         # self.speed_meter_3.setSpeed(cu)
         # self.speed_meter_3.sharedPainter()
         # self.node3_cpu_bar.setProperty("value", cu)
@@ -2334,15 +2343,19 @@ class data_visualize(QWidget):
             tx_tag = f"{round(tx / 1000, 2)} kb"
         elif 1 < (tx / 1000000):
             tx_tag = f"{round(tx / 1000000, 2)} Mb"
+        else:
+            tx_tag = f"{round(tx / 1000000000, 2)} Gb"
         if (dx / 1000) < 1:
             dx_tag = f"{dx} b"
         elif 1 < (dx / 1000) < 1000:
             dx_tag = f"{round(dx / 1000, 2)} kb"
         elif 1 < (dx / 1000000):
             dx_tag = f"{round(dx / 1000000, 2)} Mb"
+        else:
+            dx_tag = f"{round(dx / 1000000000, 2)} Gb"
 
-        self.node3_net_read_value.setText(tx_tag)
-        self.node3_net_write_value.setText(dx_tag)
+        eval("self.node3_net_read_value.setText('" + tx_tag + "')")
+        eval("self.node3_net_write_value.setText('" + dx_tag + "')")
 
         r_tag, w_tag = "", ""
         if (rb / 1000) < 1:
@@ -2351,7 +2364,7 @@ class data_visualize(QWidget):
             r_tag = f"{round(rb / 1000, 2)} kb"
         elif 1 < (rb / 1000000) < 1000:
             r_tag = f"{round(rb / 1000000, 2)} Mb"
-        elif 1 < (rb / 1000000000):
+        else:
             r_tag = f"{round(rb / 1000000000, 2)} Gb"
 
         if (wb / 1000) < 1:
@@ -2360,10 +2373,10 @@ class data_visualize(QWidget):
             w_tag = f"{round(wb / 1000, 2)} kb"
         elif 1 < (wb / 1000000) < 1000:
             w_tag = f"{round(wb / 1000000, 2)} Mb"
-        elif 1 < (wb / 1000000000):
+        else:
             w_tag = f"{round(wb / 1000000000, 2)} Gb"
-        self.node3_disk_read_value.setText(r_tag)
-        self.node3_disk_write_value.setText(w_tag)
+        eval("self.node3_disk_read_value.setText('" + r_tag + "')")
+        eval("self.node3_disk_write_value.setText('" + w_tag + "')")
 
     def updateNode4Info(self, node4_info):
         cu = node4_info['cpu']
@@ -2372,8 +2385,8 @@ class data_visualize(QWidget):
         rb, wb = node4_info['disk'][0], node4_info['disk'][1]
         self.history_cpu_4.put(cu)
         self.history4.cpu_history.update_data_home()
-        self.node4_cpu_num.setText((str(cu) + "%"))
-        self.node4_mem_num.setText((str(mu) + "%"))
+        eval("self.node4_cpu_num.setText('"+str(cu)+"%'"+")")
+        eval("self.node4_mem_num.setText('"+str(mu)+"%'"+")")
         # self.speed_meter_4.setSpeed(cu)
         # self.speed_meter_4.sharedPainter()
         # self.node4_cpu_bar.setProperty("value", cu)
@@ -2399,15 +2412,19 @@ class data_visualize(QWidget):
             tx_tag = f"{round(tx / 1000, 2)} kb"
         elif 1 < (tx / 1000000):
             tx_tag = f"{round(tx / 1000000, 2)} Mb"
+        else:
+            tx_tag = f"{round(tx / 1000000000, 2)} Gb"
         if (dx / 1000) < 1:
             dx_tag = f"{dx} b"
         elif 1 < (dx / 1000) < 1000:
             dx_tag = f"{round(dx / 1000, 2)} kb"
         elif 1 < (dx / 1000000):
             dx_tag = f"{round(dx / 1000000, 2)} Mb"
+        else:
+            dx_tag = f"{round(dx / 1000000000, 2)} Gb"
 
-        self.node4_net_read_value.setText(tx_tag)
-        self.node4_net_write_value.setText(dx_tag)
+        eval("self.node4_net_read_value.setText('" + tx_tag + "')")
+        eval("self.node4_net_write_value.setText('" + dx_tag + "')")
 
         r_tag, w_tag = "", ""
         if (rb / 1000) < 1:
@@ -2416,7 +2433,7 @@ class data_visualize(QWidget):
             r_tag = f"{round(rb / 1000, 2)} kb"
         elif 1 < (rb / 1000000) < 1000:
             r_tag = f"{round(rb / 1000000, 2)} Mb"
-        elif 1 < (rb / 1000000000):
+        else:
             r_tag = f"{round(rb / 1000000000, 2)} Gb"
 
         if (wb / 1000) < 1:
@@ -2425,10 +2442,10 @@ class data_visualize(QWidget):
             w_tag = f"{round(wb / 1000, 2)} kb"
         elif 1 < (wb / 1000000) < 1000:
             w_tag = f"{round(wb / 1000000, 2)} Mb"
-        elif 1 < (wb / 1000000000):
+        else:
             w_tag = f"{round(wb / 1000000000, 2)} Gb"
-        self.node4_disk_read_value.setText(r_tag)
-        self.node4_disk_write_value.setText(w_tag)
+        eval("self.node4_disk_read_value.setText('" + r_tag + "')")
+        eval("self.node4_disk_write_value.setText('" + w_tag + "')")
 
 
 if __name__ == "__main__":
