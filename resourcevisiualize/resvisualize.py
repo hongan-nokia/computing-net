@@ -2163,8 +2163,11 @@ class data_visualize(QWidget):
             sleep(2)
         print(syntheticResInfo)
         self.updateNode1Info(syntheticResInfo[0])
+        sleep(0.5)
         self.updateNode2Info(syntheticResInfo[1])
+        sleep(0.5)
         self.updateNode3Info(syntheticResInfo[2])
+        sleep(0.5)
         self.updateNode4Info(syntheticResInfo[3])
 
     def updateNode1Info(self, node1_info):
