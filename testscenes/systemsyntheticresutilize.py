@@ -70,7 +70,6 @@ class SystemSyntheticResUtilize(QWidget):
                                         border: 5px inset #2980b9;
                                     }
                                 """
-
         self.topBtnSelectedStyleSheet = """
                                             QPushButton {
                                                 background-color: #031133;
@@ -80,7 +79,6 @@ class SystemSyntheticResUtilize(QWidget):
                                                 border-radius: 20px;
                                             }
                                         """
-
         self.leftBtnStyleSheet = """
                                             QPushButton {
                                                 background-color: #031133;
@@ -97,7 +95,6 @@ class SystemSyntheticResUtilize(QWidget):
                                                 border: 7px inset #2980b9;
                                             }
                                         """
-
         self.leftBtnSelectedStyleSheet = """
                                                     QPushButton {
                                                         background-color: #031133;
@@ -163,15 +160,15 @@ class SystemSyntheticResUtilize(QWidget):
         self.leftBtn1Tag = 0
         self.leftBtn2Tag = 0
 
-        self.topBtn1.clicked.connect(self.topBtn1_click)
-        self.topBtn2.clicked.connect(self.topBtn2_click)
-        self.topBtn3.clicked.connect(self.topBtn3_click)
-        self.topBtn4.clicked.connect(self.topBtn4_click)
-        self.topBtn5.clicked.connect(self.topBtn5_click)
-        self.topBtn6.clicked.connect(self.topBtn6_click)
+        # self.topBtn1.clicked.connect(self.topBtn1_click)
+        # self.topBtn2.clicked.connect(self.topBtn2_click)
+        # self.topBtn3.clicked.connect(self.topBtn3_click)
+        # self.topBtn4.clicked.connect(self.topBtn4_click)
+        # self.topBtn5.clicked.connect(self.topBtn5_click)
+        # self.topBtn6.clicked.connect(self.topBtn6_click)
 
-        self.leftBtn1.clicked.connect(self.leftBtn1_click)
-        self.leftBtn2.clicked.connect(self.leftBtn2_click)
+        self.leftBtn1.clicked.connect(self.traditionalMEC)
+        self.leftBtn2.clicked.connect(self.computingNetConverge)
 
         self.view.scene().addWidget(self.topBtn1)
         self.view.scene().addWidget(self.topBtn2)
@@ -401,7 +398,7 @@ class SystemSyntheticResUtilize(QWidget):
 
             self.pixmap_xunlian3.setVisible(False)
 
-    def leftBtn1_click(self):
+    def traditionalMEC(self):
         if self.leftBtn1Tag == 0:
             self.reset()
             self.leftBtn1Tag = 1
@@ -430,7 +427,7 @@ class SystemSyntheticResUtilize(QWidget):
         else:
             self.reset()
 
-    def leftBtn2_click(self):
+    def computingNetConverge(self):
         if self.leftBtn2Tag == 0:
             self.leftBtn1Tag = 0
             self.leftBtn2Tag = 1
@@ -480,6 +477,31 @@ class SystemSyntheticResUtilize(QWidget):
         self.s2cloud1_hm.timer.start()
         self.s2cloud2_hm.timer.start()
         self.s2cloud3_hm.timer.start()
+
+    def setTraditionalMEC(self):
+        self.cfn_manager.send_command('c_node1', 'task', 'ai_train up#1')
+        self.cfn_manager.send_command('c_node1', 'task', 'vlc up')
+        # self.cfn_manager.send_command('c_node1', 'task', 'cam_health camera_1')
+
+    def setComputingNetConverge(self):
+        self.cfn_manager.send_command('c_node1', 'task', 'vlc up')
+        self.cfn_manager.send_command('c_node1', 'task', 'cam_health camera_1')
+        self.cfn_manager.send_command('c_node2', 'task', 'ai_train up#2')
+        self.cfn_manager.send_command('c_node3', 'task', 'ai_train up#1')
+        self.cfn_manager.send_command('c_node3', 'task', 'vlc up')
+
+    def unsetTraditionalMEC(self):
+        self.cfn_manager.send_command('c_node1', 'stop_task', 'ai_train up#1')
+        self.cfn_manager.send_command('c_node1', 'stop_task', 'vlc up')
+        # self.cfn_manager.send_command('c_node1', 'task', 'cam_health camera_1')
+
+    def unsetComputingNetConverge(self):
+        self.cfn_manager.send_command('c_node1', 'stop_task', 'vlc up')
+        self.cfn_manager.send_command('c_node1', 'stop_task', 'cam_health camera_1')
+        self.cfn_manager.send_command('c_node2', 'stop_task', 'ai_train up#2')
+        self.cfn_manager.send_command('c_node3', 'stop_task', 'ai_train up#1')
+        self.cfn_manager.send_command('c_node3', 'stop_task', 'vlc up')
+
 
     def reset(self):
         self.topBtn1Tag = 0
