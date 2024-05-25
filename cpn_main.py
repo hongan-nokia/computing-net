@@ -229,14 +229,15 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         if k == QtCore.Qt.Key_R:
             self.reset()
         elif k == QtCore.Qt.Key_1:
+            print("Pressed Key-1")
             self.scene3.scene31.reset()
-            self.scene3.scene31.servive_step1.start("sp1")
+            self.scene3.scene31.service_step1.start("sp1")
         elif k == QtCore.Qt.Key_2:
             self.scene3.scene32.reset()
-            self.scene3.scene32.servive_step1.start("sp1")
+            self.scene3.scene32.service_step1.start("sp1")
         elif k == QtCore.Qt.Key_3:
             self.scene3.scene33.reset()
-            self.scene3.scene33.servive_step1.start("sp1")
+            self.scene3.scene33.service_step1.start("sp1")
         else:
             pass
 

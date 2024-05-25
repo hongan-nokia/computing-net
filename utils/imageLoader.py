@@ -65,7 +65,6 @@ class ImageLoader(QWidget, QtCore.QObject):
         # print(f">>>>>>>>>>> ImageLoad  target_node is {target_node}")
         # print(f">>>>>>>>>>> ImageLoad  target_node is {type(target_node)}")
         if self.direction == 'l2r':
-            print("in l2r")
             self.index = 0
             self.timer.timeout.connect(self.load_image_l2r)
         elif self.direction == 'r2l':
