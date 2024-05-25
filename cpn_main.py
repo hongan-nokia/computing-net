@@ -17,6 +17,7 @@ from PyQt5.QtWidgets import QApplication, QPushButton
 from nodemodels.cfndemomanager import CfnDemoManager
 from resourcevisiualize.resvisualize import data_visualize
 from testscenes.computingpowerawareaddressroute import ComputingPowerAwareAddressRouteWindow
+from testscenes.scene3 import Scene3
 from testscenes.systemsyntheticresutilize import SystemSyntheticResUtilize
 from utils.configparser import DemoConfigParser
 from utils.repeatimer import repeatTimer
@@ -65,6 +66,8 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.CPAARWidget.setVisible(False)
         self.SSRUWidget = SystemSyntheticResUtilize(self, cfn_manager)
         self.SSRUWidget.setVisible(False)
+        self.scene3 = Scene3(self, cfn_manager)
+        self.scene3.setVisible(False)
 
     def _initDataVisualize(self):
         self.data_visual = data_visualize(parent=self, demo_manager=self.cfn_manager, res_queue_dict=None)
@@ -184,26 +187,56 @@ class CpnAppWindow(QtWidgets.QMainWindow):
     def _showMainPage(self):
         self.CPAARWidget.setVisible(False)
         self.SSRUWidget.setVisible(False)
+        self.scene3.setVisible(False)
+        self.scene3.scene31.setVisible(False)
+        self.scene3.scene32.setVisible(False)
+        self.scene3.scene33.setVisible(False)
         print("Show Main Page")
 
     def _showTestScene1(self):
         self.SSRUWidget.setVisible(False)
         self.CPAARWidget.setVisible(True)
+        self.scene3.setVisible(False)
+        self.scene3.scene31.setVisible(False)
+        self.scene3.scene32.setVisible(False)
+        self.scene3.scene33.setVisible(False)
         print("This is TestScene1")
 
     def _showTestScene2(self):
         self.CPAARWidget.setVisible(False)
+
+        self.SSRUWidget.reset()
+
         self.SSRUWidget.setVisible(True)
+        self.scene3.setVisible(False)
+        self.scene3.scene31.setVisible(False)
+        self.scene3.scene32.setVisible(False)
+        self.scene3.scene33.setVisible(False)
         print("This is TestScene2")
-        # self.SSRUWidget.reset()
 
     def _showTestScene3(self):
-        pass
+        self.SSRUWidget.setVisible(False)
+        self.CPAARWidget.setVisible(False)
+        self.scene3.setVisible(True)
+        self.scene3.scene31.setVisible(False)
+        self.scene3.scene32.setVisible(False)
+        self.scene3.scene33.setVisible(False)
+        self.scene3.reset()
+        print("This is TestScene3")
 
     def keyPressEvent(self, KEvent):
         k = KEvent.key()
         if k == QtCore.Qt.Key_R:
             self.reset()
+        elif k == QtCore.Qt.Key_1:
+            self.scene3.scene31.reset()
+            self.scene3.scene31.servive_step1.start("sp1")
+        elif k == QtCore.Qt.Key_2:
+            self.scene3.scene32.reset()
+            self.scene3.scene32.servive_step1.start("sp1")
+        elif k == QtCore.Qt.Key_3:
+            self.scene3.scene33.reset()
+            self.scene3.scene33.servive_step1.start("sp1")
         else:
             pass
 

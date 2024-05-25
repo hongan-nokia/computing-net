@@ -30,7 +30,7 @@ class ImageLoader(QWidget, QtCore.QObject):
         self.label = QLabel(self)
         self.label.setGeometry(0, 0, 0, self.geo[3])
         # font = QtGui.QFont("Nokia Pure Text", 10, QtGui.QFont.Bold)
-        font = QtGui.QFont("Nokia Pure Text", 10)
+        font = QtGui.QFont("Nokia Pure Text", 16)
         self.tag_label = QLabel(parent=self)
         self.tag_label.setText(self.tag)
         self.tag_label.setGeometry(self.tag_geo[0], self.tag_geo[1], self.tag_geo[2], self.tag_geo[3])
@@ -51,13 +51,13 @@ class ImageLoader(QWidget, QtCore.QObject):
         self.destination = ''
         self.QtSignals = ImageLoaderSignals()
 
-    def show(self):
-        self.setVisible(True)
-        self.tag_label.setVisible(True)
-
-    def hide(self):
-        self.setVisible(False)
-        self.tag_label.setVisible(False)
+    # def show(self):
+    #     self.setVisible(True)
+    #     self.tag_label.setVisible(True)
+    #
+    # def hide(self):
+    #     self.setVisible(False)
+    #     self.tag_label.setVisible(False)
 
     def start(self, target_node):
         self.destination = target_node
@@ -65,6 +65,7 @@ class ImageLoader(QWidget, QtCore.QObject):
         # print(f">>>>>>>>>>> ImageLoad  target_node is {target_node}")
         # print(f">>>>>>>>>>> ImageLoad  target_node is {type(target_node)}")
         if self.direction == 'l2r':
+            print("in l2r")
             self.index = 0
             self.timer.timeout.connect(self.load_image_l2r)
         elif self.direction == 'r2l':
@@ -86,7 +87,6 @@ class ImageLoader(QWidget, QtCore.QObject):
 
     def load_image_l2r(self):
         if self.index < self.width:
-            self.tag_label.setVisible(True)
             self.label.setPixmap(self.image.copy(0, 0, self.index, self.height))
             self.label.setGeometry(0, 0, self.index, self.height)
             self.index += 1
@@ -98,6 +98,7 @@ class ImageLoader(QWidget, QtCore.QObject):
             self.timer.stop()
 
             self.QtSignals.anim_over.emit(self.destination)
+            self.tag_label.setVisible(True)
             self.index = 0
             print(f"l2r >>>  self.QtSignals.anim_over.emit({self.destination})")
 
@@ -107,9 +108,9 @@ class ImageLoader(QWidget, QtCore.QObject):
             self.label.setGeometry(self.index, 0, self.width - self.index, self.height)
             self.index -= 1
         else:
-            self.tag_label.setVisible(True)
             self.timer.stop()
             self.QtSignals.anim_over.emit(self.destination)
+            self.tag_label.setVisible(True)
             self.index = self.width
             print(f"r2l >>>  self.QtSignals.anim_over.emit({self.destination})")
 
