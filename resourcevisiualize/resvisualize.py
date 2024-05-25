@@ -2179,6 +2179,7 @@ class data_visualize(QWidget):
         self.history1.cpu_history.update_data_home()
         self.node1_cpu_num.setText((str(cu) + "%"))
         self.speed_meter_1.setSpeed(cu)
+        self.speed_meter_1.sharedPainter()
         self.node1_cpu_bar.setProperty("value", cu)
         if cu <= 50.0:
             self.node1_cpu_bar.setStyleSheet(
@@ -2243,6 +2244,7 @@ class data_visualize(QWidget):
         self.history2.cpu_history.update_data_home()
         self.node2_cpu_num.setText((str(cu) + "%"))
         self.speed_meter_2.setSpeed(cu)
+        self.speed_meter_2.sharedPainter()
         self.node2_cpu_bar.setProperty("value", cu)
         if cu <= 50.0:
             self.node2_cpu_bar.setStyleSheet(
@@ -2307,6 +2309,7 @@ class data_visualize(QWidget):
         self.history3.cpu_history.update_data_home()
         self.node3_cpu_num.setText((str(cu) + "%"))
         self.speed_meter_3.setSpeed(cu)
+        self.speed_meter_3.sharedPainter()
         self.node3_cpu_bar.setProperty("value", cu)
         if cu <= 50.0:
             self.node3_cpu_bar.setStyleSheet(
@@ -2371,6 +2374,7 @@ class data_visualize(QWidget):
         self.history4.cpu_history.update_data_home()
         self.node4_cpu_num.setText((str(cu) + "%"))
         self.speed_meter_4.setSpeed(cu)
+        self.speed_meter_4.sharedPainter()
         self.node4_cpu_bar.setProperty("value", cu)
         if cu <= 50.0:
             self.node4_cpu_bar.setStyleSheet(
