@@ -74,7 +74,8 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.SSRUWidget.setVisible(False)
 
     def _initDataVisualize(self):
-        self.data_visual = data_visualize(parent=self, demo_manager=self.cfn_manager, res_queue_dict=Nones
+        self.data_visual = data_visualize(parent=self, demo_manager=self.cfn_manager, res_queue_dict=None)
+
         self.data_visual.setVisible(False)
         self.computingNetResMonTimer = QtCore.QTimer(self)
         self.computingNetResMonTimer.setInterval(3000)
