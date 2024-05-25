@@ -77,11 +77,12 @@ class CpnAppWindow(QtWidgets.QMainWindow):
     def _initDataVisualize(self):
         self.data_visual = data_visualize(parent=self, demo_manager=self.cfn_manager, res_queue_dict=None)
         self.data_visual.setVisible(False)
-        self.computingNetResMonTimer = QtCore.QTimer(self)
-        self.computingNetResMonTimer.setInterval(3000)
-        self.computingNetResMonTimer.timeout.connect(self.data_visual.updateNodesInfo)
-        self.computingNetResMonTimer.start()
-        # self.data_mon = repeatTimer(3, self.data_visual.update_datav, autostart=True)
+        # self.computingNetResMonTimer = QtCore.QTimer(self)
+        # self.computingNetResMonTimer.setInterval(3000)
+        # self.computingNetResMonTimer.timeout.connect(self.data_visual.updateNodesInfo)
+        # self.computingNetResMonTimer.start()
+        self.data_mon = repeatTimer(3, self.data_visual.updateNodesInfo, autostart=True)
+        self.data_mon.start()
 
         print("_initDataVisualize Done ")
 
