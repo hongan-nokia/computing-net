@@ -22,6 +22,7 @@ import requests
 import yaml
 from PyQt5.QtWidgets import QFrame, QVBoxLayout, QWidget, QMainWindow, QApplication, QGroupBox, QHBoxLayout
 
+os.environ['PYTHON_VLC_MODULE_PATH'] = "./vlc"
 import vlc
 from typing import Tuple
 
@@ -40,12 +41,12 @@ HEART_LOW = 66
 HEART_HIGH = 90
 
 # load dnn model and weights
-if not (os.path.exists('algorithmDev/deploy.prototxt.txt') and path.exists(
+if not (os.path.exists('./algorithmDev/deploy.prototxt.txt') and path.exists(
         'algorithmDev/res10_300x300_ssd_iter_140000.caffemodel')):
     raise ValueError('DNN model files does not exist.')
 else:
-    DNNmodel = path.abspath('algorithmDev/deploy.prototxt.txt')
-    DNNwt = path.abspath('algorithmDev/res10_300x300_ssd_iter_140000.caffemodel')
+    DNNmodel = path.abspath('../algorithmDev/deploy.prototxt.txt')
+    DNNwt = path.abspath('./algorithmDev/res10_300x300_ssd_iter_140000.caffemodel')
 inputsize = (300, 300)
 inputmean = (104.0, 177.0, 123.0)
 FogFaceDetector = (DNNmodel, DNNwt, inputsize, inputmean)
