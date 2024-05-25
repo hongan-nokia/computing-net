@@ -89,6 +89,6 @@ async def read_performance_info():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app='resource_monitor:app', host='0.0.0.0', port=8000, workers=5)
+    uvicorn.run(app='cpn_client_res_monitor:app', host='0.0.0.0', port=8000, workers=5)
     # disk_usage = psutil.disk_io_counters()
     # print(disk_usage)
