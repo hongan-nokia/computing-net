@@ -45,7 +45,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self._initView()
         self._initMainTitle()
         self._initTestScenes()
-        # self._initDataVisualize()
+        self._initDataVisualize()
         self._initScenarioButtons()
 
         self.mouse = PyWinMouse.Mouse()
@@ -82,6 +82,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
 
     def _initDataVisualize(self):
         self.data_visual = data_visualize(parent=self, demo_manager=self.cfn_manager, res_queue_dict=None)
+
         self.data_visual.setVisible(False)
         # self.computingNetResMonTimer = QtCore.QTimer(self)
         # self.computingNetResMonTimer.setInterval(3000)

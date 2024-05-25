@@ -34,8 +34,8 @@ async def read_disk():
             {"disk_name": "PhysicalDrive0",
              "read_count": disk_usage.read_count,
              "write_count": disk_usage.write_count,
-             "read_bytes": disk_usage.read_bytes,
-             "write_bytes": disk_usage.write_bytes
+             "read_count": disk_usage.read_count,
+             "write_count": disk_usage.write_count
              }
         ]
     }
@@ -81,7 +81,7 @@ async def read_performance_info():
     synthetic_info = {
         "cpu": cpu_percent,
         "mem": memory.percent,
-        "disk": [disk_usage.read_bytes, disk_usage.write_bytes],
+        "disk": [disk_usage.read_count, disk_usage.write_count],
         "net": [tx, rx]
     }
     return synthetic_info
@@ -90,3 +90,5 @@ async def read_performance_info():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app='resource_monitor:app', host='0.0.0.0', port=8000, workers=5)
+    # disk_usage = psutil.disk_io_counters()
+    # print(disk_usage)
