@@ -315,8 +315,8 @@ class SystemSyntheticResUtilize(QWidget):
             self.pixmap_xintiao.setVisible(True)
 
             if self.topBtn1Tag == 1 and self.topBtn2Tag == 1 and self.topBtn3Tag == 1 and self.topBtn4Tag == 1 and self.topBtn5Tag == 1 and self.topBtn6Tag == 1:
-                self.leftBtn1.setStyleSheet((self.leftBtnStyleSheet))
-                self.leftBtn2.setStyleSheet((self.leftBtnSelectedStyleSheet))
+                self.leftBtn1.setStyleSheet(self.leftBtnStyleSheet)
+                self.leftBtn2.setStyleSheet(self.leftBtnSelectedStyleSheet)
 
         else:
             self.topBtn3.setStyleSheet(self.topBtnStyleSheet)
@@ -327,7 +327,7 @@ class SystemSyntheticResUtilize(QWidget):
             self.leftBtn2Tag = 0
 
             if self.topBtn1Tag == 1 and self.topBtn2Tag == 1 and self.topBtn3Tag == 0 and self.topBtn4Tag == 0 and self.topBtn5Tag == 0 and self.topBtn6Tag == 0:
-                self.leftBtn1.setStyleSheet((self.leftBtnSelectedStyleSheet))
+                self.leftBtn1.setStyleSheet(self.leftBtnSelectedStyleSheet)
 
             self.pixmap_xintiao.setVisible(False)
 
@@ -340,8 +340,8 @@ class SystemSyntheticResUtilize(QWidget):
             self.pixmap_xunlian2.setVisible(True)
 
             if self.topBtn1Tag == 1 and self.topBtn2Tag == 1 and self.topBtn3Tag == 1 and self.topBtn4Tag == 1 and self.topBtn5Tag == 1 and self.topBtn6Tag == 1:
-                self.leftBtn1.setStyleSheet((self.leftBtnStyleSheet))
-                self.leftBtn2.setStyleSheet((self.leftBtnSelectedStyleSheet))
+                self.leftBtn1.setStyleSheet(self.leftBtnStyleSheet)
+                self.leftBtn2.setStyleSheet(self.leftBtnSelectedStyleSheet)
 
         else:
             self.topBtn4.setStyleSheet(self.topBtnStyleSheet)
@@ -352,7 +352,7 @@ class SystemSyntheticResUtilize(QWidget):
             self.leftBtn2Tag = 0
 
             if self.topBtn1Tag == 1 and self.topBtn2Tag == 1 and self.topBtn3Tag == 0 and self.topBtn4Tag == 0 and self.topBtn5Tag == 0 and self.topBtn6Tag == 0:
-                self.leftBtn1.setStyleSheet((self.leftBtnSelectedStyleSheet))
+                self.leftBtn1.setStyleSheet(self.leftBtnSelectedStyleSheet)
 
             self.pixmap_xunlian2.setVisible(False)
 
