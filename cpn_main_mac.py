@@ -36,8 +36,6 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.setGeometry(geo['left'], geo['top'], geo['width'], geo['height'])
         self.nokia_blue = QtGui.QColor(18, 65, 145)
         self.cfn_manager = demo_manager
-        self.trfc_fig_timer = QtCore.QTimer(self)
-        self.trfc_fig_timer.setInterval(3000)
         # self.node_names = demo_manager.node_names
         self.mainTitle = QtWidgets.QLabel(parent=self)
         self._initResMonitorQueue()
@@ -62,20 +60,6 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.c_node1_cpu_queue = self.cfn_manager.resource_StatMon['c_node1_cpu']
         self.c_node2_cpu_queue = self.cfn_manager.resource_StatMon['c_node2_cpu']
         self.c_node2_cpu_queue = self.cfn_manager.resource_StatMon['c_node2_cpu']
-        self.data_visual_queue_dict = {
-            "c_node1_cpu_q": self.cfn_manager.resource_StatMon['c_node1_cpu'],
-            "c_node2_cpu_q": self.cfn_manager.resource_StatMon['c_node2_cpu'],
-            "c_node3_cpu_q": self.cfn_manager.resource_StatMon['c_node3_cpu'],
-            "c_node1_mem_q": self.cfn_manager.resource_StatMon['c_node1_mem'],
-            "c_node2_mem_q": self.cfn_manager.resource_StatMon['c_node2_mem'],
-            "c_node3_mem_q": self.cfn_manager.resource_StatMon['c_node3_mem'],
-            "c_node1_net_q": self.cfn_manager.resource_StatMon['c_node1_net'],
-            "c_node2_net_q": self.cfn_manager.resource_StatMon['c_node2_net'],
-            "c_node3_net_q": self.cfn_manager.resource_StatMon['c_node3_net'],
-            "c_node1_disk_q": self.cfn_manager.resource_StatMon['c_node1_disk'],
-            "c_node2_disk_q": self.cfn_manager.resource_StatMon['c_node2_disk'],
-            "c_node3_disk_q": self.cfn_manager.resource_StatMon['c_node3_disk'],
-        }
 
     def scenesQueueInfoSync(self):
         for i, queue in enumerate(self.c_nodes_cpu_queues):
@@ -91,12 +75,13 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.SSRUWidget.setVisible(False)
 
     def _initDataVisualize(self):
-        # self.data_visual = data_visualize(parent=self, res_queue_dict=self.data_visual_queue_dict)
-        self.data_visual = data_visualize(parent=self, demo_manager=self.cfn_manager, res_queue_dict=self.data_visual_queue_dict)
+        self.data_visual = data_visualize(parent=self, demo_manager=self.cfn_manager, res_queue_dict=None)
         self.data_visual.setVisible(False)
-
-        self.data_mon = repeatTimer(3, self.data_visual.update_datav, autostart=True)
-        self.data_mon.start()
+        self.computingNetResMonTimer = QtCore.QTimer(self)
+        self.computingNetResMonTimer.setInterval(3000)
+        self.computingNetResMonTimer.timeout.connect(self.data_visual.updateNodesInfo)
+        self.computingNetResMonTimer.start()
+        # self.data_mon = repeatTimer(3, self.data_visual.update_datav, autostart=True)
 
         print("_initDataVisualize Done ")
 
