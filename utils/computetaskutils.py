@@ -6,6 +6,7 @@
 Description: 
 """
 import os
+from multiprocessing.connection import Client
 from os import path, getpid
 import subprocess
 import sys
@@ -22,6 +23,7 @@ import yaml
 from PyQt5.QtWidgets import QFrame, QVBoxLayout, QWidget, QMainWindow, QApplication, QGroupBox, QHBoxLayout
 
 import vlc
+from typing import Tuple
 
 FRAME_W = 640
 FRAME_H = 480
@@ -350,3 +352,22 @@ def vlc_sender(addr: str, port: int, file_path: str, start_pos: float, cmd_q: Si
             print(f'(PID-{pid})' + s)
             cmd_q.put(('_abort', pid, s))
             return
+
+
+def dispatch(c, id, methodname, args=(), kwds={}):
+    """
+    Send a message to manager using connection `c` and return response
+    """
+    c.send((id, methodname, args, kwds))
+    kind, result = c.recv()
+    if kind == '#RETURN':
+        return result
+    raise ValueError(f'{kind, result}')
+
+
+def shutdown_multiprocessing_manager_server(addr: Tuple, key: str):
+    """诡异的关掉server方式。参考 https://stackoverflow.com/a/70649119/19733048
+    """
+    conn = Client(address=addr, authkey=key)
+    dispatch(conn, None, 'shutdown')  # from util import dispatch
+    conn.close()
