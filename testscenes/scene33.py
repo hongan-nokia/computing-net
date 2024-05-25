@@ -145,25 +145,25 @@ class Scene33(QWidget):
 
     def _initImageLoad(self):
         # -------------------------------------- Scenario_0 --------------------------------------
-        self.servive_step1 = ImageLoader(parent=self, geo=[325, 450, 1040, 130],
+        self.service_step1 = ImageLoader(parent=self, geo=[325, 450, 1040, 130],
                                          image_url='./images_test3/content_addressing_step1.png',
                                          img_scale_w=1040,
                                          img_scale_h=130,
                                          direction="l2r",
                                          interval=3, title='1.寻址请求', tag_geo=[130, 30, 100, 20])
-        self.servive_step2 = ImageLoader(parent=self, geo=[1360, 390, 443, 150],
+        self.service_step2 = ImageLoader(parent=self, geo=[1360, 390, 443, 150],
                                          image_url='./images_test3/content_power_addressing_step2.png',
                                          img_scale_w=200,
                                          img_scale_h=1,
                                          direction="l2r",
                                          interval=3, title='2.寻址内容，最优路径计算', tag_geo=[35, 0, 303, 120])
-        self.servive_step3 = ImageLoader(parent=self, geo=[720, 530, 650, 240],
+        self.service_step3 = ImageLoader(parent=self, geo=[720, 530, 650, 240],
                                          image_url='./images_test3/content_addressing_step3.png',
                                          img_scale_w=650,
                                          img_scale_h=240,
                                          direction="r2l",
                                          interval=3, title='3.网络路径控制', tag_geo=[420, 75, 400, 20])
-        self.servive_step4 = ImageLoader(parent=self, geo=[350, 507, 550, 310],
+        self.service_step4 = ImageLoader(parent=self, geo=[350, 507, 550, 310],
                                          image_url='./images_test3/content_addressing_step4.png',
                                          img_scale_w=550,
                                          img_scale_h=310,
@@ -171,23 +171,23 @@ class Scene33(QWidget):
                                          interval=3, title='', tag_geo=[280, 20, 200, 30])
 
     def initConnections(self):
-        self.servive_step1.QtSignals.anim_over.connect(self.service_provision_anim)
-        self.servive_step2.QtSignals.anim_over.connect(self.service_provision_anim)
-        self.servive_step3.QtSignals.anim_over.connect(self.service_provision_anim)
-        self.servive_step4.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.service_step1.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.service_step2.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.service_step3.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.service_step4.QtSignals.anim_over.connect(self.service_provision_anim)
 
     @pyqtSlot(str)
     def service_provision_anim(self, destination: str):
         if destination == "sp1":
             self.step1_label1.setVisible(True)
-            self.servive_step2.label.setVisible(True)
-            self.servive_step2.start("sp2")
+            self.service_step2.label.setVisible(True)
+            self.service_step2.start("sp2")
         elif destination == "sp2":
-            self.servive_step3.label.setVisible(True)
-            self.servive_step3.start("sp3")
+            self.service_step3.label.setVisible(True)
+            self.service_step3.start("sp3")
         elif destination == "sp3":
-            self.servive_step4.label.setVisible(True)
-            self.servive_step4.start("")
+            self.service_step4.label.setVisible(True)
+            self.service_step4.start("")
         else:
             pass
 
@@ -196,13 +196,13 @@ class Scene33(QWidget):
         self.parent().scene3.setVisible(True)
 
     def reset(self):
-        self.servive_step1.tag_label.setVisible(False)
-        self.servive_step2.tag_label.setVisible(False)
-        self.servive_step3.tag_label.setVisible(False)
-        self.servive_step4.tag_label.setVisible(False)
+        self.service_step1.tag_label.setVisible(False)
+        self.service_step2.tag_label.setVisible(False)
+        self.service_step3.tag_label.setVisible(False)
+        self.service_step4.tag_label.setVisible(False)
 
-        self.servive_step2.label.setVisible(False)
-        self.servive_step3.label.setVisible(False)
-        self.servive_step4.label.setVisible(False)
+        self.service_step2.label.setVisible(False)
+        self.service_step3.label.setVisible(False)
+        self.service_step4.label.setVisible(False)
 
         self.step1_label1.setVisible(False)
