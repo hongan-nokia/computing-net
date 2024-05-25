@@ -38,11 +38,10 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self._initView()
         self._initHeapMap()
         self._initImageLoad()
+        self.initConnections()
+        self.user_first_pkg.start("sc1_sp1")
 
     def _initMonitorQueue(self):
-        # self.monitor_q_cpu_hm_node1 = HeatMapQueueL[0]  # 算力节点1 CPU
-        # self.monitor_q_cpu_hm_node2 = HeatMapQueueL[1]  # 算力节点2 CPU
-        # self.monitor_q_cpu_hm_node3 = HeatMapQueueL[2]  # 算力节点3 CPU
         self.monitor_q_cpu_hm_node1 = self.cfn_manager.resource_StatMon['c_node1_cpu']  # 算力节点1 CPU
         self.monitor_q_cpu_hm_node2 = self.cfn_manager.resource_StatMon['c_node2_cpu']  # 算力节点2 CPU
         self.monitor_q_cpu_hm_node3 = self.cfn_manager.resource_StatMon['c_node3_cpu']  # 算力节点3 CPU
@@ -83,9 +82,12 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         c_node1_video_img = QtGui.QPixmap("./images/video_conv.png").scaled(QSize(54, 31))
         c_node2_video_img = QtGui.QPixmap("./images/video_conv.png").scaled(QSize(54, 31))
         c_node3_video_img = QtGui.QPixmap("./images/video_conv.png").scaled(QSize(54, 31))
-        self.c_node1_video = BlinkingPic(parent=self, pixmap=c_node1_video_img, auto_dim=True, dim_opacity=0.1, blink_period=1200).pixmap_item
-        self.c_node2_video = BlinkingPic(parent=self, pixmap=c_node2_video_img, auto_dim=True, dim_opacity=0.1, blink_period=1200).pixmap_item
-        self.c_node3_video = BlinkingPic(parent=self, pixmap=c_node3_video_img, auto_dim=True, dim_opacity=0.1, blink_period=1200).pixmap_item
+        self.c_node1_video = BlinkingPic(parent=self, pixmap=c_node1_video_img, auto_dim=True, dim_opacity=0.1,
+                                         blink_period=1200).pixmap_item
+        self.c_node2_video = BlinkingPic(parent=self, pixmap=c_node2_video_img, auto_dim=True, dim_opacity=0.1,
+                                         blink_period=1200).pixmap_item
+        self.c_node3_video = BlinkingPic(parent=self, pixmap=c_node3_video_img, auto_dim=True, dim_opacity=0.1,
+                                         blink_period=1200).pixmap_item
 
         scene.addItem(self.c_node1_video)
         scene.addItem(self.c_node2_video)
@@ -140,46 +142,63 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         scene.addWidget(self.cloud3_hm_l2)
         scene.addWidget(self.cloud3_hm_l3)
 
-        self.cloud1_link_1 = QtWidgets.QLabel(self)
-        self.cloud1_link_1.setGeometry(958, 540, 35, 15)
-        scene.addWidget(self.cloud1_link_1)
-
-        self.cloud1_link_2_tag = QtWidgets.QLabel(self)
-        self.cloud1_link_2_tag.setText("BW:")
-        self.cloud1_link_2_tag.setGeometry(750, 680, 35, 15)
-        scene.addWidget(self.cloud1_link_2_tag)
-
-        self.cloud1_link_2 = QtWidgets.QLabel(self)
-        self.cloud1_link_2.setGeometry(750, 700, 35, 15)
-        scene.addWidget(self.cloud1_link_2)
-
-        self.cloud2_link = QtWidgets.QLabel(self)
-        self.cloud2_link.setGeometry(1070, 580, 35, 15)
-        scene.addWidget(self.cloud2_link)
-
-        self.cloud3_link_1 = QtWidgets.QLabel(self)
-        self.cloud3_link_1.setGeometry(1160, 720, 35, 15)
-        scene.addWidget(self.cloud3_link_1)
-
-        self.cloud3_link_2 = QtWidgets.QLabel(self)
-        self.cloud3_link_2.setGeometry(990, 805, 35, 15)
-        scene.addWidget(self.cloud3_link_2)
-
         return scene
 
     def _initImageLoad(self):
-        self.user_first_pkg = ImageLoader(parent=self, geo=[300, 440, 560, 150],
-                                          image_url='./images/firs_pkg.png', direction="l2r", img_scale_w=0, img_scale_h=0,
-                                          interval=3, title='1. 首包 ', tag_geo=[120, 194, 240, 30])
-        self.addr_request = ImageLoader(parent=self, geo=[300, 440, 560, 150],
-                                        image_url='./images/addr_req.png', direction="l2r", img_scale_w=0, img_scale_h=0,
-                                        interval=3, title='2. 寻址请求 ', tag_geo=[120, 194, 240, 30])
-        self.net_route_ctrl = ImageLoader(parent=self, geo=[300, 440, 560, 150],
-                                          image_url='./images/net_ctrl.png', direction="l2r", img_scale_w=0, img_scale_h=0,
-                                          interval=3, title='4. 网络路径控制 ', tag_geo=[120, 194, 240, 30])
-        self.net_route_ctrl = ImageLoader(parent=self, geo=[300, 440, 560, 150],
-                                          image_url='./images/choose_new_svc.png', direction="l2r", img_scale_w=0, img_scale_h=0,
-                                          interval=3, title='8. 选择新服务实例，完成网络路径控制 ', tag_geo=[120, 194, 240, 30])
-        self.video_stream = ImageLoader(parent=self, geo=[300, 440, 560, 150],
-                                        image_url='./images/video_stream.png', direction="l2r", img_scale_w=0, img_scale_h=0,
-                                        interval=3, title='5. 视频传输数据 ', tag_geo=[120, 194, 240, 30])
+        self.user_first_pkg = ImageLoader(parent=self, geo=[320, 450, 530, 100],
+                                          image_url='./images_test3/server_addressing_step1.png',
+                                          img_scale_w=530,
+                                          img_scale_h=75,
+                                          direction="l2r",
+                                          interval=3, title='1. 首包', tag_geo=[230, 32, 100, 20])
+        self.addr_request = ImageLoader(parent=self, geo=[896, 449, 443, 100],
+                                        image_url='./images_test3/server_addressing_step2.png',
+                                        img_scale_w=443,
+                                        img_scale_h=75,
+                                        direction="l2r",
+                                        interval=3, title='2.寻址请求', tag_geo=[170, 32, 100, 20])
+        self.net_brain_ctrl = ImageLoader(parent=self, geo=[1360, 440, 443, 100],
+                                          image_url='./images_test3/server_addressing_step3.png',
+                                          img_scale_w=200,
+                                          img_scale_h=3,
+                                          direction="l2r",
+                                          interval=3, title='3.算网融合调度编排', tag_geo=[90, 0, 200, 20])
+        self.net_route_ctrl = ImageLoader(parent=self, geo=[880, 550, 476, 170],
+                                          image_url='./images_test3/server_addressing_step4.png',
+                                          img_scale_w=475,
+                                          img_scale_h=75,
+                                          direction="r2l",
+                                          interval=3, title='4.网络路径控制', tag_geo=[280, 20, 200, 30])
+        self.video_stream = ImageLoader(parent=self, geo=[320, 460, 550, 120],
+                                        image_url='./images_test3/server_addressing_step5.png',
+                                        img_scale_w=550,
+                                        img_scale_h=120,
+                                        direction="r2l",
+                                        interval=3, title='5.视频传输数据', tag_geo=[20, 80, 200, 30])
+
+    def initConnections(self):
+        self.user_first_pkg.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.addr_request.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.net_brain_ctrl.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.net_route_ctrl.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.video_stream.QtSignals.anim_over.connect(self.service_provision_anim)
+
+    @pyqtSlot(str)
+    def service_provision_anim(self, destination: str):
+        print(f"destination is: {destination}")
+        if destination == "sc1_sp1":
+            self.user_first_pkg.setVisible(True)
+            self.addr_request.setVisible(True)
+            self.addr_request.label.setVisible(True)
+            self.addr_request.start("sc1_sp2")
+        elif destination == "sc1_sp2":
+            self.net_brain_ctrl.label.setVisible(True)
+            self.net_brain_ctrl.start("sc1_sp3")
+        elif destination == "sc1_sp3":
+            self.net_route_ctrl.label.setVisible(True)
+            self.net_route_ctrl.start("sc1_sp4")
+        elif destination == "sc1_sp4":
+            self.video_stream.label.setVisible(True)
+            self.video_stream.start("")
+        else:
+            pass

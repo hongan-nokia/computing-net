@@ -153,6 +153,8 @@ class GlancesHandler(object):
                         self.q.put([float(r_dict.get(item)) for item in self.metrics])  # 将收集到的数据放入队列 self.q 中  [0.0, 0.0]
                         self.q.put([float(r_dict.get(item)) for item in self.metrics])
                         self.q.put([float(r_dict.get(item)) for item in self.metrics])
+                        self.q.put([float(r_dict.get(item)) for item in self.metrics])
+                        self.q.put([float(r_dict.get(item)) for item in self.metrics])
                     else:
                         self.q.put([float(r_dict.get(item)) for item in self.metrics])
                         self.q.put([float(r_dict.get(item)) for item in self.metrics])
