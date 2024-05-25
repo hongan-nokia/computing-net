@@ -49,8 +49,12 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self._initScenarioButtons()
 
         self.mouse = PyWinMouse.Mouse()
-        self.mouse_pos_mon = repeatTimer(1, self.get_mouse_position, autostart=True)
-        self.mouse_pos_mon.start()
+        # self.mouse_pos_mon = repeatTimer(1, self.get_mouse_position, autostart=True)
+        # self.mouse_pos_mon.start()
+        self.mouseMonTimer = QtCore.QTimer(self)
+        self.mouseMonTimer.setInterval(1000)
+        self.mouseMonTimer.timeout.connect(self.get_mouse_position)
+        self.mouseMonTimer.start()
 
     def _initResMonitorQueue(self):
         """
@@ -251,6 +255,5 @@ if __name__ == '__main__':
     cfn_manager = CfnDemoManager(configuration, inter_process_resource_NodeMan, inter_process_resource_StatMon)
     print(cfn_manager.n_nodes)
     mainWidget = CpnAppWindow(cfn_manager)
-    sleep(10)
     mainWidget.show()
     sys.exit(app.exec())

@@ -81,10 +81,10 @@ class HistoryWindow(QChart):
         #     [QPointF(now.addSecs(-i).toMSecsSinceEpoch(), 0) for i in range(self.m_count + 20, -1, -1)])
 
         # 定时器获取数据
-        self.m_timer = QTimer()
-        self.m_timer.timeout.connect(self.update_data_home)
-        # self.m_timer.timeout.connect(self.update_data_office)
-        self.m_timer.start(5500)
+        # self.m_timer = QTimer()
+        # self.m_timer.timeout.connect(self.update_data_home)
+        # # self.m_timer.timeout.connect(self.update_data_office)
+        # self.m_timer.start(4000)
 
     def update_data_home(self):
         h_cpu = 0

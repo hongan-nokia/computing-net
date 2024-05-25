@@ -2176,6 +2176,7 @@ class data_visualize(QWidget):
         tx, dx = node1_info['net'][0], node1_info['net'][1]
         rb, wb = node1_info['disk'][0], node1_info['disk'][1]
         self.history_cpu_1.put(cu)
+        self.history1.cpu_history.update_data_home()
         self.node1_cpu_num.setText((str(cu) + "%"))
         self.speed_meter_1.setSpeed(cu)
         self.node1_cpu_bar.setProperty("value", cu)
@@ -2239,6 +2240,7 @@ class data_visualize(QWidget):
         tx, dx = node2_info['net'][0], node2_info['net'][1]
         rb, wb = node2_info['disk'][0], node2_info['disk'][1]
         self.history_cpu_2.put(cu)
+        self.history2.cpu_history.update_data_home()
         self.node2_cpu_num.setText((str(cu) + "%"))
         self.speed_meter_2.setSpeed(cu)
         self.node2_cpu_bar.setProperty("value", cu)
@@ -2302,6 +2304,7 @@ class data_visualize(QWidget):
         tx, dx = node3_info['net'][0], node3_info['net'][1]
         rb, wb = node3_info['disk'][0], node3_info['disk'][1]
         self.history_cpu_3.put(cu)
+        self.history3.cpu_history.update_data_home()
         self.node3_cpu_num.setText((str(cu) + "%"))
         self.speed_meter_3.setSpeed(cu)
         self.node3_cpu_bar.setProperty("value", cu)
@@ -2365,6 +2368,7 @@ class data_visualize(QWidget):
         tx, dx = node4_info['net'][0], node4_info['net'][1]
         rb, wb = node4_info['disk'][0], node4_info['disk'][1]
         self.history_cpu_4.put(cu)
+        self.history4.cpu_history.update_data_home()
         self.node4_cpu_num.setText((str(cu) + "%"))
         self.speed_meter_4.setSpeed(cu)
         self.node4_cpu_bar.setProperty("value", cu)
