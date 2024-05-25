@@ -317,7 +317,6 @@ class SystemSyntheticResUtilize(QWidget):
             if self.topBtn1Tag == 1 and self.topBtn2Tag == 1 and self.topBtn3Tag == 1 and self.topBtn4Tag == 1 and self.topBtn5Tag == 1 and self.topBtn6Tag == 1:
                 self.leftBtn1.setStyleSheet(self.leftBtnStyleSheet)
                 self.leftBtn2.setStyleSheet(self.leftBtnSelectedStyleSheet)
-
         else:
             self.topBtn3.setStyleSheet(self.topBtnStyleSheet)
             self.leftBtn1.setStyleSheet(self.leftBtnStyleSheet)
