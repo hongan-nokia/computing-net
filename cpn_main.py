@@ -5,22 +5,15 @@
 @Email: honggang.yuan@nokia-sbell.com
 Description:
 """
-import socket
 import sys
-import threading
 from multiprocessing import Pipe, Queue
-from time import sleep
 
 import PyWinMouse
-import psutil
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtCore import pyqtSlot, Qt, QTimer
-from PyQt5.QtGui import QPalette, QColor, QBrush, QPixmap, QIcon
-from PyQt5.QtWidgets import QApplication, QHBoxLayout, QPushButton, QLabel, QGroupBox, QVBoxLayout, QTableWidgetItem, \
-    QHeaderView, QTableWidget, QWidget
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPalette, QColor
+from PyQt5.QtWidgets import QApplication, QPushButton
 
-from guiwidgets.exitdialog import ExitDialog
-from guiwidgets.fadingpic import BlinkingPic
 from nodemodels.cfndemomanager import CfnDemoManager
 from resourcevisiualize.resvisualize import data_visualize
 from testscenes.computingpowerawareaddressroute import ComputingPowerAwareAddressRouteWindow
