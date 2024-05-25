@@ -16,12 +16,7 @@ from PyQt5.QtGui import QPalette, QColor, QBrush, QPixmap, QIcon
 from PyQt5.QtWidgets import QApplication, QHBoxLayout, QPushButton, QLabel, QGroupBox, QVBoxLayout, QTableWidgetItem, \
     QHeaderView, QTableWidget, QWidget
 
-from guiwidgets.exitdialog import ExitDialog
-from guiwidgets.fadingpic import BlinkingPic
-from nodemodels.cfndemomanager import CfnDemoManager
-from resourcevisiualize.resvisualize import data_visualize
-from utils.configparser import DemoConfigParser
-from utils.repeatimer import repeatTimer
+from utils.HeatMap import HeatMap
 
 
 class SystemSyntheticResUtilize(QWidget):
@@ -36,7 +31,10 @@ class SystemSyntheticResUtilize(QWidget):
         self.nokia_blue = QtGui.QColor(18, 65, 145)
         self.cfn_manager = demo_manager
         self.setParent(parent)
+        self._initMonitorQueue()
         self._initView()
+        self._initScene()
+        self._initHeapMap()
 
     def _initView(self):
         self.setWindowTitle(" ")
@@ -56,82 +54,105 @@ class SystemSyntheticResUtilize(QWidget):
 
     def add_butten(self):
         self.initBtn()
-        self.initScene()
 
     def initBtn(self):
         self.topBtnStyleSheet = """
                                     QPushButton {
-                                        background-color: #ccc;
-                                        border: 6px solid #2980b9;
-                                        color: blue;
+                                        background-color: #031133;
+                                        border-radius: 20px;
+                                        border: 5px solid #2980b9;
+                                        border-style:outset;
+                                        color: #fff;
                                         padding: 10px 20px;
-                                        border-radius: 25px;
-                                        width：150px;
-                                        font-size: 20px;
                                     }
                                     QPushButton:hover {
                                         color:red;
-                                        border: 6px inset #2980b9;
+                                        border: 5px inset #2980b9;
                                     }
                                 """
 
         self.topBtnSelectedStyleSheet = """
                                             QPushButton {
-                                                background-color: #ccc;
+                                                background-color: #031133;
                                                 padding: 10px 20px;
-                                                border-radius: 25px;
-                                                width：150px;
-                                                font-size: 20px;
-                                                color:red;
-                                                border: 6px inset #2980b9;
+                                                color: red;
+                                                border: 5px inset #2980b9;
+                                                border-radius: 20px;
                                             }
                                         """
 
         self.leftBtnStyleSheet = """
                                             QPushButton {
-                                                background-color: #ccc;
-                                                border: 10px solid #2980b9;
-                                                color: blue;
-                                                padding: 20px;
+                                                background-color: #031133;
+                                                border: 7px solid #2980b9;
                                                 border-radius: 30px;
+                                                border-style:outset;
+                                                color: #fff;
+                                                padding: 30px 20px;
                                                 width：150px;
                                                 font-size: 20px;
                                             }
                                             QPushButton:hover {
                                                 color:red;
-                                                border: 10px inset #2980b9;
+                                                border: 7px inset #2980b9;
                                             }
                                         """
 
         self.leftBtnSelectedStyleSheet = """
                                                     QPushButton {
-                                                        background-color: #ccc;
-                                                        padding: 20px;
-                                                        border-radius: 30px;
+                                                        background-color: #031133;
+                                                        padding: 30px 20px;
                                                         width：150px;
                                                         font-size: 20px;
                                                         color:red;
-                                                        border: 10px inset #2980b9;
+                                                        border: 7px inset #2980b9;
+                                                        border-radius: 30px;
                                                     }
                                                 """
+        self.topBtnFont = QtGui.QFont("Arial", 14, QtGui.QFont.Bold)
+        self.leftBtnFont = QtGui.QFont("Arial", 20, QtGui.QFont.Bold)
+
+        topBtnToTop = 175
+        topBtnWidth = 150
+        topBtnHeight = 20
 
         self.topBtn1 = QPushButton("视频点播")
-        self.topBtn1.setStyleSheet(self.topBtnStyleSheet)
+        # self.topBtn1.setStyleSheet(self.topBtnStyleSheet)
+        self.topBtn1.setGeometry(400, topBtnToTop, topBtnWidth, topBtnHeight)
+        self.topBtn1.setFont(self.topBtnFont)
         self.topBtn2 = QPushButton("AI训练1")
-        self.topBtn2.setStyleSheet(self.topBtnStyleSheet)
+        # self.topBtn2.setStyleSheet(self.topBtnStyleSheet)
+        self.topBtn2.setGeometry(600, topBtnToTop, topBtnWidth, topBtnHeight)
+        self.topBtn2.setFont(self.topBtnFont)
         self.topBtn3 = QPushButton("心跳检测")
-        self.topBtn3.setStyleSheet(self.topBtnStyleSheet)
+        # self.topBtn3.setStyleSheet(self.topBtnStyleSheet)
+        self.topBtn3.setGeometry(800, topBtnToTop, topBtnWidth, topBtnHeight)
+        self.topBtn3.setFont(self.topBtnFont)
         self.topBtn4 = QPushButton("AI训练2")
-        self.topBtn4.setStyleSheet(self.topBtnStyleSheet)
+        # self.topBtn4.setStyleSheet(self.topBtnStyleSheet)
+        self.topBtn4.setGeometry(1000, topBtnToTop, topBtnWidth, topBtnHeight)
+        self.topBtn4.setFont(self.topBtnFont)
         self.topBtn5 = QPushButton("视频转换")
-        self.topBtn5.setStyleSheet(self.topBtnStyleSheet)
+        # self.topBtn5.setStyleSheet(self.topBtnStyleSheet)
+        self.topBtn5.setGeometry(1200, topBtnToTop, topBtnWidth, topBtnHeight)
+        self.topBtn5.setFont(self.topBtnFont)
         self.topBtn6 = QPushButton("AI训练3")
-        self.topBtn6.setStyleSheet(self.topBtnStyleSheet)
+        # self.topBtn6.setStyleSheet(self.topBtnStyleSheet)
+        self.topBtn6.setGeometry(1400, topBtnToTop, topBtnWidth, topBtnHeight)
+        self.topBtn6.setFont(self.topBtnFont)
+
+        leftBtnToleft = 20
+        letBtnWidth = 180
+        leftBtnHeight = 20
 
         self.leftBtn1 = QPushButton("传统MEC")
-        self.leftBtn1.setStyleSheet(self.leftBtnStyleSheet)
+        # self.leftBtn1.setStyleSheet(self.leftBtnStyleSheet)
+        self.leftBtn1.setGeometry(leftBtnToleft, 480, letBtnWidth, leftBtnHeight)
+        self.leftBtn1.setFont(self.topBtnFont)
         self.leftBtn2 = QPushButton("算网融合")
-        self.leftBtn2.setStyleSheet(self.leftBtnStyleSheet)
+        # self.leftBtn2.setStyleSheet(self.leftBtnStyleSheet)
+        self.leftBtn2.setGeometry(leftBtnToleft, 620, letBtnWidth, leftBtnHeight)
+        self.leftBtn2.setFont(self.topBtnFont)
 
         self.topBtn1Tag = 0
         self.topBtn2Tag = 0
@@ -152,52 +173,17 @@ class SystemSyntheticResUtilize(QWidget):
         self.leftBtn1.clicked.connect(self.leftBtn1_click)
         self.leftBtn2.clicked.connect(self.leftBtn2_click)
 
-        self.proxy_widget_height = 175
+        self.view.scene().addWidget(self.topBtn1)
+        self.view.scene().addWidget(self.topBtn2)
+        self.view.scene().addWidget(self.topBtn3)
+        self.view.scene().addWidget(self.topBtn4)
+        self.view.scene().addWidget(self.topBtn5)
+        self.view.scene().addWidget(self.topBtn6)
 
-        # 创建 QGraphicsProxyWidget 并将按钮嵌入到 QGraphicsScene 中
-        proxy_widget = QtWidgets.QGraphicsProxyWidget()
-        proxy_widget.setWidget(self.topBtn1)
-        proxy_widget.setPos(400, self.proxy_widget_height)  # 设置按钮在场景中的位置
-        # 将 QGraphicsProxyWidget 添加到场景中
-        self.view.scene().addItem(proxy_widget)
+        self.view.scene().addWidget(self.leftBtn1)
+        self.view.scene().addWidget(self.leftBtn2)
 
-        # 创建 QGraphicsProxyWidget 并将按钮嵌入到 QGraphicsScene 中
-        proxy_widget = QtWidgets.QGraphicsProxyWidget()
-        proxy_widget.setWidget(self.topBtn2)
-        proxy_widget.setPos(600, self.proxy_widget_height)  # 设置按钮在场景中的位置
-        self.view.scene().addItem(proxy_widget)
-
-        proxy_widget = QtWidgets.QGraphicsProxyWidget()
-        proxy_widget.setWidget(self.topBtn3)
-        proxy_widget.setPos(800, self.proxy_widget_height)  # 设置按钮在场景中的位置
-        self.view.scene().addItem(proxy_widget)
-
-        proxy_widget = QtWidgets.QGraphicsProxyWidget()
-        proxy_widget.setWidget(self.topBtn4)
-        proxy_widget.setPos(1000, self.proxy_widget_height)  # 设置按钮在场景中的位置
-        self.view.scene().addItem(proxy_widget)
-
-        proxy_widget = QtWidgets.QGraphicsProxyWidget()
-        proxy_widget.setWidget(self.topBtn5)
-        proxy_widget.setPos(1200, self.proxy_widget_height)  # 设置按钮在场景中的位置
-        self.view.scene().addItem(proxy_widget)
-
-        proxy_widget = QtWidgets.QGraphicsProxyWidget()
-        proxy_widget.setWidget(self.topBtn6)
-        proxy_widget.setPos(1400, self.proxy_widget_height)  # 设置按钮在场景中的位置
-        self.view.scene().addItem(proxy_widget)
-
-        proxy_widget = QtWidgets.QGraphicsProxyWidget()
-        proxy_widget.setWidget(self.leftBtn1)
-        proxy_widget.setPos(50, 480)  # 设置按钮在场景中的位置
-        self.view.scene().addItem(proxy_widget)
-
-        proxy_widget = QtWidgets.QGraphicsProxyWidget()
-        proxy_widget.setWidget(self.leftBtn2)
-        proxy_widget.setPos(50, 620)  # 设置按钮在场景中的位置
-        self.view.scene().addItem(proxy_widget)
-
-    def initScene(self):
+    def _initScene(self):
         pixmap = QtGui.QPixmap('./images/dianbo.png')
         self.pixmap_dianbo = QtWidgets.QGraphicsPixmapItem(pixmap)
         self.pixmap_dianbo.setPos(925, 350)
@@ -234,8 +220,42 @@ class SystemSyntheticResUtilize(QWidget):
         self.view.scene().addItem(self.pixmap_xunlian3)
         self.pixmap_xunlian3.setVisible(False)
 
-
-
+        self.cloud1_hm_l1 = QtWidgets.QLabel(parent=self)
+        self.cloud1_hm_l2 = QtWidgets.QLabel(parent=self)
+        self.cloud1_hm_l3 = QtWidgets.QLabel(parent=self)
+        self.cloud1_hm_l1.setText("0%")
+        self.cloud1_hm_l2.setText("100%")
+        self.cloud1_hm_l3.setText("cpu")
+        self.cloud1_hm_l1.setGeometry(772, 467, 20, 10)
+        self.cloud1_hm_l2.setGeometry(763, 399, 30, 10)
+        self.cloud1_hm_l3.setGeometry(792, 476, 20, 20)
+        self.cloud2_hm_l1 = QtWidgets.QLabel(parent=self)
+        self.cloud2_hm_l2 = QtWidgets.QLabel(parent=self)
+        self.cloud2_hm_l3 = QtWidgets.QLabel(parent=self)
+        self.cloud2_hm_l1.setText("0%")
+        self.cloud2_hm_l2.setText("100%")
+        self.cloud2_hm_l3.setText("cpu")
+        self.cloud2_hm_l1.setGeometry(1037, 582, 20, 10)
+        self.cloud2_hm_l2.setGeometry(1027, 514, 30, 10)
+        self.cloud2_hm_l3.setGeometry(1055, 592, 20, 20)
+        self.cloud3_hm_l1 = QtWidgets.QLabel(parent=self)
+        self.cloud3_hm_l2 = QtWidgets.QLabel(parent=self)
+        self.cloud3_hm_l3 = QtWidgets.QLabel(parent=self)
+        self.cloud3_hm_l1.setText("0%")
+        self.cloud3_hm_l2.setText("100%")
+        self.cloud3_hm_l3.setText("cpu")
+        self.cloud3_hm_l1.setGeometry(965, 912, 20, 10)
+        self.cloud3_hm_l2.setGeometry(955, 852, 30, 10)
+        self.cloud3_hm_l3.setGeometry(985, 928, 20, 20)
+        self.view.scene().addWidget(self.cloud1_hm_l1)
+        self.view.scene().addWidget(self.cloud1_hm_l2)
+        self.view.scene().addWidget(self.cloud1_hm_l3)
+        self.view.scene().addWidget(self.cloud2_hm_l1)
+        self.view.scene().addWidget(self.cloud2_hm_l2)
+        self.view.scene().addWidget(self.cloud2_hm_l3)
+        self.view.scene().addWidget(self.cloud3_hm_l1)
+        self.view.scene().addWidget(self.cloud3_hm_l2)
+        self.view.scene().addWidget(self.cloud3_hm_l3)
 
     def topBtn1_click(self):
         if self.topBtn1Tag == 0:
@@ -389,6 +409,8 @@ class SystemSyntheticResUtilize(QWidget):
             self.topBtn1Tag = 1
             self.topBtn2Tag = 1
 
+            self.pixmap_xunlian1.setPos(925, 390)
+
             self.pixmap_dianbo.setVisible(True)
             self.pixmap_xunlian1.setVisible(True)
             self.pixmap_xunlian2.setVisible(False)
@@ -419,6 +441,8 @@ class SystemSyntheticResUtilize(QWidget):
             self.topBtn5Tag = 1
             self.topBtn6Tag = 1
 
+            self.pixmap_xunlian1.setPos(1120, 780)
+
             self.pixmap_dianbo.setVisible(True)
             self.pixmap_xunlian1.setVisible(True)
             self.pixmap_xunlian2.setVisible(True)
@@ -438,6 +462,24 @@ class SystemSyntheticResUtilize(QWidget):
         else:
             self.reset()
 
+    def _initMonitorQueue(self):
+        self.monitor_q_cpu_hm_node1 = self.cfn_manager.resource_StatMon['c_node1_cpu']  # 算力节点1 CPU
+        self.monitor_q_cpu_hm_node2 = self.cfn_manager.resource_StatMon['c_node2_cpu']  # 算力节点2 CPU
+        self.monitor_q_cpu_hm_node3 = self.cfn_manager.resource_StatMon['c_node3_cpu']  # 算力节点3 CPU
+
+    def _initHeapMap(self):
+        self.s2cloud1_hm = HeatMap(parent=self, geo=[793, 405, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node1)
+        self.s2cloud2_hm = HeatMap(parent=self, geo=[1058, 520, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node2)
+        self.s2cloud3_hm = HeatMap(parent=self, geo=[986, 857, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node3)
+        self.s2cloud1_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
+        self.s2cloud2_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
+        self.s2cloud3_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
+        self.s2cloud1_hm.setVisible(True)
+        self.s2cloud2_hm.setVisible(True)
+        self.s2cloud3_hm.setVisible(True)
+        self.s2cloud1_hm.timer.start()
+        self.s2cloud2_hm.timer.start()
+        self.s2cloud3_hm.timer.start()
 
     def reset(self):
         self.topBtn1Tag = 0
