@@ -5,12 +5,14 @@
 @Email: honggang.yuan@nokia-sbell.com
 Description:
 """
+import socket
 import sys
 import threading
 from multiprocessing import Pipe, Queue
 from time import sleep
 
 import PyWinMouse
+import psutil
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import pyqtSlot, Qt, QTimer
 from PyQt5.QtGui import QPalette, QColor, QBrush, QPixmap, QIcon
@@ -53,16 +55,6 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.mouse_pos_mon.start()
 
     def _initResMonitorQueue(self):
-        """
-        self.scene1_heatMap_QueueL = [Queue(15) for i in range(3)]  # 这里一共有3个c_node节点
-        self.scene2_heatMap_QueueL = [Queue(15) for i in range(3)]
-        self.scene3_heatMap_QueueL = [Queue(15) for i in range(3)]
-        self.c_nodes_cpu_queues = [
-            self.cfn_manager.resource_StatMon['c_node1_cpu'],
-            self.cfn_manager.resource_StatMon['c_node2_cpu'],
-            self.cfn_manager.resource_StatMon['c_node3_cpu'],
-        ]
-        """
         self.c_node1_cpu_queue = self.cfn_manager.resource_StatMon['c_node1_cpu']
         self.c_node2_cpu_queue = self.cfn_manager.resource_StatMon['c_node2_cpu']
         self.c_node2_cpu_queue = self.cfn_manager.resource_StatMon['c_node2_cpu']
@@ -84,12 +76,12 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.data_visual = data_visualize(parent=self, demo_manager=self.cfn_manager, res_queue_dict=None)
 
         self.data_visual.setVisible(False)
-        # self.computingNetResMonTimer = QtCore.QTimer(self)
-        # self.computingNetResMonTimer.setInterval(3000)
-        # self.computingNetResMonTimer.timeout.connect(self.data_visual.updateNodesInfo)
-        # self.computingNetResMonTimer.start()
-        self.data_mon = repeatTimer(3, self.data_visual.updateNodesInfo, autostart=True)
-        self.data_mon.start()
+        self.computingNetResMonTimer = QtCore.QTimer(self)
+        self.computingNetResMonTimer.setInterval(3000)
+        self.computingNetResMonTimer.timeout.connect(self.data_visual.updateNodesInfo)
+        self.computingNetResMonTimer.start()
+        # self.data_mon = repeatTimer(3, self.data_visual.updateNodesInfo, autostart=True)
+        # self.data_mon.start()
 
         print("_initDataVisualize Done ")
 
@@ -241,12 +233,38 @@ class CpnAppWindow(QtWidgets.QMainWindow):
             self.main_page_btn.setVisible(False)
 
     def reset(self):
+        # self.cfn_manager.close()
         print("This is Reset")
+
+
+def check_port(port):
+    # 创建socket对象
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        # 尝试连接指定端口
+        s.bind(("127.0.0.1", port))
+        # 如果可以绑定成功，则端口未被占用
+        print(f"Port {port} is available.")
+    except OSError:
+        # 如果绑定失败，则端口已被占用
+        print(f"Port {port} is already in use.")
+        # 获取占用该端口的进程信息
+        for proc in psutil.process_iter():
+            try:
+                # 获取进程的监听端口
+                proc_ports = proc.connections()
+                for p in proc_ports:
+                    if p.laddr.port == port:
+                        print(f"Process {proc.pid} is using port {port}. Terminating...")
+                        # 终止进程
+                        proc.terminate()
+            except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                pass
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-
+    check_port(10070)
     configuration = DemoConfigParser("cpn_config-test-only-cpu.json")
     inter_process_resource_NodeMan = [(i['node_name'], Pipe()) for i in configuration.nodes]
     inter_process_resource_StatMon = [(i['monitoring_source_name'], Queue(100)) for i in configuration.monitoring_sources]  # for state_monitor_process. new Queue()
