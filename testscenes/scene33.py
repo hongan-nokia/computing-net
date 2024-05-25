@@ -106,7 +106,7 @@ class Scene33(QWidget):
         self.backBtn.clicked.connect(self.backTest3)
         self.view.scene().addWidget(self.backBtn)
 
-        font1 = QtGui.QFont("Nokia Pure Text", 11)
+        font1 = QtGui.QFont("微软雅黑", 11)
         self.step1_label1 = QtWidgets.QLabel(parent=self)
         self.step1_label1.setText("c.房间1的监控")
         self.step1_label1.setWordWrap(True)
@@ -115,7 +115,7 @@ class Scene33(QWidget):
         self.view.scene().addWidget(self.step1_label1)
         self.step1_label1.setVisible(False)
 
-        # font2 = QtGui.QFont("Nokia Pure Text", 14)
+        # font2 = QtGui.QFont("微软雅黑", 14)
         # self.step1_label2 = QtWidgets.QLabel(parent=self)
         # self.step1_label2.setText("寻址请求")
         # self.step1_label2.setWordWrap(True)
@@ -124,7 +124,7 @@ class Scene33(QWidget):
         # self.view.scene().addWidget(self.step1_label2)
         # self.step1_label2.setVisible(False)
 
-    def _initMonitorQueue(self, HeatMapQueueL):
+    def _initMonitorQueue(self):
         self.monitor_q_cpu_hm_node1 = self.cfn_manager.resource_StatMon['c_node1_cpu']  # 算力节点1 CPU
         self.monitor_q_cpu_hm_node2 = self.cfn_manager.resource_StatMon['c_node2_cpu']  # 算力节点2 CPU
         self.monitor_q_cpu_hm_node3 = self.cfn_manager.resource_StatMon['c_node3_cpu']  # 算力节点3 CPU

@@ -106,7 +106,7 @@ class Scene31(QWidget):
         self.backBtn.clicked.connect(self.backTest3)
         self.view.scene().addWidget(self.backBtn)
 
-    def _initMonitorQueue(self, HeatMapQueueL):
+    def _initMonitorQueue(self):
         self.monitor_q_cpu_hm_node1 = self.cfn_manager.resource_StatMon['c_node1_cpu']  # 算力节点1 CPU
         self.monitor_q_cpu_hm_node2 = self.cfn_manager.resource_StatMon['c_node2_cpu']  # 算力节点2 CPU
         self.monitor_q_cpu_hm_node3 = self.cfn_manager.resource_StatMon['c_node3_cpu']  # 算力节点3 CPU
