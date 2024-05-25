@@ -222,13 +222,12 @@ class CpnAppWindow(QtWidgets.QMainWindow):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
 
-    configuration = DemoConfigParser("cpn_config-test.json")
+    configuration = DemoConfigParser("cpn_config-test-only-cpu.json")
     inter_process_resource_NodeMan = [(i['node_name'], Pipe()) for i in configuration.nodes]
     inter_process_resource_StatMon = [(i['monitoring_source_name'], Queue(100)) for i in configuration.monitoring_sources]  # for state_monitor_process. new Queue()
-
     cfn_manager = CfnDemoManager(configuration, inter_process_resource_NodeMan, inter_process_resource_StatMon)
     print(cfn_manager.n_nodes)
     mainWidget = CpnAppWindow(cfn_manager)
-    sleep(10)
     mainWidget.show()
     sys.exit(app.exec())
+
