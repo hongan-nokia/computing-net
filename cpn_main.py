@@ -193,11 +193,9 @@ class CpnAppWindow(QtWidgets.QMainWindow):
 
     def _showTestScene2(self):
         self.CPAARWidget.setVisible(False)
-
-        self.SSRUWidget.reset()
-
         self.SSRUWidget.setVisible(True)
         print("This is TestScene2")
+        # self.SSRUWidget.reset()
 
     def _showTestScene3(self):
         pass
@@ -227,7 +225,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
             self.main_page_btn.setVisible(False)
 
     def reset(self):
-        # self.cfn_manager.close()
+        self.cfn_manager.close()
         print("This is Reset")
 
 

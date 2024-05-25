@@ -49,8 +49,16 @@ class SystemSyntheticResUtilize(QWidget):
         self.view.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.view.setRenderHint(QtGui.QPainter.Antialiasing)
         self.view.setGeometry(0, 0, 1920, 1080)
-
         self.add_butten()
+        self.topBtn1.setStyleSheet(self.topBtnStyleSheet)
+        self.topBtn2.setStyleSheet(self.topBtnStyleSheet)
+        self.topBtn3.setStyleSheet(self.topBtnStyleSheet)
+        self.topBtn4.setStyleSheet(self.topBtnStyleSheet)
+        self.topBtn5.setStyleSheet(self.topBtnStyleSheet)
+        self.topBtn6.setStyleSheet(self.topBtnStyleSheet)
+
+        self.leftBtn1.setStyleSheet(self.leftBtnStyleSheet)
+        self.leftBtn2.setStyleSheet(self.leftBtnStyleSheet)
 
     def add_butten(self):
         self.initBtn()
@@ -502,7 +510,6 @@ class SystemSyntheticResUtilize(QWidget):
         self.cfn_manager.send_command('c_node3', 'stop_task', 'ai_train up#1')
         self.cfn_manager.send_command('c_node3', 'stop_task', 'vlc up')
 
-
     def reset(self):
         self.topBtn1Tag = 0
         self.topBtn2Tag = 0
@@ -520,13 +527,3 @@ class SystemSyntheticResUtilize(QWidget):
         self.pixmap_xunlian3.setVisible(False)
         self.pixmap_xintiao.setVisible(False)
         self.pixmap_zhuanhuan.setVisible(False)
-
-        self.topBtn1.setStyleSheet(self.topBtnStyleSheet)
-        self.topBtn2.setStyleSheet(self.topBtnStyleSheet)
-        self.topBtn3.setStyleSheet(self.topBtnStyleSheet)
-        self.topBtn4.setStyleSheet(self.topBtnStyleSheet)
-        self.topBtn5.setStyleSheet(self.topBtnStyleSheet)
-        self.topBtn6.setStyleSheet(self.topBtnStyleSheet)
-
-        self.leftBtn1.setStyleSheet(self.leftBtnStyleSheet)
-        self.leftBtn2.setStyleSheet(self.leftBtnStyleSheet)
