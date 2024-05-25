@@ -8,3 +8,7 @@ matplotlib
 pyqtgraph
 fastapi
 pyqtchart
+typing
+opencv-python
+pywinmouse
+uvicorn

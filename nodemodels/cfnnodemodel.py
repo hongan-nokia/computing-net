@@ -104,19 +104,19 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
     #     onos_post_tag = onos_post_all_flow(pid_args=args)
     #     print(f"onos_add_all_flow tag is: {onos_post_tag}")
 
-    elif taskname == 'kubernetes':
-        p = Process(target=kubernetes_pod_handler, args=(taskname, args, task_cmd_q, task_cancel, node_obj.terminate_event))
-        node_obj.tasks[f'{taskname} {args}'] = -1
-        p.start()
-
-    elif taskname == 'kubernetes_del':
-        _stdout = sys.stdout
-        _stderr = sys.stderr
-        _stdout = subprocess.DEVNULL
-        _stderr = subprocess.DEVNULL
-        del_cmd = f"kubectl delete --all pods -n default --force"
-        subprocess.run(del_cmd, shell=True, stdout=_stdout, stderr=_stderr)
-        sleep(1)
+    # elif taskname == 'kubernetes':
+    #     p = Process(target=kubernetes_pod_handler, args=(taskname, args, task_cmd_q, task_cancel, node_obj.terminate_event))
+    #     node_obj.tasks[f'{taskname} {args}'] = -1
+    #     p.start()
+    #
+    # elif taskname == 'kubernetes_del':
+    #     _stdout = sys.stdout
+    #     _stderr = sys.stderr
+    #     _stdout = subprocess.DEVNULL
+    #     _stderr = subprocess.DEVNULL
+    #     del_cmd = f"kubectl delete --all pods -n default --force"
+    #     subprocess.run(del_cmd, shell=True, stdout=_stdout, stderr=_stderr)
+    #     sleep(1)
 
     elif taskname == 'bk_service':
         p = Process(target=cfn_bk_service, args=(taskname, args, task_cmd_q, task_cancel, node_obj.terminate_event))
