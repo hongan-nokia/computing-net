@@ -20,6 +20,7 @@ from PyQt5.QtWidgets import QVBoxLayout, QWidget, QGroupBox, QPushButton
 
 from resourcevisiualize.resourcehistory import HistoryWindow
 from resourcevisiualize.speedmeter import SpeedMeter
+from utils.repeatimer import repeatTimer
 from utils.reversequeue import reverseQueue
 
 
@@ -2163,11 +2164,8 @@ class data_visualize(QWidget):
             sleep(2)
         print(syntheticResInfo)
         self.updateNode1Info(syntheticResInfo[0])
-        sleep(0.5)
         self.updateNode2Info(syntheticResInfo[1])
-        sleep(0.5)
         self.updateNode3Info(syntheticResInfo[2])
-        sleep(0.5)
         self.updateNode4Info(syntheticResInfo[3])
 
     def updateNode1Info(self, node1_info):
@@ -2452,7 +2450,12 @@ if __name__ == "__main__":
     import sys
 
     app = QtWidgets.QApplication(sys.argv)
-    window = data_visualize()
-    window.show()
-    # window.update_start()
+    data_visual = data_visualize()
+    data_visual.show()
+    # self.computingNetResMonTimer = QtCore.QTimer(self)
+    # self.computingNetResMonTimer.setInterval(3000)
+    # self.computingNetResMonTimer.timeout.connect(self.data_visual.updateNodesInfo)
+    # self.computingNetResMonTimer.start()
+    data_mon = repeatTimer(3, data_visual.updateNodesInfo, autostart=True)
+    data_mon.start()
     sys.exit(app.exec_())
