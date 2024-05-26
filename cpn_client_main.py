@@ -263,6 +263,7 @@ class ClientCanvas(QWidget):
     def _firstPkgRespLatency(self):
         print("This _firstPkgRespLatency func")
         self.client_mgn.conn_GUI.send(('cpn_test', 'firstPkgLat'))
+        self.timeSpine1 = time.time()
 
     def _serviceAddress(self):
         print("This _serviceAddress func")
@@ -277,7 +278,7 @@ class ClientCanvas(QWidget):
         self.client_manager.conn_GUI.send(('cpn_test', 'contentAddr'))
 
     def listenFirstPkg(self, server_conn):
-        timeSpine1 = time.time()
+
         while True:
             data = "123"
             try:
@@ -286,10 +287,11 @@ class ClientCanvas(QWidget):
                 print(f"Receive First Pkg ERROR: {exp}")
             if "RESPONSE" in data:
                 print(f"listenFirstPkg >>>>> {data}")
-                timeSpine2 = time.time()
-                print(f"timeSpine1: {timeSpine1}")
-                print(f"timeSpine2: {timeSpine2}")
-                self.task1_text2.setText(str((timeSpine2 - timeSpine1) * 1000))
+                self.timeSpine2 = time.time()
+                print(f"timeSpine1: {self.timeSpine1}")
+                print(f"timeSpine2: {self.timeSpine2}")
+                latency = round((self.timeSpine2 - self.timeSpine1) * 1000, 1)
+                self.task1_text2.setText(str(latency))
                 # self.server_socket.close()
                 break
 

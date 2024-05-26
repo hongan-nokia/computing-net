@@ -231,3 +231,4 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         except Exception as exp:
             print(f"*-------------- {exp}")
         print("FirstPkg Message Sent")
+        client_socket.close()
