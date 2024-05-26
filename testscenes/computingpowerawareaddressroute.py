@@ -293,3 +293,29 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         # print(f' VLC_migration reported streaming position: {current_position}')
         if self.cfn_manager.node_names[containerId] == 'c_node1':
             self.cfn_manager.send_command('c_node3', 'task', 'vlc worldCup.mp4_' + current_position)
+
+    def reset(self):
+        self.user_first_pkg.tag_label.setVisible(False)
+        self.addr_request.tag_label.setVisible(False)
+        self.net_brain_ctrl.tag_label.setVisible(False)
+        self.net_route_ctrl.tag_label.setVisible(False)
+        self.video_stream.tag_label.setVisible(False)
+        self.startAITrainer.tag_label.setVisible(False)
+        self.reScheduling.tag_label.setVisible(False)
+        self.selNewService.tag_label.setVisible(False)
+        self.finalServiceProvide.tag_label.setVisible(False)
+
+        self.user_first_pkg.label.setVisible(False)
+        self.addr_request.label.setVisible(False)
+        self.net_brain_ctrl.label.setVisible(False)
+        self.net_route_ctrl.label.setVisible(False)
+        self.video_stream.label.setVisible(False)
+        self.startAITrainer.label.setVisible(False)
+        self.reScheduling.label.setVisible(False)
+        self.selNewService.label.setVisible(False)
+        self.finalServiceProvide.label.setVisible(False)
+
+        self.cfn_manager.send_command("c-node1", "stop_task", "AI_trainer1 up")
+        self.cfn_manager.send_command("c_node1", "stop_task", "vlc worldCup.mp4_0")
+        self.cfn_manager.send_command('c_node3', 'stop_task', 'vlc worldCup.mp4')
+
