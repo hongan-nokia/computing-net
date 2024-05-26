@@ -37,7 +37,7 @@ def GUI_msg_handler(node_model_specific_msg_handler):
             cmd, args = msg[0], msg[1:]
         except:
             node_obj.print("GUI's message parsing error. Do nothing.")
-            node_obj.send2gui(('warning', 'message parsing error, wronng cmd format!'))
+            node_obj.send2gui(('warning', 'message parsing error, wrong cmd format!'))
             return
         try:
             ret = node_model_specific_msg_handler(cmd, args, node_obj)
@@ -66,7 +66,6 @@ def GUI_msg_handler(node_model_specific_msg_handler):
                 node_obj.print('setting terminalDemo to True')
                 node_obj.terminateDemo = True
                 node_obj.terminate_event.set()
-
             else:
                 node_obj.print(f'received unknown cmd: {cmd}, ???')
 
@@ -156,43 +155,29 @@ class BaseNodeModel(ABC):
         """
         for i in range(max_try):
             try:
-                self.conn_GUI = connection.Client(self.GUI_addr, authkey=b'cpn')
-                print(f'[{self.node_conf.node_name}] connected to cloud server!')
+                self.conn_GUI = connection.Client(self.GUI_addr)
+                print(f'[{self.node_conf.node_name}] connected to cfn server!')
                 self.conn_GUI.send(self.node_conf.node_name)
+                self.conn_GUI.send(('ready', ''))
                 return True
             except:
-                sleep(1)
+                sleep(2)
                 print(f'waiting for server @ {self.GUI_addr} {i}th time.')
             if i == max_try - 1:
                 return False
 
     def _gui_interaction(self):
         msg = None
-        idx = 0
-        # while not self.terminateDemo and 'camera' not in self.node_conf.node_name:
         while not self.terminateDemo:
             # 从GUI侧接收消息
             try:
-                if idx < 3:
-                    if self.conn_GUI.poll(3):
-                        msg = self.conn_GUI.recv()
-                        idx = 0
-                    else:
-                        idx += 1
-                else:
-                    print(f" ###########################  Unknown is: \n")
-                    raise ValueError
-            # except (EOFError, ConnectionResetError, ConnectionAbortedError, ValueError, OSError) as err:
-            except Exception as err:
-                print(f" ###########################  err is: {str(err), repr(err)}")
+                msg = self.conn_GUI.recv()
+                self.print(f'receives msg_cld = {msg}')  ########################### debug
+            except (EOFError, ConnectionResetError):
                 self.print('cloud connection broke!')
-                print("self.conn_GUI.close()")
-                self.conn_GUI.close()
-                print("self._init_conn_GUI() done 11111")
-                self._init_conn_GUI()
-                # self.terminateDemo = True
-                # self.terminate_event.set()
-                continue
+                self.terminateDemo = True
+                self.terminate_event.set()
+                break
             # 处理消息。这里意外情形会比较多，所以尽量保留下面一坨异常处理别删掉
             try:
                 if msg is None:
@@ -202,19 +187,32 @@ class BaseNodeModel(ABC):
                     break
             except (OSError, ConnBreakErr) as err:  # GUI侧断开
                 print(err, '\nExiting')
-                # self.terminateDemo = True
-                # self.terminate_event.set()
-                self._init_conn_GUI()
-                print("self._init_conn_GUI() done 22222")
+                self.terminateDemo = True
+                self.terminate_event.set()
             except:  # 处理消息过程中的错误，往往是往GUI发消息时网络出错
                 print('#' * 50 + '\n#  ERROR: RECEIVED ' + str(msg) + '\n' + '#' * 50)
-                # print("Unexpected error:", sys.exc_info()[0])
-                # raise
-                self._init_conn_GUI()
-                print("self._init_conn_GUI() done 33333")
+                print("Unexpected error:", sys.exc_info()[0])
+                raise
         self.print('exiting _gui_interaction()')
         self.conn_GUI.close()
         self.close()
+
+    def send2gui(self, msg: Tuple[str, any]):
+        try:
+            if self.conn_GUI:
+                self._conn_lock.acquire()
+                self.conn_GUI.send(msg)
+                self._conn_lock.release()
+            else:
+                self.print("WARNING: send() before cloud connection exist!!!")
+        except (OSError, ConnectionAbortedError) as err:
+            print(err, '\nExiting')
+            # raise ConnBreakErr
+            self.terminateDemo = True
+            self.terminate_event.set()
+        except:
+            print("Unexpected error when reporting state:", sys.exc_info()[0])
+            raise
 
     def _gui_interaction_camera(self):
         msg = None
@@ -246,23 +244,6 @@ class BaseNodeModel(ABC):
         self.print('exiting _gui_interaction_camera()')
         self.conn_GUI.close()
         self.close()
-
-    def send2gui(self, msg: Tuple[str, any]):
-        try:
-            if self.conn_GUI:
-                self._conn_lock.acquire()
-                self.conn_GUI.send(msg)
-                self._conn_lock.release()
-            else:
-                self.print("WARNING: send() before cloud connection exist!!!")
-        except (OSError, ConnectionAbortedError) as err:
-            print(err, '\nExiting')
-            # raise ConnBreakErr
-            self.terminateDemo = True
-            self.terminate_event.set()
-        except:
-            print("Unexpected error when reporting state:", sys.exc_info()[0])
-            raise
 
     def print(self, s: str):
         print(f'[{self.node_conf.node_name}] - {s}')

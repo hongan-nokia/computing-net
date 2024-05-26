@@ -40,7 +40,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self._initHeapMap()
         self._initImageLoad()
         self.initConnections()
-        self.user_first_pkg.start("sc1_sp1")
+        # self.user_first_pkg.start("sc1_sp1")
 
     def _initMonitorQueue(self):
         self.monitor_q_cpu_hm_node1 = self.cfn_manager.resource_StatMon['c_node1_cpu']  # 算力节点1 CPU

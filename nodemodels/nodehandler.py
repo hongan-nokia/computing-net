@@ -110,15 +110,14 @@ class NodeManager(object):
         This will be spawned as a subprocess.
         根据Demo配置信息, 主动连接node或监听node连接请求。对每个node, 启动一个对应的handler线程。
         """
-
         address = (self.demo_config.gui_controller_host_ip, self.demo_config.gui_controller_host_port)
         print(f"Start server @ {address}")
         with Listener(address) as listener:
             while True:
                 conn = listener.accept()
-                print('connection accepted from', listener.last_accepted)
+                print('$$$$$$$$$$$ connection accepted from', listener.last_accepted)
                 msg = conn.recv()
-                print(f' {msg}')
+                print(f'Init msg is: {msg}')
                 name_reported = msg if type(msg == str) else msg[0]
                 if name_reported in ['_END_DEMO_', _SECRET_SIGNAL]:
                     print("Demo termination signal received. Now try to exit node_manager process.")
@@ -128,6 +127,9 @@ class NodeManager(object):
                     print(f"{name_reported} is not a valid node name! Check the configuration!")
                     conn.close()
                 else:
+                    print(f"*******************************"
+                          f"Start connect to slaver"
+                          f"*******************************")
                     intfc_type = self.demo_config.get_node_interface_type(name_reported)
                     if intfc_type == 'tcp_client':
                         # node connection, Gui connection

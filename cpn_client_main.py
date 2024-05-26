@@ -15,8 +15,9 @@ from utils.configparser import DemoConfigParser
 
 
 class ClientCanvas(QWidget):
-    def __init__(self, client_mgn: CfnNodeModel):
+    def __init__(self, parent, client_mgn: CfnNodeModel):
         super().__init__()
+        self.setParent(parent)
         self.layout = QtWidgets.QHBoxLayout(self)
         self.setWindowTitle("")
         self.resize(1920, 1080)
@@ -79,6 +80,7 @@ class ClientCanvas(QWidget):
 
         self.layout.addWidget(self.groupBox)
         self.layout.setContentsMargins(0, 0, 0, 0)
+        self.setVisible(True)
 
     def _initTitle(self):
         self.title_box = QtWidgets.QGroupBox(self.groupBox)
@@ -266,7 +268,7 @@ class ClientWindow(QWidget):
         self.setWindowTitle(" ")
         self.setGeometry(0, 0, 1920, 1080)
         self.client_manager = manager
-        self.canvas = ClientCanvas(self.client_manager)
+        self.canvas = ClientCanvas(self, self.client_manager)
         self.setStyleSheet("border:none; background-color: {}".format(QColor(0, 17, 53).name()))
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.canvas)
@@ -278,7 +280,7 @@ if __name__ == '__main__':
     GuiHosts = ['c_node1', 'c_node2', 'c_node3']
     parser = argparse.ArgumentParser(description='cpn_node')
     parser.add_argument('config', metavar="CONFIG_FILE", type=str, help="Demo configuration JSON file.",
-                        default="cpn_config-test.json")
+                        default="cpn_config-test-only-cpu.json")
     parser.add_argument('node_name', metavar="NODE_NAME", type=str,
                         help="Name of this node (should match the demo config file).")
     args = parser.parse_args()
@@ -302,9 +304,9 @@ if __name__ == '__main__':
     GUI_ip, GUI_port = demo_config.gui_controller_host_ip, demo_config.gui_controller_host_port
     print(f"Will connect to GUI @ ({GUI_ip}, {GUI_port})")
 
-    node_model = None
-    # node_model = CfnNodeModel(demo_config, node_config)
-    # node_model.start()
+    # node_model = None
+    node_model = CfnNodeModel(demo_config, node_config)
+    node_model.start()
 
     app = QApplication(sys.argv)
     if node_name in ['client']:
