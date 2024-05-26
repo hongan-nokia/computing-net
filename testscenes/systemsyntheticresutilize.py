@@ -364,7 +364,7 @@ class SystemSyntheticResUtilize(QWidget):
             self.leftBtn2Tag = 0
 
             if self.topBtn1Tag == 1 and self.topBtn2Tag == 1 and self.topBtn3Tag == 0 and self.topBtn4Tag == 0 and self.topBtn5Tag == 0 and self.topBtn6Tag == 0:
-                self.leftBtn1.setStyleSheet((self.leftBtnSelectedStyleSheet))
+                self.leftBtn1.setStyleSheet(self.leftBtnSelectedStyleSheet)
 
             self.pixmap_xunlian3.setVisible(False)
 
@@ -394,6 +394,7 @@ class SystemSyntheticResUtilize(QWidget):
 
             self.leftBtn1.setStyleSheet(self.leftBtnSelectedStyleSheet)
             self.leftBtn2.setStyleSheet(self.leftBtnStyleSheet)
+            self.setTraditionalMEC()
         else:
             self.reset()
 
@@ -426,6 +427,7 @@ class SystemSyntheticResUtilize(QWidget):
 
             self.leftBtn1.setStyleSheet(self.leftBtnStyleSheet)
             self.leftBtn2.setStyleSheet(self.leftBtnSelectedStyleSheet)
+            self.setComputingNetConverge()
         else:
             self.reset()
 
@@ -452,28 +454,34 @@ class SystemSyntheticResUtilize(QWidget):
         self.s2cloud3_hm.timer.start()
 
     def setTraditionalMEC(self):
-        self.cfn_manager.send_command('c_node1', 'task', 'ai_train up#1')
-        self.cfn_manager.send_command('c_node1', 'task', 'vlc up')
+        self.cfn_manager.send_command('c_node1', 'task', 'AI_trainer1 up')              # AI 训练
+        self.cfn_manager.send_command('c_node1', 'task', 'vlc fake-WorldCup.mp4_0')     # 视频点播
         # self.cfn_manager.send_command('c_node1', 'task', 'cam_health camera_1')
 
     def setComputingNetConverge(self):
-        self.cfn_manager.send_command('c_node1', 'task', 'vlc up')
+        self.cfn_manager.send_command('c_node1', 'task', 'vlc fake-WorldCup.mp4_0')
         self.cfn_manager.send_command('c_node1', 'task', 'cam_health camera_1')
-        self.cfn_manager.send_command('c_node2', 'task', 'ai_train up#2')
-        self.cfn_manager.send_command('c_node3', 'task', 'ai_train up#1')
-        self.cfn_manager.send_command('c_node3', 'task', 'vlc up')
+
+        self.cfn_manager.send_command('c_node2', 'task', 'AI_trainer1 up')
+        self.cfn_manager.send_command('c_node2', 'task', 'AI_trainer2 up')
+
+        self.cfn_manager.send_command('c_node3', 'task', 'AI_trainer3 up')
+        self.cfn_manager.send_command('c_node3', 'task', 'vlc fake-WorldCup.mp4_0')
 
     def unsetTraditionalMEC(self):
-        self.cfn_manager.send_command('c_node1', 'stop_task', 'ai_train up#1')
-        self.cfn_manager.send_command('c_node1', 'stop_task', 'vlc up')
+        self.cfn_manager.send_command('c_node1', 'stop_task', 'AI_trainer1 up')  # AI 训练
+        self.cfn_manager.send_command('c_node1', 'stop_task', 'vlc fake-WorldCup.mp4_0')  # 视频点播
         # self.cfn_manager.send_command('c_node1', 'task', 'cam_health camera_1')
 
     def unsetComputingNetConverge(self):
-        self.cfn_manager.send_command('c_node1', 'stop_task', 'vlc up')
+        self.cfn_manager.send_command('c_node1', 'stop_task', 'vlc fake-WorldCup.mp4_0')
         self.cfn_manager.send_command('c_node1', 'stop_task', 'cam_health camera_1')
-        self.cfn_manager.send_command('c_node2', 'stop_task', 'ai_train up#2')
-        self.cfn_manager.send_command('c_node3', 'stop_task', 'ai_train up#1')
-        self.cfn_manager.send_command('c_node3', 'stop_task', 'vlc up')
+
+        self.cfn_manager.send_command('c_node2', 'stop_task', 'AI_trainer1 up')
+        self.cfn_manager.send_command('c_node2', 'stop_task', 'AI_trainer2 up')
+
+        self.cfn_manager.send_command('c_node3', 'stop_task', 'AI_trainer3 up')
+        self.cfn_manager.send_command('c_node3', 'stop_task', 'vlc fake-WorldCup.mp4_0')
 
     def reset(self):
         self.topBtn1Tag = 0
@@ -488,7 +496,9 @@ class SystemSyntheticResUtilize(QWidget):
         self.pixmap_dianbo.setVisible(False)
         self.pixmap_xunlian1.setVisible(False)
         self.pixmap_xunlian2.setVisible(False)
-        self.pixmap_xunlian2.setVisible(False)
         self.pixmap_xunlian3.setVisible(False)
         self.pixmap_xintiao.setVisible(False)
         self.pixmap_zhuanhuan.setVisible(False)
+
+        self.unsetTraditionalMEC()
+        self.unsetComputingNetConverge()

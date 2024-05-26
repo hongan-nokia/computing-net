@@ -372,10 +372,10 @@ def vlc_streaming(addr: str, port: int, file_path: str, start_pos: float, cmd_q:
         media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
         sleep(2)
     elif 'fake' in file_path:
-        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + '192.169.122.122' + ":" + str(port) + "},dst=display}"
+        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + '192.169.122.122' + ":" + "10045" + "},dst=display}"
         params = [ad, "sout-all", "sout-keep"]
         inst = vlc.Instance()
-        media = inst.media_new('./game.mp4', *params)
+        media = inst.media_new('./worldCup.mp4', *params)
         media_player = media.player_new_from_media()
         print("------vlc_s start_pos:" + str(start_pos))
         media_player.play()
