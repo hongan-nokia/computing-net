@@ -44,7 +44,7 @@ def process_GUI_msg(cmd: str, args: tuple, node_obj: 'CfnNodeModel'):
         node_obj.print(f"Received cancel_task command, content= {task_key}. ")
         task_name = task_key.split(" ")[0]
         task_args = task_key.split(" ")[1]
-        node_obj.signal_emitter.signal_emit_logic(task_name, 'down', task_args)
+        # node_obj.signal_emitter.signal_emit_logic(task_name, 'down', task_args)
         node_obj.cancel_task(task_key)
         return
 
@@ -70,9 +70,18 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
         return
 
     elif taskname in ServiceName:
-        node_obj.signal_emitter.signal_emit_logic(taskname, 'up', args)
+        # node_obj.signal_emitter.signal_emit_logic(taskname, 'up', args)
         task_pid = random.randint(10, 100)
         node_obj.tasks[f'{taskname} {args}'] = task_pid
+
+    elif taskname == 'vlc':  # vlc作为server将文件stream到指定的client
+        file_path = './' + str(args).split('_', -1)[0]  # 所要播放的文件路径
+        start_pos = str(args).split('_', -1)[1]
+        addr, port = "192.168.2.128", "1234"
+        p = Process(target=vlc_streaming, args=(
+            addr, port, file_path, start_pos, task_cmd_q, task_cancel, node_obj.terminate_event))
+        node_obj.tasks[f'{taskname}'] = -1
+        p.start()
 
     elif taskname == 'mvlc':  # 在server端部署vlc接收程序接收来自UE侧的视频流（多播）
         params = args.split("#")

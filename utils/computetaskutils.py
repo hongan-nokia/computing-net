@@ -352,7 +352,7 @@ def vlc_sender(addr: str, port: int, file_path: str, start_pos: float, cmd_q: Si
             return
 
 
-def vlc_streaming(cam_name: str, addr: str, port: int, file_path: str, start_pos: float, cmd_q: SimpleQueue,
+def vlc_streaming(addr: str, port: int, file_path: str, start_pos: float, cmd_q: SimpleQueue,
                   cancel_task_id: Value, terminate_event: Event) -> float:
     # print("*****************vlc_streaming*****************")
     pid = os.getpid()
@@ -361,7 +361,7 @@ def vlc_streaming(cam_name: str, addr: str, port: int, file_path: str, start_pos
     cmd_q.put(("_PID", ('vlc', pid)))
 
     if 'GAME' in file_path:
-        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + port + "}}"
+        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "}}"
         params = [ad, "sout-all", "sout-keep"]
         inst = vlc.Instance()
         file_path = file_path.lower()
@@ -372,7 +372,7 @@ def vlc_streaming(cam_name: str, addr: str, port: int, file_path: str, start_pos
         media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
         sleep(2)
     elif 'fake' in file_path:
-        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + '192.169.122.122' + ":" + port + "},dst=display}"
+        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + '192.169.122.122' + ":" + str(port) + "},dst=display}"
         params = [ad, "sout-all", "sout-keep"]
         inst = vlc.Instance()
         media = inst.media_new('./game.mp4', *params)
@@ -382,7 +382,7 @@ def vlc_streaming(cam_name: str, addr: str, port: int, file_path: str, start_pos
         media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
         sleep(2)
     else:
-        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + port + "},dst=display}"
+        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "},dst=display}"
         params = [ad, "sout-all", "sout-keep"]
         inst = vlc.Instance()
         media = inst.media_new(f'{file_path}', *params)
@@ -399,14 +399,11 @@ def vlc_streaming(cam_name: str, addr: str, port: int, file_path: str, start_pos
                 pos_stream = media_player.get_position()  # 获取当前播放位置
                 media_player.stop()
                 sleep(0.1)
-                cmd_q.put(('vlc', str(pos_stream)))
-                cmd_q.put(('state', str(pos_stream)))
+                cmd_q.put(('vlc_state', str(pos_stream)))
                 print("------当前播放位置::Pos_streaming:" + str(pos_stream))
                 break
             elif media_player.is_playing() == 0:
                 print("media_player.is_no_playing")
-                # print("media_player continue keep playing")
-                # media_player.play()
                 sleep(0.2)
                 break
             else:

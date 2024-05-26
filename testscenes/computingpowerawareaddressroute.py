@@ -291,16 +291,5 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
                     to the target VLC-server to continue the streaming work.
                 """
         # print(f' VLC_migration reported streaming position: {current_position}')
-        if self.vlc == 1 and self.work_mode == 3:  # from mec request to ncc request
-            self.demo_manager.send_command('cloud_5', 'task', 'vlc fakegame.mp4_' + current_position)
-            self.demo_manager.send_command('cloud_3', 'task', 'vlc GAME.mp4_' + current_position)
-            self.vlc = 3
-        elif self.vlc == 3 and self.work_mode == 4:  # cloud_3 to cloud_4, >>>> video service migration
-            self.demo_manager.send_command('cloud_4', 'task', 'vlc game.mp4_' + current_position)
-            self.vlc = 4
-        elif self.vlc == 3 and self.work_mode == 3:  # detecting link congestion, streaming unclear video shortly
-            self.demo_manager.send_command('cloud_3', 'task', 'vlc GAMEC.mp4_' + current_position)
-            self.work_mode = 3
-        else:
-            pass
-        return
+        if self.cfn_manager.node_names[containerId] == 'c_node1':
+            self.cfn_manager.send_command('c_node3', 'task', 'vlc worldCup.mp4_' + current_position)
