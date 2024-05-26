@@ -29,7 +29,11 @@ from utils.imageLoader import ImageLoader
 
 
 class Scene32(QWidget):
-    def __init__(self, parent, demo_manager):
+    """
+    算力寻址
+    """
+
+    def __init__(self, parent, demo_manager: CfnDemoManager):
         super().__init__()
         geo = {
             'top': 0,
@@ -60,7 +64,6 @@ class Scene32(QWidget):
         self.view.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.view.setRenderHint(QtGui.QPainter.Antialiasing)
         self.view.setGeometry(0, 0, 1920, 1080)
-
 
     def _initScene(self):
         self.cloud1_hm_l1 = QtWidgets.QLabel(parent=self)
@@ -131,7 +134,8 @@ class Scene32(QWidget):
 
     def _initHeapMap(self):
         self.cloud1_hm = HeatMap(parent=self, geo=[793, 365, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node1)
-        self.cloud2_hm = HeatMap(parent=self, geo=[1058, 520, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node2)
+        self.cloud2_hm = HeatMap(parent=self, geo=[1058, 520, 40, 80], interval=4000,
+                                 data_q=self.monitor_q_cpu_hm_node2)
         self.cloud3_hm = HeatMap(parent=self, geo=[986, 857, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node3)
         self.cloud1_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.cloud2_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
@@ -156,7 +160,8 @@ class Scene32(QWidget):
                                          img_scale_w=200,
                                          img_scale_h=1,
                                          direction="l2r",
-                                         interval=3, title='2.算网融合调度编排(算力寻址，计算最优算力资源路由组合)', tag_geo=[35, 0, 303, 120])
+                                         interval=3, title='2.算网融合调度编排(算力寻址，计算最优算力资源路由组合)',
+                                         tag_geo=[35, 0, 303, 120])
         self.service_step2.tag_label.setWordWrap(True)
         self.service_step3 = ImageLoader(parent=self, geo=[908, 420, 650, 200],
                                          image_url='./images_test3/computing_power_addressing_step3.png',
@@ -179,11 +184,16 @@ class Scene32(QWidget):
         self.service_step5.tag_label.setStyleSheet("color: rgb(224,61,205);")
 
     def initConnections(self):
+        self.cfn_manager.signal_emitter.QtSignals.computingAddr_test.connect(self.computingAddressWorkFlow)
         self.service_step1.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step2.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step3.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step4.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step5.QtSignals.anim_over.connect(self.service_provision_anim)
+
+    @pyqtSlot(int, str)
+    def computingAddressWorkFlow(self):
+        self.service_step1.start("sp1")
 
     @pyqtSlot(str)
     def service_provision_anim(self, destination: str):
@@ -222,5 +232,3 @@ class Scene32(QWidget):
 
         self.step1_label1.setVisible(False)
         self.step1_label2.setVisible(False)
-
-

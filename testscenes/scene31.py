@@ -29,7 +29,10 @@ from utils.imageLoader import ImageLoader
 
 
 class Scene31(QWidget):
-    def __init__(self, parent, demo_manager):
+    """
+    服务寻址
+    """
+    def __init__(self, parent, demo_manager: CfnDemoManager):
         super().__init__()
         geo = {
             'top': 0,
@@ -60,7 +63,6 @@ class Scene31(QWidget):
         self.view.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.view.setRenderHint(QtGui.QPainter.Antialiasing)
         self.view.setGeometry(0, 0, 1920, 1080)
-
 
     def _initScene(self):
         self.cloud1_hm_l1 = QtWidgets.QLabel(parent=self)
@@ -160,6 +162,7 @@ class Scene31(QWidget):
         self.service_step5.tag_label.setStyleSheet("color: rgb(224,61,205);")
 
     def initConnections(self):
+        self.cfn_manager.signal_emitter.QtSignals.serviceAddr_test.connect(self.serviceAddressWorkFlow)
         self.service_step1.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step2.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step3.QtSignals.anim_over.connect(self.service_provision_anim)
@@ -180,9 +183,15 @@ class Scene31(QWidget):
             self.service_step4.start("sp4")
         elif destination == "sp4":
             self.service_step5.label.setVisible(True)
-            self.service_step5.start("")
+            self.service_step5.start("sp5")
+        elif destination == "sp5":
+            self.cfn_manager.send_command('c_node1', 'task', 'vlc worldCup.mp4_0')
         else:
             pass
+
+    @pyqtSlot(int, str)
+    def serviceAddressWorkFlow(self):
+        self.scene3.scene31.service_step1.start("sp1")
 
     def backTest3(self):
         self.setVisible(False)
@@ -200,5 +209,3 @@ class Scene31(QWidget):
         self.service_step3.label.setVisible(False)
         self.service_step4.label.setVisible(False)
         self.service_step5.label.setVisible(False)
-
-

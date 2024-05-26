@@ -29,7 +29,11 @@ from utils.imageLoader import ImageLoader
 
 
 class Scene33(QWidget):
-    def __init__(self, parent, demo_manager):
+    """
+    内容寻址
+    """
+
+    def __init__(self, parent, demo_manager: CfnDemoManager):
         super().__init__()
         geo = {
             'top': 0,
@@ -60,7 +64,6 @@ class Scene33(QWidget):
         self.view.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.view.setRenderHint(QtGui.QPainter.Antialiasing)
         self.view.setGeometry(0, 0, 1920, 1080)
-
 
     def _initScene(self):
         self.cloud1_hm_l1 = QtWidgets.QLabel(parent=self)
@@ -131,7 +134,8 @@ class Scene33(QWidget):
 
     def _initHeapMap(self):
         self.cloud1_hm = HeatMap(parent=self, geo=[793, 365, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node1)
-        self.cloud2_hm = HeatMap(parent=self, geo=[1058, 520, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node2)
+        self.cloud2_hm = HeatMap(parent=self, geo=[1058, 520, 40, 80], interval=4000,
+                                 data_q=self.monitor_q_cpu_hm_node2)
         self.cloud3_hm = HeatMap(parent=self, geo=[986, 857, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node3)
         self.cloud1_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.cloud2_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
@@ -171,10 +175,15 @@ class Scene33(QWidget):
                                          interval=3, title='', tag_geo=[280, 20, 200, 30])
 
     def initConnections(self):
+        self.cfn_manager.signal_emitter.QtSignals.contentAddr_test.connect(self.contentAddressWorkFlow)
         self.service_step1.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step2.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step3.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step4.QtSignals.anim_over.connect(self.service_provision_anim)
+
+    @pyqtSlot(int, str)
+    def contentAddressWorkFlow(self):
+        self.service_step1.start("sp1")
 
     @pyqtSlot(str)
     def service_provision_anim(self, destination: str):

@@ -32,7 +32,7 @@ from testscenes.scene33 import Scene33
 
 
 class Scene3(QWidget):
-    def __init__(self, parent, demo_manager):
+    def __init__(self, parent, demo_manager: CfnDemoManager):
         super().__init__()
         geo = {
             'top': 0,
