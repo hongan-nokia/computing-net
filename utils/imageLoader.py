@@ -33,6 +33,7 @@ class ImageLoader(QWidget, QtCore.QObject):
         font = QtGui.QFont("微软雅黑", 16)
         self.tag_label = QLabel(parent=self)
         self.tag_label.setText(self.tag)
+        self.tag_label.setWordWrap(True)
         self.tag_label.setGeometry(self.tag_geo[0], self.tag_geo[1], self.tag_geo[2], self.tag_geo[3])
         self.tag_label.setFont(font)
         self.tag_label.setVisible(False)

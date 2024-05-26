@@ -68,17 +68,11 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
         node_obj.send2gui(
             ('warning', f'Already running task {taskname} {args}. Do nothing.'))
         return
+
     elif taskname in ServiceName:
         node_obj.signal_emitter.signal_emit_logic(taskname, 'up', args)
         task_pid = random.randint(10, 100)
         node_obj.tasks[f'{taskname} {args}'] = task_pid
-
-    elif taskname == 'bk_svc':
-        print(args)
-        print("execute bk_svc")
-        p = Process(target=cfn_bk_service, args=(taskname, args, task_cmd_q, task_cancel, node_obj.terminate_event))
-        node_obj.tasks[f'{taskname} {args}'] = -1
-        p.start()
 
     elif taskname == 'mvlc':  # 在server端部署vlc接收程序接收来自UE侧的视频流（多播）
         params = args.split("#")
@@ -119,11 +113,18 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
     #     subprocess.run(del_cmd, shell=True, stdout=_stdout, stderr=_stderr)
     #     sleep(1)
 
-    elif taskname == 'bk_service':
+    elif taskname == 'AI_trainer1':
         p = Process(target=cfn_bk_service, args=(taskname, args, task_cmd_q, task_cancel, node_obj.terminate_event))
         node_obj.tasks[f'{taskname} {args}'] = -1
         p.start()
-
+    elif taskname == 'AI_trainer2':
+        p = Process(target=cfn_bk_service, args=(taskname, args, task_cmd_q, task_cancel, node_obj.terminate_event))
+        node_obj.tasks[f'{taskname} {args}'] = -1
+        p.start()
+    elif taskname == 'AI_trainer3':
+        p = Process(target=cfn_bk_service, args=(taskname, args, task_cmd_q, task_cancel, node_obj.terminate_event))
+        node_obj.tasks[f'{taskname} {args}'] = -1
+        p.start()
     else:
         return taskname, args
 

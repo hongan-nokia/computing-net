@@ -117,7 +117,7 @@ def find_freq_method2(allFrames, nchannel, fps):
 
 
 def extract_heart_rate(allFrames_b, nchannel=3, fps=30) -> float:
-    '''
+    """
     Parameters
     ----------
     allFrames_b : list of bytearray (each item is a video frame)
@@ -127,7 +127,7 @@ def extract_heart_rate(allFrames_b, nchannel=3, fps=30) -> float:
     -------
     a floating number indicating heart rate (beats/second).
 
-    '''
+    """
     assert ((nchannel == 1) or (nchannel == 3))
     if len(allFrames_b) == 0:
         return -1
@@ -317,7 +317,6 @@ def vlc_sender(addr: str, port: int, file_path: str, start_pos: float, cmd_q: Si
                cancel_task_id: Value, terminate_event: Event) -> float:
     pid = os.getpid()
     cmd_q.put(("_PID", ('vlc', pid)))
-
     ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "},dst=display}"
     params = [ad, "sout-all", "sout-keep"]
     inst = vlc.Instance()
@@ -328,6 +327,70 @@ def vlc_sender(addr: str, port: int, file_path: str, start_pos: float, cmd_q: Si
     media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
     sleep(2)
 
+    while not terminate_event.is_set():
+        try:
+            if cancel_task_id.value == pid:
+                print(f"(PID-{pid}) Received task_cancel signal!")
+                cancel_task_id.value = 0
+                pos_stream = media_player.get_position()  # 获取当前播放位置
+                media_player.stop()
+                sleep(0.1)
+                cmd_q.put(('vlc', str(pos_stream)))
+                cmd_q.put(('vlc_state', str(pos_stream)))
+                print("------当前播放位置::Pos_streaming:" + str(pos_stream))
+                break
+            elif media_player.is_playing() == 0:
+                print("media_player.is_no_playing")
+                sleep(0.2)
+                break
+            else:
+                continue
+        except Exception as err:  # 运行中出现连接断开之类错误
+            s = f"Error encountered with vlc_sender: {err}. Aborting task."
+            print(f'(PID-{pid})' + s)
+            cmd_q.put(('_abort', pid, s))
+            return
+
+
+def vlc_streaming(cam_name: str, addr: str, port: int, file_path: str, start_pos: float, cmd_q: SimpleQueue,
+                  cancel_task_id: Value, terminate_event: Event) -> float:
+    # print("*****************vlc_streaming*****************")
+    pid = os.getpid()
+    print("------Process PID======= " + str(pid))
+    print(f"(PID-{pid}) Starting a new vlc streaming task!")
+    cmd_q.put(("_PID", ('vlc', pid)))
+
+    if 'GAME' in file_path:
+        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + port + "}}"
+        params = [ad, "sout-all", "sout-keep"]
+        inst = vlc.Instance()
+        file_path = file_path.lower()
+        media = inst.media_new(f'{file_path}', *params)
+        media_player = media.player_new_from_media()
+        print("------vlc_s start_pos:" + str(start_pos))
+        media_player.play()
+        media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
+        sleep(2)
+    elif 'fake' in file_path:
+        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + '192.169.122.122' + ":" + port + "},dst=display}"
+        params = [ad, "sout-all", "sout-keep"]
+        inst = vlc.Instance()
+        media = inst.media_new('./game.mp4', *params)
+        media_player = media.player_new_from_media()
+        print("------vlc_s start_pos:" + str(start_pos))
+        media_player.play()
+        media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
+        sleep(2)
+    else:
+        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + port + "},dst=display}"
+        params = [ad, "sout-all", "sout-keep"]
+        inst = vlc.Instance()
+        media = inst.media_new(f'{file_path}', *params)
+        media_player = media.player_new_from_media()
+        print("------vlc_s start_pos:" + str(start_pos))
+        media_player.play()
+        media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
+        sleep(2)
     while not terminate_event.is_set():
         try:
             if cancel_task_id.value == pid:
@@ -349,7 +412,7 @@ def vlc_sender(addr: str, port: int, file_path: str, start_pos: float, cmd_q: Si
             else:
                 continue
         except Exception as err:  # 运行中出现连接断开之类错误
-            s = f"Error encountered with vlc_sender: {err}. Aborting task."
+            s = f"Error encountered with vlc: {err}. Aborting task."
             print(f'(PID-{pid})' + s)
             cmd_q.put(('_abort', pid, s))
             return

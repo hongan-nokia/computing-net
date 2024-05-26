@@ -27,7 +27,7 @@ class CfnDemoManagerSignals(QObject):
     """
     container_connected = pyqtSignal(int)  # node_id
     container_disconnected = pyqtSignal(int)  # node_id
-    container_state_report = pyqtSignal(int, str)  # node_id, current state
+    vlc_state_report = pyqtSignal(int, str)  # node_id, current state
 
     container_service_deploy = pyqtSignal(int, str)  # node_id, state ('come' or 'gone')
     container_resource_report = pyqtSignal(int, dict)  # node_id, pulse rate
@@ -77,9 +77,9 @@ class SgnlEmitter:
             elif "computingAddr" in command_arg:
                 self.QtSignals.contentAddr_test.emit(node_id, command_arg)
 
-        elif command == 'state':
-            print(f'node {node_name} reported state: {command_arg}')
-            self.QtSignals.container_state_report.emit(node_id, command_arg)
+        elif command == 'vlc_state':
+            print(f'node {node_name} reported vlc_state: {command_arg}')
+            self.QtSignals.vlc_state_report.emit(node_id, command_arg)
 
         elif command == 'current_tasks':
             self.QtSignals.container_task_list.emit(node_id, command_arg)

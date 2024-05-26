@@ -229,12 +229,15 @@ class CpnAppWindow(QtWidgets.QMainWindow):
             self.reset()
         elif k == QtCore.Qt.Key_1:
             print("Pressed Key-1")
+            self.CPAARWidget.deployAITrainerOnCNode1()
+        elif k == QtCore.Qt.Key_Q:
+            print("Pressed Key-Q")
             self.scene3.scene31.reset()
             self.scene3.scene31.service_step1.start("sp1")
-        elif k == QtCore.Qt.Key_2:
+        elif k == QtCore.Qt.Key_W:
             self.scene3.scene32.reset()
             self.scene3.scene32.service_step1.start("sp1")
-        elif k == QtCore.Qt.Key_3:
+        elif k == QtCore.Qt.Key_E:
             self.scene3.scene33.reset()
             self.scene3.scene33.service_step1.start("sp1")
         else:

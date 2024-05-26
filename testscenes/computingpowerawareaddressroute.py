@@ -178,6 +178,32 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
                                         img_scale_h=120,
                                         direction="r2l",
                                         interval=3, title='5.视频传输数据', tag_geo=[20, 80, 200, 30])
+        self.startAITrainer = ImageLoader(parent=self, geo=[779, 283, 400, 100],
+                                          image_url='./images_test3/server_addressing_step3.png',
+                                          img_scale_w=200,
+                                          img_scale_h=3,
+                                          direction="l2r",
+                                          interval=3, title='6. 启动一计算密集型应用', tag_geo=[90, 0, 200, 20])
+        self.reScheduling = ImageLoader(parent=self, geo=[1433, 342, 150, 100],
+                                        image_url='./images_test3/server_addressing_step3.png',
+                                        img_scale_w=200,
+                                        img_scale_h=3,
+                                        direction="l2r",
+                                        interval=3, title='7. 感知算力变化，重新寻址调度编排', tag_geo=[90, 0, 200, 20])
+        self.selNewService = ImageLoader(parent=self, geo=[1139, 617, 443, 300],
+                                         image_url='./images/choose_new_svc.png',
+                                         img_scale_w=410,
+                                         img_scale_h=260,
+                                         direction="r2l",
+                                         interval=3, title='8. 选择新服务实例，完成网络路径控制',
+                                         tag_geo=[90, 0, 200, 20])
+        self.finalServiceProvide = ImageLoader(parent=self, geo=[327, 501, 755, 394],
+                                               image_url='./images/finalServiceProvide.png',
+                                               img_scale_w=755,
+                                               img_scale_h=394,
+                                               direction="r2l",
+                                               interval=3, title='',
+                                               tag_geo=[90, 0, 200, 20])
 
     def initConnections(self):
         self.cfn_manager.signal_emitter.QtSignals.firstPkgLat_test.connect(self.firstPkgLatWorkFlow)
@@ -186,6 +212,12 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.net_brain_ctrl.QtSignals.anim_over.connect(self.service_provision_anim)
         self.net_route_ctrl.QtSignals.anim_over.connect(self.service_provision_anim)
         self.video_stream.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.startAITrainer.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.reScheduling.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.selNewService.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.finalServiceProvide.QtSignals.anim_over.connect(self.service_provision_anim)
+
+        self.cfn_manager.signal_emitter.QtSignals.vlc_state_report.connect(self.VLC_migration)
 
     @pyqtSlot(str)
     def service_provision_anim(self, destination: str):
@@ -204,6 +236,19 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         elif destination == "sc1_sp4":
             self.video_stream.label.setVisible(True)
             self.video_stream.start("")
+        elif destination == "sc1_sp6":
+            print("sc1_sp7 sc1_sp7 sc1_sp7")
+            self.reScheduling.label.setVisible(True)
+            self.reScheduling.start("sc1_sp7")
+        elif destination == "sc1_sp7":
+            print("sc1_sp8 sc1_sp8 sc1_sp8")
+            self.selNewService.label.setVisible(True)
+            self.selNewService.start("sc1_sp8")
+        elif destination == "sc1_sp8":
+            self.finalServiceProvide.label.setVisible(True)
+            self.finalServiceProvide.start("sc1_sp9")
+        elif destination == "sc1_sp9":
+            self.cfn_manager.send_command("c_node1", "stop_task", "vlc worldCup.mp4_0")
         else:
             pass
 
@@ -217,7 +262,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
     def _sendFirstPkg2UE(self):
         print("Here is _sendFirstPkg2UE")
         client_host = self.cfn_manager.demo_config.get_node('client')['node_ip']
-        client_host = "127.0.0.1"
+        # client_host = "127.0.0.1"
         client_port = 12354
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         message = "RESPONSE FROM C-NODE1"
@@ -226,10 +271,36 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
             client_socket.connect((client_host, client_port))
         except Exception as exp:
             print(f"*&&&&&&&&&&&&&&& {exp}")
-            
         try:
             client_socket.sendall(message.encode())
         except Exception as exp:
             print(f"*-------------- {exp}")
         print("FirstPkg Message Sent")
         client_socket.close()
+        self.cfn_manager.send_command("c_node1", "task", "vlc worldCup.mp4_0")
+
+    def deployAITrainerOnCNode1(self):
+        self.cfn_manager.send_command("c-node1", "task", "AI_trainer1 up")
+        self.startAITrainer.label.setVisible(True)
+        self.startAITrainer.start("sc1_sp6")
+
+    @pyqtSlot(int, str)
+    def VLC_migration(self, containerId: int, current_position: str):
+        """ This slot is only triggered when the container sends in a 'state' message.
+                    to check the current streaming position of source VLC-server, and send a command
+                    to the target VLC-server to continue the streaming work.
+                """
+        # print(f' VLC_migration reported streaming position: {current_position}')
+        if self.vlc == 1 and self.work_mode == 3:  # from mec request to ncc request
+            self.demo_manager.send_command('cloud_5', 'task', 'vlc fakegame.mp4_' + current_position)
+            self.demo_manager.send_command('cloud_3', 'task', 'vlc GAME.mp4_' + current_position)
+            self.vlc = 3
+        elif self.vlc == 3 and self.work_mode == 4:  # cloud_3 to cloud_4, >>>> video service migration
+            self.demo_manager.send_command('cloud_4', 'task', 'vlc game.mp4_' + current_position)
+            self.vlc = 4
+        elif self.vlc == 3 and self.work_mode == 3:  # detecting link congestion, streaming unclear video shortly
+            self.demo_manager.send_command('cloud_3', 'task', 'vlc GAMEC.mp4_' + current_position)
+            self.work_mode = 3
+        else:
+            pass
+        return

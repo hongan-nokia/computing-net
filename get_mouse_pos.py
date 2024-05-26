@@ -8,7 +8,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.label = QLabel(self)
-        self.label.setGeometry(10, 10, 100, 20)
+        self.label.setGeometry(10, 10, 200, 20)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.setStyleSheet("background-color: white;")
 

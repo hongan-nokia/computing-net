@@ -250,7 +250,7 @@ class ClientCanvas(QWidget):
         self.mainLayout.addLayout(self.nokia_logo_layout)
 
     def _initFirstPkgMonitorSocket(self):
-        server_host = "127.0.0.1"
+        server_host = self.client_mgn.demo_conf.get_node('client')['node_ip']
         server_port = 12354
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_socket.bind((server_host, server_port))
@@ -278,7 +278,6 @@ class ClientCanvas(QWidget):
         self.client_manager.conn_GUI.send(('cpn_test', 'contentAddr'))
 
     def listenFirstPkg(self, server_conn):
-
         while True:
             data = "123"
             try:
