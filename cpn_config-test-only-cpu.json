@@ -40,11 +40,12 @@
     },
     {
       "node_id": 4,
-      "node_name": "first_pkg",
-      "description": "First Package Response Latency Test",
-      "node_ip": "localhost",
-      "node_port": 10083,
-      "conn_type": "tcp_client"
+      "node_name": "camera_1",
+      "description": "摄像头, 原先属于fog_home节点, 现作为独立节点",
+      "node_type": "sensor",
+      "conn_type": "tcp_client",
+	  "node_ip": "localhost",
+	  "node_port": 10069
     },
     {
       "node_id": 5,

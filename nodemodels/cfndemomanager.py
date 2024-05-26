@@ -28,7 +28,8 @@ class CfnDemoManagerSignals(QObject):
     container_connected = pyqtSignal(int)  # node_id
     container_disconnected = pyqtSignal(int)  # node_id
     vlc_state_report = pyqtSignal(int, str)  # node_id, current state
-
+    container_pulsate_update = pyqtSignal(int, float)  # node_id, pulse rate
+    container_person_state = pyqtSignal(int, str)  # node_id, state ('come' or 'gone')
     container_service_deploy = pyqtSignal(int, str)  # node_id, state ('come' or 'gone')
     container_resource_report = pyqtSignal(int, dict)  # node_id, pulse rate
     container_task_list = pyqtSignal(int, dict)  # node_id, pulse rate
@@ -86,6 +87,12 @@ class SgnlEmitter:
 
         elif command == 'warning':
             print(f"{node_name} says WARNING: {command_arg}")
+
+        elif command == 'pulserate':
+            self.QtSignals.container_pulsate_update.emit(node_id, command_arg)
+
+        elif command == 'personstate':
+            self.QtSignals.container_person_state.emit(node_id, command_arg)
 
         elif command == 'ue_msg':
             self.QtSignals.container_ue_msg.emit(command_arg)

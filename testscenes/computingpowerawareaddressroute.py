@@ -32,6 +32,9 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
             'left': 0,
             'width': 1920,
             'height': 1080}
+        self._heartrate_update_cnt = 0
+        self._previous_position = -1
+        self.person_position = -1
         self.setGeometry(geo['left'], geo['top'], geo['width'], geo['height'])
         self.nokia_blue = QtGui.QColor(18, 65, 145)
         self.cfn_manager = demo_manager
@@ -41,6 +44,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self._initHeapMap()
         self._initImageLoad()
         self.initConnections()
+        self._initHearRate()
         # self.user_first_pkg.start("sc1_sp1")
 
     def _initMonitorQueue(self):
@@ -206,6 +210,8 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
                                                tag_geo=[90, 0, 200, 20])
 
     def initConnections(self):
+        self.cfn_manager.signal_emitter.QtSignals.container_pulsate_update.connect(self.update_pulserate)
+        self.cfn_manager.signal_emitter.QtSignals.container_person_state.connect(self.show_person_position)
         self.cfn_manager.signal_emitter.QtSignals.firstPkgLat_test.connect(self.firstPkgLatWorkFlow)
         self.user_first_pkg.QtSignals.anim_over.connect(self.service_provision_anim)
         self.addr_request.QtSignals.anim_over.connect(self.service_provision_anim)
@@ -218,6 +224,29 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.finalServiceProvide.QtSignals.anim_over.connect(self.service_provision_anim)
 
         self.cfn_manager.signal_emitter.QtSignals.vlc_state_report.connect(self.VLC_migration)
+
+    def _initHearRate(self):
+        self.heartrate = QtWidgets.QLabel(parent=self)
+        self.heartrate.setText("---")
+        font = QtGui.QFont("Nokia Pure Text", 28)
+        self.heartrate.setFont(font)
+        # self.heartrate.setFrameStyle(22)  # show border
+        self.heartrate.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignCenter)  # Qt.AlignRight
+
+        palette = self.palette()
+        palette.setColor(self.foregroundRole(), self.nokia_blue)
+        self.heartrate.setPalette(palette)
+        self.heartrate.setGeometry(1600, 225, 180, 100)
+
+        self.heartrateTag = QtWidgets.QLabel(parent=self)
+        self.heartrateTag.setPixmap(QtGui.QPixmap('./images/heartrate_tag.png'))
+        self.heartrateTag.setFont(font)
+        self.heartrateTag.setPalette(palette)
+        self.heartrateTag.setGeometry(1615, 225, 180, 100)
+        self.heartrate.raise_()
+        self.heartrate.setVisible(True)
+        self.heartrateTag.setVisible(True)
+
 
     @pyqtSlot(str)
     def service_provision_anim(self, destination: str):
@@ -258,6 +287,49 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.user_first_pkg.start("sc1_sp1")
         self._sendFirstPkg2UE()
         # self.cfn_manager.send_command("c_node1", "task", "send_pkg2ue")
+
+    @pyqtSlot(int, float)
+    def update_pulserate(self, containerId: int, pulserate: float):
+        if pulserate == -1:
+            pass
+        else:
+            self.heartrate.setText('%.0f' % pulserate)
+        print(f'container={containerId}, '
+              f'person_position={self.person_position}, pulserate={pulserate}, cnt={self._heartrate_update_cnt}')
+
+    @pyqtSlot(int, str)
+    def show_person_position(self, containerId: int, presence: str):
+        """ When person comes in or go out of a camera's view, it triggers a
+            signal with corresponding container id and 'come' or 'gone' flag.
+            This function therefore triggers animation of the person's picture.
+        """
+        print(f'person state change in camera {containerId}: {presence}')
+        print(f'self.work_mode:  {self.work_mode}')
+        print(f'self.person_position:  {self.person_position}')
+        if self.person_position != -1:
+            self._previous_position = self.person_position  # update previous position record
+        if containerId == 0:
+            if presence == 'come':
+                self.person_position = 0
+                print(f'@@@@@   person state change in camera {containerId}: {presence}')
+            else:  # should be 'gone'
+                self.person_position = -1
+                self.heartrate.setText("---")
+        elif containerId == 1:
+            if presence == 'come':
+                self.person_position = 0
+                print(f'@@@@@   person state change in camera {containerId}: {presence}')
+            else:  # should be 'gone'
+                self.person_position = -1
+                self.heartrate.setText("---")
+        elif containerId == 2:  # cloud
+            if presence == 'come':
+                self.person_position = 0
+                print(f'@@@@@   person state change in camera {containerId}: {presence}')
+            else:  # should be 'gone'
+                self.person_position = -1
+        else:
+            pass
 
     def _sendFirstPkg2UE(self):
         print("Here is _sendFirstPkg2UE")

@@ -14,6 +14,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QStackedWidget, 
     QHBoxLayout, QSpacerItem, QSizePolicy
 
 from nodemodels.cfnnodemodel import CfnNodeModel
+from nodemodels.fogcamera import FogCam
 from utils.configparser import DemoConfigParser
 
 
@@ -338,11 +339,15 @@ if __name__ == '__main__':
     print(f"Will connect to GUI @ ({GUI_ip}, {GUI_port})")
 
     # node_model = None
-    node_model = CfnNodeModel(demo_config, node_config)
-    node_model.start()
+    if node_name == "camera_1":
+        n = FogCam(demo_config, node_config, sim=False)
+        n.start()
+    else:
+        node_model = CfnNodeModel(demo_config, node_config)
+        node_model.start()
 
-    app = QApplication(sys.argv)
-    if node_name in ['client']:
-        c_window = ClientWindow(node_model)
-        c_window.show()
-    sys.exit(app.exec_())
+        app = QApplication(sys.argv)
+        if node_name in ['client']:
+            c_window = ClientWindow(node_model)
+            c_window.show()
+        sys.exit(app.exec_())

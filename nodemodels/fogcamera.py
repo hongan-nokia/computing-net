@@ -198,10 +198,10 @@ class FogCam(BaseNodeModel):
         super().__init__(demo_config, node_config, msg_process_fn)
 
     def start(self):
-        '''
+        """
         启动节点, 默认先启动一个与主程序通信的线程, 再启动一个multiprocessing.manager, 作为一个
         其他节点可以来取数据的server。
-        '''
+        """
         # 一个本地的进程间资源manager。本地显示进程，和远端compute node，都会连接过来取数据
         self.m = CamManager(address=(self.node_conf.data_ip, self.node_conf.data_port), authkey=b'cpn')
 
