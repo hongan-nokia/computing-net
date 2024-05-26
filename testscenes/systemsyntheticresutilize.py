@@ -65,55 +65,18 @@ class SystemSyntheticResUtilize(QWidget):
 
     def initBtn(self):
         self.topBtnStyleSheet = """
-                                    QPushButton {
-                                        background-color: #031133;
-                                        border-radius: 20px;
-                                        border: 5px solid #2980b9;
-                                        border-style:outset;
-                                        color: #fff;
-                                        padding: 10px 20px;
-                                    }
-                                    QPushButton:hover {
-                                        color:red;
-                                        border: 5px inset #2980b9;
-                                    }
-                                """
+        QPushButton {background-color: #031133;border-radius: 20px;border: 5px solid #2980b9;border-style:outset;
+        color: #fff;padding: 10px 20px;}
+        QPushButton:hover {color:red;border: 5px inset #2980b9;}"""
         self.topBtnSelectedStyleSheet = """
-                                            QPushButton {
-                                                background-color: #031133;
-                                                padding: 10px 20px;
-                                                color: red;
-                                                border: 5px inset #2980b9;
-                                                border-radius: 20px;
-                                            }
-                                        """
+        QPushButton {background-color: #031133;padding: 10px 20px;color: red;border: 5px inset #2980b9;border-radius: 20px;}"""
         self.leftBtnStyleSheet = """
-                                            QPushButton {
-                                                background-color: #031133;
-                                                border: 7px solid #2980b9;
-                                                border-radius: 30px;
-                                                border-style:outset;
-                                                color: #fff;
-                                                padding: 30px 20px;
-                                                width：150px;
-                                                font-size: 20px;
-                                            }
-                                            QPushButton:hover {
-                                                color:red;
-                                                border: 7px inset #2980b9;
-                                            }
-                                        """
+        QPushButton {background-color: #031133;border: 7px solid #2980b9;border-radius: 30px;border-style:outset;
+        color: #fff;padding: 30px 20px;width：150px;font-size: 20px;}
+        QPushButton:hover {color:red;border: 7px inset #2980b9;}"""
         self.leftBtnSelectedStyleSheet = """
-                                                    QPushButton {
-                                                        background-color: #031133;
-                                                        padding: 30px 20px;
-                                                        width：150px;
-                                                        font-size: 20px;
-                                                        color:red;
-                                                        border: 7px inset #2980b9;
-                                                        border-radius: 30px;
-                                                    }
-                                                """
+        QPushButton {background-color: #031133;padding: 30px 20px;width：150px;font-size: 20px;
+        color:red;border: 7px inset #2980b9;border-radius: 30px;}"""
         self.topBtnFont = QtGui.QFont("Arial", 14, QtGui.QFont.Bold)
         self.leftBtnFont = QtGui.QFont("Arial", 20, QtGui.QFont.Bold)
 
@@ -472,9 +435,12 @@ class SystemSyntheticResUtilize(QWidget):
         self.monitor_q_cpu_hm_node3 = self.cfn_manager.resource_StatMon['c_node3_cpu']  # 算力节点3 CPU
 
     def _initHeapMap(self):
-        self.s2cloud1_hm = HeatMap(parent=self, geo=[793, 405, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node1)
-        self.s2cloud2_hm = HeatMap(parent=self, geo=[1058, 520, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node2)
-        self.s2cloud3_hm = HeatMap(parent=self, geo=[986, 857, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node3)
+        self.s2cloud1_hm = HeatMap(parent=self, geo=[793, 405, 40, 80], interval=4000,
+                                   data_q=self.monitor_q_cpu_hm_node1)
+        self.s2cloud2_hm = HeatMap(parent=self, geo=[1058, 520, 40, 80], interval=4000,
+                                   data_q=self.monitor_q_cpu_hm_node2)
+        self.s2cloud3_hm = HeatMap(parent=self, geo=[986, 857, 40, 80], interval=4000,
+                                   data_q=self.monitor_q_cpu_hm_node3)
         self.s2cloud1_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.s2cloud2_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.s2cloud3_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
