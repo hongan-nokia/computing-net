@@ -7,7 +7,8 @@ from threading import Thread
 from typing import Union
 import cv2 as cv
 import numpy as np
-from basemodel import BaseNodeModel, GUI_msg_handler, terminate_demo_cmd
+
+from nodemodels.basemodel import GUI_msg_handler, terminate_demo_cmd, BaseNodeModel
 from utils import FakeCap, shutdown_multiprocessing_manager_server, \
     RemoteManagerValue, faceDetector, FogFaceDetector
 
@@ -69,10 +70,10 @@ CamManager.register('get_face_valid', callable=lambda: face_valid)
 CamManager.register('get_person_valid', callable=lambda: person_valid)
 
 # load the faceframe
-if not (path.exists("algorithmDev/faceframe640x480.bmp")):
+if not (path.exists("./algorithmDev/faceframe640x480.bmp")):
     raise ValueError('faceframe640x480.bmp not exist.')
 else:
-    faceframe = cv.imread(path.abspath('algorithmDev/faceframe640x480.bmp'))
+    faceframe = cv.imread(path.abspath('./algorithmDev/faceframe640x480.bmp'))
     facemask = cv.bitwise_not(faceframe)
     faceframe_white = facemask.copy()
     faceframe_green = facemask.copy()
@@ -122,8 +123,8 @@ def show_video(frame_q, heart_rate_q, facevalidflag, person_valid, detector_meta
     (startX, startY, endX, endY) = (0, 0, 0, 0)
     while True:
         frame = frame_q.get()
-        if (len(frame) == 4):
-            if (frame == 'stop'):
+        if len(frame) == 4:
+            if frame == 'stop':
                 cv.destroyAllWindows()
                 break
         detections = detector.detect(frame)
@@ -203,7 +204,7 @@ class FogCam(BaseNodeModel):
         其他节点可以来取数据的server。
         """
         # 一个本地的进程间资源manager。本地显示进程，和远端compute node，都会连接过来取数据
-        self.m = CamManager(address=(self.node_conf.data_ip, self.node_conf.data_port), authkey=b'cpn')
+        self.m = CamManager(address=(self.node_conf.node_ip, self.node_conf.node_port), authkey=b'cpn')
 
         # 启动show进程 
         self.p_show = Process(name='show', target=show_video,

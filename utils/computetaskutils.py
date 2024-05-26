@@ -45,7 +45,7 @@ if not (os.path.exists('./algorithmDev/deploy.prototxt.txt') and path.exists(
         'algorithmDev/res10_300x300_ssd_iter_140000.caffemodel')):
     raise ValueError('DNN model files does not exist.')
 else:
-    DNNmodel = path.abspath('../algorithmDev/deploy.prototxt.txt')
+    DNNmodel = path.abspath('./algorithmDev/deploy.prototxt.txt')
     DNNwt = path.abspath('./algorithmDev/res10_300x300_ssd_iter_140000.caffemodel')
 inputsize = (300, 300)
 inputmean = (104.0, 177.0, 123.0)
