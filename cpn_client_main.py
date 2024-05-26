@@ -50,7 +50,6 @@ class ClientCanvas(QWidget):
         self.task_font_size.setFamily("Arial")
         self.task_font_size.setBold(True)
         self.task_font_size.setPointSize(20)
-
         self._initTitle()
 
         self.left_spacer = QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
@@ -84,6 +83,9 @@ class ClientCanvas(QWidget):
         self.layout.addWidget(self.groupBox)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setVisible(True)
+
+        server_thread = threading.Thread(target=self._initFirstPkgMonitorSocket)
+        server_thread.start()
 
     def _initTitle(self):
         self.title_box = QtWidgets.QGroupBox(self.groupBox)
@@ -247,18 +249,20 @@ class ClientCanvas(QWidget):
         self.nokia_logo.setStyleSheet("border: none;")
         self.mainLayout.addLayout(self.nokia_logo_layout)
 
+    def _initFirstPkgMonitorSocket(self):
+        server_host = "127.0.0.1"
+        server_port = 12354
+        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server_socket.bind((server_host, server_port))
+        self.server_socket.listen(5)
+        while True:
+            self.conn, _ = self.server_socket.accept()
+            client_thread = threading.Thread(target=self.listenFirstPkg, args=(self.conn,))
+            client_thread.start()
+
     def _firstPkgRespLatency(self):
-        try:
-            server_host = self.client_mgn.demo_conf.get_node('client')['node_ip']
-            server_port = 12354
-            self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.server_socket.bind(('192.168.2.235', server_port))
-        except Exception as exp:
-            print(f"Bind Exception: {exp}")
         print("This _firstPkgRespLatency func")
         self.client_mgn.conn_GUI.send(('cpn_test', 'firstPkgLat'))
-        client_thread = threading.Thread(target=self.listenFirstPkg)
-        client_thread.start()
 
     def _serviceAddress(self):
         print("This _serviceAddress func")
@@ -272,17 +276,19 @@ class ClientCanvas(QWidget):
         print("This _contentAddress func")
         self.client_manager.conn_GUI.send(('cpn_test', 'contentAddr'))
 
-    def listenFirstPkg(self):
+    def listenFirstPkg(self, server_conn):
         timeSpine1 = time.time()
         while True:
             data = "123"
             try:
-                data, address = self.server_socket.recvfrom(1024)
-            except:
-                pass
+                data = server_conn.recv(1024).decode('utf-8')
+            except Exception as exp:
+                print(f"Receive First Pkg ERROR: {exp}")
             if "RESPONSE" in data:
                 print(f"listenFirstPkg >>>>> {data}")
                 timeSpine2 = time.time()
+                print(f"timeSpine1: {timeSpine1}")
+                print(f"timeSpine2: {timeSpine2}")
                 self.task1_text2.setText(str((timeSpine2 - timeSpine1) * 1000))
                 # self.server_socket.close()
                 break

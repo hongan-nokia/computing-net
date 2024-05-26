@@ -216,17 +216,18 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
     def _sendFirstPkg2UE(self):
         print("Here is _sendFirstPkg2UE")
         client_host = self.cfn_manager.demo_config.get_node('client')['node_ip']
-        client_host = "192.168.2.235"
+        client_host = "127.0.0.1"
         client_port = 12354
-        addr = (client_host, client_port)
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         message = "RESPONSE FROM C-NODE1"
+        sleep(0.1)
         try:
-            client_socket.connect(addr)
-            client_socket.send(message.encode("UTF-8"))
-            client_socket.sendto(message.encode(), addr)
-            client_socket.sendto(message.encode(), addr)
-            # client_socket.close()
+            client_socket.connect((client_host, client_port))
         except Exception as exp:
             print(f"*&&&&&&&&&&&&&&& {exp}")
+            
+        try:
+            client_socket.sendall(message.encode())
+        except Exception as exp:
+            print(f"*-------------- {exp}")
         print("FirstPkg Message Sent")
