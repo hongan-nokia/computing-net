@@ -1,5 +1,8 @@
 import argparse
+import socket
 import sys
+import threading
+import time
 from pathlib import Path
 
 from PyQt5.QtCore import Qt, pyqtSlot, QSize
@@ -126,10 +129,9 @@ class ClientCanvas(QWidget):
         self.task1_btn.setText("首包响应时延测试")
         self.task1_btn.setFont(self.task_font_size)
         self.task1_btn.setStyleSheet(self.btn_style)
-        self.task1_btn.clicked.connect(self._firstPkgRespLatency)
-
         self.task1_btn_layout.addWidget(self.task1_btn)
         self.task1_layout.addWidget(self.task1_btn_box)
+        self.task1_btn.clicked.connect(self._firstPkgRespLatency)
 
         # ####
         self.task1_text1_box = QtWidgets.QGroupBox(self.task1_box)
@@ -246,20 +248,44 @@ class ClientCanvas(QWidget):
         self.mainLayout.addLayout(self.nokia_logo_layout)
 
     def _firstPkgRespLatency(self):
+        try:
+            server_host = self.client_mgn.demo_conf.get_node('client')['node_ip']
+            server_port = 12354
+            self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.server_socket.bind(('192.168.2.235', server_port))
+        except Exception as exp:
+            print(f"Bind Exception: {exp}")
         print("This _firstPkgRespLatency func")
-        # self.client_manager.conn_GUI.send(('cpn_test', 'firstPkgLat'))
+        self.client_mgn.conn_GUI.send(('cpn_test', 'firstPkgLat'))
+        client_thread = threading.Thread(target=self.listenFirstPkg)
+        client_thread.start()
 
     def _serviceAddress(self):
         print("This _serviceAddress func")
-        # self.client_manager.conn_GUI.send(('cpn_test', 'serviceAddr'))
+        self.client_manager.conn_GUI.send(('cpn_test', 'serviceAddr'))
 
     def _computingAddress(self):
         print("This _serviceAddress func")
-        # self.client_manager.conn_GUI.send(('cpn_test', 'computingAddr'))
+        self.client_manager.conn_GUI.send(('cpn_test', 'computingAddr'))
 
     def _contentAddress(self):
         print("This _contentAddress func")
-        # self.client_manager.conn_GUI.send(('cpn_test', 'contentAddr'))
+        self.client_manager.conn_GUI.send(('cpn_test', 'contentAddr'))
+
+    def listenFirstPkg(self):
+        timeSpine1 = time.time()
+        while True:
+            data = "123"
+            try:
+                data, address = self.server_socket.recvfrom(1024)
+            except:
+                pass
+            if "RESPONSE" in data:
+                print(f"listenFirstPkg >>>>> {data}")
+                timeSpine2 = time.time()
+                self.task1_text2.setText(str((timeSpine2 - timeSpine1) * 1000))
+                # self.server_socket.close()
+                break
 
 
 class ClientWindow(QWidget):

@@ -34,6 +34,11 @@ class CfnDemoManagerSignals(QObject):
     container_task_list = pyqtSignal(int, dict)  # node_id, pulse rate
     container_ue_msg = pyqtSignal(str)  # node_id, pulse rate
 
+    firstPkgLat_test = pyqtSignal(int, str)  # node_id, test-case name
+    serviceAddr_test = pyqtSignal(int, str)  # node_id, test-case name
+    computingAddr_test = pyqtSignal(int, str)  # node_id, test-case name
+    contentAddr_test = pyqtSignal(int, str)  # node_id, test-case name
+
 
 class SgnlEmitter:
     """
@@ -62,8 +67,15 @@ class SgnlEmitter:
             self.demo_manager.send_command(node_name, 'startlocal')
             self.QtSignals.container_connected.emit(node_id)
 
-        elif command == 'cfnret':
-            self.QtSignals.container_resource_report.emit(node_id, command_arg)
+        elif command == 'cpn_test':
+            if "firstPkgLat" in command_arg:
+                self.QtSignals.firstPkgLat_test.emit(node_id, command_arg)
+            elif "serviceAddr" in command_arg:
+                self.QtSignals.serviceAddr_test.emit(node_id, command_arg)
+            elif "computingAddr" in command_arg:
+                self.QtSignals.contentAddr_test.emit(node_id, command_arg)
+            elif "computingAddr" in command_arg:
+                self.QtSignals.contentAddr_test.emit(node_id, command_arg)
 
         elif command == 'state':
             print(f'node {node_name} reported state: {command_arg}')

@@ -17,6 +17,7 @@ from PyQt5.QtWidgets import QApplication, QHBoxLayout, QPushButton, QLabel, QGro
     QHeaderView, QTableWidget, QWidget
 
 from guiwidgets.fadingpic import BlinkingPic
+from nodemodels.cfndemomanager import CfnDemoManager
 from utils.HeatMap import HeatMap
 from utils.configparser import DemoConfigParser
 from utils.imageLoader import ImageLoader
@@ -24,7 +25,7 @@ from utils.repeatimer import repeatTimer
 
 
 class ComputingPowerAwareAddressRouteWindow(QWidget):
-    def __init__(self, parent, demo_manager):
+    def __init__(self, parent, demo_manager: CfnDemoManager):
         super().__init__()
         geo = {
             'top': 0,
@@ -179,6 +180,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
                                         interval=3, title='5.视频传输数据', tag_geo=[20, 80, 200, 30])
 
     def initConnections(self):
+        self.cfn_manager.signal_emitter.QtSignals.firstPkgLat_test.connect(self.firstPkgLatWorkFlow)
         self.user_first_pkg.QtSignals.anim_over.connect(self.service_provision_anim)
         self.addr_request.QtSignals.anim_over.connect(self.service_provision_anim)
         self.net_brain_ctrl.QtSignals.anim_over.connect(self.service_provision_anim)
@@ -204,3 +206,27 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
             self.video_stream.start("")
         else:
             pass
+
+    @pyqtSlot(int, str)
+    def firstPkgLatWorkFlow(self, node_id, command_args):
+        print("Here is firstPkgLatWorkFlow")
+        self._sendFirstPkg2UE()
+        # self.cfn_manager.send_command("c_node1", "task", "send_pkg2ue")
+
+    def _sendFirstPkg2UE(self):
+        print("Here is _sendFirstPkg2UE")
+        client_host = self.cfn_manager.demo_config.get_node('client')['node_ip']
+        client_host = "192.168.2.235"
+        client_port = 12354
+        addr = (client_host, client_port)
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        message = "RESPONSE FROM C-NODE1"
+        try:
+            client_socket.connect(addr)
+            client_socket.send(message.encode("UTF-8"))
+            client_socket.sendto(message.encode(), addr)
+            client_socket.sendto(message.encode(), addr)
+            # client_socket.close()
+        except Exception as exp:
+            print(f"*&&&&&&&&&&&&&&& {exp}")
+        print("FirstPkg Message Sent")

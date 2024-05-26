@@ -10,7 +10,7 @@ from multiprocessing import Pipe, Queue
 
 import PyWinMouse
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSlot
 from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtWidgets import QApplication, QPushButton
 
@@ -44,7 +44,6 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self._initTestScenes()
         # self._initDataVisualize()
         self._initScenarioButtons()
-
         self.mouse = PyWinMouse.Mouse()
         self.mouse_pos_mon = repeatTimer(1, self.get_mouse_position, autostart=True)
         self.mouse_pos_mon.start()

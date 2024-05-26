@@ -14,6 +14,7 @@ from typing import Union
 from PyQt5.QtCore import QObject, pyqtSignal
 
 from nodemodels.basemodel import GUI_msg_handler, GUI_task_cmd_handler, BaseNodeModel
+from utils import DemoConfigParser, NodeConfig
 from utils.computetaskutils import *
 
 
@@ -134,7 +135,7 @@ class CfnNodeModel(BaseNodeModel):
     每个task对应一个进程, 当前的所有task都记录在self.compute_tasks字典中
     """
 
-    def __init__(self, demo_config, node_config, msg_process_fn=process_GUI_msg,
+    def __init__(self, demo_config: DemoConfigParser, node_config: NodeConfig, msg_process_fn=process_GUI_msg,
                  task_cmd_handler=start_node_task) -> None:
 
         self.current_state = 'NodePowerOn'
