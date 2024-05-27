@@ -155,7 +155,9 @@ class GlancesHandler(object):
                         self.q.put([float(r_dict.get(item)) for item in self.metrics])
                         self.q.put([float(r_dict.get(item)) for item in self.metrics])
                         self.q.put([float(r_dict.get(item)) for item in self.metrics])
+                        self.q.put([float(r_dict.get(item)) for item in self.metrics])
                     else:
+                        self.q.put([float(r_dict.get(item)) for item in self.metrics])
                         self.q.put([float(r_dict.get(item)) for item in self.metrics])
                         self.q.put([float(r_dict.get(item)) for item in self.metrics])
                         # else:

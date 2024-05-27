@@ -425,6 +425,75 @@ def vlc_streaming(addr: str, port: int, file_path: str, start_pos: float, cmd_q:
             return
 
 
+def vlcc_streaming(addr: str, port: int, file_path: str, start_pos: float, cmd_q: SimpleQueue,
+                  cancel_task_id: Value, terminate_event: Event) -> float:
+    pid = os.getpid()
+    print("------Process PID======= " + str(pid))
+    print(f"(PID-{pid}) Starting a new vlc streaming task!")
+    cmd_q.put(("_PID", ('vlc', pid)))
+
+    if 'GAME' in file_path:
+        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "}}"
+        params = [ad, "sout-all", "sout-keep"]
+        inst = vlc.Instance()
+        file_path = file_path.lower()
+        media = inst.media_new(f'{file_path}', *params)
+        media_player = media.player_new_from_media()
+        print("------vlc_s start_pos:" + str(start_pos))
+        media_player.play()
+        media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
+        sleep(2)
+    elif 'fake1' in file_path:
+        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "10045" + "},dst=display}"
+        params = [ad, "sout-all", "sout-keep"]
+        inst = vlc.Instance()
+        media = inst.media_new('./worldCup.mp4', *params)
+        media_player = media.player_new_from_media()
+        print("------vlc_s start_pos:" + str(start_pos))
+        media_player.play()
+        media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
+        sleep(2)
+    elif 'fake2' in file_path:
+        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "10046" + "},dst=display}"
+        params = [ad, "sout-all", "sout-keep"]
+        inst = vlc.Instance()
+        media = inst.media_new('./worldCup.mp4', *params)
+        media_player = media.player_new_from_media()
+        print("------vlc_s start_pos:" + str(start_pos))
+        media_player.play()
+        media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
+        sleep(2)
+    else:
+        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "},dst=display}"
+        params = [ad, "sout-all", "sout-keep"]
+        inst = vlc.Instance()
+        media = inst.media_new(f'{file_path}', *params)
+        media_player = media.player_new_from_media()
+        print("------vlc_s start_pos:" + str(start_pos))
+        media_player.play()
+        media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
+        sleep(2)
+    while not terminate_event.is_set():
+        try:
+            if cancel_task_id.value == pid:
+                print(f"(PID-{pid}) Received task_cancel signal!")
+                cancel_task_id.value = 0
+                media_player.stop()
+                sleep(0.1)
+                break
+            elif media_player.is_playing() == 0:
+                print("media_player.is_no_playing")
+                sleep(0.2)
+                break
+            else:
+                continue
+        except Exception as err:  # 运行中出现连接断开之类错误
+            s = f"Error encountered with vlc: {err}. Aborting task."
+            print(f'(PID-{pid})' + s)
+            cmd_q.put(('_abort', pid, s))
+            return
+
+
 def dispatch(c, id, methodname, args=(), kwds={}):
     """
     Send a message to manager using connection `c` and return response

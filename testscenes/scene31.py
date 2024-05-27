@@ -208,7 +208,7 @@ class Scene31(QWidget):
             self.service_step5.label.setVisible(True)
             self.service_step5.start("sp5")
         elif destination == "sp5":
-            self.cfn_manager.send_command('c_node1', 'task', 'vlc worldCup.mp4_0')
+            self.cfn_manager.send_command('c_node1', 'task', 'vlcc worldCup.mp4_0')
         else:
             pass
 
@@ -226,7 +226,7 @@ class Scene31(QWidget):
         self.service_step3.tag_label.setVisible(False)
         self.service_step4.tag_label.setVisible(False)
         self.service_step5.tag_label.setVisible(False)
-
+        self.cfn_manager.send_command('c_node1', 'stop_task', 'vlcc worldCup.mp4_0')
         # self.service_step1.label.setVisible(False)
         self.service_step2.label.setVisible(False)
         self.service_step3.label.setVisible(False)

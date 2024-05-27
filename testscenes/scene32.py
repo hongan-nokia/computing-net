@@ -31,6 +31,7 @@ from utils.imageLoader import ImageLoader
 class Scene32(QWidget):
     def __init__(self, parent, demo_manager):
         super().__init__()
+        self.queueFlag = None
         self.path = 1
         geo = {
             'top': 0,
@@ -255,7 +256,6 @@ class Scene32(QWidget):
     def service_provision_anim(self, destination: str):
         self.queueFlag = 1
         if destination == "sp1":
-
             self.service_step2.label.setVisible(True)
             self.service_step2.start("sp2")
         elif destination == "sp2":
@@ -307,16 +307,18 @@ class Scene32(QWidget):
                 self.service_step51.label.setVisible(True)
                 self.service_step51.start("")
                 self.c_node1_heart_rate.setVisible(True)
+                self.cfn_manager.send_command(f'c_node{self.path}', 'task', 'cam_health camera_1')
             elif self.path == 2:
                 self.service_step52.label.setVisible(True)
                 self.service_step52.start("")
                 self.c_node2_heart_rate.setVisible(True)
+                self.cfn_manager.send_command(f'c_node{self.path}', 'task', 'cam_health camera_1')
             elif self.path == 3:
                 self.service_step53.label.setVisible(True)
                 self.service_step53.start("")
                 self.c_node3_heart_rate.setVisible(True)
-        else:
-            pass
+                self.cfn_manager.send_command(f'c_node{self.path}', 'task', 'cam_health camera_1')
+
 
     def backTest3(self):
         self.setVisible(False)
@@ -348,3 +350,6 @@ class Scene32(QWidget):
 
         self.step1_label1.setVisible(False)
         self.step1_label2.setVisible(False)
+        self.cfn_manager.send_command('c_node1', 'stop_task', 'cam_health camera_1')
+        self.cfn_manager.send_command('c_node2', 'stop_task', 'cam_health camera_1')
+        self.cfn_manager.send_command('c_node3', 'stop_task', 'cam_health camera_1')
