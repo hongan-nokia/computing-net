@@ -38,6 +38,9 @@ class Scene32(QWidget):
             'left': 0,
             'width': 1920,
             'height': 1080}
+        self._heartrate_update_cnt = 0
+        self._previous_position = -1
+        self.person_position = -1
         self.setGeometry(geo['left'], geo['top'], geo['width'], geo['height'])
         self.nokia_blue = QtGui.QColor(18, 65, 145)
         self.cfn_manager = demo_manager
@@ -251,6 +254,75 @@ class Scene32(QWidget):
         self.service_step51.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step52.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step53.QtSignals.anim_over.connect(self.service_provision_anim)
+
+        self.cfn_manager.signal_emitter.QtSignals.container_pulsate_update.connect(self.update_pulserate)
+        self.cfn_manager.signal_emitter.QtSignals.container_person_state.connect(self.show_person_position)
+
+    def _initHearRate(self):
+        self.heartrate = QtWidgets.QLabel(parent=self)
+        self.heartrate.setText("---")
+        font = QtGui.QFont("Nokia Pure Text", 28)
+        self.heartrate.setFont(font)
+        # self.heartrate.setFrameStyle(22)  # show border
+        self.heartrate.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignCenter)  # Qt.AlignRight
+
+        palette = self.palette()
+        palette.setColor(self.foregroundRole(), self.nokia_blue)
+        self.heartrate.setPalette(palette)
+        # self.heartrate.setGeometry(1600, 225, 180, 100)
+        self.heartrate.setGeometry(1517, 257, 180, 100)
+
+        self.heartrateTag = QtWidgets.QLabel(parent=self)
+        self.heartrateTag.setPixmap(QtGui.QPixmap('./images/heartrate_tag.png'))
+        self.heartrateTag.setFont(font)
+        self.heartrateTag.setPalette(palette)
+        self.heartrateTag.setGeometry(1532, 257, 180, 100)
+        self.heartrate.raise_()
+        self.heartrate.setVisible(True)
+        self.heartrateTag.setVisible(True)
+
+    @pyqtSlot(int, float)
+    def update_pulserate(self, containerId: int, pulserate: float):
+        if pulserate == -1:
+            pass
+        else:
+            self.heartrate.setText('%.0f' % pulserate)
+        # print(f'container={containerId}, '
+        #       f'person_position={self.person_position}, pulserate={pulserate}, cnt={self._heartrate_update_cnt}')
+
+    @pyqtSlot(int, str)
+    def show_person_position(self, containerId: int, presence: str):
+        """ When person comes in or go out of a camera's view, it triggers a
+            signal with corresponding container id and 'come' or 'gone' flag.
+            This function therefore triggers animation of the person's picture.
+        """
+        print(f'person state change in camera {containerId}: {presence}')
+        print(f'self.person_position:  {self.person_position}')
+        if self.person_position != -1:
+            self._previous_position = self.person_position  # update previous position record
+        if containerId == 0:
+            if presence == 'come':
+                self.person_position = 0
+                print(f'@@@@@   person state change in camera {containerId}: {presence}')
+            else:  # should be 'gone'
+                self.person_position = -1
+                self.heartrate.setText("---")
+        elif containerId == 1:
+            if presence == 'come':
+                self.person_position = 0
+                print(f'@@@@@   person state change in camera {containerId}: {presence}')
+            else:  # should be 'gone'
+                self.person_position = -1
+                self.heartrate.setText("---")
+        elif containerId == 2:  # cloud
+            if presence == 'come':
+                self.person_position = 0
+                print(f'@@@@@   person state change in camera {containerId}: {presence}')
+            else:  # should be 'gone'
+                self.person_position = -1
+        else:
+            pass
+
 
     @pyqtSlot(str)
     def service_provision_anim(self, destination: str):
