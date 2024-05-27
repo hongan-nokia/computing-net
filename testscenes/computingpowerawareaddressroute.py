@@ -86,9 +86,9 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         """ add all items into scene and set their initial position/visibility"""
         scene = QtWidgets.QGraphicsScene()
 
-        c_node1_video_img = QtGui.QPixmap("./images/video_conv.png").scaled(QSize(54, 31))
-        c_node2_video_img = QtGui.QPixmap("./images/video_conv.png").scaled(QSize(54, 31))
-        c_node3_video_img = QtGui.QPixmap("./images/video_conv.png").scaled(QSize(54, 31))
+        c_node1_video_img = QtGui.QPixmap("./images/video_conversion.png").scaled(QSize(80, 60))
+        c_node2_video_img = QtGui.QPixmap("./images/video_conversion.png").scaled(QSize(80, 60))
+        c_node3_video_img = QtGui.QPixmap("./images/video_conversion.png").scaled(QSize(80, 60))
         self.c_node1_video = BlinkingPic(parent=self, pixmap=c_node1_video_img, auto_dim=True, dim_opacity=0.1,
                                          blink_period=1200).pixmap_item
         self.c_node2_video = BlinkingPic(parent=self, pixmap=c_node2_video_img, auto_dim=True, dim_opacity=0.1,
@@ -236,13 +236,14 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         palette = self.palette()
         palette.setColor(self.foregroundRole(), self.nokia_blue)
         self.heartrate.setPalette(palette)
-        self.heartrate.setGeometry(1600, 225, 180, 100)
+        # self.heartrate.setGeometry(1600, 225, 180, 100)
+        self.heartrate.setGeometry(1517, 257, 180, 100)
 
         self.heartrateTag = QtWidgets.QLabel(parent=self)
         self.heartrateTag.setPixmap(QtGui.QPixmap('./images/heartrate_tag.png'))
         self.heartrateTag.setFont(font)
         self.heartrateTag.setPalette(palette)
-        self.heartrateTag.setGeometry(1615, 225, 180, 100)
+        self.heartrateTag.setGeometry(1532, 257, 180, 100)
         self.heartrate.raise_()
         self.heartrate.setVisible(True)
         self.heartrateTag.setVisible(True)
