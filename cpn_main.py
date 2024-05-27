@@ -246,6 +246,8 @@ class CpnAppWindow(QtWidgets.QMainWindow):
             self.scene3.scene31.service_step1.start("sp1")
         elif k == QtCore.Qt.Key_W:
             self.scene3.scene32.reset()
+            self.scene3.scene32.step1_label1.setVisible(True)
+            self.scene3.scene32.step1_label2.setVisible(True)
             self.scene3.scene32.service_step1.start("sp1")
         elif k == QtCore.Qt.Key_E:
             self.scene3.scene33.reset()

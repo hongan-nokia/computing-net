@@ -255,8 +255,7 @@ class Scene32(QWidget):
     def service_provision_anim(self, destination: str):
         self.queueFlag = 1
         if destination == "sp1":
-            self.step1_label1.setVisible(True)
-            self.step1_label2.setVisible(True)
+
             self.service_step2.label.setVisible(True)
             self.service_step2.start("sp2")
         elif destination == "sp2":
