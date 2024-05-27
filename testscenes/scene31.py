@@ -12,7 +12,7 @@ from time import sleep
 
 import PyWinMouse
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtCore import pyqtSlot, Qt, QTimer
+from PyQt5.QtCore import pyqtSlot, Qt, QTimer, QSize
 from PyQt5.QtGui import QPalette, QColor, QBrush, QPixmap, QIcon
 from PyQt5.QtWidgets import QApplication, QHBoxLayout, QPushButton, QLabel, QGroupBox, QVBoxLayout, QTableWidgetItem, \
     QHeaderView, QTableWidget, QWidget
@@ -65,6 +65,29 @@ class Scene31(QWidget):
         self.view.setGeometry(0, 0, 1920, 1080)
 
     def _initScene(self):
+
+        c_node1_video_img = QtGui.QPixmap("./images/video_conversion.png").scaled(QSize(80, 60))
+        c_node2_video_img = QtGui.QPixmap("./images/video_conversion.png").scaled(QSize(80, 60))
+        c_node3_video_img = QtGui.QPixmap("./images/video_conversion.png").scaled(QSize(80, 60))
+        self.c_node1_video = BlinkingPic(parent=self, pixmap=c_node1_video_img, auto_dim=True, dim_opacity=0.1,
+                                         blink_period=1200).pixmap_item
+        self.c_node2_video = BlinkingPic(parent=self, pixmap=c_node2_video_img, auto_dim=True, dim_opacity=0.1,
+                                         blink_period=1200).pixmap_item
+        self.c_node3_video = BlinkingPic(parent=self, pixmap=c_node3_video_img, auto_dim=True, dim_opacity=0.1,
+                                         blink_period=1200).pixmap_item
+
+        self.view.scene().addItem(self.c_node1_video)
+        self.view.scene().addItem(self.c_node2_video)
+        self.view.scene().addItem(self.c_node3_video)
+
+        self.c_node1_video.setPos(906, 428)
+        self.c_node2_video.setPos(1140, 535)
+        self.c_node3_video.setPos(1098, 840)
+
+        self.c_node1_video.setVisible(True)
+        self.c_node2_video.setVisible(True)
+        self.c_node3_video.setVisible(True)
+
         self.cloud1_hm_l1 = QtWidgets.QLabel(parent=self)
         self.cloud1_hm_l2 = QtWidgets.QLabel(parent=self)
         self.cloud1_hm_l3 = QtWidgets.QLabel(parent=self)

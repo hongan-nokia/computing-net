@@ -12,7 +12,7 @@ from time import sleep
 
 import PyWinMouse
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtCore import pyqtSlot, Qt, QTimer
+from PyQt5.QtCore import pyqtSlot, Qt, QTimer, QSize
 from PyQt5.QtGui import QPalette, QColor, QBrush, QPixmap, QIcon
 from PyQt5.QtWidgets import QApplication, QHBoxLayout, QPushButton, QLabel, QGroupBox, QVBoxLayout, QTableWidgetItem, \
     QHeaderView, QTableWidget, QWidget
@@ -31,6 +31,7 @@ from utils.imageLoader import ImageLoader
 class Scene32(QWidget):
     def __init__(self, parent, demo_manager):
         super().__init__()
+        self.path = 1
         geo = {
             'top': 0,
             'left': 0,
@@ -61,8 +62,30 @@ class Scene32(QWidget):
         self.view.setRenderHint(QtGui.QPainter.Antialiasing)
         self.view.setGeometry(0, 0, 1920, 1080)
 
-
     def _initScene(self):
+
+        c_node1_heart_rate_img = QtGui.QPixmap("./images/heart_rate.png").scaled(QSize(80, 60))
+        c_node2_heart_rate_img = QtGui.QPixmap("./images/heart_rate.png").scaled(QSize(80, 60))
+        c_node3_heart_rate_img = QtGui.QPixmap("./images/heart_rate.png").scaled(QSize(80, 60))
+        self.c_node1_heart_rate = BlinkingPic(parent=self, pixmap=c_node1_heart_rate_img, auto_dim=True, dim_opacity=0.1,
+                                              blink_period=1200).pixmap_item
+        self.c_node2_heart_rate = BlinkingPic(parent=self, pixmap=c_node2_heart_rate_img, auto_dim=True, dim_opacity=0.1,
+                                              blink_period=1200).pixmap_item
+        self.c_node3_heart_rate = BlinkingPic(parent=self, pixmap=c_node3_heart_rate_img, auto_dim=True, dim_opacity=0.1,
+                                              blink_period=1200).pixmap_item
+
+        self.view.scene().addItem(self.c_node1_heart_rate)
+        self.view.scene().addItem(self.c_node2_heart_rate)
+        self.view.scene().addItem(self.c_node3_heart_rate)
+
+        self.c_node1_heart_rate.setPos(906, 428)
+        self.c_node2_heart_rate.setPos(1140, 535)
+        self.c_node3_heart_rate.setPos(1098, 840)
+
+        self.c_node1_heart_rate.setVisible(False)
+        self.c_node2_heart_rate.setVisible(False)
+        self.c_node3_heart_rate.setVisible(False)
+
         self.cloud1_hm_l1 = QtWidgets.QLabel(parent=self)
         self.cloud1_hm_l2 = QtWidgets.QLabel(parent=self)
         self.cloud1_hm_l3 = QtWidgets.QLabel(parent=self)
@@ -157,13 +180,12 @@ class Scene32(QWidget):
                                          img_scale_h=1,
                                          direction="l2r",
                                          interval=3, title='2.算网融合调度编排(算力寻址，计算最优算力资源路由组合)', tag_geo=[35, 0, 303, 120])
-        self.service_step2.tag_label.setWordWrap(True)
         self.service_step31 = ImageLoader(parent=self, geo=[908, 420, 650, 200],
-                                         image_url='./images_test3/computing_power_addressing_step31.png',
-                                         img_scale_w=650,
-                                         img_scale_h=200,
-                                         direction="r2l",
-                                         interval=3, title='3.心跳检测处理实例化', tag_geo=[100, 0, 400, 20])
+                                          image_url='./images_test3/computing_power_addressing_step31.png',
+                                          img_scale_w=650,
+                                          img_scale_h=200,
+                                          direction="r2l",
+                                          interval=3, title='3.心跳检测处理实例化', tag_geo=[100, 0, 400, 20])
         self.service_step32 = ImageLoader(parent=self, geo=[1145, 530, 600, 80],
                                           image_url='./images_test3/computing_power_addressing_step32.png',
                                           img_scale_w=420,
@@ -177,29 +199,29 @@ class Scene32(QWidget):
                                           direction="r2l",
                                           interval=3, title='3.心跳检测处理实例化', tag_geo=[100, 230, 400, 20])
         self.service_step41 = ImageLoader(parent=self, geo=[880, 550, 475, 170],
-                                         image_url='./images_test3/computing_power_addressing_step41.png',
-                                         img_scale_w=475,
-                                         img_scale_h=75,
-                                         direction="r2l",
-                                         interval=3, title='4.网络路径控制', tag_geo=[260, 60, 200, 30])
+                                          image_url='./images_test3/computing_power_addressing_step41.png',
+                                          img_scale_w=475,
+                                          img_scale_h=75,
+                                          direction="r2l",
+                                          interval=3, title='4.网络路径控制', tag_geo=[260, 60, 200, 30])
         self.service_step42 = ImageLoader(parent=self, geo=[1040, 615, 350, 180],
-                                         image_url='./images_test3/computing_power_addressing_step42.png',
-                                         img_scale_w=350,
-                                         img_scale_h=180,
-                                         direction="r2l",
-                                         interval=3, title='4.网络路径控制', tag_geo=[160, 120, 200, 30])
+                                          image_url='./images_test3/computing_power_addressing_step42.png',
+                                          img_scale_w=350,
+                                          img_scale_h=180,
+                                          direction="r2l",
+                                          interval=3, title='4.网络路径控制', tag_geo=[160, 120, 200, 30])
         self.service_step43 = ImageLoader(parent=self, geo=[1040, 615, 350, 180],
-                                         image_url='./images_test3/computing_power_addressing_step43.png',
-                                         img_scale_w=350,
-                                         img_scale_h=180,
-                                         direction="r2l",
-                                         interval=3, title='4.网络路径控制', tag_geo=[130, 120, 200, 30])
+                                          image_url='./images_test3/computing_power_addressing_step43.png',
+                                          img_scale_w=350,
+                                          img_scale_h=180,
+                                          direction="r2l",
+                                          interval=3, title='4.网络路径控制', tag_geo=[130, 120, 200, 30])
         self.service_step51 = ImageLoader(parent=self, geo=[320, 460, 550, 120],
-                                         image_url='./images_test3/computing_power_addressing_step51.png',
-                                         img_scale_w=550,
-                                         img_scale_h=120,
-                                         direction="r2l",
-                                         interval=3, title='5.业务数据流', tag_geo=[20, 80, 200, 30])
+                                          image_url='./images_test3/computing_power_addressing_step51.png',
+                                          img_scale_w=550,
+                                          img_scale_h=120,
+                                          direction="r2l",
+                                          interval=3, title='5.业务数据流', tag_geo=[20, 80, 200, 30])
         self.service_step52 = ImageLoader(parent=self, geo=[340, 490, 800, 290],
                                           image_url='./images_test3/computing_power_addressing_step52.png',
                                           img_scale_w=800,
@@ -231,7 +253,6 @@ class Scene32(QWidget):
 
     @pyqtSlot(str)
     def service_provision_anim(self, destination: str):
-        self.path = 1
         self.queueFlag = 1
         if destination == "sp1":
             self.step1_label1.setVisible(True)
@@ -239,7 +260,7 @@ class Scene32(QWidget):
             self.service_step2.label.setVisible(True)
             self.service_step2.start("sp2")
         elif destination == "sp2":
-            temps = [0,0,0]
+            temps = [0, 0, 0]
             if not self.monitor_q_cpu_hm_node1.empty():
                 temp1 = self.monitor_q_cpu_hm_node1.get()[-1]
             else:
@@ -254,38 +275,47 @@ class Scene32(QWidget):
                 self.queueFlag = 0
 
             if self.queueFlag:
-                temps = [temp1,temp2,temp3]
+                temps = [temp1, temp2, temp3]
                 self.path = temps.index(min(temps)) + 1
 
             if self.path == 1:
                 self.service_step31.label.setVisible(True)
                 self.service_step31.start("sp3")
+                self.c_node1_heart_rate.setVisible(True)
             elif self.path == 2:
                 self.service_step32.label.setVisible(True)
                 self.service_step32.start("sp3")
+                self.c_node2_heart_rate.setVisible(True)
             elif self.path == 3:
                 self.service_step33.label.setVisible(True)
                 self.service_step33.start("sp3")
+                self.c_node3_heart_rate.setVisible(True)
         elif destination == "sp3":
             if self.path == 1:
                 self.service_step41.label.setVisible(True)
                 self.service_step41.start("sp4")
+                self.c_node1_heart_rate.setVisible(True)
             elif self.path == 2:
                 self.service_step42.label.setVisible(True)
                 self.service_step42.start("sp4")
+                self.c_node2_heart_rate.setVisible(True)
             elif self.path == 3:
                 self.service_step43.label.setVisible(True)
                 self.service_step43.start("sp4")
+                self.c_node3_heart_rate.setVisible(True)
         elif destination == "sp4":
             if self.path == 1:
                 self.service_step51.label.setVisible(True)
                 self.service_step51.start("")
+                self.c_node1_heart_rate.setVisible(True)
             elif self.path == 2:
                 self.service_step52.label.setVisible(True)
                 self.service_step52.start("")
+                self.c_node2_heart_rate.setVisible(True)
             elif self.path == 3:
                 self.service_step53.label.setVisible(True)
                 self.service_step53.start("")
+                self.c_node3_heart_rate.setVisible(True)
         else:
             pass
 
@@ -317,8 +347,5 @@ class Scene32(QWidget):
         self.service_step52.label.setVisible(False)
         self.service_step53.label.setVisible(False)
 
-
         self.step1_label1.setVisible(False)
         self.step1_label2.setVisible(False)
-
-
