@@ -22,7 +22,7 @@ import requests
 import yaml
 from PyQt5.QtWidgets import QFrame, QVBoxLayout, QWidget, QMainWindow, QApplication, QGroupBox, QHBoxLayout
 
-os.environ['PYTHON_VLC_MODULE_PATH'] = "./vlc"
+os.environ['PYTHON_VLC_MODULE_PATH'] = "./vlc_bin"
 import vlc
 from typing import Tuple
 

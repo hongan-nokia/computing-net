@@ -18,6 +18,7 @@ from PyQt5.QtChart import QChartView
 from PyQt5.QtWidgets import QHBoxLayout
 from PyQt5.QtWidgets import QVBoxLayout, QWidget, QGroupBox, QPushButton
 
+from nodemodels.cfndemomanager import CfnDemoManager
 from resourcevisiualize.resourcehistory import HistoryWindow
 from resourcevisiualize.speedmeter import SpeedMeter
 from utils.repeatimer import repeatTimer
@@ -46,7 +47,7 @@ class DataVisualizationWindow(QWidget):
 
 
 class data_visualize(QWidget):
-    def __init__(self, parent=None, demo_manager=None, res_queue_dict=None):
+    def __init__(self, parent, demo_manager: CfnDemoManager, res_queue_dict):
         super().__init__()
         self._initResourceUri()
         # self.setWindowFlag(Qt.FramelessWindowHint)
@@ -1812,9 +1813,9 @@ class data_visualize(QWidget):
         self.node4_disk_write_value.setText("2M")
 
     def _initResourceUri(self):
-        self.node1_resource_uri = "http://127.0.0.1:8000/synthetic"
-        self.node2_resource_uri = "http://127.0.0.1:8000/synthetic"
-        self.node3_resource_uri = "http://127.0.0.1:8000/synthetic"
+        self.node1_resource_uri = f"http://192.168.2.110:8000/synthetic"
+        self.node2_resource_uri = "http://192.168.2.111:8000/synthetic"
+        self.node3_resource_uri = "http://192.168.2.108:8000/synthetic"
 
     def _initVariableGroup(self):
         self.CPU_Nums = [

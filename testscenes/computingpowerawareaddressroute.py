@@ -209,9 +209,9 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
                                                interval=3, title='',
                                                tag_geo=[90, 0, 200, 20])
 
-    # def initConnections(self):
-    #     self.cfn_manager.signal_emitter.QtSignals.container_pulsate_update.connect(self.update_pulserate)
-    #     self.cfn_manager.signal_emitter.QtSignals.container_person_state.connect(self.show_person_position)
+    def initConnections(self):
+        # self.cfn_manager.signal_emitter.QtSignals.container_pulsate_update.connect(self.update_pulserate)
+        # self.cfn_manager.signal_emitter.QtSignals.container_person_state.connect(self.show_person_position)
         self.cfn_manager.signal_emitter.QtSignals.firstPkgLat_test.connect(self.firstPkgLatWorkFlow)
         self.cfn_manager.signal_emitter.QtSignals.vlc_state_report.connect(self.VLC_migration)
         self.user_first_pkg.QtSignals.anim_over.connect(self.service_provision_anim)
