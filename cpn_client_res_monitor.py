@@ -34,8 +34,6 @@ async def read_disk():
             {"disk_name": "PhysicalDrive0",
              "read_count": disk_usage.read_count,
              "write_count": disk_usage.write_count,
-             "read_count": disk_usage.read_count,
-             "write_count": disk_usage.write_count
              }
         ]
     }
