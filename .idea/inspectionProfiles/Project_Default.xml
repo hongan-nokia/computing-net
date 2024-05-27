@@ -1,10 +1,15 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
     <option name="myName" value="Project Default" />
+    <inspection_tool class="DuplicatedCode" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <Languages>
+        <language minSize="114" name="Python" />
+      </Languages>
+    </inspection_tool>
     <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoredPackages">
         <value>
-          <list size="53">
+          <list size="54">
             <item index="0" class="java.lang.String" itemvalue="protobuf" />
             <item index="1" class="java.lang.String" itemvalue="joblib" />
             <item index="2" class="java.lang.String" itemvalue="falcon" />
@@ -58,6 +63,7 @@
             <item index="50" class="java.lang.String" itemvalue="dm_haiku" />
             <item index="51" class="java.lang.String" itemvalue="pika" />
             <item index="52" class="java.lang.String" itemvalue="whisper" />
+            <item index="53" class="java.lang.String" itemvalue="typing" />
           </list>
         </value>
       </option>
@@ -69,6 +75,7 @@
           <option value="E501" />
           <option value="E722" />
           <option value="E128" />
+          <option value="E303" />
         </list>
       </option>
     </inspection_tool>
