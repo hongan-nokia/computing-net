@@ -29,20 +29,13 @@ from utils.imageLoader import ImageLoader
 
 
 class Scene32(QWidget):
-    """
-    算力寻址
-    """
-
-    def __init__(self, parent, demo_manager: CfnDemoManager):
+    def __init__(self, parent, demo_manager):
         super().__init__()
         geo = {
             'top': 0,
             'left': 0,
             'width': 1920,
             'height': 1080}
-        self._heartrate_update_cnt = 0
-        self._previous_position = -1
-        self.person_position = -1
         self.setGeometry(geo['left'], geo['top'], geo['width'], geo['height'])
         self.nokia_blue = QtGui.QColor(18, 65, 145)
         self.cfn_manager = demo_manager
@@ -53,7 +46,6 @@ class Scene32(QWidget):
         self._initHeapMap()
         self._initImageLoad()
         self.initConnections()
-        self._initHearRate()
 
     def _initView(self):
         self.setWindowTitle(" ")
@@ -68,6 +60,7 @@ class Scene32(QWidget):
         self.view.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.view.setRenderHint(QtGui.QPainter.Antialiasing)
         self.view.setGeometry(0, 0, 1920, 1080)
+
 
     def _initScene(self):
         self.cloud1_hm_l1 = QtWidgets.QLabel(parent=self)
@@ -113,7 +106,7 @@ class Scene32(QWidget):
         self.backBtn.clicked.connect(self.backTest3)
         self.view.scene().addWidget(self.backBtn)
 
-        font1 = QtGui.QFont("微软雅黑", 11)
+        font1 = QtGui.QFont("Nokia Pure Text", 11)
         self.step1_label1 = QtWidgets.QLabel(parent=self)
         self.step1_label1.setText("a.算力需求用于处理心跳检测")
         self.step1_label1.setWordWrap(True)
@@ -122,7 +115,7 @@ class Scene32(QWidget):
         self.view.scene().addWidget(self.step1_label1)
         self.step1_label1.setVisible(False)
 
-        font2 = QtGui.QFont("微软雅黑", 14)
+        font2 = QtGui.QFont("Nokia Pure Text", 14)
         self.step1_label2 = QtWidgets.QLabel(parent=self)
         self.step1_label2.setText("寻址请求")
         self.step1_label2.setWordWrap(True)
@@ -138,8 +131,7 @@ class Scene32(QWidget):
 
     def _initHeapMap(self):
         self.cloud1_hm = HeatMap(parent=self, geo=[793, 365, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node1)
-        self.cloud2_hm = HeatMap(parent=self, geo=[1058, 520, 40, 80], interval=4000,
-                                 data_q=self.monitor_q_cpu_hm_node2)
+        self.cloud2_hm = HeatMap(parent=self, geo=[1058, 520, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node2)
         self.cloud3_hm = HeatMap(parent=self, geo=[986, 857, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node3)
         self.cloud1_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.cloud2_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
@@ -164,124 +156,136 @@ class Scene32(QWidget):
                                          img_scale_w=200,
                                          img_scale_h=1,
                                          direction="l2r",
-                                         interval=3, title='2.算网融合调度编排(算力寻址，计算最优算力资源路由组合)',
-                                         tag_geo=[35, 0, 303, 120])
+                                         interval=3, title='2.算网融合调度编排(算力寻址，计算最优算力资源路由组合)', tag_geo=[35, 0, 303, 120])
         self.service_step2.tag_label.setWordWrap(True)
-        self.service_step3 = ImageLoader(parent=self, geo=[908, 420, 650, 200],
-                                         image_url='./images_test3/computing_power_addressing_step3.png',
+        self.service_step31 = ImageLoader(parent=self, geo=[908, 420, 650, 200],
+                                         image_url='./images_test3/computing_power_addressing_step31.png',
                                          img_scale_w=650,
                                          img_scale_h=200,
                                          direction="r2l",
                                          interval=3, title='3.心跳检测处理实例化', tag_geo=[100, 0, 400, 20])
-        self.service_step4 = ImageLoader(parent=self, geo=[880, 550, 475, 170],
-                                         image_url='./images_test3/computing_power_addressing_step4.png',
+        self.service_step32 = ImageLoader(parent=self, geo=[1145, 530, 600, 80],
+                                          image_url='./images_test3/computing_power_addressing_step32.png',
+                                          img_scale_w=420,
+                                          img_scale_h=80,
+                                          direction="r2l",
+                                          interval=3, title='3.心跳检测处理实例化', tag_geo=[230, 30, 400, 20])
+        self.service_step33 = ImageLoader(parent=self, geo=[1080, 630, 480, 280],
+                                          image_url='./images_test3/computing_power_addressing_step33.png',
+                                          img_scale_w=480,
+                                          img_scale_h=280,
+                                          direction="r2l",
+                                          interval=3, title='3.心跳检测处理实例化', tag_geo=[100, 230, 400, 20])
+        self.service_step41 = ImageLoader(parent=self, geo=[880, 550, 475, 170],
+                                         image_url='./images_test3/computing_power_addressing_step41.png',
                                          img_scale_w=475,
                                          img_scale_h=75,
                                          direction="r2l",
-                                         interval=3, title='4.网络路径控制', tag_geo=[280, 20, 200, 30])
-        self.service_step5 = ImageLoader(parent=self, geo=[320, 460, 550, 120],
-                                         image_url='./images_test3/computing_power_addressing_step5.png',
+                                         interval=3, title='4.网络路径控制', tag_geo=[260, 60, 200, 30])
+        self.service_step42 = ImageLoader(parent=self, geo=[1040, 615, 350, 180],
+                                         image_url='./images_test3/computing_power_addressing_step42.png',
+                                         img_scale_w=350,
+                                         img_scale_h=180,
+                                         direction="r2l",
+                                         interval=3, title='4.网络路径控制', tag_geo=[160, 120, 200, 30])
+        self.service_step43 = ImageLoader(parent=self, geo=[1040, 615, 350, 180],
+                                         image_url='./images_test3/computing_power_addressing_step43.png',
+                                         img_scale_w=350,
+                                         img_scale_h=180,
+                                         direction="r2l",
+                                         interval=3, title='4.网络路径控制', tag_geo=[130, 120, 200, 30])
+        self.service_step51 = ImageLoader(parent=self, geo=[320, 460, 550, 120],
+                                         image_url='./images_test3/computing_power_addressing_step51.png',
                                          img_scale_w=550,
                                          img_scale_h=120,
                                          direction="r2l",
                                          interval=3, title='5.业务数据流', tag_geo=[20, 80, 200, 30])
-        self.service_step5.tag_label.setStyleSheet("color: rgb(224,61,205);")
+        self.service_step52 = ImageLoader(parent=self, geo=[340, 490, 800, 290],
+                                          image_url='./images_test3/computing_power_addressing_step52.png',
+                                          img_scale_w=800,
+                                          img_scale_h=290,
+                                          direction="r2l",
+                                          interval=3, title='5.业务数据流', tag_geo=[20, 35, 200, 30])
+        self.service_step53 = ImageLoader(parent=self, geo=[340, 490, 750, 400],
+                                          image_url='./images_test3/computing_power_addressing_step53.png',
+                                          img_scale_w=750,
+                                          img_scale_h=400,
+                                          direction="r2l",
+                                          interval=3, title='5.业务数据流', tag_geo=[20, 35, 200, 30])
+        self.service_step51.tag_label.setStyleSheet("color: rgb(224,61,205);")
+        self.service_step52.tag_label.setStyleSheet("color: rgb(224,61,205);")
+        self.service_step53.tag_label.setStyleSheet("color: rgb(224,61,205);")
 
     def initConnections(self):
-        self.cfn_manager.signal_emitter.QtSignals.container_pulsate_update.connect(self.update_pulserate)
-        self.cfn_manager.signal_emitter.QtSignals.container_person_state.connect(self.show_person_position)
-        self.cfn_manager.signal_emitter.QtSignals.computingAddr_test.connect(self.computingAddressWorkFlow)
         self.service_step1.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step2.QtSignals.anim_over.connect(self.service_provision_anim)
-        self.service_step3.QtSignals.anim_over.connect(self.service_provision_anim)
-        self.service_step4.QtSignals.anim_over.connect(self.service_provision_anim)
-        self.service_step5.QtSignals.anim_over.connect(self.service_provision_anim)
-
-    def _initHearRate(self):
-        self.heartrate = QtWidgets.QLabel(parent=self)
-        self.heartrate.setText("---")
-        font = QtGui.QFont("Nokia Pure Text", 28)
-        self.heartrate.setFont(font)
-        # self.heartrate.setFrameStyle(22)  # show border
-        self.heartrate.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignCenter)  # Qt.AlignRight
-
-        palette = self.palette()
-        palette.setColor(self.foregroundRole(), self.nokia_blue)
-        self.heartrate.setPalette(palette)
-        self.heartrate.setGeometry(1600, 225, 180, 100)
-
-        self.heartrateTag = QtWidgets.QLabel(parent=self)
-        self.heartrateTag.setPixmap(QtGui.QPixmap('./images/heartrate_tag.png'))
-        self.heartrateTag.setFont(font)
-        self.heartrateTag.setPalette(palette)
-        self.heartrateTag.setGeometry(1615, 225, 180, 100)
-        self.heartrate.raise_()
-        self.heartrate.setVisible(True)
-        self.heartrateTag.setVisible(True)
-
-    @pyqtSlot(int, str)
-    def computingAddressWorkFlow(self):
-        self.service_step1.start("sp1")
+        self.service_step31.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.service_step32.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.service_step33.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.service_step41.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.service_step42.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.service_step43.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.service_step51.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.service_step52.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.service_step53.QtSignals.anim_over.connect(self.service_provision_anim)
 
     @pyqtSlot(str)
     def service_provision_anim(self, destination: str):
+        self.path = 1
+        self.queueFlag = 1
         if destination == "sp1":
             self.step1_label1.setVisible(True)
             self.step1_label2.setVisible(True)
             self.service_step2.label.setVisible(True)
             self.service_step2.start("sp2")
         elif destination == "sp2":
-            self.service_step3.label.setVisible(True)
-            self.service_step3.start("sp3")
+            temps = [0,0,0]
+            if not self.monitor_q_cpu_hm_node1.empty():
+                temp1 = self.monitor_q_cpu_hm_node1.get()[-1]
+            else:
+                self.queueFlag = 0
+            if not self.monitor_q_cpu_hm_node2.empty():
+                temp2 = self.monitor_q_cpu_hm_node1.get()[-1]
+            else:
+                self.queueFlag = 0
+            if not self.monitor_q_cpu_hm_node3.empty():
+                temp3 = self.monitor_q_cpu_hm_node1.get()[-1]
+            else:
+                self.queueFlag = 0
+
+            if self.queueFlag:
+                temps = [temp1,temp2,temp3]
+                self.path = temps.index(min(temps)) + 1
+
+            if self.path == 1:
+                self.service_step31.label.setVisible(True)
+                self.service_step31.start("sp3")
+            elif self.path == 2:
+                self.service_step32.label.setVisible(True)
+                self.service_step32.start("sp3")
+            elif self.path == 3:
+                self.service_step33.label.setVisible(True)
+                self.service_step33.start("sp3")
         elif destination == "sp3":
-            self.service_step4.label.setVisible(True)
-            self.service_step4.start("sp4")
+            if self.path == 1:
+                self.service_step41.label.setVisible(True)
+                self.service_step41.start("sp4")
+            elif self.path == 2:
+                self.service_step42.label.setVisible(True)
+                self.service_step42.start("sp4")
+            elif self.path == 3:
+                self.service_step43.label.setVisible(True)
+                self.service_step43.start("sp4")
         elif destination == "sp4":
-            self.service_step5.label.setVisible(True)
-            self.service_step5.start("")
-        else:
-            pass
-
-    @pyqtSlot(int, float)
-    def update_pulserate(self, containerId: int, pulserate: float):
-        if pulserate == -1:
-            pass
-        else:
-            self.heartrate.setText('%.0f' % pulserate)
-        print(f'container={containerId}, '
-              f'person_position={self.person_position}, pulserate={pulserate}, cnt={self._heartrate_update_cnt}')
-
-    @pyqtSlot(int, str)
-    def show_person_position(self, containerId: int, presence: str):
-        """ When person comes in or go out of a camera's view, it triggers a
-            signal with corresponding container id and 'come' or 'gone' flag.
-            This function therefore triggers animation of the person's picture.
-        """
-        print(f'person state change in camera {containerId}: {presence}')
-        print(f'self.work_mode:  {self.work_mode}')
-        print(f'self.person_position:  {self.person_position}')
-        if self.person_position != -1:
-            self._previous_position = self.person_position  # update previous position record
-        if containerId == 0:
-            if presence == 'come':
-                self.person_position = 0
-                print(f'@@@@@   person state change in camera {containerId}: {presence}')
-            else:  # should be 'gone'
-                self.person_position = -1
-                self.heartrate.setText("---")
-        elif containerId == 1:
-            if presence == 'come':
-                self.person_position = 0
-                print(f'@@@@@   person state change in camera {containerId}: {presence}')
-            else:  # should be 'gone'
-                self.person_position = -1
-                self.heartrate.setText("---")
-        elif containerId == 2:  # cloud
-            if presence == 'come':
-                self.person_position = 0
-                print(f'@@@@@   person state change in camera {containerId}: {presence}')
-            else:  # should be 'gone'
-                self.person_position = -1
+            if self.path == 1:
+                self.service_step51.label.setVisible(True)
+                self.service_step51.start("")
+            elif self.path == 2:
+                self.service_step52.label.setVisible(True)
+                self.service_step52.start("")
+            elif self.path == 3:
+                self.service_step53.label.setVisible(True)
+                self.service_step53.start("")
         else:
             pass
 
@@ -292,14 +296,29 @@ class Scene32(QWidget):
     def reset(self):
         self.service_step1.tag_label.setVisible(False)
         self.service_step2.tag_label.setVisible(False)
-        self.service_step3.tag_label.setVisible(False)
-        self.service_step4.tag_label.setVisible(False)
-        self.service_step5.tag_label.setVisible(False)
+        self.service_step31.tag_label.setVisible(False)
+        self.service_step32.tag_label.setVisible(False)
+        self.service_step33.tag_label.setVisible(False)
+        self.service_step41.tag_label.setVisible(False)
+        self.service_step42.tag_label.setVisible(False)
+        self.service_step43.tag_label.setVisible(False)
+        self.service_step51.tag_label.setVisible(False)
+        self.service_step52.tag_label.setVisible(False)
+        self.service_step53.tag_label.setVisible(False)
 
         self.service_step2.label.setVisible(False)
-        self.service_step3.label.setVisible(False)
-        self.service_step4.label.setVisible(False)
-        self.service_step5.label.setVisible(False)
+        self.service_step31.label.setVisible(False)
+        self.service_step32.label.setVisible(False)
+        self.service_step33.label.setVisible(False)
+        self.service_step41.label.setVisible(False)
+        self.service_step42.label.setVisible(False)
+        self.service_step43.label.setVisible(False)
+        self.service_step51.label.setVisible(False)
+        self.service_step52.label.setVisible(False)
+        self.service_step53.label.setVisible(False)
+
 
         self.step1_label1.setVisible(False)
         self.step1_label2.setVisible(False)
+
+
