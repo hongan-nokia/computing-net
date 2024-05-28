@@ -303,38 +303,23 @@ def cfn_bk_service(task_name, pig_args: str, cmd_q: SimpleQueue,
             return
 
 
-def vlc_streamer(addr: str, port: int, file_path: str, start_pos: float):
-    ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "},dst=display}"
-    params = [ad, "sout-all", "sout-keep", "repeat"]
-    inst = vlc.Instance()
-    media = inst.media_new(f'{file_path}', *params)
-    media_player = media.player_new_from_media()
-    media_player.play()
-    media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
-    sleep(2)
-    while not media_player.is_playing():
-        media_player.play()
-        media_player.set_position(float(start_pos))
-        sleep(1)
-
-
-# 二次开发python-vlc包实现音视频的网络串流
-def vlc_sender(addr: str, port: int, file_path: str, start_pos: float, cmd_q: SimpleQueue,
-               cancel_task_id: Value, terminate_event: Event) -> float:
+def vlc_surveillance(task_name: str, task_args: str, addr: str, port: int, file_path: str, cmd_q: SimpleQueue,
+                  cancel_task_id: Value, terminate_event: Event) -> float:
+    # print("*****************vlc_streaming*****************")
     pid = os.getpid()
-    cmd_q.put(("_PID", ('vlc', pid)))
+    print("------Process PID======= " + str(pid))
+    print(f"(PID-{pid}) Starting a new vlc streaming task!")
+    cmd_q.put(("_PID", (f'{task_name}', pid)))
+
     ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "},dst=display}"
-    params = [ad, "sout-all", "sout-keep", "repeat"]
+    params = [ad, "sout-all", "sout-keep",]
     inst = vlc.Instance()
-    media = inst.media_new(f'{file_path}', *params)
+    media = inst.media_new("dshow://:dshow-vdev='Integrated Camera'", *params)
     media_player = media.player_new_from_media()
-    print("------vlc_s start_pos:" + str(start_pos))
     media_player.play()
-    media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
     sleep(2)
     while not media_player.is_playing():
         media_player.play()
-        media_player.set_position(float(start_pos))
         sleep(1)
 
     while not terminate_event.is_set():
@@ -345,8 +330,6 @@ def vlc_sender(addr: str, port: int, file_path: str, start_pos: float, cmd_q: Si
                 pos_stream = media_player.get_position()  # 获取当前播放位置
                 media_player.stop()
                 sleep(0.1)
-                cmd_q.put(('vlc', str(pos_stream)))
-                cmd_q.put(('vlc_state', str(pos_stream)))
                 print("------当前播放位置::Pos_streaming:" + str(pos_stream))
                 break
             elif media_player.is_playing() == 0:
@@ -356,7 +339,7 @@ def vlc_sender(addr: str, port: int, file_path: str, start_pos: float, cmd_q: Si
             else:
                 continue
         except Exception as err:  # 运行中出现连接断开之类错误
-            s = f"Error encountered with vlc_sender: {err}. Aborting task."
+            s = f"Error encountered with vlc: {err}. Aborting task."
             print(f'(PID-{pid})' + s)
             cmd_q.put(('_abort', pid, s))
             return
@@ -553,3 +536,64 @@ def shutdown_multiprocessing_manager_server(addr: Tuple, key: str):
     conn = Client(address=addr, authkey=key)
     dispatch(conn, None, 'shutdown')  # from util import dispatch
     conn.close()
+
+
+"""
+def vlc_streamer(addr: str, port: int, file_path: str, start_pos: float):
+    ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "},dst=display}"
+    params = [ad, "sout-all", "sout-keep", "repeat"]
+    inst = vlc.Instance()
+    media = inst.media_new(f'{file_path}', *params)
+    media_player = media.player_new_from_media()
+    media_player.play()
+    media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
+    sleep(2)
+    while not media_player.is_playing():
+        media_player.play()
+        media_player.set_position(float(start_pos))
+        sleep(1)
+
+
+# 二次开发python-vlc包实现音视频的网络串流
+def vlc_sender(addr: str, port: int, file_path: str, start_pos: float, cmd_q: SimpleQueue,
+               cancel_task_id: Value, terminate_event: Event) -> float:
+    pid = os.getpid()
+    cmd_q.put(("_PID", ('vlc', pid)))
+    ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "},dst=display}"
+    params = [ad, "sout-all", "sout-keep", "repeat"]
+    inst = vlc.Instance()
+    media = inst.media_new(f'{file_path}', *params)
+    media_player = media.player_new_from_media()
+    print("------vlc_s start_pos:" + str(start_pos))
+    media_player.play()
+    media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
+    sleep(2)
+    while not media_player.is_playing():
+        media_player.play()
+        media_player.set_position(float(start_pos))
+        sleep(1)
+
+    while not terminate_event.is_set():
+        try:
+            if cancel_task_id.value == pid:
+                print(f"(PID-{pid}) Received task_cancel signal!")
+                cancel_task_id.value = 0
+                pos_stream = media_player.get_position()  # 获取当前播放位置
+                media_player.stop()
+                sleep(0.1)
+                cmd_q.put(('vlc', str(pos_stream)))
+                cmd_q.put(('vlc_state', str(pos_stream)))
+                print("------当前播放位置::Pos_streaming:" + str(pos_stream))
+                break
+            elif media_player.is_playing() == 0:
+                print("media_player.is_no_playing")
+                sleep(0.2)
+                break
+            else:
+                continue
+        except Exception as err:  # 运行中出现连接断开之类错误
+            s = f"Error encountered with vlc_sender: {err}. Aborting task."
+            print(f'(PID-{pid})' + s)
+            cmd_q.put(('_abort', pid, s))
+            return
+"""
