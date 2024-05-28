@@ -27,6 +27,7 @@ from utils.repeatimer import repeatTimer
 class ComputingPowerAwareAddressRouteWindow(QWidget):
     def __init__(self, parent, demo_manager: CfnDemoManager):
         super().__init__()
+        self.path = 1
         geo = {
             'top': 0,
             'left': 0,
@@ -163,7 +164,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
                                         img_scale_w=443,
                                         img_scale_h=75,
                                         direction="l2r",
-                                        interval=3, title='2.寻址请求', tag_geo=[170, 32, 100, 20])
+                                        interval=3, title='2.寻址请求', tag_geo=[170, 32, 150, 20])
         self.net_brain_ctrl = ImageLoader(parent=self, geo=[1360, 440, 443, 100],
                                           image_url='./images_test3/server_addressing_step3.png',
                                           img_scale_w=200,
@@ -171,13 +172,13 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
                                           direction="l2r",
                                           interval=3, title='3.算网融合调度编排', tag_geo=[90, 0, 200, 20])
         self.net_route_ctrl = ImageLoader(parent=self, geo=[880, 550, 476, 170],
-                                          image_url='./images_test3/server_addressing_step4.png',
+                                          image_url='./images_test3/server_addressing_step41.png',
                                           img_scale_w=475,
                                           img_scale_h=75,
                                           direction="r2l",
                                           interval=3, title='4.网络路径控制', tag_geo=[280, 20, 200, 30])
         self.video_stream = ImageLoader(parent=self, geo=[320, 460, 550, 120],
-                                        image_url='./images_test3/server_addressing_step5.png',
+                                        image_url='./images_test3/server_addressing_step51.png',
                                         img_scale_w=550,
                                         img_scale_h=120,
                                         direction="r2l",
@@ -188,26 +189,40 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
                                           img_scale_h=3,
                                           direction="l2r",
                                           interval=3, title='6. 启动一计算密集型应用', tag_geo=[90, 0, 200, 20])
-        self.reScheduling = ImageLoader(parent=self, geo=[1433, 342, 150, 100],
+        self.reScheduling = ImageLoader(parent=self, geo=[1433, 342, 290, 100],
                                         image_url='./images_test3/server_addressing_step3.png',
                                         img_scale_w=200,
                                         img_scale_h=3,
                                         direction="l2r",
-                                        interval=3, title='7. 感知算力变化，重新寻址调度编排', tag_geo=[90, 0, 200, 20])
-        self.selNewService = ImageLoader(parent=self, geo=[1139, 617, 443, 300],
-                                         image_url='./images/choose_new_svc.png',
-                                         img_scale_w=410,
-                                         img_scale_h=260,
-                                         direction="r2l",
-                                         interval=3, title='8. 选择新服务实例，完成网络路径控制',
-                                         tag_geo=[90, 0, 200, 20])
-        self.finalServiceProvide = ImageLoader(parent=self, geo=[327, 501, 755, 394],
-                                               image_url='./images/finalServiceProvide.png',
-                                               img_scale_w=755,
-                                               img_scale_h=394,
-                                               direction="r2l",
-                                               interval=3, title='',
-                                               tag_geo=[90, 0, 200, 20])
+                                        interval=3, title='7. 感知算力变化，重新寻址调度编排', tag_geo=[90, 0, 180, 50])
+        self.selNewService1 = ImageLoader(parent=self, geo=[1211, 541, 500, 300],
+                                          image_url='./images_test3/scene1_step81.png',
+                                          img_scale_w=350,
+                                          img_scale_h=75,
+                                          direction="r2l",
+                                          interval=3, title='8. 选择新服务实例，完成网络路径控制',
+                                          tag_geo=[300, 100, 200, 50])
+        self.selNewService2 = ImageLoader(parent=self, geo=[1139, 617, 443, 300],
+                                          image_url='./images/choose_new_svc.png',
+                                          img_scale_w=410,
+                                          img_scale_h=260,
+                                          direction="r2l",
+                                          interval=3, title='8. 选择新服务实例，完成网络路径控制',
+                                          tag_geo=[90, 200, 200, 50])
+        self.finalServiceProvide1 = ImageLoader(parent=self, geo=[327, 510, 810, 280],
+                                                image_url='./images_test3/scene1_step91.png',
+                                                img_scale_w=810,
+                                                img_scale_h=280,
+                                                direction="r2l",
+                                                interval=3, title='',
+                                                tag_geo=[90, 0, 200, 20])
+        self.finalServiceProvide2 = ImageLoader(parent=self, geo=[327, 501, 755, 394],
+                                                image_url='./images_test3/scene1_step92.png',
+                                                img_scale_w=755,
+                                                img_scale_h=394,
+                                                direction="r2l",
+                                                interval=3, title='',
+                                                tag_geo=[90, 0, 200, 20])
 
     def initConnections(self):
         # self.cfn_manager.signal_emitter.QtSignals.container_pulsate_update.connect(self.update_pulserate)
@@ -221,8 +236,10 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.video_stream.QtSignals.anim_over.connect(self.service_provision_anim)
         self.startAITrainer.QtSignals.anim_over.connect(self.service_provision_anim)
         self.reScheduling.QtSignals.anim_over.connect(self.service_provision_anim)
-        self.selNewService.QtSignals.anim_over.connect(self.service_provision_anim)
-        self.finalServiceProvide.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.selNewService1.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.selNewService2.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.finalServiceProvide1.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.finalServiceProvide2.QtSignals.anim_over.connect(self.service_provision_anim)
 
 
     def _initHearRate(self):
@@ -252,6 +269,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
     @pyqtSlot(str)
     def service_provision_anim(self, destination: str):
         print(f"destination is: {destination}")
+        self.queueFlag = 1
         if destination == "sc1_sp1":
             self.user_first_pkg.setVisible(True)
             self.addr_request.setVisible(True)
@@ -272,11 +290,37 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
             self.reScheduling.start("sc1_sp7")
         elif destination == "sc1_sp7":
             print("sc1_sp8 sc1_sp8 sc1_sp8")
-            self.selNewService.label.setVisible(True)
-            self.selNewService.start("sc1_sp8")
+
+            temps = [0, 0]
+            if not self.monitor_q_cpu_hm_node2.empty():
+                temp2 = self.monitor_q_cpu_hm_node1.get()[-1]
+            else:
+                self.queueFlag = 0
+            if not self.monitor_q_cpu_hm_node3.empty():
+                temp3 = self.monitor_q_cpu_hm_node1.get()[-1]
+            else:
+                self.queueFlag = 0
+
+            if self.queueFlag:
+                temps = [temp2, temp3]
+                self.path = temps.index(min(temps)) + 1
+            self.path = 2
+
+            if self.path == 1:
+                self.selNewService1.label.setVisible(True)
+                self.selNewService1.start("sc1_sp8")
+            elif self.path == 2:
+                self.selNewService2.label.setVisible(True)
+                self.selNewService2.start("sc1_sp8")
+
         elif destination == "sc1_sp8":
-            self.finalServiceProvide.label.setVisible(True)
-            self.finalServiceProvide.start("sc1_sp9")
+            if self.path == 1:
+                self.finalServiceProvide1.label.setVisible(True)
+                self.finalServiceProvide1.start("sc1_sp9")
+            elif self.path == 2:
+                self.finalServiceProvide2.label.setVisible(True)
+                self.finalServiceProvide2.start("sc1_sp9")
+
         elif destination == "sc1_sp9":
             self.cfn_manager.send_command("c_node1", "stop_task", "vlc worldCup.mp4_0")
         else:
@@ -376,8 +420,10 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.video_stream.tag_label.setVisible(False)
         self.startAITrainer.tag_label.setVisible(False)
         self.reScheduling.tag_label.setVisible(False)
-        self.selNewService.tag_label.setVisible(False)
-        self.finalServiceProvide.tag_label.setVisible(False)
+        self.selNewService1.tag_label.setVisible(False)
+        self.selNewService2.tag_label.setVisible(False)
+        self.finalServiceProvide1.tag_label.setVisible(False)
+        self.finalServiceProvide2.tag_label.setVisible(False)
 
         self.user_first_pkg.label.setVisible(False)
         self.addr_request.label.setVisible(False)
@@ -386,10 +432,12 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.video_stream.label.setVisible(False)
         self.startAITrainer.label.setVisible(False)
         self.reScheduling.label.setVisible(False)
-        self.selNewService.label.setVisible(False)
-        self.finalServiceProvide.label.setVisible(False)
+        self.selNewService1.label.setVisible(False)
+        self.selNewService2.label.setVisible(False)
+        self.finalServiceProvide1.label.setVisible(False)
+        self.finalServiceProvide2.label.setVisible(False)
 
         self.cfn_manager.send_command("c-node1", "stop_task", "AI_trainer1 up")
         self.cfn_manager.send_command("c_node1", "stop_task", "vlc worldCup.mp4_0")
+        self.cfn_manager.send_command("c_node1", "stop_task", "sendFirstPkg up")
         self.cfn_manager.send_command('c_node3', 'stop_task', 'vlc worldCup.mp4')
-

@@ -348,7 +348,7 @@ class Scene32(QWidget):
             if self.queueFlag:
                 temps = [temp1, temp2, temp3]
                 self.path = temps.index(min(temps)) + 1
-
+            # self.path = 3
             if self.path == 1:
                 self.service_step31.label.setVisible(True)
                 self.service_step31.start("sp3")
@@ -409,6 +409,7 @@ class Scene32(QWidget):
         self.service_step52.tag_label.setVisible(False)
         self.service_step53.tag_label.setVisible(False)
 
+        self.service_step1.label.setVisible(False)
         self.service_step2.label.setVisible(False)
         self.service_step31.label.setVisible(False)
         self.service_step32.label.setVisible(False)

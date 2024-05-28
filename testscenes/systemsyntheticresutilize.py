@@ -500,5 +500,16 @@ class SystemSyntheticResUtilize(QWidget):
         self.pixmap_xintiao.setVisible(False)
         self.pixmap_zhuanhuan.setVisible(False)
 
+        self.topBtn1.setStyleSheet(self.topBtnStyleSheet)
+        self.topBtn2.setStyleSheet(self.topBtnStyleSheet)
+        self.topBtn3.setStyleSheet(self.topBtnStyleSheet)
+        self.topBtn4.setStyleSheet(self.topBtnStyleSheet)
+        self.topBtn5.setStyleSheet(self.topBtnStyleSheet)
+        self.topBtn6.setStyleSheet(self.topBtnStyleSheet)
+
+        self.leftBtn1.setStyleSheet(self.leftBtnStyleSheet)
+        self.leftBtn2.setStyleSheet(self.leftBtnStyleSheet)
+
         self.unsetTraditionalMEC()
         self.unsetComputingNetConverge()
+

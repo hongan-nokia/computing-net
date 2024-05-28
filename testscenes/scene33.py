@@ -154,7 +154,7 @@ class Scene33(QWidget):
                                          img_scale_w=1040,
                                          img_scale_h=130,
                                          direction="l2r",
-                                         interval=3, title='1.寻址请求', tag_geo=[130, 30, 100, 20])
+                                         interval=3, title='1.寻址请求', tag_geo=[130, 30, 150, 20])
         self.service_step2 = ImageLoader(parent=self, geo=[1360, 390, 443, 150],
                                          image_url='./images_test3/content_power_addressing_step2.png',
                                          img_scale_w=200,
@@ -210,6 +210,7 @@ class Scene33(QWidget):
         self.service_step3.tag_label.setVisible(False)
         self.service_step4.tag_label.setVisible(False)
 
+        self.service_step1.label.setVisible(False)
         self.service_step2.label.setVisible(False)
         self.service_step3.label.setVisible(False)
         self.service_step4.label.setVisible(False)
