@@ -305,7 +305,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
             if self.queueFlag:
                 temps = [temp2, temp3]
                 self.path = temps.index(min(temps)) + 1
-            self.path = 2
+            # self.path = 1
 
             if self.path == 1:
                 self.selNewService1.label.setVisible(True)
