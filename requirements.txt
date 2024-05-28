@@ -12,3 +12,5 @@ typing
 opencv-python
 pywinmouse
 uvicorn
+pycameralist
+yaml
