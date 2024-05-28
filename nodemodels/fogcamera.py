@@ -61,7 +61,8 @@ person_valid = RemoteManagerValue(v=-1)  # local 'show' process set this flag to
 
 # whether the specific person (a "registered face") is detected.
 
-class CamManager(BaseManager): pass
+class CamManager(BaseManager):
+    pass
 
 
 CamManager.register('get_data_deq', callable=lambda: data_deq)
@@ -164,7 +165,7 @@ def show_video(frame_q, heart_rate_q, facevalidflag, person_valid, detector_meta
             # heart_rate_copy.put(beats_per_min)
 
         frame = add_faceframe(frame, facevalid=bool(facevalidflag.value))
-        text_color = (0, 255, 0) if (beats_per_min > 65 and beats_per_min < 85) else (180, 0, 255)
+        text_color = (0, 255, 0) if (65 < beats_per_min < 85) else (180, 0, 255)
         if facevalidflag.value == 1:
             cv.putText(frame, heartrate, (50, 50), cv.FONT_HERSHEY_SIMPLEX, 0.75, text_color, 2)
         else:  # hide heartrate text when face is not detected
@@ -190,8 +191,7 @@ def create_sim_video_src(source=VIDEO_SIM, dutycycle=0.3, fps=FPS):
 
 
 class FogCam(BaseNodeModel):
-    def __init__(self, demo_config, node_config, msg_process_fn=process_GUI_msg,
-                 video_src: Union[int, str] = 0, sim=False) -> None:
+    def __init__(self, demo_config, node_config, msg_process_fn=process_GUI_msg, video_src: Union[int, str] = 0, sim=False) -> None:
         self.video_src = video_src
         self.fps = 0
         self.sim = sim  # simulation mode: fills fake camera data into queue.
@@ -239,7 +239,7 @@ class FogCam(BaseNodeModel):
             img = img[:, ::-1, :]
             if not show_q.full():
                 show_q.put(img)
-            if (face_valid.value == 1):
+            if face_valid.value == 1:
                 n_frame_valid += 1
                 data_deq.append(img[cut_y0:cut_y1, cut_x0:cut_x1, ...].tobytes())
             else:

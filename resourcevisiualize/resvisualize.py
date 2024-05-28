@@ -2086,7 +2086,6 @@ class data_visualize(QWidget):
             rb, wb = SRI['disk'][0], SRI['disk'][1]
             try:
                 self.CPU_HistoryList[i].put(cu)
-                print("History CPU Info Stored")
                 self.CPU_Nums[i].setText((str(cu) + "%"))
                 self.CPU_SpeedMeters[i].setSpeed(cu)
                 self.CPU_Bars[i].setProperty("value", cu)
@@ -2167,7 +2166,7 @@ class data_visualize(QWidget):
         while not (len(syntheticResInfo) == 4):
             syntheticResInfo = self.requestResourceInfo()
             sleep(2)
-        print(syntheticResInfo)
+        # print(syntheticResInfo)
         self.updateNode1Info(syntheticResInfo[0])
         self.updateNode2Info(syntheticResInfo[1])
         self.updateNode3Info(syntheticResInfo[2])

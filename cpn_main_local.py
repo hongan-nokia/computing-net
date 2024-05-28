@@ -70,7 +70,6 @@ class CpnAppWindow(QtWidgets.QMainWindow):
 
     def _initDataVisualize(self):
         self.data_visual = data_visualize(parent=self, demo_manager=self.cfn_manager, res_queue_dict=None)
-
         self.data_visual.setVisible(False)
         self.computingNetResMonTimer = QtCore.QTimer(self)
         self.computingNetResMonTimer.setInterval(3000)
@@ -259,9 +258,12 @@ class CpnAppWindow(QtWidgets.QMainWindow):
             self.scene3.scene32.service_step1.start("sp1")
         elif k == QtCore.Qt.Key_E:
             self.scene3.scene33.reset()
-
             self.scene3.scene33.service_step1.label.setVisible(True)
             self.scene3.scene33.service_step1.start("sp1")
+        elif k == QtCore.Qt.Key_N:
+            self.cfn_manager.send_command("c_node1", "task", "cam_health camera_1")
+        elif k == QtCore.Qt.Key_M:
+            self.cfn_manager.send_command("c_node1", "stop_task", "cam_health camera_1")
         else:
             pass
 
