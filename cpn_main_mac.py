@@ -47,16 +47,6 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self._initScenarioButtons()
 
     def _initResMonitorQueue(self):
-        """
-        self.scene1_heatMap_QueueL = [Queue(15) for i in range(3)]  # 这里一共有3个c_node节点
-        self.scene2_heatMap_QueueL = [Queue(15) for i in range(3)]
-        self.scene3_heatMap_QueueL = [Queue(15) for i in range(3)]
-        self.c_nodes_cpu_queues = [
-            self.cfn_manager.resource_StatMon['c_node1_cpu'],
-            self.cfn_manager.resource_StatMon['c_node2_cpu'],
-            self.cfn_manager.resource_StatMon['c_node3_cpu'],
-        ]
-        """
         self.c_node1_cpu_queue = self.cfn_manager.resource_StatMon['c_node1_cpu']
         self.c_node2_cpu_queue = self.cfn_manager.resource_StatMon['c_node2_cpu']
         self.c_node2_cpu_queue = self.cfn_manager.resource_StatMon['c_node2_cpu']
@@ -73,16 +63,18 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.CPAARWidget.setVisible(False)
         self.SSRUWidget = SystemSyntheticResUtilize(self, cfn_manager)
         self.SSRUWidget.setVisible(False)
+        self.scene3 = Scene3(self, cfn_manager)
+        self.scene3.setVisible(False)
 
     def _initDataVisualize(self):
         self.data_visual = data_visualize(parent=self, demo_manager=self.cfn_manager, res_queue_dict=None)
         self.data_visual.setVisible(False)
-        # self.computingNetResMonTimer = QtCore.QTimer(self)
-        # self.computingNetResMonTimer.setInterval(3000)
-        # self.computingNetResMonTimer.timeout.connect(self.data_visual.updateNodesInfo)
-        # self.computingNetResMonTimer.start()
-        self.data_mon = repeatTimer(3, self.data_visual.updateNodesInfo, autostart=True)
-        self.data_mon.start()
+        self.computingNetResMonTimer = QtCore.QTimer(self)
+        self.computingNetResMonTimer.setInterval(3000)
+        self.computingNetResMonTimer.timeout.connect(self.data_visual.updateNodesInfo)
+        self.computingNetResMonTimer.start()
+        # self.data_mon = repeatTimer(3, self.data_visual.updateNodesInfo, autostart=True)
+        # self.data_mon.start()
 
         print("_initDataVisualize Done ")
 
@@ -191,11 +183,21 @@ class CpnAppWindow(QtWidgets.QMainWindow):
     def _showMainPage(self):
         self.CPAARWidget.setVisible(False)
         self.SSRUWidget.setVisible(False)
+        self.scene3.setVisible(False)
+        self.scene3.scene31.setVisible(False)
+        self.scene3.scene32.setVisible(False)
+        self.scene3.scene33.setVisible(False)
         print("Show Main Page")
 
     def _showTestScene1(self):
         self.SSRUWidget.setVisible(False)
+        self.CPAARWidget.reset()
+        self.CPAARWidget.user_first_pkg.label.setVisible(True)
         self.CPAARWidget.setVisible(True)
+        self.scene3.setVisible(False)
+        self.scene3.scene31.setVisible(False)
+        self.scene3.scene32.setVisible(False)
+        self.scene3.scene33.setVisible(False)
         print("This is TestScene1")
 
     def _showTestScene2(self):
@@ -204,19 +206,67 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.SSRUWidget.reset()
 
         self.SSRUWidget.setVisible(True)
+        self.scene3.setVisible(False)
+        self.scene3.scene31.setVisible(False)
+        self.scene3.scene32.setVisible(False)
+        self.scene3.scene33.setVisible(False)
         print("This is TestScene2")
 
     def _showTestScene3(self):
-        pass
+        self.SSRUWidget.setVisible(False)
+        self.CPAARWidget.setVisible(False)
+        self.scene3.setVisible(True)
+        self.scene3.scene31.setVisible(False)
+        self.scene3.scene32.setVisible(False)
+        self.scene3.scene33.setVisible(False)
+        self.scene3.reset()
+        print("This is TestScene3")
 
     def keyPressEvent(self, KEvent):
         k = KEvent.key()
         if k == QtCore.Qt.Key_R:
-            self.reset()
+            if self.isVisible():
+                self.reset()
+            elif self.CPAARWidget.isVisible():
+                self.CPAARWidget.reset()
+            elif self.scene3.scene31.isVisible():
+                self.scene3.scene31.reset()
+            elif self.scene3.scene32.isVisible():
+                self.scene3.scene32.reset()
+            elif self.scene3.scene33.isVisible():
+                self.scene3.scene33.reset()
+        elif k == QtCore.Qt.Key_2:
+            self.CPAARWidget.reset()
+            self.CPAARWidget.user_first_pkg.label.setVisible(True)
+            self.CPAARWidget.user_first_pkg.start("sc1_sp1")
+        elif k == QtCore.Qt.Key_1:
+            print("Pressed Key-1")
+            # self.CPAARWidget.reset()
+            self.CPAARWidget.deployAITrainerOnCNode1()
+        elif k == QtCore.Qt.Key_Q:
+            print("Pressed Key-Q")
+            self.scene3.scene31.reset()
+            self.scene3.scene31.service_step1.label.setVisible(True)
+            self.scene3.scene31.service_step1.start("sp1")
+        elif k == QtCore.Qt.Key_W:
+            self.scene3.scene32.reset()
+            self.scene3.scene32.service_step1.label.setVisible(True)
+            self.scene3.scene32.step1_label1.setVisible(True)
+            self.scene3.scene32.step1_label2.setVisible(True)
+            self.scene3.scene32.service_step1.start("sp1")
+        elif k == QtCore.Qt.Key_E:
+            self.scene3.scene33.reset()
+            self.scene3.scene33.service_step1.label.setVisible(True)
+            self.scene3.scene33.service_step1.start("sp1")
+        elif k == QtCore.Qt.Key_N:
+            self.cfn_manager.send_command("c_node1", "task", "cam_health camera_1")
+        elif k == QtCore.Qt.Key_M:
+            self.cfn_manager.send_command("c_node1", "stop_task", "cam_health camera_1")
         else:
             pass
 
     def reset(self):
+        self.cfn_manager.close()
         print("This is Reset")
 
 

@@ -130,11 +130,13 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
         # 暂时写-1进去，等下会pid数值，会由task进程写进task_cmd_q从而触发更新
         node_obj.tasks[f'{taskname} {args}'] = -1
         p.start()
-    # elif taskname == 'cfnres':
-    #     print(args)
-    #     p = Process(target=cfnResHandler, args=(task_cmd_q, task_cancel, node_obj.terminate_event))
-    #     node_obj.tasks[f'{taskname} {args}'] = -1
-    #     p.start()
+    elif taskname == 'surveillance':
+        file_path = './' + str(args).split('_', -1)[0]  # 所要播放的文件路径
+        start_pos = str(args).split('_', -1)[1]
+        addr, port = "192.168.2.128", "10089"
+        p = Process(target=vlc_streaming, args=(taskname, args, addr, port, file_path, start_pos, task_cmd_q, task_cancel, node_obj.terminate_event))
+        node_obj.tasks[f'{taskname}'] = -1
+        p.start()
     # elif taskname == 'onos':
     #     onos_tag = onos_handler(pid_args=args)
     #     print(f"onos_handler tag is: {onos_tag}")
