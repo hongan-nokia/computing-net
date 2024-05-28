@@ -27,6 +27,7 @@ from utils.repeatimer import repeatTimer
 class ComputingPowerAwareAddressRouteWindow(QWidget):
     def __init__(self, parent, demo_manager: CfnDemoManager):
         super().__init__()
+        # ComputingPowerAwareAddressRouteWindow
         self.path = 1
         geo = {
             'top': 0,
