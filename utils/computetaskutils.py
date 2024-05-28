@@ -310,6 +310,10 @@ def vlc_streamer(addr: str, port: int, file_path: str, start_pos: float):
     media_player.play()
     media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
     sleep(2)
+    while not media_player.is_playing():
+        media_player.play()
+        media_player.set_position(float(start_pos))
+        sleep(1)
 
 
 # 二次开发python-vlc包实现音视频的网络串流
@@ -326,6 +330,10 @@ def vlc_sender(addr: str, port: int, file_path: str, start_pos: float, cmd_q: Si
     media_player.play()
     media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
     sleep(2)
+    while not media_player.is_playing():
+        media_player.play()
+        media_player.set_position(float(start_pos))
+        sleep(1)
 
     while not terminate_event.is_set():
         try:
@@ -371,6 +379,10 @@ def vlc_streaming(task_name: str, task_args: str, addr: str, port: int, file_pat
         media_player.play()
         media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
         sleep(2)
+        while not media_player.is_playing():
+            media_player.play()
+            media_player.set_position(float(start_pos))
+            sleep(1)
     elif 'fake1' in file_path:
         ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "10045" + "},dst=display}"
         params = [ad, "sout-all", "sout-keep"]
@@ -381,6 +393,10 @@ def vlc_streaming(task_name: str, task_args: str, addr: str, port: int, file_pat
         media_player.play()
         media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
         sleep(2)
+        while not media_player.is_playing():
+            media_player.play()
+            media_player.set_position(float(start_pos))
+            sleep(1)
     elif 'fake2' in file_path:
         ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "10046" + "},dst=display}"
         params = [ad, "sout-all", "sout-keep"]
@@ -391,6 +407,10 @@ def vlc_streaming(task_name: str, task_args: str, addr: str, port: int, file_pat
         media_player.play()
         media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
         sleep(2)
+        while not media_player.is_playing():
+            media_player.play()
+            media_player.set_position(float(start_pos))
+            sleep(1)
     else:
         ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "},dst=display}"
         params = [ad, "sout-all", "sout-keep"]
@@ -401,10 +421,10 @@ def vlc_streaming(task_name: str, task_args: str, addr: str, port: int, file_pat
         media_player.play()
         media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
         sleep(2)
-    while not media_player.is_playing():
-        media_player.play()
-        media_player.set_position(float(start_pos))
-        sleep(1)
+        while not media_player.is_playing():
+            media_player.play()
+            media_player.set_position(float(start_pos))
+            sleep(1)
     while not terminate_event.is_set():
         try:
             if cancel_task_id.value == pid:
@@ -447,6 +467,10 @@ def vlcc_streaming(addr: str, port: int, file_path: str, start_pos: float, cmd_q
         media_player.play()
         media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
         sleep(2)
+        while not media_player.is_playing():
+            media_player.play()
+            media_player.set_position(float(start_pos))
+            sleep(1)
     elif 'fake1' in file_path:
         ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "10045" + "},dst=display}"
         params = [ad, "sout-all", "sout-keep"]
@@ -457,6 +481,10 @@ def vlcc_streaming(addr: str, port: int, file_path: str, start_pos: float, cmd_q
         media_player.play()
         media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
         sleep(2)
+        while not media_player.is_playing():
+            media_player.play()
+            media_player.set_position(float(start_pos))
+            sleep(1)
     elif 'fake2' in file_path:
         ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "10046" + "},dst=display}"
         params = [ad, "sout-all", "sout-keep"]
@@ -467,6 +495,10 @@ def vlcc_streaming(addr: str, port: int, file_path: str, start_pos: float, cmd_q
         media_player.play()
         media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
         sleep(2)
+        while not media_player.is_playing():
+            media_player.play()
+            media_player.set_position(float(start_pos))
+            sleep(1)
     else:
         ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "},dst=display}"
         params = [ad, "sout-all", "sout-keep"]
@@ -477,6 +509,10 @@ def vlcc_streaming(addr: str, port: int, file_path: str, start_pos: float, cmd_q
         media_player.play()
         media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
         sleep(2)
+        while not media_player.is_playing():
+            media_player.play()
+            media_player.set_position(float(start_pos))
+            sleep(1)
     while not terminate_event.is_set():
         try:
             if cancel_task_id.value == pid:
