@@ -303,7 +303,7 @@ def cfn_bk_service(task_name, pig_args: str, cmd_q: SimpleQueue,
 
 def vlc_streamer(addr: str, port: int, file_path: str, start_pos: float):
     ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "},dst=display}"
-    params = [ad, "sout-all", "sout-keep"]
+    params = [ad, "sout-all", "sout-keep", "repeat"]
     inst = vlc.Instance()
     media = inst.media_new(f'{file_path}', *params)
     media_player = media.player_new_from_media()
@@ -322,7 +322,7 @@ def vlc_sender(addr: str, port: int, file_path: str, start_pos: float, cmd_q: Si
     pid = os.getpid()
     cmd_q.put(("_PID", ('vlc', pid)))
     ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "},dst=display}"
-    params = [ad, "sout-all", "sout-keep"]
+    params = [ad, "sout-all", "sout-keep", "repeat"]
     inst = vlc.Instance()
     media = inst.media_new(f'{file_path}', *params)
     media_player = media.player_new_from_media()
@@ -370,7 +370,7 @@ def vlc_streaming(task_name: str, task_args: str, addr: str, port: int, file_pat
 
     if 'GAME' in file_path:
         ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "}}"
-        params = [ad, "sout-all", "sout-keep"]
+        params = [ad, "sout-all", "sout-keep", "repeat"]
         inst = vlc.Instance()
         file_path = file_path.lower()
         media = inst.media_new(f'{file_path}', *params)
@@ -385,7 +385,7 @@ def vlc_streaming(task_name: str, task_args: str, addr: str, port: int, file_pat
             sleep(1)
     elif 'fake1' in file_path:
         ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "10045" + "},dst=display}"
-        params = [ad, "sout-all", "sout-keep"]
+        params = [ad, "sout-all", "sout-keep", "repeat"]
         inst = vlc.Instance()
         media = inst.media_new('./worldCup.mp4', *params)
         media_player = media.player_new_from_media()
@@ -399,7 +399,7 @@ def vlc_streaming(task_name: str, task_args: str, addr: str, port: int, file_pat
             sleep(1)
     elif 'fake2' in file_path:
         ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "10046" + "},dst=display}"
-        params = [ad, "sout-all", "sout-keep"]
+        params = [ad, "sout-all", "sout-keep", "repeat"]
         inst = vlc.Instance()
         media = inst.media_new('./worldCup.mp4', *params)
         media_player = media.player_new_from_media()
@@ -413,7 +413,7 @@ def vlc_streaming(task_name: str, task_args: str, addr: str, port: int, file_pat
             sleep(1)
     else:
         ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "},dst=display}"
-        params = [ad, "sout-all", "sout-keep"]
+        params = [ad, "sout-all", "sout-keep", "repeat"]
         inst = vlc.Instance()
         media = inst.media_new(f'{file_path}', *params)
         media_player = media.player_new_from_media()
@@ -458,7 +458,7 @@ def vlcc_streaming(addr: str, port: int, file_path: str, start_pos: float, cmd_q
 
     if 'GAME' in file_path:
         ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "}}"
-        params = [ad, "sout-all", "sout-keep"]
+        params = [ad, "sout-all", "sout-keep", "repeat"]
         inst = vlc.Instance()
         file_path = file_path.lower()
         media = inst.media_new(f'{file_path}', *params)
@@ -473,7 +473,7 @@ def vlcc_streaming(addr: str, port: int, file_path: str, start_pos: float, cmd_q
             sleep(1)
     elif 'fake1' in file_path:
         ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "10045" + "},dst=display}"
-        params = [ad, "sout-all", "sout-keep"]
+        params = [ad, "sout-all", "sout-keep", "repeat"]
         inst = vlc.Instance()
         media = inst.media_new('./worldCup.mp4', *params)
         media_player = media.player_new_from_media()
@@ -487,7 +487,7 @@ def vlcc_streaming(addr: str, port: int, file_path: str, start_pos: float, cmd_q
             sleep(1)
     elif 'fake2' in file_path:
         ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "10046" + "},dst=display}"
-        params = [ad, "sout-all", "sout-keep"]
+        params = [ad, "sout-all", "sout-keep", "repeat"]
         inst = vlc.Instance()
         media = inst.media_new('./worldCup.mp4', *params)
         media_player = media.player_new_from_media()
@@ -501,7 +501,7 @@ def vlcc_streaming(addr: str, port: int, file_path: str, start_pos: float, cmd_q
             sleep(1)
     else:
         ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "},dst=display}"
-        params = [ad, "sout-all", "sout-keep"]
+        params = [ad, "sout-all", "sout-keep", "repeat"]
         inst = vlc.Instance()
         media = inst.media_new(f'{file_path}', *params)
         media_player = media.player_new_from_media()
