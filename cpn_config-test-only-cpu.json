@@ -2,7 +2,7 @@
   "gui_controller": {
     "description": "主界面程序(同时负责资源监控，服务部署和调度) Windows",
     "version": 240516,
-    "host_ip": "localhost",
+    "host_ip": "127.0.0.1",
     "host_port": 10070
   },
   "nodes": [
@@ -10,7 +10,7 @@
       "node_id": 0,
       "node_name": "c_node1",
       "description": "Computing Node-1",
-      "node_ip": "localhost",
+      "node_ip": "127.0.0.1",
       "node_port": 10080,
       "conn_type": "tcp_client"
     },
@@ -18,7 +18,7 @@
       "node_id": 1,
       "node_name": "c_node2",
       "description": "Computing Node-2",
-      "node_ip": "localhost",
+      "node_ip": "127.0.0.1",
       "node_port": 10081,
       "conn_type": "tcp_client"
     },
@@ -26,7 +26,7 @@
       "node_id": 2,
       "node_name": "c_node3",
       "description": "Computing Node-3",
-      "node_ip": "localhost",
+      "node_ip": "127.0.0.1",
       "node_port": 10082,
       "conn_type": "tcp_client"
     },
@@ -34,7 +34,7 @@
       "node_id": 3,
       "node_name": "client",
       "description": "Test Client",
-      "node_ip": "localhost",
+      "node_ip": "127.0.0.1",
       "node_port": 10083,
       "conn_type": "tcp_client"
     },
@@ -44,14 +44,14 @@
       "description": "摄像头, 原先属于fog_home节点, 现作为独立节点",
       "node_type": "sensor",
       "conn_type": "tcp_client",
-	  "node_ip": "localhost",
+	  "node_ip": "127.0.0.1",
 	  "node_port": 10069
     },
     {
       "node_id": 5,
       "node_name": "service_addr",
       "description": "Service Addressing Test",
-      "node_ip": "localhost",
+      "node_ip": "127.0.0.1",
       "node_port": 10084,
       "conn_type": "tcp_client"
     },
@@ -59,7 +59,7 @@
       "node_id": 6,
       "node_name": "computing_addr",
       "description": "Computing Addressing Test",
-      "node_ip": "localhost",
+      "node_ip": "127.0.0.1",
       "node_port": 10085,
       "conn_type": "tcp_client"
     },
@@ -67,7 +67,7 @@
       "node_id": 7,
       "node_name": "content_addr",
       "description": "Content Addressing Test",
-      "node_ip": "localhost",
+      "node_ip": "127.0.0.1",
       "node_port": 10086,
       "conn_type": "tcp_client"
     },
@@ -75,7 +75,7 @@
       "node_id": 8,
       "node_name": "load_test",
       "description": "Single Node Loading Test",
-      "node_ip": "localhost",
+      "node_ip": "127.0.0.1",
       "node_port": 10087,
       "conn_type": "tcp_client"
     }

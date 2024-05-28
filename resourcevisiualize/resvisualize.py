@@ -1813,9 +1813,9 @@ class data_visualize(QWidget):
         self.node4_disk_write_value.setText("2M")
 
     def _initResourceUri(self):
-        self.node1_resource_uri = f"http://192.168.2.110:8000/synthetic"
-        self.node2_resource_uri = "http://192.168.2.111:8000/synthetic"
-        self.node3_resource_uri = "http://192.168.2.108:8000/synthetic"
+        self.node1_resource_uri = f"http://{self.cfn_manager.demo_config.get_node('c_node1')['node_ip']}:8000/synthetic"
+        self.node2_resource_uri = f"http://{self.cfn_manager.demo_config.get_node('c_node2')['node_ip']}:8000/synthetic"
+        self.node3_resource_uri = f"http://{self.cfn_manager.demo_config.get_node('c_node3')['node_ip']}:8000/synthetic"
 
     def _initVariableGroup(self):
         self.CPU_Nums = [
@@ -1958,7 +1958,6 @@ class data_visualize(QWidget):
                     "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
             Mem_Bars[i].sharedPainter()
         print("_updateMemInfo")
-
 
     def _updateNetInfo(self):
         Net_Info = [
@@ -2181,8 +2180,8 @@ class data_visualize(QWidget):
         rb, wb = node1_info['disk'][0], node1_info['disk'][1]
         self.history_cpu_1.put(cu)
         self.history1.cpu_history.update_data_home()
-        eval("self.node1_cpu_num.setText('"+str(cu)+"%'"+")")
-        eval("self.node1_mem_num.setText('"+str(mu)+"%'"+")")
+        eval("self.node1_cpu_num.setText('" + str(cu) + "%'" + ")")
+        eval("self.node1_mem_num.setText('" + str(mu) + "%'" + ")")
         self.speed_meter_1.setSpeed(cu)
         self.speed_meter_1.sharedPainter()
         self.node1_cpu_bar.setProperty("value", cu)
@@ -2219,9 +2218,8 @@ class data_visualize(QWidget):
         else:
             dx_tag = f"{round(dx / 1000000000, 2)} Gb"
 
-
-        eval("self.node1_net_read_value.setText('"+tx_tag+"')")
-        eval("self.node1_net_write_value.setText('"+dx_tag+"')")
+        eval("self.node1_net_read_value.setText('" + tx_tag + "')")
+        eval("self.node1_net_write_value.setText('" + dx_tag + "')")
 
         r_tag, w_tag = "", ""
         if (rb / 1000) < 1:
@@ -2251,8 +2249,8 @@ class data_visualize(QWidget):
         rb, wb = node2_info['disk'][0], node2_info['disk'][1]
         self.history_cpu_2.put(cu)
         self.history2.cpu_history.update_data_home()
-        eval("self.node2_cpu_num.setText('"+str(cu)+"%'"+")")
-        eval("self.node2_mem_num.setText('"+str(mu)+"%'"+")")
+        eval("self.node2_cpu_num.setText('" + str(cu) + "%'" + ")")
+        eval("self.node2_mem_num.setText('" + str(mu) + "%'" + ")")
         self.speed_meter_2.setSpeed(cu)
         self.speed_meter_2.sharedPainter()
         self.node2_cpu_bar.setProperty("value", cu)
@@ -2320,8 +2318,8 @@ class data_visualize(QWidget):
         rb, wb = node3_info['disk'][0], node3_info['disk'][1]
         self.history_cpu_3.put(cu)
         self.history3.cpu_history.update_data_home()
-        eval("self.node3_cpu_num.setText('"+str(cu)+"%'"+")")
-        eval("self.node3_mem_num.setText('"+str(mu)+"%'"+")")
+        eval("self.node3_cpu_num.setText('" + str(cu) + "%'" + ")")
+        eval("self.node3_mem_num.setText('" + str(mu) + "%'" + ")")
         self.speed_meter_3.setSpeed(cu)
         self.speed_meter_3.sharedPainter()
         self.node3_cpu_bar.setProperty("value", cu)
@@ -2389,8 +2387,8 @@ class data_visualize(QWidget):
         rb, wb = node4_info['disk'][0], node4_info['disk'][1]
         self.history_cpu_4.put(cu)
         self.history4.cpu_history.update_data_home()
-        eval("self.node4_cpu_num.setText('"+str(cu)+"%'"+")")
-        eval("self.node4_mem_num.setText('"+str(mu)+"%'"+")")
+        eval("self.node4_cpu_num.setText('" + str(cu) + "%'" + ")")
+        eval("self.node4_mem_num.setText('" + str(mu) + "%'" + ")")
         self.speed_meter_4.setSpeed(cu)
         self.speed_meter_4.sharedPainter()
         self.node4_cpu_bar.setProperty("value", cu)
