@@ -289,7 +289,6 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
             self.reScheduling.start("sc1_sp7")
         elif destination == "sc1_sp7":
             print("sc1_sp8 sc1_sp8 sc1_sp8")
-
             temps = [0, 0]
             if not self.monitor_q_cpu_hm_node2.empty():
                 temp2 = self.monitor_q_cpu_hm_node1.get()[-1]
