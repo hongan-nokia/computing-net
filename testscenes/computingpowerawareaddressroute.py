@@ -210,20 +210,20 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
                                           direction="r2l",
                                           interval=3, title='8. 选择新服务实例，完成网络路径控制',
                                           tag_geo=[90, 200, 200, 50])
-        self.finalServiceProvide1 = ImageLoader(parent=self, geo=[327, 510, 810, 280],
-                                                image_url='./images_test3/scene1_step91.png',
-                                                img_scale_w=810,
-                                                img_scale_h=280,
-                                                direction="r2l",
-                                                interval=3, title='',
-                                                tag_geo=[90, 0, 200, 20])
-        self.finalServiceProvide2 = ImageLoader(parent=self, geo=[327, 501, 755, 394],
-                                                image_url='./images_test3/scene1_step92.png',
-                                                img_scale_w=755,
-                                                img_scale_h=394,
-                                                direction="r2l",
-                                                interval=3, title='',
-                                                tag_geo=[90, 0, 200, 20])
+        self.finalServiceProvideByNode2 = ImageLoader(parent=self, geo=[327, 510, 810, 280],
+                                                      image_url='./images_test3/scene1_step91.png',
+                                                      img_scale_w=810,
+                                                      img_scale_h=280,
+                                                      direction="r2l",
+                                                      interval=3, title='',
+                                                      tag_geo=[90, 0, 200, 20])
+        self.finalServiceProvideByNode3 = ImageLoader(parent=self, geo=[327, 501, 755, 394],
+                                                      image_url='./images_test3/scene1_step92.png',
+                                                      img_scale_w=755,
+                                                      img_scale_h=394,
+                                                      direction="r2l",
+                                                      interval=3, title='',
+                                                      tag_geo=[90, 0, 200, 20])
 
     def initConnections(self):
         # self.cfn_manager.signal_emitter.QtSignals.container_pulsate_update.connect(self.update_pulserate)
@@ -239,8 +239,8 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.reScheduling.QtSignals.anim_over.connect(self.service_provision_anim)
         self.selNewService1.QtSignals.anim_over.connect(self.service_provision_anim)
         self.selNewService2.QtSignals.anim_over.connect(self.service_provision_anim)
-        self.finalServiceProvide1.QtSignals.anim_over.connect(self.service_provision_anim)
-        self.finalServiceProvide2.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.finalServiceProvideByNode2.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.finalServiceProvideByNode3.QtSignals.anim_over.connect(self.service_provision_anim)
 
     def _initHearRate(self):
         self.heartrate = QtWidgets.QLabel(parent=self)
@@ -314,14 +314,13 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
 
         elif destination == "sc1_sp8":
             if self.path == 1:
-                self.finalServiceProvide1.label.setVisible(True)
-                self.finalServiceProvide1.start("sc1_sp9")
+                self.cfn_manager.send_command("c_node1", "stop_task", "vlc worldCup.mp4_0")
+                self.finalServiceProvideByNode2.label.setVisible(True)
+                self.finalServiceProvideByNode2.start("")
             elif self.path == 2:
-                self.finalServiceProvide2.label.setVisible(True)
-                self.finalServiceProvide2.start("sc1_sp9")
-
-        elif destination == "sc1_sp9":
-            self.cfn_manager.send_command("c_node1", "stop_task", "vlc worldCup.mp4_0")
+                self.finalServiceProvideByNode3.label.setVisible(True)
+                self.finalServiceProvideByNode3.start("")
+                self.cfn_manager.send_command("c_node1", "stop_task", "vlc worldCup.mp4_0")
         else:
             pass
 
@@ -408,7 +407,10 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
                     to the target VLC-server to continue the streaming work.
                 """
         # print(f' VLC_migration reported streaming position: {current_position}')
-        if self.cfn_manager.node_names[containerId] == 'c_node1':
+        # self.cfn_manager.send_command(f'c_node{self.path + 1}', 'task', 'vlc worldCup.mp4_' + current_position)
+        if self.cfn_manager.node_names[containerId] == 'c_node1' and self.path == 1:
+            self.cfn_manager.send_command('c_node2', 'task', 'vlc worldCup.mp4_' + current_position)
+        elif self.cfn_manager.node_names[containerId] == 'c_node1' and self.path == 2:
             self.cfn_manager.send_command('c_node3', 'task', 'vlc worldCup.mp4_' + current_position)
 
     def reset(self):
@@ -421,8 +423,8 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.reScheduling.tag_label.setVisible(False)
         self.selNewService1.tag_label.setVisible(False)
         self.selNewService2.tag_label.setVisible(False)
-        self.finalServiceProvide1.tag_label.setVisible(False)
-        self.finalServiceProvide2.tag_label.setVisible(False)
+        self.finalServiceProvideByNode2.tag_label.setVisible(False)
+        self.finalServiceProvideByNode3.tag_label.setVisible(False)
 
         self.user_first_pkg.label.setVisible(False)
         self.addr_request.label.setVisible(False)
@@ -433,8 +435,8 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.reScheduling.label.setVisible(False)
         self.selNewService1.label.setVisible(False)
         self.selNewService2.label.setVisible(False)
-        self.finalServiceProvide1.label.setVisible(False)
-        self.finalServiceProvide2.label.setVisible(False)
+        self.finalServiceProvideByNode2.label.setVisible(False)
+        self.finalServiceProvideByNode3.label.setVisible(False)
 
         self.cfn_manager.send_command("c-node1", "stop_task", "AI_trainer1 up")
         self.cfn_manager.send_command("c_node1", "stop_task", "vlc worldCup.mp4_0")
