@@ -260,9 +260,9 @@ class CpnAppWindow(QtWidgets.QMainWindow):
             self.scene3.scene33.service_step1.label.setVisible(True)
             self.scene3.scene33.service_step1.start("sp1")
         elif k == QtCore.Qt.Key_N:
-            self.cfn_manager.send_command("c_node1", "task", "cam_health camera_1")
+            self.cfn_manager.send_command("c_node1", "task", "surveillance up")
         elif k == QtCore.Qt.Key_M:
-            self.cfn_manager.send_command("c_node1", "stop_task", "cam_health camera_1")
+            self.cfn_manager.send_command("c_node1", "stop_task", "surveillance up")
         else:
             pass
 
