@@ -10,7 +10,6 @@ import sys
 from multiprocessing import Pipe, Queue
 from time import sleep
 
-import PyWinMouse
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import pyqtSlot, Qt, QTimer, QSize
 from PyQt5.QtGui import QPalette, QColor, QBrush, QPixmap, QIcon
