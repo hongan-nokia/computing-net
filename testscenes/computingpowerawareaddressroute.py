@@ -242,7 +242,6 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.finalServiceProvide1.QtSignals.anim_over.connect(self.service_provision_anim)
         self.finalServiceProvide2.QtSignals.anim_over.connect(self.service_provision_anim)
 
-
     def _initHearRate(self):
         self.heartrate = QtWidgets.QLabel(parent=self)
         self.heartrate.setText("---")
@@ -265,7 +264,6 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.heartrate.raise_()
         self.heartrate.setVisible(True)
         self.heartrateTag.setVisible(True)
-
 
     @pyqtSlot(str)
     def service_provision_anim(self, destination: str):
@@ -395,8 +393,8 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         #     print(f"*-------------- {exp}")
         # print("FirstPkg Message Sent")
         # client_socket.close()
-        self.cfn_manager.send_command("c_node1", "task", "vlc worldCup.mp4_0")
         self.cfn_manager.send_command("c_node1", "task", "sendFirstPkg up")
+        self.cfn_manager.send_command("c_node1", "task", "vlc worldCup.mp4_0")
 
     def deployAITrainerOnCNode1(self):
         self.cfn_manager.send_command("c-node1", "task", "AI_trainer1 up")
@@ -440,5 +438,4 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
 
         self.cfn_manager.send_command("c-node1", "stop_task", "AI_trainer1 up")
         self.cfn_manager.send_command("c_node1", "stop_task", "vlc worldCup.mp4_0")
-        self.cfn_manager.send_command("c_node1", "stop_task", "sendFirstPkg up")
         self.cfn_manager.send_command('c_node3', 'stop_task', 'vlc worldCup.mp4')

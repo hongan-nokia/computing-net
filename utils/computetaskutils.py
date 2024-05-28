@@ -366,7 +366,7 @@ def vlc_streaming(task_name: str, task_args: str, addr: str, port: int, file_pat
     pid = os.getpid()
     print("------Process PID======= " + str(pid))
     print(f"(PID-{pid}) Starting a new vlc streaming task!")
-    cmd_q.put(("_PID", (f'{task_name} {task_args}', pid)))
+    cmd_q.put(("_PID", (f'{task_name}', pid)))
 
     if 'GAME' in file_path:
         ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "}}"
@@ -453,8 +453,8 @@ def vlcc_streaming(addr: str, port: int, file_path: str, start_pos: float, cmd_q
                    cancel_task_id: Value, terminate_event: Event) -> float:
     pid = os.getpid()
     print("------Process PID======= " + str(pid))
-    print(f"(PID-{pid}) Starting a new vlc streaming task!")
-    cmd_q.put(("_PID", ('vlc', pid)))
+    print(f"(PID-{pid}) Starting a new vlcc streaming task!")
+    cmd_q.put(("_PID", ('vlcc', pid)))
 
     if 'GAME' in file_path:
         ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "}}"
