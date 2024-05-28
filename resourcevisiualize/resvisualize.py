@@ -49,9 +49,9 @@ class DataVisualizationWindow(QWidget):
 class data_visualize(QWidget):
     def __init__(self, parent, demo_manager: CfnDemoManager, res_queue_dict):
         super().__init__()
+        self.cfn_manager = demo_manager
         self._initResourceUri()
         # self.setWindowFlag(Qt.FramelessWindowHint)
-        self.cfn_manager = demo_manager
         self.updateFlag = False
         self.layout = QtWidgets.QHBoxLayout(self)
         self.setParent(parent)
