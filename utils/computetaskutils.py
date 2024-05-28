@@ -21,6 +21,7 @@ import numpy as np
 import requests
 import yaml
 from PyQt5.QtWidgets import QFrame, QVBoxLayout, QWidget, QMainWindow, QApplication, QGroupBox, QHBoxLayout
+from PyCameraList.camera_device import test_list_cameras, list_video_devices, list_audio_devices
 
 os.environ['PYTHON_VLC_MODULE_PATH'] = "./vlc"
 import vlc
@@ -304,17 +305,18 @@ def cfn_bk_service(task_name, pig_args: str, cmd_q: SimpleQueue,
 
 
 def vlc_surveillance(task_name: str, task_args: str, addr: str, port: int, file_path: str, cmd_q: SimpleQueue,
-                  cancel_task_id: Value, terminate_event: Event) -> float:
+                     cancel_task_id: Value, terminate_event: Event) -> float:
     # print("*****************vlc_streaming*****************")
     pid = os.getpid()
     print("------Process PID======= " + str(pid))
     print(f"(PID-{pid}) Starting a new vlc streaming task!")
     cmd_q.put(("_PID", (f'{task_name}', pid)))
-
+    camera_name = list_video_devices()[0][1]
+    print(f">>>>>>>> vlc_surveillance ... camera's name is: {camera_name}")
     ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "},dst=display}"
-    params = [ad, "sout-all", "sout-keep",]
+    params = [ad, "sout-all", "sout-keep", ]
     inst = vlc.Instance()
-    media = inst.media_new("dshow://:dshow-vdev='Integrated Camera'", *params)
+    media = inst.media_new(f"dshow://:dshow-vdev='{camera_name}'", *params)
     media_player = media.player_new_from_media()
     media_player.play()
     sleep(2)
