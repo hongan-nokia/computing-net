@@ -20,6 +20,7 @@ from guiwidgets.fadingpic import BlinkingPic
 from nodemodels.cfndemomanager import CfnDemoManager
 from resourcevisiualize.resvisualize import data_visualize
 from testscenes.computingpowerawareaddressroute import ComputingPowerAwareAddressRouteWindow
+from testscenes.scene3 import Scene3
 from testscenes.systemsyntheticresutilize import SystemSyntheticResUtilize
 from utils.configparser import DemoConfigParser
 from utils.repeatimer import repeatTimer
