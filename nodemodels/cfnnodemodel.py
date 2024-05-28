@@ -79,8 +79,8 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
         file_path = './' + str(args).split('_', -1)[0]  # 所要播放的文件路径
         start_pos = str(args).split('_', -1)[1]
         addr, port = "192.168.2.128", "1234"
-        p = Process(target=vlc_streaming, args=(addr, port, file_path, start_pos, task_cmd_q, task_cancel, node_obj.terminate_event))
-        node_obj.tasks[f'{taskname}'] = -1
+        p = Process(target=vlc_streaming, args=(taskname, args, addr, port, file_path, start_pos, task_cmd_q, task_cancel, node_obj.terminate_event))
+        node_obj.tasks[f'{taskname} {args}'] = -1
         p.start()
 
     elif taskname == 'vlcc':  # vlc作为server将文件stream到指定的client

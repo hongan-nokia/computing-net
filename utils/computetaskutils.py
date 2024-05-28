@@ -352,13 +352,13 @@ def vlc_sender(addr: str, port: int, file_path: str, start_pos: float, cmd_q: Si
             return
 
 
-def vlc_streaming(addr: str, port: int, file_path: str, start_pos: float, cmd_q: SimpleQueue,
+def vlc_streaming(task_name: str, task_args: str, addr: str, port: int, file_path: str, start_pos: float, cmd_q: SimpleQueue,
                   cancel_task_id: Value, terminate_event: Event) -> float:
     # print("*****************vlc_streaming*****************")
     pid = os.getpid()
     print("------Process PID======= " + str(pid))
     print(f"(PID-{pid}) Starting a new vlc streaming task!")
-    cmd_q.put(("_PID", ('vlc', pid)))
+    cmd_q.put(("_PID", (f'{task_name} {task_args}', pid)))
 
     if 'GAME' in file_path:
         ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "}}"
@@ -401,6 +401,10 @@ def vlc_streaming(addr: str, port: int, file_path: str, start_pos: float, cmd_q:
         media_player.play()
         media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
         sleep(2)
+    while not media_player.is_playing():
+        media_player.play()
+        media_player.set_position(float(start_pos))
+        sleep(1)
     while not terminate_event.is_set():
         try:
             if cancel_task_id.value == pid:
@@ -426,7 +430,7 @@ def vlc_streaming(addr: str, port: int, file_path: str, start_pos: float, cmd_q:
 
 
 def vlcc_streaming(addr: str, port: int, file_path: str, start_pos: float, cmd_q: SimpleQueue,
-                  cancel_task_id: Value, terminate_event: Event) -> float:
+                   cancel_task_id: Value, terminate_event: Event) -> float:
     pid = os.getpid()
     print("------Process PID======= " + str(pid))
     print(f"(PID-{pid}) Starting a new vlc streaming task!")
