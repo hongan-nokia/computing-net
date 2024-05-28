@@ -42,7 +42,7 @@ def node_handler_node2gui(node_name: str, node_conn: Connection, gui_conn: Conne
             cmd = msg
             arg = None
         msg_with_name = (node_name, cmd, arg)
-        print(f" node_handler_node2gui : {msg_with_name}")
+        # print(f" node_handler_node2gui : {msg_with_name}")
         if cmd == '_disconnect':  # special message
             gui_conn.send((node_name, '_disconnect', None))
             break

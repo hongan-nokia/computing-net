@@ -119,6 +119,17 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
             print(f"*-------------- {exp}")
         print("FirstPkg Message Sent")
         client_socket.close()
+
+    elif taskname == 'cam_health':  # 摄像头测心跳，参数就是camera节点的node_name
+        cam_name = args
+        n = node_obj.demo_conf.get_node(cam_name)
+        addr, port = n['node_ip'], int(n['node_port'])
+        p = Process(target=task_camera_based_pulse, args=(
+            cam_name, addr, port, task_cmd_q, task_cancel, node_obj.terminate_event, 0.4))
+        # 记录下来当前运行中的task
+        # 暂时写-1进去，等下会pid数值，会由task进程写进task_cmd_q从而触发更新
+        node_obj.tasks[f'{taskname} {args}'] = -1
+        p.start()
     # elif taskname == 'cfnres':
     #     print(args)
     #     p = Process(target=cfnResHandler, args=(task_cmd_q, task_cancel, node_obj.terminate_event))
