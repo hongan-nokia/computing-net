@@ -334,23 +334,24 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
 
     def _sendFirstPkg2UE(self):
         print("Here is _sendFirstPkg2UE")
-        client_host = self.cfn_manager.demo_config.get_node('client')['node_ip']
-        # client_host = "127.0.0.1"
-        client_port = 12354
-        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        message = "RESPONSE FROM C-NODE1"
-        sleep(0.1)
-        try:
-            client_socket.connect((client_host, client_port))
-        except Exception as exp:
-            print(f"*&&&&&&&&&&&&&&& {exp}")
-        try:
-            client_socket.sendall(message.encode())
-        except Exception as exp:
-            print(f"*-------------- {exp}")
-        print("FirstPkg Message Sent")
-        client_socket.close()
+        # client_host = self.cfn_manager.demo_config.get_node('client')['node_ip']
+        # # client_host = "127.0.0.1"
+        # client_port = 12354
+        # client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # message = "RESPONSE FROM C-NODE1"
+        # sleep(0.1)
+        # try:
+        #     client_socket.connect((client_host, client_port))
+        # except Exception as exp:
+        #     print(f"*&&&&&&&&&&&&&&& {exp}")
+        # try:
+        #     client_socket.sendall(message.encode())
+        # except Exception as exp:
+        #     print(f"*-------------- {exp}")
+        # print("FirstPkg Message Sent")
+        # client_socket.close()
         self.cfn_manager.send_command("c_node1", "task", "vlc worldCup.mp4_0")
+        self.cfn_manager.send_command("c_node1", "task", "sendFirstPkg up")
 
     def deployAITrainerOnCNode1(self):
         self.cfn_manager.send_command("c-node1", "task", "AI_trainer1 up")

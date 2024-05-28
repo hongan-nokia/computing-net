@@ -7,6 +7,7 @@ Description:
 """
 
 import random
+import socket
 from multiprocessing import Process, SimpleQueue, Value
 from threading import Thread
 from typing import Union
@@ -98,6 +99,22 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
         p = Process(target=vlc_receiver, args=(addr, eth_face, task_cmd_q, task_cancel, node_obj.terminate_event))
         node_obj.tasks[f'{taskname} {args}'] = -1
         p.start()
+    elif taskname == "sendFirstPkg":
+        client_host = "192.168.2.128"
+        client_port = 12354
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        message = "RESPONSE FROM C-NODE1"
+        sleep(0.1)
+        try:
+            client_socket.connect((client_host, client_port))
+        except Exception as exp:
+            print(f"*&&&&&&&&&&&&&&& {exp}")
+        try:
+            client_socket.sendall(message.encode())
+        except Exception as exp:
+            print(f"*-------------- {exp}")
+        print("FirstPkg Message Sent")
+        client_socket.close()
     # elif taskname == 'cfnres':
     #     print(args)
     #     p = Process(target=cfnResHandler, args=(task_cmd_q, task_cancel, node_obj.terminate_event))
