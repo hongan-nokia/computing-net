@@ -8,6 +8,7 @@ Description:
 import cv2
 from PyCameraList.camera_device import test_list_cameras, list_video_devices, list_audio_devices
 
+
 def get_camera_names():
     # 获取本机所有可用的摄像头
     camera_names = []
