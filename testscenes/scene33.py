@@ -188,13 +188,13 @@ class Scene33(QWidget):
     def service_provision_anim(self, destination: str):
         if destination == "sp1":
             self.step1_label1.setVisible(True)
-            self.service_step2.label.setVisible(True)
+            # self.service_step2.label.setVisible(True)
             self.service_step2.start("sp2")
         elif destination == "sp2":
-            self.service_step3.label.setVisible(True)
+            # self.service_step3.label.setVisible(True)
             self.service_step3.start("sp3")
         elif destination == "sp3":
-            self.service_step4.label.setVisible(True)
+            # self.service_step4.label.setVisible(True)
             self.service_step4.start("")
         else:
             pass

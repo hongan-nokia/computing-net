@@ -272,20 +272,20 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         if destination == "sc1_sp1":
             self.user_first_pkg.setVisible(True)
             self.addr_request.setVisible(True)
-            self.addr_request.label.setVisible(True)
+            # self.addr_request.label.setVisible(True)
             self.addr_request.start("sc1_sp2")
         elif destination == "sc1_sp2":
-            self.net_brain_ctrl.label.setVisible(True)
+            # self.net_brain_ctrl.label.setVisible(True)
             self.net_brain_ctrl.start("sc1_sp3")
         elif destination == "sc1_sp3":
-            self.net_route_ctrl.label.setVisible(True)
+            # self.net_route_ctrl.label.setVisible(True)
             self.net_route_ctrl.start("sc1_sp4")
         elif destination == "sc1_sp4":
-            self.video_stream.label.setVisible(True)
+            # self.video_stream.label.setVisible(True)
             self.video_stream.start("")
         elif destination == "sc1_sp6":
             print("sc1_sp7 sc1_sp7 sc1_sp7")
-            self.reScheduling.label.setVisible(True)
+            # self.reScheduling.label.setVisible(True)
             self.reScheduling.start("sc1_sp7")
         elif destination == "sc1_sp7":
             print("sc1_sp8 sc1_sp8 sc1_sp8")
@@ -305,19 +305,19 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
             # self.path = 1
 
             if self.path == 1:
-                self.selNewService1.label.setVisible(True)
+                # self.selNewService1.label.setVisible(True)
                 self.selNewService1.start("sc1_sp8")
             elif self.path == 2:
-                self.selNewService2.label.setVisible(True)
+                # self.selNewService2.label.setVisible(True)
                 self.selNewService2.start("sc1_sp8")
 
         elif destination == "sc1_sp8":
             if self.path == 1:
                 self.cfn_manager.send_command("c_node1", "stop_task", "vlc worldCup.mp4_0")
-                self.finalServiceProvideByNode2.label.setVisible(True)
+                # self.finalServiceProvideByNode2.label.setVisible(True)
                 self.finalServiceProvideByNode2.start("")
             elif self.path == 2:
-                self.finalServiceProvideByNode3.label.setVisible(True)
+                # self.finalServiceProvideByNode3.label.setVisible(True)
                 self.finalServiceProvideByNode3.start("")
                 self.cfn_manager.send_command("c_node1", "stop_task", "vlc worldCup.mp4_0")
         else:

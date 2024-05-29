@@ -226,11 +226,11 @@ class Scene31(QWidget):
     def service_provision_anim(self, destination: str):
         self.queueFlag = 1
         if destination == "sp1":
-            self.service_step2.label.setVisible(True)
+            # self.service_step2.label.setVisible(True)
             self.service_step2.start("sp2")
         elif destination == "sp2":
             self.service_step3.tag_label.setVisible(True)
-            self.service_step3.label.setVisible(True)
+            # self.service_step3.label.setVisible(True)
             self.service_step3.start("sp3")
         elif destination == "sp3":
             temps = [0, 0, 0]
@@ -252,26 +252,26 @@ class Scene31(QWidget):
                 self.path = temps.index(min(temps)) + 1
             # self.path = 3
             if self.path == 1:
-                self.service_step41.label.setVisible(True)
+                # self.service_step41.label.setVisible(True)
                 self.service_step41.start("sp4")
             elif self.path == 2:
-                self.service_step42.label.setVisible(True)
+                # self.service_step42.label.setVisible(True)
                 self.service_step42.start("sp4")
             elif self.path == 3:
-                self.service_step43.label.setVisible(True)
+                # self.service_step43.label.setVisible(True)
                 self.service_step43.start("sp4")
 
         elif destination == "sp4":
             if self.path == 1:
-                self.service_step51.label.setVisible(True)
+                # self.service_step51.label.setVisible(True)
                 self.service_step51.start("sp5")
                 self.cfn_manager.send_command('c_node1', 'task', 'vlcc worldCup.mp4_0')
             elif self.path == 2:
-                self.service_step52.label.setVisible(True)
+                # self.service_step52.label.setVisible(True)
                 self.service_step52.start("sp5")
                 self.cfn_manager.send_command('c_node2', 'task', 'vlcc worldCup.mp4_0')
             elif self.path == 3:
-                self.service_step53.label.setVisible(True)
+                # self.service_step53.label.setVisible(True)
                 self.service_step53.start("sp5")
                 self.cfn_manager.send_command('c_node3', 'task', 'vlcc worldCup.mp4_0')
         else:

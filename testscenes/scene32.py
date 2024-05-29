@@ -327,7 +327,7 @@ class Scene32(QWidget):
     def service_provision_anim(self, destination: str):
         self.queueFlag = 1
         if destination == "sp1":
-            self.service_step2.label.setVisible(True)
+            # self.service_step2.label.setVisible(True)
             self.service_step2.start("sp2")
         elif destination == "sp2":
             temps = [0, 0, 0]
@@ -349,43 +349,43 @@ class Scene32(QWidget):
                 self.path = temps.index(min(temps)) + 1
             # self.path = 3
             if self.path == 1:
-                self.service_step31.label.setVisible(True)
+                # self.service_step31.label.setVisible(True)
                 self.service_step31.start("sp3")
                 self.c_node1_heart_rate.setVisible(True)
             elif self.path == 2:
-                self.service_step32.label.setVisible(True)
+                # self.service_step32.label.setVisible(True)
                 self.service_step32.start("sp3")
                 self.c_node2_heart_rate.setVisible(True)
             elif self.path == 3:
-                self.service_step33.label.setVisible(True)
+                # self.service_step33.label.setVisible(True)
                 self.service_step33.start("sp3")
                 self.c_node3_heart_rate.setVisible(True)
         elif destination == "sp3":
             if self.path == 1:
-                self.service_step41.label.setVisible(True)
+                # self.service_step41.label.setVisible(True)
                 self.service_step41.start("sp4")
                 self.c_node1_heart_rate.setVisible(True)
             elif self.path == 2:
-                self.service_step42.label.setVisible(True)
+                # self.service_step42.label.setVisible(True)
                 self.service_step42.start("sp4")
                 self.c_node2_heart_rate.setVisible(True)
             elif self.path == 3:
-                self.service_step43.label.setVisible(True)
+                # self.service_step43.label.setVisible(True)
                 self.service_step43.start("sp4")
                 self.c_node3_heart_rate.setVisible(True)
         elif destination == "sp4":
             if self.path == 1:
-                self.service_step51.label.setVisible(True)
+                # self.service_step51.label.setVisible(True)
                 self.service_step51.start("")
                 self.c_node1_heart_rate.setVisible(True)
                 self.cfn_manager.send_command(f'c_node{self.path}', 'task', 'cam_health camera_1')
             elif self.path == 2:
-                self.service_step52.label.setVisible(True)
+                # self.service_step52.label.setVisible(True)
                 self.service_step52.start("")
                 self.c_node2_heart_rate.setVisible(True)
                 self.cfn_manager.send_command(f'c_node{self.path}', 'task', 'cam_health camera_1')
             elif self.path == 3:
-                self.service_step53.label.setVisible(True)
+                # self.service_step53.label.setVisible(True)
                 self.service_step53.start("")
                 self.c_node3_heart_rate.setVisible(True)
                 self.cfn_manager.send_command(f'c_node{self.path}', 'task', 'cam_health camera_1')

@@ -62,6 +62,7 @@ class ImageLoader(QWidget, QtCore.QObject):
 
     def start(self, target_node):
         self.tag_label.setVisible(True)
+        self.label.setVisible(True)
         self.destination = target_node
         self.timer = QTimer(self)
         # print(f">>>>>>>>>>> ImageLoad  target_node is {target_node}")
@@ -109,7 +110,7 @@ class ImageLoader(QWidget, QtCore.QObject):
         else:
             self.timer.stop()
             self.QtSignals.anim_over.emit(self.destination)
-            self.tag_label.setVisible(True)
+            # self.tag_label.setVisible(True)
             self.index = self.width
             print(f"r2l >>>  self.QtSignals.anim_over.emit({self.destination})")
 

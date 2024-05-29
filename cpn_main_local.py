@@ -194,7 +194,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
     def _showTestScene1(self):
         self.SSRUWidget.setVisible(False)
         self.CPAARWidget.reset()
-        self.CPAARWidget.user_first_pkg.label.setVisible(True)
+        # self.CPAARWidget.user_first_pkg.label.setVisible(True)
         self.CPAARWidget.setVisible(True)
         self.scene3.setVisible(False)
         self.scene3.scene31.setVisible(False)
@@ -239,7 +239,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
                 self.scene3.scene33.reset()
         elif k == QtCore.Qt.Key_2:
             self.CPAARWidget.reset()
-            self.CPAARWidget.user_first_pkg.label.setVisible(True)
+            # self.CPAARWidget.user_first_pkg.label.setVisible(True)
             self.CPAARWidget.user_first_pkg.start("sc1_sp1")
         elif k == QtCore.Qt.Key_1:
             print("Pressed Key-1")
@@ -248,17 +248,17 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         elif k == QtCore.Qt.Key_Q:
             print("Pressed Key-Q")
             self.scene3.scene31.reset()
-            self.scene3.scene31.service_step1.label.setVisible(True)
+            # self.scene3.scene31.service_step1.label.setVisible(True)
             self.scene3.scene31.service_step1.start("sp1")
         elif k == QtCore.Qt.Key_W:
             self.scene3.scene32.reset()
-            self.scene3.scene32.service_step1.label.setVisible(True)
+            # self.scene3.scene32.service_step1.label.setVisible(True)
             self.scene3.scene32.step1_label1.setVisible(True)
             self.scene3.scene32.step1_label2.setVisible(True)
             self.scene3.scene32.service_step1.start("sp1")
         elif k == QtCore.Qt.Key_E:
             self.scene3.scene33.reset()
-            self.scene3.scene33.service_step1.label.setVisible(True)
+            # self.scene3.scene33.service_step1.label.setVisible(True)
             self.scene3.scene33.service_step1.start("sp1")
         elif k == QtCore.Qt.Key_N:
             self.cfn_manager.send_command("c_node1", "task", "surveillance up")
