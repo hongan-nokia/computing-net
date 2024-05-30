@@ -46,6 +46,14 @@
       "conn_type": "tcp_client",
 	  "node_ip": "192.168.2.128",
 	  "node_port": 10069
+    },
+    {
+      "node_id": 5,
+      "node_name": "monitor_client",
+      "description": "Surveillance service",
+      "node_ip": "127.0.0.1",
+      "node_port": 10084,
+      "conn_type": "tcp_client"
     }
   ],
   "monitoring_source": [
