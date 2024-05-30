@@ -266,14 +266,17 @@ class Scene31(QWidget):
                 # self.service_step51.label.setVisible(True)
                 self.service_step51.start("sp5")
                 self.cfn_manager.send_command('c_node1', 'task', 'vlcc worldCup.mp4_0')
+                self.c_node1_video.start_blink()
             elif self.path == 2:
                 # self.service_step52.label.setVisible(True)
                 self.service_step52.start("sp5")
                 self.cfn_manager.send_command('c_node2', 'task', 'vlcc worldCup.mp4_0')
+                self.c_node2_video.start_blink()
             elif self.path == 3:
                 # self.service_step53.label.setVisible(True)
                 self.service_step53.start("sp5")
                 self.cfn_manager.send_command('c_node3', 'task', 'vlcc worldCup.mp4_0')
+                self.c_node3_video.start_blink()
         else:
             pass
 

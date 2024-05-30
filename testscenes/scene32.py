@@ -407,7 +407,6 @@ class Scene32(QWidget):
         self.service_step51.tag_label.setVisible(False)
         self.service_step52.tag_label.setVisible(False)
         self.service_step53.tag_label.setVisible(False)
-
         self.service_step1.label.setVisible(False)
         self.service_step2.label.setVisible(False)
         self.service_step31.label.setVisible(False)
@@ -419,6 +418,9 @@ class Scene32(QWidget):
         self.service_step51.label.setVisible(False)
         self.service_step52.label.setVisible(False)
         self.service_step53.label.setVisible(False)
+        self.c_node1_heart_rate.setVisible(False)
+        self.c_node2_heart_rate.setVisible(False)
+        self.c_node3_heart_rate.setVisible(False)
 
         self.step1_label1.setVisible(False)
         self.step1_label2.setVisible(False)

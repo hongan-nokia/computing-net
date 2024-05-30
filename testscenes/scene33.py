@@ -196,6 +196,7 @@ class Scene33(QWidget):
         elif destination == "sp3":
             # self.service_step4.label.setVisible(True)
             self.service_step4.start("")
+            self.cfn_manager.send_command('monitor_client', 'task', 'surveillance up')
         else:
             pass
 
@@ -213,5 +214,5 @@ class Scene33(QWidget):
         self.service_step2.label.setVisible(False)
         self.service_step3.label.setVisible(False)
         self.service_step4.label.setVisible(False)
-
+        self.cfn_manager.send_command('monitor_client', 'stop_task', 'surveillance up')
         self.step1_label1.setVisible(False)
