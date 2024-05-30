@@ -238,10 +238,10 @@ class CpnAppWindow(QtWidgets.QMainWindow):
                 self.scene3.scene32.reset()
             elif self.scene3.scene33.isVisible():
                 self.scene3.scene33.reset()
-        elif k == QtCore.Qt.Key_2:
-            self.CPAARWidget.reset()
-            # self.CPAARWidget.user_first_pkg.label.setVisible(True)
-            self.CPAARWidget.user_first_pkg.start("sc1_sp1")
+        # elif k == QtCore.Qt.Key_2:
+        #     self.CPAARWidget.reset()
+        #     # self.CPAARWidget.user_first_pkg.label.setVisible(True)
+        #     self.CPAARWidget.user_first_pkg.start("sc1_sp1")
         elif k == QtCore.Qt.Key_1:
             print("Pressed Key-1")
             # self.CPAARWidget.reset()

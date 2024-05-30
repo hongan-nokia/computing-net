@@ -395,7 +395,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.cfn_manager.send_command("c_node1", "task", "vlc worldCup.mp4_0")
 
     def deployAITrainerOnCNode1(self):
-        self.cfn_manager.send_command("c-node1", "task", "AI_trainer1 up")
+        self.cfn_manager.send_command("c_node1", "task", "AI_trainer1 up")
         self.startAITrainer.label.setVisible(True)
         self.startAITrainer.start("sc1_sp6")
 
@@ -437,6 +437,6 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.finalServiceProvideByNode2.label.setVisible(False)
         self.finalServiceProvideByNode3.label.setVisible(False)
 
-        self.cfn_manager.send_command("c-node1", "stop_task", "AI_trainer1 up")
+        self.cfn_manager.send_command("c_node1", "stop_task", "AI_trainer1 up")
         self.cfn_manager.send_command("c_node1", "stop_task", "vlc worldCup.mp4_0")
         self.cfn_manager.send_command('c_node3', 'stop_task', 'vlc worldCup.mp4')
