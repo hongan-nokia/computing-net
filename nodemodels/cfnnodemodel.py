@@ -133,7 +133,7 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
 
     elif taskname == 'surveillance':
         file_path = './' + str(args).split('_', -1)[0]  # 所要播放的文件路径
-        addr, port = "192.168.2.128", "10089"
+        addr, port = "192.168.2.128", 10089
         p = Process(target=vlc_surveillance, args=(taskname, args, addr, port, file_path, task_cmd_q, task_cancel, node_obj.terminate_event))
         node_obj.tasks[f'{taskname}'] = -1
         p.start()
