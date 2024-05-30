@@ -371,6 +371,7 @@ class SystemSyntheticResUtilize(QWidget):
     def traditionalMEC(self):
         if self.leftBtn1Tag == 0:
             self.reset()
+            self.setTraditionalMEC()
             self.leftBtn1Tag = 1
             self.leftBtn2Tag = 0
             self.topBtn1Tag = 1
@@ -394,12 +395,13 @@ class SystemSyntheticResUtilize(QWidget):
 
             self.leftBtn1.setStyleSheet(self.leftBtnSelectedStyleSheet)
             self.leftBtn2.setStyleSheet(self.leftBtnStyleSheet)
-            self.setTraditionalMEC()
-        else:
-            self.reset()
+        # else:
+        #     self.reset()
 
     def computingNetConverge(self):
         if self.leftBtn2Tag == 0:
+            self.reset()
+            self.setComputingNetConverge()
             self.leftBtn1Tag = 0
             self.leftBtn2Tag = 1
             self.topBtn1Tag = 1
@@ -427,9 +429,6 @@ class SystemSyntheticResUtilize(QWidget):
 
             self.leftBtn1.setStyleSheet(self.leftBtnStyleSheet)
             self.leftBtn2.setStyleSheet(self.leftBtnSelectedStyleSheet)
-            self.setComputingNetConverge()
-        else:
-            self.reset()
 
     def _initMonitorQueue(self):
         self.monitor_q_cpu_hm_node1 = self.cfn_manager.resource_StatMon['c_node1_cpu']  # 算力节点1 CPU
@@ -454,8 +453,8 @@ class SystemSyntheticResUtilize(QWidget):
         self.s2cloud3_hm.timer.start()
 
     def setTraditionalMEC(self):
-        self.cfn_manager.send_command('c_node1', 'task', 'AI_trainer1 up')              # AI 训练
-        self.cfn_manager.send_command('c_node1', 'task', 'vlcc fake1-WorldCup.mp4_0')     # 视频点播
+        self.cfn_manager.send_command('c_node1', 'task', 'AI_trainer1 up')  # AI 训练
+        self.cfn_manager.send_command('c_node1', 'task', 'vlcc fake1-WorldCup.mp4_0')  # 视频点播
         # self.cfn_manager.send_command('c_node1', 'task', 'cam_health camera_1')
 
     def setComputingNetConverge(self):
@@ -484,6 +483,8 @@ class SystemSyntheticResUtilize(QWidget):
         self.cfn_manager.send_command('c_node3', 'stop_task', 'vlcc fake2-WorldCup.mp4_0')
 
     def reset(self):
+        self.unsetTraditionalMEC()
+        self.unsetComputingNetConverge()
         self.topBtn1Tag = 0
         self.topBtn2Tag = 0
         self.topBtn3Tag = 0
@@ -509,7 +510,3 @@ class SystemSyntheticResUtilize(QWidget):
 
         self.leftBtn1.setStyleSheet(self.leftBtnStyleSheet)
         self.leftBtn2.setStyleSheet(self.leftBtnStyleSheet)
-
-        self.unsetTraditionalMEC()
-        self.unsetComputingNetConverge()
-

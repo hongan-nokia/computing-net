@@ -46,7 +46,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self._initHeapMap()
         self._initImageLoad()
         self.initConnections()
-        self._initHearRate()
+        # self._initHearRate()
         # self.user_first_pkg.start("sc1_sp1")
 
     def _initMonitorQueue(self):
@@ -439,4 +439,5 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
 
         self.cfn_manager.send_command("c_node1", "stop_task", "AI_trainer1 up")
         self.cfn_manager.send_command("c_node1", "stop_task", "vlc worldCup.mp4_0")
+        self.cfn_manager.send_command("c_node2", "stop_task", "vlc worldCup.mp4")
         self.cfn_manager.send_command('c_node3', 'stop_task', 'vlc worldCup.mp4')

@@ -1793,7 +1793,7 @@ class data_visualize(QWidget):
         self.node3_disk_read_value.setText("10M")
         self.node3_disk_write_value.setText("2M")
 
-        self.node4_label.setText("C-Node4")
+        self.node4_label.setText("Average")
         self.node4_wl_label.setText("Workload")
         self.node4_cpu_label.setText("CPU")
         self.node4_cpu_num.setText("0.0%")
