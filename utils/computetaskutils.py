@@ -312,8 +312,9 @@ def vlc_surveillance(task_name: str, task_args: str, addr: str, port: int, file_
     cmd_q.put(("_PID", (f'{task_name}', pid)))
     camera_name = list_video_devices()[0][1]
     print(f">>>>>>>> vlc_surveillance ... camera's name is: {camera_name}")
-    ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "},dst=display}"
-    params = [ad, "sout-all", "sout-keep", ]
+    ad = "sout=#transcode{vcodec=h264,vb=800,acodec=mpga,scale=1,ab=128,channels=2,samplerate=44100}:" \
+         "duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "}}"
+    params = [ad, "no-sout-all", "sout-keep", "file-caching=500"]
     inst = vlc.Instance()
     media = inst.media_new(f"dshow://:dshow-vdev='{camera_name}'", *params)
     media_player = media.player_new_from_media()
