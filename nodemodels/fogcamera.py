@@ -204,7 +204,7 @@ class FogCam(BaseNodeModel):
         其他节点可以来取数据的server。
         """
         # 一个本地的进程间资源manager。本地显示进程，和远端compute node，都会连接过来取数据
-        self.m = CamManager(address=(self.node_conf.node_ip, self.node_conf.node_port), authkey=b'cpn')
+        self.m = CamManager(address=(self.node_conf['node_ip'], self.node_conf['port']), authkey=b'cpn')
 
         # 启动show进程 
         self.p_show = Process(name='show', target=show_video,
@@ -277,7 +277,7 @@ class FogCam(BaseNodeModel):
         """
         if not self.s.stop_event.is_set():
             # address and authkey same as when started the manager
-            shutdown_multiprocessing_manager_server(addr=(self.node_conf.data_ip, self.node_conf.data_port), key=b'cpn')
+            shutdown_multiprocessing_manager_server(addr=(self.node_conf['node_ip'], self.node_conf['port']), key=b'cpn')
             self.s.stop_event.set()
             sleep(0.1)
             self.print('stop_server() done')

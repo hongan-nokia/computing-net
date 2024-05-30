@@ -268,15 +268,15 @@ class ClientCanvas(QWidget):
 
     def _serviceAddress(self):
         print("This _serviceAddress func")
-        self.client_manager.conn_GUI.send(('cpn_test', 'serviceAddr'))
+        self.client_mgn.conn_GUI.send(('cpn_test', 'serviceAddr'))
 
     def _computingAddress(self):
         print("This _serviceAddress func")
-        self.client_manager.conn_GUI.send(('cpn_test', 'computingAddr'))
+        self.client_mgn.conn_GUI.send(('cpn_test', 'computingAddr'))
 
     def _contentAddress(self):
         print("This _contentAddress func")
-        self.client_manager.conn_GUI.send(('cpn_test', 'contentAddr'))
+        self.client_mgn.conn_GUI.send(('cpn_test', 'contentAddr'))
 
     def listenFirstPkg(self, server_conn):
         while True:

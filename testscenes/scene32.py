@@ -50,6 +50,7 @@ class Scene32(QWidget):
         self._initHeapMap()
         self._initImageLoad()
         self.initConnections()
+        self._initHearRate()
 
     def _initView(self):
         self.setWindowTitle(" ")
@@ -253,7 +254,7 @@ class Scene32(QWidget):
         self.service_step51.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step52.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step53.QtSignals.anim_over.connect(self.service_provision_anim)
-
+        self.cfn_manager.signal_emitter.QtSignals.computingAddr_test.connect(self.computingAddrWorkFlow)
         self.cfn_manager.signal_emitter.QtSignals.container_pulsate_update.connect(self.update_pulserate)
         self.cfn_manager.signal_emitter.QtSignals.container_person_state.connect(self.show_person_position)
 
@@ -390,6 +391,9 @@ class Scene32(QWidget):
                 self.c_node3_heart_rate.setVisible(True)
                 self.cfn_manager.send_command(f'c_node{self.path}', 'task', 'cam_health camera_1')
 
+    @pyqtSlot(int, str)
+    def computingAddrWorkFlow(self):
+        self.service_step1.start("sp1")
 
     def backTest3(self):
         self.setVisible(False)

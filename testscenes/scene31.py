@@ -282,7 +282,7 @@ class Scene31(QWidget):
 
     @pyqtSlot(int, str)
     def serviceAddressWorkFlow(self):
-        self.scene3.scene31.service_step1.start("sp1")
+        self.service_step1.start("sp1")
 
     def backTest3(self):
         self.setVisible(False)

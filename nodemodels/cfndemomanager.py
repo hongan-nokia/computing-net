@@ -74,8 +74,8 @@ class SgnlEmitter:
             elif "serviceAddr" in command_arg:
                 self.QtSignals.serviceAddr_test.emit(node_id, command_arg)
             elif "computingAddr" in command_arg:
-                self.QtSignals.contentAddr_test.emit(node_id, command_arg)
-            elif "computingAddr" in command_arg:
+                self.QtSignals.computingAddr_test.emit(node_id, command_arg)
+            elif "contentAddr" in command_arg:
                 self.QtSignals.contentAddr_test.emit(node_id, command_arg)
 
         elif command == 'vlc_state':
