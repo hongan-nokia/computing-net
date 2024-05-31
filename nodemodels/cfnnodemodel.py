@@ -46,7 +46,7 @@ def process_GUI_msg(cmd: str, args: tuple, node_obj: 'CfnNodeModel'):
         task_name = task_key.split(" ")[0]
         task_args = task_key.split(" ")[1]
         print(f"task_name is: {task_name}, task_args is: {task_args} ......")
-        # node_obj.signal_emitter.signal_emit_logic(task_name, 'down', task_args)
+        node_obj.signal_emitter.signal_emit_logic(task_name, 'down', task_args)
         if 'vlc' in task_key or 'vlcc' in task_key or "surveillance" in task_key:
             node_obj.cancel_task(task_name)
         else:
@@ -78,6 +78,9 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
         # node_obj.signal_emitter.signal_emit_logic(taskname, 'up', args)
         task_pid = random.randint(10, 100)
         node_obj.tasks[f'{taskname} {args}'] = task_pid
+
+    elif taskname == 'surveillance':
+        node_obj.signal_emitter.signal_emit_logic(taskname, 'up', args)
 
     elif taskname == 'vlc':  # vlc作为server将文件stream到指定的client
         file_path = './' + str(args).split('_', -1)[0]  # 所要播放的文件路径
@@ -131,12 +134,6 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
         node_obj.tasks[f'{taskname} {args}'] = -1
         p.start()
 
-    elif taskname == 'surveillance':
-        file_path = './' + str(args).split('_', -1)[0]  # 所要播放的文件路径
-        addr, port = node_obj.demo_conf.get_node("client")['node_ip'], 10089
-        p = Process(target=vlc_surveillance, args=(taskname, args, addr, port, file_path, task_cmd_q, task_cancel, node_obj.terminate_event))
-        node_obj.tasks[f'{taskname}'] = -1
-        p.start()
     # elif taskname == 'onos':
     #     onos_tag = onos_handler(pid_args=args)
     #     print(f"onos_handler tag is: {onos_tag}")

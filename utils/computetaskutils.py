@@ -23,6 +23,8 @@ import yaml
 from PyQt5.QtWidgets import QFrame, QVBoxLayout, QWidget, QMainWindow, QApplication, QGroupBox, QHBoxLayout
 from PyCameraList.camera_device import test_list_cameras, list_video_devices, list_audio_devices
 
+from utils.StreamPlayer import StreamerPlayer
+
 os.environ['PYTHON_VLC_MODULE_PATH'] = "./vlc"
 import vlc
 from typing import Tuple
@@ -310,33 +312,29 @@ def vlc_surveillance(task_name: str, task_args: str, addr: str, port: int, file_
     print("------Process PID======= " + str(pid))
     print(f"(PID-{pid}) Starting a new vlc streaming task!")
     cmd_q.put(("_PID", (f'{task_name}', pid)))
-    camera_name = list_video_devices()[0][1]
-    print(f">>>>>>>> vlc_surveillance ... camera's name is: {camera_name}")
-    ad = "sout=#transcode{vcodec=h264,vb=800,acodec=mpga,scale=1,ab=128,channels=2,samplerate=44100}:" \
-         "duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "}}"
-    params = [ad, "no-sout-all", "sout-keep", "file-caching=500"]
-    inst = vlc.Instance()
-    media = inst.media_new(f"dshow://:dshow-vdev='{camera_name}'", *params)
-    media_player = media.player_new_from_media()
-    media_player.play()
-    sleep(2)
-    while not media_player.is_playing():
-        media_player.play()
-        sleep(1)
-
+    # camera_name = list_video_devices()[0][1]
+    # if "Integrated" not in camera_name:
+    #     camera_name = "camera_1"
+    # print(f">>>>>>>> vlc_surveillance ... camera's name is: {camera_name}")
+    # ad = "sout=#transcode{vcodec=h264,vb=800,acodec=mpga,scale=1,ab=128,channels=2,samplerate=44100}:" \
+    #      "duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "}}"
+    # params = [ad, "no-sout-all", "sout-keep", "file-caching=500"]
+    # inst = vlc.Instance()
+    # media = inst.media_new(f"dshow://:dshow-vdev='{camera_name}'", *params)
+    # media_player = media.player_new_from_media()
+    # media_player.play()
+    vlc_streamer = StreamerPlayer(parent=None, addr=addr, port=port, local_port="2234",
+                                  video_source="dshow://:dshow-vdev='Integrated Camera'")
+    vlc_streamer.startStream()
     while not terminate_event.is_set():
         try:
             if cancel_task_id.value == pid:
                 print(f"(PID-{pid}) Received task_cancel signal!")
                 cancel_task_id.value = 0
-                pos_stream = media_player.get_position()  # 获取当前播放位置
-                media_player.stop()
+                # pos_stream = media_player.get_position()  # 获取当前播放位置
+                # media_player.stop()
+                vlc_streamer.stopStream()
                 sleep(0.1)
-                print("------当前播放位置::Pos_streaming:" + str(pos_stream))
-                break
-            elif media_player.is_playing() == 0:
-                print("media_player.is_no_playing")
-                sleep(0.2)
                 break
             else:
                 continue

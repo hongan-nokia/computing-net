@@ -13,6 +13,7 @@ from PyQt5.QtGui import QKeyEvent, QPixmap, QIcon, QColor
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QStackedWidget, QWidget, QVBoxLayout, QGroupBox, \
     QHBoxLayout, QSpacerItem, QSizePolicy
 
+from Surveillance import Surveillance
 from nodemodels.cfnnodemodel import CfnNodeModel
 from nodemodels.fogcamera import FogCam
 from utils.configparser import DemoConfigParser
@@ -350,4 +351,7 @@ if __name__ == '__main__':
         if node_name in ['client']:
             c_window = ClientWindow(node_model)
             c_window.show()
+        if node_name in ['monitor_client']:
+            monitor_window = Surveillance(node_model)
+            monitor_window.show()
         sys.exit(app.exec_())
