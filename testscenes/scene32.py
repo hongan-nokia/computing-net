@@ -224,19 +224,19 @@ class Scene32(QWidget):
                                           image_url='./images_test3/computing_power_addressing_step51.png',
                                           img_scale_w=550,
                                           img_scale_h=120,
-                                          direction="r2l",
+                                          direction="l2r",
                                           interval=3, title='5.业务数据流', tag_geo=[20, 80, 200, 30])
         self.service_step52 = ImageLoader(parent=self, geo=[340, 490, 800, 290],
                                           image_url='./images_test3/computing_power_addressing_step52.png',
                                           img_scale_w=800,
                                           img_scale_h=290,
-                                          direction="r2l",
+                                          direction="l2r",
                                           interval=3, title='5.业务数据流', tag_geo=[20, 35, 200, 30])
         self.service_step53 = ImageLoader(parent=self, geo=[340, 490, 750, 400],
                                           image_url='./images_test3/computing_power_addressing_step53.png',
                                           img_scale_w=750,
                                           img_scale_h=400,
-                                          direction="r2l",
+                                          direction="l2r",
                                           interval=3, title='5.业务数据流', tag_geo=[20, 35, 200, 30])
         self.service_step51.tag_label.setStyleSheet("color: rgb(224,61,205);")
         self.service_step52.tag_label.setStyleSheet("color: rgb(224,61,205);")
@@ -273,7 +273,7 @@ class Scene32(QWidget):
         self.heartrate.setGeometry(1517, 257, 180, 100)
 
         self.heartrateTag = QtWidgets.QLabel(parent=self)
-        self.heartrateTag.setPixmap(QtGui.QPixmap('./images/heartrate_tag.png'))
+        self.heartrateTag.setPixmap(QtGui.QPixmap('./images/heartrateheartrate_tag.png'))
         self.heartrateTag.setFont(font)
         self.heartrateTag.setPalette(palette)
         self.heartrateTag.setGeometry(1532, 257, 180, 100)
@@ -350,17 +350,14 @@ class Scene32(QWidget):
                 self.path = temps.index(min(temps)) + 1
             # self.path = 3
             if self.path == 1:
-                # self.service_step31.label.setVisible(True)
                 self.service_step31.start("sp3")
-                self.c_node1_heart_rate.setVisible(True)
+                self.service_step31.QtSignals.anim_over.connect(self.on_animation_over)
             elif self.path == 2:
-                # self.service_step32.label.setVisible(True)
                 self.service_step32.start("sp3")
-                self.c_node2_heart_rate.setVisible(True)
+                self.service_step32.QtSignals.anim_over.connect(self.on_animation_over)
             elif self.path == 3:
-                # self.service_step33.label.setVisible(True)
                 self.service_step33.start("sp3")
-                self.c_node3_heart_rate.setVisible(True)
+                self.service_step33.QtSignals.anim_over.connect(self.on_animation_over)
         elif destination == "sp3":
             if self.path == 1:
                 # self.service_step41.label.setVisible(True)
@@ -394,6 +391,14 @@ class Scene32(QWidget):
     @pyqtSlot(int, str)
     def computingAddrWorkFlow(self):
         self.service_step1.start("sp1")
+
+    def on_animation_over(self, target_node):
+        if self.path == 1:
+            self.c_node1_heart_rate.setVisible(True)
+        elif self.path == 2:
+            self.c_node2_heart_rate.setVisible(True)
+        elif self.path == 3:
+            self.c_node3_heart_rate.setVisible(True)
 
     def backTest3(self):
         self.setVisible(False)

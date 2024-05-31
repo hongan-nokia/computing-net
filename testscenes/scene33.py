@@ -166,11 +166,17 @@ class Scene33(QWidget):
                                          img_scale_h=240,
                                          direction="r2l",
                                          interval=3, title='3.网络路径控制', tag_geo=[420, 75, 400, 20])
-        self.service_step4 = ImageLoader(parent=self, geo=[350, 507, 550, 310],
+        self.service_step4 = ImageLoader(parent=self, geo=[350, 550, 530, 310],
                                          image_url='./images_test3/content_addressing_step4.png',
-                                         img_scale_w=550,
-                                         img_scale_h=310,
-                                         direction="d2u",
+                                         img_scale_w=530,
+                                         img_scale_h=260,
+                                         direction="l2r",
+                                         interval=3, title='', tag_geo=[280, 20, 200, 30])
+        self.service_step5 = ImageLoader(parent=self, geo=[340, 517, 539, 310],
+                                         image_url='./images_test3/content_addressing_step5.png',
+                                         img_scale_w=540,
+                                         img_scale_h=35,
+                                         direction="r2l",
                                          interval=3, title='', tag_geo=[280, 20, 200, 30])
 
     def initConnections(self):
@@ -179,6 +185,7 @@ class Scene33(QWidget):
         self.service_step2.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step3.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step4.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.service_step5.QtSignals.anim_over.connect(self.service_provision_anim)
 
     @pyqtSlot(int, str)
     def contentAddressWorkFlow(self):
@@ -195,7 +202,9 @@ class Scene33(QWidget):
             self.service_step3.start("sp3")
         elif destination == "sp3":
             # self.service_step4.label.setVisible(True)
-            self.service_step4.start("")
+            self.service_step4.start("sp4")
+        elif destination == "sp4":
+            self.service_step5.start("")
             self.cfn_manager.send_command('monitor_client', 'task', 'surveillance up')
         else:
             pass
@@ -209,10 +218,12 @@ class Scene33(QWidget):
         self.service_step2.tag_label.setVisible(False)
         self.service_step3.tag_label.setVisible(False)
         self.service_step4.tag_label.setVisible(False)
+        self.service_step5.tag_label.setVisible(False)
 
         self.service_step1.label.setVisible(False)
         self.service_step2.label.setVisible(False)
         self.service_step3.label.setVisible(False)
         self.service_step4.label.setVisible(False)
+        self.service_step5.label.setVisible(False)
         self.cfn_manager.send_command('monitor_client', 'stop_task', 'surveillance up')
         self.step1_label1.setVisible(False)

@@ -45,6 +45,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self._initView()
         self._initHeapMap()
         self._initImageLoad()
+        self._initWarningBtn()
         self.initConnections()
         # self._initHearRate()
         # self.user_first_pkg.start("sc1_sp1")
@@ -224,6 +225,27 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
                                                       direction="r2l",
                                                       interval=3, title='',
                                                       tag_geo=[90, 0, 200, 20])
+
+    def _initWarningBtn(self):
+        warning_icon_img = QtGui.QPixmap("./images_test3/warning.svg").scaled(QSize(80, 80))
+        self.warning_icon = BlinkingPic(parent=self, pixmap=warning_icon_img, auto_dim=True, dim_opacity=0.1,
+                                         blink_period=1200).pixmap_item
+
+        self.view.scene().addItem(self.warning_icon)
+        self.warning_icon.setPos(950, 350)
+        self.warning_icon.start_blink()
+        self.warning_icon.setVisible(True)
+
+        self.warning_btn = QPushButton()
+        self.warning_btn.setGeometry(950,350, 80, 80)
+        self.warning_btn.setStyleSheet("background-color: rgba(240, 240, 240, 0);")
+        self.warning_btn.clicked.connect(self.warning_event)
+        self.warning_btn.raise_()
+        self.view.scene().addWidget(self.warning_btn)
+
+    def warning_event(self):
+        # self.warning_icon.setVisible(False)
+        pass
 
     def initConnections(self):
         # self.cfn_manager.signal_emitter.QtSignals.container_pulsate_update.connect(self.update_pulserate)
