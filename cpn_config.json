@@ -10,7 +10,7 @@
       "node_id": 0,
       "node_name": "c_node1",
       "description": "Computing Node-1",
-      "node_ip": "192.168.2.110",
+      "node_ip": "192.168.2.108",
       "node_port": 10080,
       "conn_type": "tcp_client"
     },
@@ -26,7 +26,7 @@
       "node_id": 2,
       "node_name": "c_node3",
       "description": "Computing Node-3",
-      "node_ip": "192.168.2.108",
+      "node_ip": "192.168.2.110",
       "node_port": 10082,
       "conn_type": "tcp_client"
     },
@@ -64,7 +64,7 @@
       "data_API": {
         "backend_tool": "Glances",
         "keyword": "cpu",
-        "url": "http://192.168.2.110:8000/cpu",
+        "url": "http://192.168.2.108:8000/cpu",
         "refresh_interval": 3
       },
       "simulation": {
@@ -114,7 +114,7 @@
       "data_API": {
         "backend_tool": "Glances",
         "keyword": "cpu",
-        "url": "http://192.168.2.108:8000/cpu",
+        "url": "http://192.168.2.110:8000/cpu",
         "refresh_interval": 3
       },
       "simulation": {
