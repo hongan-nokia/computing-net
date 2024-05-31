@@ -25,25 +25,46 @@ from utils.repeatimer import repeatTimer
 from utils.reversequeue import reverseQueue
 
 
-def net_formatter(read_bytes, write_bytes):
-    if (read_bytes / 1000) < 1:
-        read_tag = f"{read_bytes} bps"
-    elif 1 < (read_bytes / 1000) < 1000:
-        read_tag = f"{round(read_bytes / 1000, 2)} kbps"
-    elif 1 < (read_bytes / 1000000):
-        read_tag = f"{round(read_bytes / 1000000, 2)} Mbps"
+def net_formatter(net_tx_bytes, net_rx_bytes):
+    if (net_tx_bytes / 1000) < 1:
+        tx_tag = f"{net_tx_bytes} bps"
+    elif 1 < (net_tx_bytes / 1000) < 1000:
+        tx_tag = f"{round(net_tx_bytes / 1000, 1)} kbps"
+    elif 1 < (net_tx_bytes / 1000000):
+        tx_tag = f"{round(net_tx_bytes / 1000000, 1)} Mbps"
     else:
-        read_tag = f"{round(read_bytes / 1000000000, 2)} Gbps"
+        tx_tag = f"{round(net_tx_bytes / 1000000000, 1)} Gbps"
 
-    if (write_bytes / 1000) < 1:
-        write_tag = f"{write_bytes} bps"
-    elif 1 < (write_bytes / 1000) < 1000:
-        write_tag = f"{round(write_bytes / 1000, 2)} kbps"
-    elif 1 < (write_bytes / 1000000):
-        write_tag = f"{round(write_bytes / 1000000, 2)} Mbps"
+    if (net_rx_bytes / 1000) < 1:
+        rx_tag = f"{net_rx_bytes} bps"
+    elif 1 < (net_rx_bytes / 1000) < 1000:
+        rx_tag = f"{round(net_rx_bytes / 1000, 1)} kbps"
+    elif 1 < (net_rx_bytes / 1000000):
+        rx_tag = f"{round(net_rx_bytes / 1000000, 1)} Mbps"
     else:
-        write_tag = f"{round(write_bytes / 1000000000, 2)} Gbps"
-    return read_tag, write_tag
+        rx_tag = f"{round(net_rx_bytes / 1000000000, 1)} Gbps"
+    return tx_tag, rx_tag
+
+
+def disk_formatter(disk_read_bytes, disk_write_bytes):
+    if (disk_read_bytes / 1000) < 1:
+        r_tag = f"{disk_read_bytes} B/s"
+    elif 1 < (disk_read_bytes / 1000) < 1000:
+        r_tag = f"{round(disk_read_bytes / 1000, 1)} KB/s"
+    elif 1 < (disk_read_bytes / 1000000) < 1000:
+        r_tag = f"{round(disk_read_bytes / 1000000, 1)} MB/s"
+    else:
+        r_tag = f"{round(disk_read_bytes / 1000000000, 1)} GB/s"
+
+    if (disk_write_bytes / 1000) < 1:
+        w_tag = f"{disk_write_bytes} B/s"
+    elif 1 < (disk_write_bytes / 1000) < 1000:
+        w_tag = f"{round(disk_write_bytes / 1000, 1)} KB/s"
+    elif 1 < (disk_write_bytes / 1000000) < 1000:
+        w_tag = f"{round(disk_write_bytes / 1000000, 1)} MB/s"
+    else:
+        w_tag = f"{round(disk_write_bytes / 1000000000, 1)} GB/s"
+    return r_tag, w_tag
 
 
 class DataVisualizationWindow(QWidget):
@@ -409,19 +430,19 @@ class data_visualize(QWidget):
         self.node1_res_gridLayout.addWidget(self.node1_disk_read_label, 4, 2, 1, 1)
 
         # disk_write
-        self.node1_disk_write_label = QtWidgets.QLabel(self.node1_resource)
+        self.node1_disk_read_v = QtWidgets.QLabel(self.node1_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node1_disk_write_label.sizePolicy().hasHeightForWidth())
-        self.node1_disk_write_label.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.node1_disk_read_v.sizePolicy().hasHeightForWidth())
+        self.node1_disk_read_v.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        self.node1_disk_write_label.setFont(font)
-        self.node1_disk_write_label.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node1_disk_write_label.setObjectName("node1_disk_write_label")
-        self.node1_res_gridLayout.addWidget(self.node1_disk_write_label, 4, 4, 1, 1)
+        self.node1_disk_read_v.setFont(font)
+        self.node1_disk_read_v.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node1_disk_read_v.setObjectName("node1_disk_read_v")
+        self.node1_res_gridLayout.addWidget(self.node1_disk_read_v, 4, 4, 1, 1)
 
         self.node1_disk_name = QtWidgets.QLabel(self.node1_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
@@ -438,34 +459,34 @@ class data_visualize(QWidget):
         self.node1_res_gridLayout.addWidget(self.node1_disk_name, 5, 0, 1, 2)
 
         # disk_read
-        self.node1_disk_read_value = QtWidgets.QLabel(self.node1_resource)
+        self.node1_disk_write_label = QtWidgets.QLabel(self.node1_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node1_disk_read_value.sizePolicy().hasHeightForWidth())
-        self.node1_disk_read_value.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.node1_disk_write_label.sizePolicy().hasHeightForWidth())
+        self.node1_disk_write_label.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        self.node1_disk_read_value.setFont(font)
-        self.node1_disk_read_value.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node1_disk_read_value.setObjectName("node1_disk_read_value")
-        self.node1_res_gridLayout.addWidget(self.node1_disk_read_value, 5, 2, 1, 1)
+        self.node1_disk_write_label.setFont(font)
+        self.node1_disk_write_label.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node1_disk_write_label.setObjectName("node1_disk_write_label")
+        self.node1_res_gridLayout.addWidget(self.node1_disk_write_label, 5, 2, 1, 1)
 
         # disk_write
-        self.node1_disk_write_value = QtWidgets.QLabel(self.node1_resource)
+        self.node1_disk_write_v = QtWidgets.QLabel(self.node1_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node1_disk_write_value.sizePolicy().hasHeightForWidth())
-        self.node1_disk_write_value.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.node1_disk_write_v.sizePolicy().hasHeightForWidth())
+        self.node1_disk_write_v.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        self.node1_disk_write_value.setFont(font)
-        self.node1_disk_write_value.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node1_disk_write_value.setObjectName("node1_disk_write_value")
-        self.node1_res_gridLayout.addWidget(self.node1_disk_write_value, 5, 4, 1, 1)
+        self.node1_disk_write_v.setFont(font)
+        self.node1_disk_write_v.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node1_disk_write_v.setObjectName("node1_disk_write_v")
+        self.node1_res_gridLayout.addWidget(self.node1_disk_write_v, 5, 4, 1, 1)
 
         self.node1_res_gridLayout.setColumnStretch(0, 2)
         self.node1_res_gridLayout.setColumnStretch(1, 1)
@@ -781,19 +802,19 @@ class data_visualize(QWidget):
         self.node2_res_gridLayout.addWidget(self.node2_disk_read_label, 4, 2, 1, 1)
 
         # disk_write
-        self.node2_disk_write_label = QtWidgets.QLabel(self.node2_resource)
+        self.node2_disk_read_v = QtWidgets.QLabel(self.node2_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node2_disk_write_label.sizePolicy().hasHeightForWidth())
-        self.node2_disk_write_label.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.node2_disk_read_v.sizePolicy().hasHeightForWidth())
+        self.node2_disk_read_v.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        self.node2_disk_write_label.setFont(font)
-        self.node2_disk_write_label.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node2_disk_write_label.setObjectName("node1_disk_write_label")
-        self.node2_res_gridLayout.addWidget(self.node2_disk_write_label, 4, 4, 1, 1)
+        self.node2_disk_read_v.setFont(font)
+        self.node2_disk_read_v.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node2_disk_read_v.setObjectName("node1_disk_read_v")
+        self.node2_res_gridLayout.addWidget(self.node2_disk_read_v, 4, 4, 1, 1)
 
         self.node2_disk_name = QtWidgets.QLabel(self.node2_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
@@ -810,34 +831,34 @@ class data_visualize(QWidget):
         self.node2_res_gridLayout.addWidget(self.node2_disk_name, 5, 0, 1, 2)
 
         # disk_read
-        self.node2_disk_read_value = QtWidgets.QLabel(self.node2_resource)
+        self.node2_disk_write_label = QtWidgets.QLabel(self.node2_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node2_disk_read_value.sizePolicy().hasHeightForWidth())
-        self.node2_disk_read_value.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.node2_disk_write_label.sizePolicy().hasHeightForWidth())
+        self.node2_disk_write_label.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        self.node2_disk_read_value.setFont(font)
-        self.node2_disk_read_value.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node2_disk_read_value.setObjectName("node2_disk_read_value")
-        self.node2_res_gridLayout.addWidget(self.node2_disk_read_value, 5, 2, 1, 1)
+        self.node2_disk_write_label.setFont(font)
+        self.node2_disk_write_label.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node2_disk_write_label.setObjectName("node2_disk_write_label")
+        self.node2_res_gridLayout.addWidget(self.node2_disk_write_label, 5, 2, 1, 1)
 
         # disk_write
-        self.node2_disk_write_value = QtWidgets.QLabel(self.node2_resource)
+        self.node2_disk_write_v = QtWidgets.QLabel(self.node2_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node2_disk_write_value.sizePolicy().hasHeightForWidth())
-        self.node2_disk_write_value.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.node2_disk_write_v.sizePolicy().hasHeightForWidth())
+        self.node2_disk_write_v.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        self.node2_disk_write_value.setFont(font)
-        self.node2_disk_write_value.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node2_disk_write_value.setObjectName("node2_disk_write_value")
-        self.node2_res_gridLayout.addWidget(self.node2_disk_write_value, 5, 4, 1, 1)
+        self.node2_disk_write_v.setFont(font)
+        self.node2_disk_write_v.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node2_disk_write_v.setObjectName("node2_disk_write_v")
+        self.node2_res_gridLayout.addWidget(self.node2_disk_write_v, 5, 4, 1, 1)
 
         self.node2_res_gridLayout.setColumnStretch(0, 2)
         self.node2_res_gridLayout.setColumnStretch(1, 1)
@@ -1153,19 +1174,19 @@ class data_visualize(QWidget):
         self.node3_res_gridLayout.addWidget(self.node3_disk_read_label, 4, 2, 1, 1)
 
         # disk_write
-        self.node3_disk_write_label = QtWidgets.QLabel(self.node3_resource)
+        self.node3_disk_read_v = QtWidgets.QLabel(self.node3_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node3_disk_write_label.sizePolicy().hasHeightForWidth())
-        self.node3_disk_write_label.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.node3_disk_read_v.sizePolicy().hasHeightForWidth())
+        self.node3_disk_read_v.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        self.node3_disk_write_label.setFont(font)
-        self.node3_disk_write_label.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node3_disk_write_label.setObjectName("node3_disk_write_label")
-        self.node3_res_gridLayout.addWidget(self.node3_disk_write_label, 4, 4, 1, 1)
+        self.node3_disk_read_v.setFont(font)
+        self.node3_disk_read_v.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node3_disk_read_v.setObjectName("node3_disk_read_v")
+        self.node3_res_gridLayout.addWidget(self.node3_disk_read_v, 4, 4, 1, 1)
 
         self.node3_disk_name = QtWidgets.QLabel(self.node3_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
@@ -1182,34 +1203,34 @@ class data_visualize(QWidget):
         self.node3_res_gridLayout.addWidget(self.node3_disk_name, 5, 0, 1, 2)
 
         # disk_read
-        self.node3_disk_read_value = QtWidgets.QLabel(self.node3_resource)
+        self.node3_disk_write_label = QtWidgets.QLabel(self.node3_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node3_disk_read_value.sizePolicy().hasHeightForWidth())
-        self.node3_disk_read_value.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.node3_disk_write_label.sizePolicy().hasHeightForWidth())
+        self.node3_disk_write_label.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        self.node3_disk_read_value.setFont(font)
-        self.node3_disk_read_value.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node3_disk_read_value.setObjectName("node3_disk_read_value")
-        self.node3_res_gridLayout.addWidget(self.node3_disk_read_value, 5, 2, 1, 1)
+        self.node3_disk_write_label.setFont(font)
+        self.node3_disk_write_label.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node3_disk_write_label.setObjectName("node3_disk_write_label")
+        self.node3_res_gridLayout.addWidget(self.node3_disk_write_label, 5, 2, 1, 1)
 
         # disk_write
-        self.node3_disk_write_value = QtWidgets.QLabel(self.node3_resource)
+        self.node3_disk_write_v = QtWidgets.QLabel(self.node3_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node3_disk_write_value.sizePolicy().hasHeightForWidth())
-        self.node3_disk_write_value.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.node3_disk_write_v.sizePolicy().hasHeightForWidth())
+        self.node3_disk_write_v.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        self.node3_disk_write_value.setFont(font)
-        self.node3_disk_write_value.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node3_disk_write_value.setObjectName("node3_disk_write_value")
-        self.node3_res_gridLayout.addWidget(self.node3_disk_write_value, 5, 4, 1, 1)
+        self.node3_disk_write_v.setFont(font)
+        self.node3_disk_write_v.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node3_disk_write_v.setObjectName("node3_disk_write_v")
+        self.node3_res_gridLayout.addWidget(self.node3_disk_write_v, 5, 4, 1, 1)
 
         self.node3_res_gridLayout.setColumnStretch(0, 2)
         self.node3_res_gridLayout.setColumnStretch(1, 1)
@@ -1525,19 +1546,19 @@ class data_visualize(QWidget):
         self.node4_res_gridLayout.addWidget(self.node4_disk_read_label, 4, 2, 1, 1)
 
         # disk_write
-        self.node4_disk_write_label = QtWidgets.QLabel(self.node4_resource)
+        self.node4_disk_read_v = QtWidgets.QLabel(self.node4_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node4_disk_write_label.sizePolicy().hasHeightForWidth())
-        self.node4_disk_write_label.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.node4_disk_read_v.sizePolicy().hasHeightForWidth())
+        self.node4_disk_read_v.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        self.node4_disk_write_label.setFont(font)
-        self.node4_disk_write_label.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node4_disk_write_label.setObjectName("node4_disk_write_label")
-        self.node4_res_gridLayout.addWidget(self.node4_disk_write_label, 4, 4, 1, 1)
+        self.node4_disk_read_v.setFont(font)
+        self.node4_disk_read_v.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node4_disk_read_v.setObjectName("node4_disk_read_v")
+        self.node4_res_gridLayout.addWidget(self.node4_disk_read_v, 4, 4, 1, 1)
 
         self.node4_disk_name = QtWidgets.QLabel(self.node4_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
@@ -1554,34 +1575,34 @@ class data_visualize(QWidget):
         self.node4_res_gridLayout.addWidget(self.node4_disk_name, 5, 0, 1, 2)
 
         # disk_read
-        self.node4_disk_read_value = QtWidgets.QLabel(self.node4_resource)
+        self.node4_disk_write_label = QtWidgets.QLabel(self.node4_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node4_disk_read_value.sizePolicy().hasHeightForWidth())
-        self.node4_disk_read_value.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.node4_disk_write_label.sizePolicy().hasHeightForWidth())
+        self.node4_disk_write_label.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        self.node4_disk_read_value.setFont(font)
-        self.node4_disk_read_value.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node4_disk_read_value.setObjectName("node4_disk_read_value")
-        self.node4_res_gridLayout.addWidget(self.node4_disk_read_value, 5, 2, 1, 1)
+        self.node4_disk_write_label.setFont(font)
+        self.node4_disk_write_label.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node4_disk_write_label.setObjectName("node4_disk_write_label")
+        self.node4_res_gridLayout.addWidget(self.node4_disk_write_label, 5, 2, 1, 1)
 
         # disk_write
-        self.node4_disk_write_value = QtWidgets.QLabel(self.node4_resource)
+        self.node4_disk_write_v = QtWidgets.QLabel(self.node4_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node4_disk_write_value.sizePolicy().hasHeightForWidth())
-        self.node4_disk_write_value.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.node4_disk_write_v.sizePolicy().hasHeightForWidth())
+        self.node4_disk_write_v.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        self.node4_disk_write_value.setFont(font)
-        self.node4_disk_write_value.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node4_disk_write_value.setObjectName("node4_disk_write_value")
-        self.node4_res_gridLayout.addWidget(self.node4_disk_write_value, 5, 4, 1, 1)
+        self.node4_disk_write_v.setFont(font)
+        self.node4_disk_write_v.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node4_disk_write_v.setObjectName("node4_disk_write_v")
+        self.node4_res_gridLayout.addWidget(self.node4_disk_write_v, 5, 4, 1, 1)
 
         self.node4_res_gridLayout.setColumnStretch(0, 2)
         self.node4_res_gridLayout.setColumnStretch(1, 1)
@@ -1638,8 +1659,6 @@ class data_visualize(QWidget):
 
         self.history4 = DataVisualizationWindow(self.history_cpu_4, self.history_delay_4, "Node4")
         self.history4.setVisible(False)
-
-        self._initVariableGroup()
 
     def _initSpeedMeter(self):
         font = QtGui.QFont()
@@ -1771,10 +1790,10 @@ class data_visualize(QWidget):
         self.node1_net_write_v.setText("333kb")
         self.node1_disk_label.setText("DISK")
         self.node1_disk_read_label.setText("R/s")
-        self.node1_disk_write_label.setText("W/s")
+        self.node1_disk_read_v.setText("W/s")
         self.node1_disk_name.setText("Total")
-        self.node1_disk_read_value.setText("10M")
-        self.node1_disk_write_value.setText("2M")
+        self.node1_disk_write_label.setText("10M")
+        self.node1_disk_write_v.setText("2M")
 
         self.node2_label.setText("C-Node2")
         self.node2_wl_label.setText("Workload")
@@ -1790,10 +1809,10 @@ class data_visualize(QWidget):
         self.node2_net_write_v.setText("333kb")
         self.node2_disk_label.setText("DISK")
         self.node2_disk_read_label.setText("R/s")
-        self.node2_disk_write_label.setText("W/s")
+        self.node2_disk_read_v.setText("W/s")
         self.node2_disk_name.setText("Total")
-        self.node2_disk_read_value.setText("10M")
-        self.node2_disk_write_value.setText("2M")
+        self.node2_disk_write_label.setText("10M")
+        self.node2_disk_write_v.setText("2M")
 
         self.node3_label.setText("C-Node3")
         self.node3_wl_label.setText("Workload")
@@ -1809,10 +1828,10 @@ class data_visualize(QWidget):
         self.node3_net_write_v.setText("333kb")
         self.node3_disk_label.setText("DISK")
         self.node3_disk_read_label.setText("R/s")
-        self.node3_disk_write_label.setText("W/s")
+        self.node3_disk_read_v.setText("W/s")
         self.node3_disk_name.setText("Total")
-        self.node3_disk_read_value.setText("10M")
-        self.node3_disk_write_value.setText("2M")
+        self.node3_disk_write_label.setText("10M")
+        self.node3_disk_write_v.setText("2M")
 
         self.node4_label.setText("Average")
         self.node4_wl_label.setText("Workload")
@@ -1828,60 +1847,15 @@ class data_visualize(QWidget):
         self.node4_net_write_v.setText("333kb")
         self.node4_disk_label.setText("DISK")
         self.node4_disk_read_label.setText("R/s")
-        self.node4_disk_write_label.setText("W/s")
+        self.node4_disk_read_v.setText("W/s")
         self.node4_disk_name.setText("Total")
-        self.node4_disk_read_value.setText("10M")
-        self.node4_disk_write_value.setText("2M")
+        self.node4_disk_write_label.setText("10M")
+        self.node4_disk_write_v.setText("2M")
 
     def _initResourceUri(self):
         self.node1_resource_uri = f"http://{self.cfn_manager.demo_config.get_node('c_node1')['node_ip']}:8000/synthetic"
         self.node2_resource_uri = f"http://{self.cfn_manager.demo_config.get_node('c_node2')['node_ip']}:8000/synthetic"
         self.node3_resource_uri = f"http://{self.cfn_manager.demo_config.get_node('c_node3')['node_ip']}:8000/synthetic"
-
-    def _initVariableGroup(self):
-        self.CPU_Nums = [
-            self.node1_cpu_num,
-            self.node2_cpu_num,
-            self.node3_cpu_num,
-            self.node4_cpu_num,
-        ]
-        self.CPU_Bars = [
-            self.node1_cpu_bar,
-            self.node2_cpu_bar,
-            self.node3_cpu_bar,
-            self.node4_cpu_bar,
-        ]
-        self.CPU_SpeedMeters = [
-            self.speed_meter_1,
-            self.speed_meter_2,
-            self.speed_meter_3,
-            self.speed_meter_4,
-        ]
-        self.Mem_Nums = [
-            self.node1_mem_num,
-            self.node2_mem_num,
-            self.node3_mem_num,
-            self.node4_mem_num,
-        ]
-        self.Mem_Bars = [
-            self.node1_mem_bar,
-            self.node2_mem_bar,
-            self.node3_mem_bar,
-            self.node4_mem_bar,
-        ]
-        self.Net_Info = [
-            [self.node1_net_write_label, self.node1_net_write_v],
-            [self.node2_net_write_label, self.node2_net_write_v],
-            [self.node3_net_write_label, self.node3_net_write_v],
-            [self.node4_net_write_label, self.node4_net_write_v],
-        ]
-        self.Disk_Info = [
-            [self.node1_disk_read_value, self.node1_disk_write_value],
-            [self.node2_disk_read_value, self.node2_disk_write_value],
-            [self.node3_disk_read_value, self.node3_disk_write_value],
-            [self.node4_disk_read_value, self.node4_disk_write_value],
-        ]
-        self.CPU_HistoryList = [self.history_cpu_1, self.history_cpu_2, self.history_cpu_3, self.history_cpu_4]
 
     def requestResourceInfo(self):
         nodes_info = []
@@ -1957,26 +1931,12 @@ class data_visualize(QWidget):
         self.node1_net_write_label.setText(f"Rx({dx_tag.split(' ')[1]})")
         self.node1_net_write_v.setText(f"{dx_tag.split(' ')[0]}")
 
-        r_tag, w_tag = "", ""
-        if (rb / 1000) < 1:
-            r_tag = f"{rb} b"
-        elif 1 < (rb / 1000) < 1000:
-            r_tag = f"{round(rb / 1000, 2)} kb"
-        elif 1 < (rb / 1000000) < 1000:
-            r_tag = f"{round(rb / 1000000, 2)} Mb"
-        else:
-            r_tag = f"{round(rb / 1000000000, 2)} Gb"
+        r_tag, w_tag = disk_formatter(rb, wb)
 
-        if (wb / 1000) < 1:
-            w_tag = f"{wb} b"
-        elif 1 < (wb / 1000) < 1000:
-            w_tag = f"{round(wb / 1000, 2)} kb"
-        elif 1 < (wb / 1000000) < 1000:
-            w_tag = f"{round(wb / 1000000, 2)} Mb"
-        else:
-            w_tag = f"{round(wb / 1000000000, 2)} Gb"
-        eval("self.node1_disk_read_value.setText('" + r_tag + "')")
-        eval("self.node1_disk_write_value.setText('" + w_tag + "')")
+        self.node1_disk_read_label.setText(f"Read({r_tag.split(' ')[1]})")
+        self.node1_disk_read_v.setText(f"{r_tag.split(' ')[0]}")
+        self.node1_disk_write_label.setText(f"Write({w_tag.split(' ')[1]})")
+        self.node1_disk_write_v.setText(f"{w_tag.split(' ')[0]}")
 
     def updateNode2Info(self, node2_info):
         cu = node2_info['cpu']
@@ -2012,26 +1972,12 @@ class data_visualize(QWidget):
         self.node2_net_write_label.setText(f"Rx({dx_tag.split(' ')[1]})")
         self.node2_net_write_v.setText(f"{dx_tag.split(' ')[0]}")
 
-        r_tag, w_tag = "", ""
-        if (rb / 1000) < 1:
-            r_tag = f"{rb} b"
-        elif 1 < (rb / 1000) < 1000:
-            r_tag = f"{round(rb / 1000, 2)} kb"
-        elif 1 < (rb / 1000000) < 1000:
-            r_tag = f"{round(rb / 1000000, 2)} Mb"
-        else:
-            r_tag = f"{round(rb / 1000000000, 2)} Gb"
+        r_tag, w_tag = disk_formatter(rb, wb)
 
-        if (wb / 1000) < 1:
-            w_tag = f"{wb} b"
-        elif 1 < (wb / 1000) < 1000:
-            w_tag = f"{round(wb / 1000, 2)} kb"
-        elif 1 < (wb / 1000000) < 1000:
-            w_tag = f"{round(wb / 1000000, 2)} Mb"
-        else:
-            w_tag = f"{round(wb / 1000000000, 2)} Gb"
-        eval("self.node2_disk_read_value.setText('" + r_tag + "')")
-        eval("self.node2_disk_write_value.setText('" + w_tag + "')")
+        self.node2_disk_read_label.setText(f"Read({r_tag.split(' ')[1]})")
+        self.node2_disk_read_v.setText(f"{r_tag.split(' ')[0]}")
+        self.node2_disk_write_label.setText(f"Write({w_tag.split(' ')[1]})")
+        self.node2_disk_write_v.setText(f"{w_tag.split(' ')[0]}")
 
     def updateNode3Info(self, node3_info):
         cu = node3_info['cpu']
@@ -2067,26 +2013,12 @@ class data_visualize(QWidget):
         self.node3_net_write_label.setText(f"Rx({dx_tag.split(' ')[1]})")
         self.node3_net_write_v.setText(f"{dx_tag.split(' ')[0]}")
 
-        r_tag, w_tag = "", ""
-        if (rb / 1000) < 1:
-            r_tag = f"{rb} b"
-        elif 1 < (rb / 1000) < 1000:
-            r_tag = f"{round(rb / 1000, 2)} kb"
-        elif 1 < (rb / 1000000) < 1000:
-            r_tag = f"{round(rb / 1000000, 2)} Mb"
-        else:
-            r_tag = f"{round(rb / 1000000000, 2)} Gb"
+        r_tag, w_tag = disk_formatter(rb, wb)
 
-        if (wb / 1000) < 1:
-            w_tag = f"{wb} b"
-        elif 1 < (wb / 1000) < 1000:
-            w_tag = f"{round(wb / 1000, 2)} kb"
-        elif 1 < (wb / 1000000) < 1000:
-            w_tag = f"{round(wb / 1000000, 2)} Mb"
-        else:
-            w_tag = f"{round(wb / 1000000000, 2)} Gb"
-        eval("self.node3_disk_read_value.setText('" + r_tag + "')")
-        eval("self.node3_disk_write_value.setText('" + w_tag + "')")
+        self.node3_disk_read_label.setText(f"Read({r_tag.split(' ')[1]})")
+        self.node3_disk_read_v.setText(f"{r_tag.split(' ')[0]}")
+        self.node3_disk_write_label.setText(f"Write({w_tag.split(' ')[1]})")
+        self.node3_disk_write_v.setText(f"{w_tag.split(' ')[0]}")
 
     def updateNode4Info(self, node4_info):
         cu = node4_info['cpu']
@@ -2121,26 +2053,12 @@ class data_visualize(QWidget):
         self.node4_net_write_label.setText(f"Rx({dx_tag.split(' ')[1]})")
         self.node4_net_write_v.setText(f"{dx_tag.split(' ')[0]}")
 
-        r_tag, w_tag = "", ""
-        if (rb / 1000) < 1:
-            r_tag = f"{rb} b"
-        elif 1 < (rb / 1000) < 1000:
-            r_tag = f"{round(rb / 1000, 2)} kb"
-        elif 1 < (rb / 1000000) < 1000:
-            r_tag = f"{round(rb / 1000000, 2)} Mb"
-        else:
-            r_tag = f"{round(rb / 1000000000, 2)} Gb"
+        r_tag, w_tag = disk_formatter(rb, wb)
 
-        if (wb / 1000) < 1:
-            w_tag = f"{wb} b"
-        elif 1 < (wb / 1000) < 1000:
-            w_tag = f"{round(wb / 1000, 2)} kb"
-        elif 1 < (wb / 1000000) < 1000:
-            w_tag = f"{round(wb / 1000000, 2)} Mb"
-        else:
-            w_tag = f"{round(wb / 1000000000, 2)} Gb"
-        eval("self.node4_disk_read_value.setText('" + r_tag + "')")
-        eval("self.node4_disk_write_value.setText('" + w_tag + "')")
+        self.node4_disk_read_label.setText(f"Read({r_tag.split(' ')[1]})")
+        self.node4_disk_read_v.setText(f"{r_tag.split(' ')[0]}")
+        self.node4_disk_write_label.setText(f"Write({w_tag.split(' ')[1]})")
+        self.node4_disk_write_v.setText(f"{w_tag.split(' ')[0]}")
 
 
 if __name__ == "__main__":
