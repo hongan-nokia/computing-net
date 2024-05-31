@@ -55,8 +55,17 @@ class Surveillance(QWidget):
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.top_box)
         self.horizontalLayout.setObjectName("horizontalLayout")
 
+        current_datetime = datetime.datetime.now()
+        formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+
         font.setBold(True)
         font.setPointSize(10)
+
+        self.label = QtWidgets.QLabel(self.top_box)
+        self.label.setObjectName("label")
+        self.label.setFont(font)
+        self.label.setText(str(formatted_datetime))
+        self.horizontalLayout.addWidget(self.label)
 
         spacerItem1 = QtWidgets.QSpacerItem(176, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
@@ -80,7 +89,63 @@ class Surveillance(QWidget):
         hostname = socket.gethostname()
         ip_address = socket.gethostbyname(hostname)
         self.vlc_player = VideoPlayer(frame=self.player_frame, videoPath="udp://@" + ip_address + ":2234")
+        # self.vlc_player.startPlayer()
         self.horizontalLayout_v.addWidget(self.vlc_player)
+
+        self.bottom_box = QtWidgets.QGroupBox(self.groupBox)
+        self.bottom_box.setTitle("")
+        self.bottom_box.setObjectName("bottom_box")
+        self.bottom_box.setStyleSheet("border: none;")
+        # self.bottom_box.setStyleSheet("QGroupBox { border: 2px solid #2F528F; border-radius: 20px; }")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.bottom_box)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+
+        self.volume = QtWidgets.QLabel(self.bottom_box)
+        self.volume.setObjectName("volume")
+        self.volume.setText("Volume")
+        self.volume.setFont(font)
+        self.volume.setStyleSheet("border: none;")
+        self.horizontalLayout_2.addWidget(self.volume)
+
+        self.volumeSlider = QtWidgets.QSlider(self.bottom_box)
+        self.volumeSlider.setMaximumSize(QtCore.QSize(200, 30))
+        self.volumeSlider.setOrientation(QtCore.Qt.Horizontal)
+        self.volumeSlider.setObjectName("volumeSlider")
+        self.volumeSlider.setMinimum(0)
+        self.volumeSlider.setMaximum(100)
+        self.volumeSlider.setMinimumWidth(50)
+        self.volumeSlider.setStyleSheet("border: none;")
+        self.volumeSlider.setValue(100)
+        self.volumeSlider.valueChanged.connect(self.update_volume)
+        self.horizontalLayout_2.addWidget(self.volumeSlider)
+
+        self.volumenum = QtWidgets.QLabel(self.bottom_box)
+        self.volumenum.setObjectName("volumenum")
+        self.volumenum.setText("100%")
+        self.volumenum.setFont(font)
+        self.volumenum.setFixedWidth(60)
+        self.volumenum.setStyleSheet("border: none;")
+        self.horizontalLayout_2.addWidget(self.volumenum)
+
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem1)
+
+        font.setBold(True)
+        font.setPointSize(15)
+        self.start_end_btn = QtWidgets.QPushButton(self.bottom_box)
+        self.start_end_btn.setObjectName("start_end_btn")
+        self.start_end_btn.setStyleSheet(
+            "QPushButton { background-color: #4CAF50; color: white; border: 0px solid; border-radius: 10px;}"
+            "QPushButton:hover { background-color: #45a049; }")
+        self.start_end_btn.clicked.connect(self.start_event)
+        self.start_end_btn.setText("Start")
+        self.start_end_btn.setFixedWidth(200)
+        self.start_end_btn.setFixedHeight(70)
+        self.start_end_btn.setFont(font)
+        self.horizontalLayout_2.addWidget(self.start_end_btn)
+        self.start_end_btn.setVisible(False)
+
+        self.verticalLayout.addWidget(self.bottom_box)
 
         self.verticalLayout.setStretch(0, 1)
         self.verticalLayout.setStretch(1, 10)
@@ -88,6 +153,10 @@ class Surveillance(QWidget):
 
         self.layout.addWidget(self.groupBox)
         self.layout.setContentsMargins(0, 0, 0, 0)
+
+        self.timer_timeupdate = QTimer(self)
+        self.timer_timeupdate.timeout.connect(self.update_time)
+        self.timer_timeupdate.start(1000)
 
     def _init_signals(self):
         self.node_manager.signal_emitter.QtSignals.service_ctrl.connect(self.slave_service_ctrl)
@@ -103,3 +172,72 @@ class Surveillance(QWidget):
         elif action == 'down':
             self.vlc_streamer.stopStream()
             self.vlc_player.stopPlayer()
+
+    def update_time(self):
+        current_datetime = datetime.datetime.now()
+        formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+        self.label.setText(str(formatted_datetime))
+
+    def update_volume(self, value):
+        self.volumenum.setText(f"{value}%")
+        self.vlc_player.media_player.audio_set_volume(value)
+
+    def start_event(self):
+        self.start_end_btn.setDisabled(True)
+
+        if self.vlc_player.isHidden():
+            self.vlc_player.show()
+        else:
+            self.vlc_player.hide()
+
+        if not self.vlc_streamer.video_streamer.is_playing():  # not playing --> playing
+            self.send_msg("Surveillance", "CPU: 0.672 Gflops", "MEM: 36.7 MB", "BW: 1.8 Mbps")
+            self.vlc_streamer.startStream()
+            self.vlc_player.startPlayer()
+            self.start_end_btn.setText("Stop")
+            self.start_end_btn.setStyleSheet(
+                "QPushButton { background-color: #A60000; color: white; border: 0px solid; border-radius: 10px;}"
+                "QPushButton:hover { background-color: #8F1613; }")
+            self.start_end_btn.setDisabled(False)
+        else:  # playing --> not playing
+            self.vlc_streamer.stopStream()
+            self.start_end_btn.setText("Start")
+            self.start_end_btn.setStyleSheet(
+                "QPushButton { background-color: #4CAF50; color: white; border: 0px solid; border-radius: 10px;}"
+                "QPushButton:hover { background-color: #45a049; }")
+            self.start_end_btn.setDisabled(False)
+        self.start_end_btn.setVisible(False)
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_S:
+            self.send_msg("Surveillance", "CPU: 0.672 Gflops", "MEM: 36.7 MB", "BW: 1.8 Mbps")
+        if event.key() == Qt.Key_C:
+            self.send_msg("Crowded", "", "", "")
+        if event.key() == Qt.Key_X:
+            self.send_msg("UnCrowded", "", "", "")
+
+    def send_msg(self, serviceName, cpu_val, mem_val, bw_val):
+        udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        ip = '192.168.66.30'
+        port = 10068
+        if serviceName == "Crowded" or serviceName == "UnCrowded":
+            message = serviceName
+        else:
+            message = "tag_" + str(serviceName) + "_" + str(cpu_val) + "_" + str(mem_val) + "_" + str(bw_val)
+        try:
+            # 发送消息
+            udp_socket.sendto(message.encode(), (ip, port))
+            print(f"Sent message: {message} to {ip}:{port}")
+        except Exception as e:
+            print(f"Error while sending message: {e}")
+        finally:
+            # 关闭套接字
+            udp_socket.close()
+
+    def shut_down(self):
+        self.vlc_player.stopPlayer()
+        self.vlc_streamer.stopStream()
+
+    def closeEvent(self, event):
+        self.shut_down()
+        event.accept()

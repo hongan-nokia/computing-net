@@ -29,7 +29,7 @@ class StreamerPlayer():
         print(ip_address)
 
         ad = "sout=#transcode{vcodec=h264,vb=800,acodec=mpga,scale=1,ab=128,channels=2,samplerate=44100}:" \
-             "duplicate{dst=udp{mux=ts,dst=" + addr + ":" + port + "},dst=udp{mux=ts,dst=" + ip_address + ":" + local_port + "}}"
+             "duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "},dst=udp{mux=ts,dst=" + ip_address + ":" + local_port + "}}"
         self.params = [ad, "no-sout-all", "sout-keep", "file-caching=500"]
 
         if parent is not None:
