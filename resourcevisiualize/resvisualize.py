@@ -1624,7 +1624,7 @@ class data_visualize(QWidget):
 
         # 在底部添加logo
         self.nokia_logo = QtWidgets.QLabel()
-        self.nokia_logo.setPixmap(QtGui.QPixmap("../images/bell_logo.png"))
+        self.nokia_logo.setPixmap(QtGui.QPixmap("./images/bell_logo.png"))
         self.nokia_logo.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         self.nokia_logo_layout = QtWidgets.QHBoxLayout()
         self.nokia_logo_layout.addStretch(19)
