@@ -150,12 +150,8 @@ class GlancesHandler(object):
                 if not self.q.full():
                     # print(f"GlancesHandler -> r_dict: {r_dict}")
                     if self.plugin in ['cpu']:
-                        self.q.put([float(r_dict.get(item)) for item in self.metrics])  # 将收集到的数据放入队列 self.q 中  [0.0, 0.0]
-                        self.q.put([float(r_dict.get(item)) for item in self.metrics])
-                        self.q.put([float(r_dict.get(item)) for item in self.metrics])
-                        self.q.put([float(r_dict.get(item)) for item in self.metrics])
-                        self.q.put([float(r_dict.get(item)) for item in self.metrics])
-                        self.q.put([float(r_dict.get(item)) for item in self.metrics])
+                        for i in range(10):
+                            self.q.put([float(r_dict.get(item)) for item in self.metrics])  # 将收集到的数据放入队列 self.q 中  [0.0, 0.0]
                     else:
                         self.q.put([float(r_dict.get(item)) for item in self.metrics])
                         self.q.put([float(r_dict.get(item)) for item in self.metrics])

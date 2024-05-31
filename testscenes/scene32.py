@@ -273,7 +273,7 @@ class Scene32(QWidget):
         self.heartrate.setGeometry(1517, 257, 180, 100)
 
         self.heartrateTag = QtWidgets.QLabel(parent=self)
-        self.heartrateTag.setPixmap(QtGui.QPixmap('./images/heartrateheartrate_tag.png'))
+        self.heartrateTag.setPixmap(QtGui.QPixmap('./images/heartrate_tag.png'))
         self.heartrateTag.setFont(font)
         self.heartrateTag.setPalette(palette)
         self.heartrateTag.setGeometry(1532, 257, 180, 100)
@@ -323,7 +323,6 @@ class Scene32(QWidget):
         else:
             pass
 
-
     @pyqtSlot(str)
     def service_provision_anim(self, destination: str):
         self.queueFlag = 1
@@ -331,24 +330,25 @@ class Scene32(QWidget):
             # self.service_step2.label.setVisible(True)
             self.service_step2.start("sp2")
         elif destination == "sp2":
-            temps = [0, 0, 0]
+            temp1, temp2, temp3 = 0, 0, 0
             if not self.monitor_q_cpu_hm_node1.empty():
                 temp1 = self.monitor_q_cpu_hm_node1.get()[-1]
             else:
                 self.queueFlag = 0
             if not self.monitor_q_cpu_hm_node2.empty():
-                temp2 = self.monitor_q_cpu_hm_node1.get()[-1]
+                temp2 = self.monitor_q_cpu_hm_node2.get()[-1]
             else:
                 self.queueFlag = 0
             if not self.monitor_q_cpu_hm_node3.empty():
-                temp3 = self.monitor_q_cpu_hm_node1.get()[-1]
+                temp3 = self.monitor_q_cpu_hm_node3.get()[-1]
             else:
                 self.queueFlag = 0
-
+            temps = [temp1, temp2, temp3]
+            print(f"------------------------------------------------------------------------------\n"
+                  f">>>> Computing Addressing self.queueFlag is: {self.queueFlag}, CPU utilization's are: {temps} "
+                  f"------------------------------------------------------------------------------\n")
             if self.queueFlag:
-                temps = [temp1, temp2, temp3]
                 self.path = temps.index(min(temps)) + 1
-            # self.path = 3
             if self.path == 1:
                 self.service_step31.start("sp3")
                 self.service_step31.QtSignals.anim_over.connect(self.on_animation_over)
@@ -360,30 +360,24 @@ class Scene32(QWidget):
                 self.service_step33.QtSignals.anim_over.connect(self.on_animation_over)
         elif destination == "sp3":
             if self.path == 1:
-                # self.service_step41.label.setVisible(True)
                 self.service_step41.start("sp4")
                 self.c_node1_heart_rate.setVisible(True)
             elif self.path == 2:
-                # self.service_step42.label.setVisible(True)
                 self.service_step42.start("sp4")
                 self.c_node2_heart_rate.setVisible(True)
             elif self.path == 3:
-                # self.service_step43.label.setVisible(True)
                 self.service_step43.start("sp4")
                 self.c_node3_heart_rate.setVisible(True)
         elif destination == "sp4":
             if self.path == 1:
-                # self.service_step51.label.setVisible(True)
                 self.service_step51.start("")
                 self.c_node1_heart_rate.setVisible(True)
                 self.cfn_manager.send_command(f'c_node{self.path}', 'task', 'cam_health camera_1')
             elif self.path == 2:
-                # self.service_step52.label.setVisible(True)
                 self.service_step52.start("")
                 self.c_node2_heart_rate.setVisible(True)
                 self.cfn_manager.send_command(f'c_node{self.path}', 'task', 'cam_health camera_1')
             elif self.path == 3:
-                # self.service_step53.label.setVisible(True)
                 self.service_step53.start("")
                 self.c_node3_heart_rate.setVisible(True)
                 self.cfn_manager.send_command(f'c_node{self.path}', 'task', 'cam_health camera_1')

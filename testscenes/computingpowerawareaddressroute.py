@@ -454,6 +454,10 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
             self.cfn_manager.send_command('c_node3', 'task', 'vlc worldCup.mp4_' + current_position)
 
     def reset(self):
+        self.cfn_manager.send_command("c_node1", "stop_task", "AI_trainer1 up")
+        self.cfn_manager.send_command("c_node1", "stop_task", "vlc worldCup.mp4_0")
+        self.cfn_manager.send_command("c_node2", "stop_task", "vlc worldCup.mp4")
+        self.cfn_manager.send_command('c_node3', 'stop_task', 'vlc worldCup.mp4')
         self.user_first_pkg.tag_label.setVisible(False)
         self.addr_request.tag_label.setVisible(False)
         self.net_brain_ctrl.tag_label.setVisible(False)
@@ -478,7 +482,3 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.finalServiceProvideByNode2.label.setVisible(False)
         self.finalServiceProvideByNode3.label.setVisible(False)
 
-        self.cfn_manager.send_command("c_node1", "stop_task", "AI_trainer1 up")
-        self.cfn_manager.send_command("c_node1", "stop_task", "vlc worldCup.mp4_0")
-        self.cfn_manager.send_command("c_node2", "stop_task", "vlc worldCup.mp4")
-        self.cfn_manager.send_command('c_node3', 'stop_task', 'vlc worldCup.mp4')
