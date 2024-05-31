@@ -27,7 +27,7 @@ from utils.reversequeue import reverseQueue
 
 def net_formatter(net_tx_bytes, net_rx_bytes):
     if (net_tx_bytes / 1000) < 1:
-        tx_tag = f"{net_tx_bytes} bps"
+        tx_tag = f"{round(net_tx_bytes, 1)} bps"
     elif 1 < (net_tx_bytes / 1000) < 1000:
         tx_tag = f"{round(net_tx_bytes / 1000, 1)} kbps"
     elif 1 < (net_tx_bytes / 1000000):
@@ -36,7 +36,7 @@ def net_formatter(net_tx_bytes, net_rx_bytes):
         tx_tag = f"{round(net_tx_bytes / 1000000000, 1)} Gbps"
 
     if (net_rx_bytes / 1000) < 1:
-        rx_tag = f"{net_rx_bytes} bps"
+        rx_tag = f"{round(net_rx_bytes, 1)} bps"
     elif 1 < (net_rx_bytes / 1000) < 1000:
         rx_tag = f"{round(net_rx_bytes / 1000, 1)} kbps"
     elif 1 < (net_rx_bytes / 1000000):
@@ -48,7 +48,7 @@ def net_formatter(net_tx_bytes, net_rx_bytes):
 
 def disk_formatter(disk_read_bytes, disk_write_bytes):
     if (disk_read_bytes / 1000) < 1:
-        r_tag = f"{disk_read_bytes} B/s"
+        r_tag = f"{round(disk_read_bytes, 1)} B/s"
     elif 1 < (disk_read_bytes / 1000) < 1000:
         r_tag = f"{round(disk_read_bytes / 1000, 1)} KB/s"
     elif 1 < (disk_read_bytes / 1000000) < 1000:
@@ -57,7 +57,7 @@ def disk_formatter(disk_read_bytes, disk_write_bytes):
         r_tag = f"{round(disk_read_bytes / 1000000000, 1)} GB/s"
 
     if (disk_write_bytes / 1000) < 1:
-        w_tag = f"{disk_write_bytes} B/s"
+        w_tag = f"{round(disk_write_bytes, 1)} B/s"
     elif 1 < (disk_write_bytes / 1000) < 1000:
         w_tag = f"{round(disk_write_bytes / 1000, 1)} KB/s"
     elif 1 < (disk_write_bytes / 1000000) < 1000:
@@ -109,6 +109,10 @@ class data_visualize(QWidget):
             'width': 1920,
             'height': 1060}
         self.setGeometry(geo['left'], geo['top'], geo['width'], geo['height'])
+        self.node1_globe_info = [[0, 0], [0, 0]]
+        self.node2_globe_info = [[0, 0], [0, 0]]
+        self.node3_globe_info = [[0, 0], [0, 0]]
+        self.node4_globe_info = [[0, 0], [0, 0]]
 
         """
         包含3个node展示页面的主框架，布局为Horizontal，3个node水平展示
@@ -1856,6 +1860,29 @@ class data_visualize(QWidget):
         self.node1_resource_uri = f"http://{self.cfn_manager.demo_config.get_node('c_node1')['node_ip']}:8000/synthetic"
         self.node2_resource_uri = f"http://{self.cfn_manager.demo_config.get_node('c_node2')['node_ip']}:8000/synthetic"
         self.node3_resource_uri = f"http://{self.cfn_manager.demo_config.get_node('c_node3')['node_ip']}:8000/synthetic"
+        node1_client = requests.get(url=self.node1_resource_uri, timeout=3)
+        node2_client = requests.get(url=self.node2_resource_uri, timeout=3)
+        node3_client = requests.get(url=self.node3_resource_uri, timeout=3)
+        node1_info = node1_client.json()
+        node2_info = node2_client.json()
+        node3_info = node3_client.json()
+        nodes_info = [node1_info, node2_info, node3_info]
+        node4_info = {
+            "cpu": round(sum(ni['cpu'] for ni in nodes_info) / len(nodes_info), 2),
+            "mem": round(sum(ni['mem'] for ni in nodes_info) / len(nodes_info), 2),
+            "disk": [
+                round(sum(ni['disk'][0] for ni in nodes_info) / len(nodes_info), 2),
+                round(sum(ni['disk'][1] for ni in nodes_info) / len(nodes_info), 2)
+            ],
+            "net": [
+                round(sum(ni['net'][0] for ni in nodes_info) / len(nodes_info), 2),
+                round(sum(ni['net'][1] for ni in nodes_info) / len(nodes_info), 2)
+            ]
+        }
+        self.node1_globe_info = [[node1_info['net'][0], node1_info['net'][1]], [node1_info['disk'][0], node1_info['disk'][1]]]
+        self.node2_globe_info = [[node2_info['net'][0], node2_info['net'][1]], [node2_info['disk'][0], node2_info['disk'][1]]]
+        self.node3_globe_info = [[node3_info['net'][0], node3_info['net'][1]], [node3_info['disk'][0], node3_info['disk'][1]]]
+        self.node4_globe_info = [[node4_info['net'][0], node4_info['net'][1]], [node4_info['disk'][0], node4_info['disk'][1]]]
 
     def requestResourceInfo(self):
         nodes_info = []
@@ -1896,12 +1923,20 @@ class data_visualize(QWidget):
         self.updateNode2Info(syntheticResInfo[1])
         self.updateNode3Info(syntheticResInfo[2])
         self.updateNode4Info(syntheticResInfo[3])
+        self.node1_globe_info = [[syntheticResInfo[0]['net'][0], syntheticResInfo[0]['net'][1]],
+                                 [syntheticResInfo[0]['disk'][0], syntheticResInfo[0]['disk'][1]]]
+        self.node2_globe_info = [[syntheticResInfo[1]['net'][0], syntheticResInfo[1]['net'][1]],
+                                 [syntheticResInfo[1]['disk'][0], syntheticResInfo[1]['disk'][1]]]
+        self.node3_globe_info = [[syntheticResInfo[2]['net'][0], syntheticResInfo[2]['net'][1]],
+                                 [syntheticResInfo[2]['disk'][0], syntheticResInfo[2]['disk'][1]]]
+        self.node4_globe_info = [[syntheticResInfo[3]['net'][0], syntheticResInfo[3]['net'][1]],
+                                 [syntheticResInfo[3]['disk'][0], syntheticResInfo[3]['disk'][1]]]
 
     def updateNode1Info(self, node1_info):
         cu = node1_info['cpu']
         mu = node1_info['mem']
-        tx, dx = node1_info['net'][0], node1_info['net'][1]
-        rb, wb = node1_info['disk'][0], node1_info['disk'][1]
+        tx, dx = node1_info['net'][0] - self.node1_globe_info[0][0], node1_info['net'][1] - self.node1_globe_info[0][1]
+        rb, wb = node1_info['disk'][0] - self.node1_globe_info[1][0], node1_info['disk'][1] - self.node1_globe_info[1][1]
         self.history_cpu_1.put(cu)
         self.history1.cpu_history.update_data_home()
         eval("self.node1_cpu_num.setText('" + str(cu) + "%'" + ")")
@@ -1941,8 +1976,8 @@ class data_visualize(QWidget):
     def updateNode2Info(self, node2_info):
         cu = node2_info['cpu']
         mu = node2_info['mem']
-        tx, dx = node2_info['net'][0], node2_info['net'][1]
-        rb, wb = node2_info['disk'][0], node2_info['disk'][1]
+        tx, dx = node2_info['net'][0] - self.node2_globe_info[0][0], node2_info['net'][1] - self.node2_globe_info[0][1]
+        rb, wb = node2_info['disk'][0] - self.node2_globe_info[1][0], node2_info['disk'][1] - self.node2_globe_info[1][1]
         self.history_cpu_2.put(cu)
         self.history2.cpu_history.update_data_home()
         eval("self.node2_cpu_num.setText('" + str(cu) + "%'" + ")")
@@ -1982,8 +2017,8 @@ class data_visualize(QWidget):
     def updateNode3Info(self, node3_info):
         cu = node3_info['cpu']
         mu = node3_info['mem']
-        tx, dx = node3_info['net'][0], node3_info['net'][1]
-        rb, wb = node3_info['disk'][0], node3_info['disk'][1]
+        tx, dx = node3_info['net'][0] - self.node3_globe_info[0][0], node3_info['net'][1] - self.node3_globe_info[0][1]
+        rb, wb = node3_info['disk'][0] - self.node3_globe_info[1][0], node3_info['disk'][1] - self.node3_globe_info[1][1]
         self.history_cpu_3.put(cu)
         self.history3.cpu_history.update_data_home()
         eval("self.node3_cpu_num.setText('" + str(cu) + "%'" + ")")
@@ -2023,8 +2058,8 @@ class data_visualize(QWidget):
     def updateNode4Info(self, node4_info):
         cu = node4_info['cpu']
         mu = node4_info['mem']
-        tx, dx = node4_info['net'][0], node4_info['net'][1]
-        rb, wb = node4_info['disk'][0], node4_info['disk'][1]
+        tx, dx = node4_info['net'][0] - self.node4_globe_info[0][0], node4_info['net'][1] - self.node4_globe_info[0][1]
+        rb, wb = node4_info['disk'][0] - self.node4_globe_info[1][0], node4_info['disk'][1] - self.node4_globe_info[1][1]
         self.history_cpu_4.put(cu)
         self.history4.cpu_history.update_data_home()
         eval("self.node4_cpu_num.setText('" + str(cu) + "%'" + ")")
