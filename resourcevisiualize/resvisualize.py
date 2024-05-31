@@ -25,6 +25,27 @@ from utils.repeatimer import repeatTimer
 from utils.reversequeue import reverseQueue
 
 
+def net_formatter(read_bytes, write_bytes):
+    if (read_bytes / 1000) < 1:
+        read_tag = f"{read_bytes} bps"
+    elif 1 < (read_bytes / 1000) < 1000:
+        read_tag = f"{round(read_bytes / 1000, 2)} kbps"
+    elif 1 < (read_bytes / 1000000):
+        read_tag = f"{round(read_bytes / 1000000, 2)} Mbps"
+    else:
+        read_tag = f"{round(read_bytes / 1000000000, 2)} Gbps"
+
+    if (write_bytes / 1000) < 1:
+        write_tag = f"{write_bytes} bps"
+    elif 1 < (write_bytes / 1000) < 1000:
+        write_tag = f"{round(write_bytes / 1000, 2)} kbps"
+    elif 1 < (write_bytes / 1000000):
+        write_tag = f"{round(write_bytes / 1000000, 2)} Mbps"
+    else:
+        write_tag = f"{round(write_bytes / 1000000000, 2)} Gbps"
+    return read_tag, write_tag
+
+
 class DataVisualizationWindow(QWidget):
     def __init__(self, cpu_q, delay_q, windowTitle="History"):
         super().__init__()
@@ -47,7 +68,7 @@ class DataVisualizationWindow(QWidget):
 
 
 class data_visualize(QWidget):
-    def __init__(self, parent, demo_manager: CfnDemoManager, res_queue_dict):
+    def __init__(self, parent, demo_manager, res_queue_dict):
         super().__init__()
         self.cfn_manager = demo_manager
         self._initResourceUri()
@@ -299,6 +320,35 @@ class data_visualize(QWidget):
         self.node1_res_gridLayout.addWidget(self.node1_net_read_label, 2, 2, 1, 1)
 
         # disk_write
+        self.node1_net_read_v = QtWidgets.QLabel(self.node1_resource)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.node1_net_read_v.sizePolicy().hasHeightForWidth())
+        self.node1_net_read_v.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(16)
+        self.node1_net_read_v.setFont(font)
+        self.node1_net_read_v.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node1_net_read_v.setObjectName("node1_net_read_v")
+        self.node1_res_gridLayout.addWidget(self.node1_net_read_v, 2, 4, 1, 1)
+
+        self.node1_net_name = QtWidgets.QLabel(self.node1_resource)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.node1_net_name.sizePolicy().hasHeightForWidth())
+        self.node1_net_name.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(16)
+        self.node1_net_name.setFont(font)
+        self.node1_net_name.setStyleSheet("color: rgb(0, 17, 53);")
+        self.node1_net_name.setObjectName("node1_net_name")
+        self.node1_res_gridLayout.addWidget(self.node1_net_name, 3, 0, 1, 1)
+
+        # disk_read
         self.node1_net_write_label = QtWidgets.QLabel(self.node1_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -311,51 +361,22 @@ class data_visualize(QWidget):
         self.node1_net_write_label.setFont(font)
         self.node1_net_write_label.setStyleSheet("color: rgb(255, 255, 255);")
         self.node1_net_write_label.setObjectName("node1_net_write_label")
-        self.node1_res_gridLayout.addWidget(self.node1_net_write_label, 2, 4, 1, 1)
-
-        self.node1_net_name = QtWidgets.QLabel(self.node1_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node1_net_name.sizePolicy().hasHeightForWidth())
-        self.node1_net_name.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.node1_net_name.setFont(font)
-        self.node1_net_name.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node1_net_name.setObjectName("node1_net_name")
-        self.node1_res_gridLayout.addWidget(self.node1_net_name, 3, 0, 1, 1)
-
-        # disk_read
-        self.node1_net_read_value = QtWidgets.QLabel(self.node1_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node1_net_read_value.sizePolicy().hasHeightForWidth())
-        self.node1_net_read_value.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.node1_net_read_value.setFont(font)
-        self.node1_net_read_value.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node1_net_read_value.setObjectName("node1_net_read_value")
-        self.node1_res_gridLayout.addWidget(self.node1_net_read_value, 3, 2, 1, 1)
+        self.node1_res_gridLayout.addWidget(self.node1_net_write_label, 3, 2, 1, 1)
 
         # disk_write
-        self.node1_net_write_value = QtWidgets.QLabel(self.node1_resource)
+        self.node1_net_write_v = QtWidgets.QLabel(self.node1_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node1_net_write_value.sizePolicy().hasHeightForWidth())
-        self.node1_net_write_value.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.node1_net_write_v.sizePolicy().hasHeightForWidth())
+        self.node1_net_write_v.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        self.node1_net_write_value.setFont(font)
-        self.node1_net_write_value.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node1_net_write_value.setObjectName("node1_net_write_value")
-        self.node1_res_gridLayout.addWidget(self.node1_net_write_value, 3, 4, 1, 1)
+        self.node1_net_write_v.setFont(font)
+        self.node1_net_write_v.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node1_net_write_v.setObjectName("node1_net_write_v")
+        self.node1_res_gridLayout.addWidget(self.node1_net_write_v, 3, 4, 1, 1)
         #################################
         # Disk
         self.node1_disk_label = QtWidgets.QLabel(self.node1_resource)
@@ -671,19 +692,19 @@ class data_visualize(QWidget):
         self.node2_res_gridLayout.addWidget(self.node2_net_read_label, 2, 2, 1, 1)
 
         # disk_write
-        self.node2_net_write_label = QtWidgets.QLabel(self.node2_resource)
+        self.node2_net_read_v = QtWidgets.QLabel(self.node2_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node2_net_write_label.sizePolicy().hasHeightForWidth())
-        self.node2_net_write_label.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.node2_net_read_v.sizePolicy().hasHeightForWidth())
+        self.node2_net_read_v.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        self.node2_net_write_label.setFont(font)
-        self.node2_net_write_label.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node2_net_write_label.setObjectName("node1_net_write_label")
-        self.node2_res_gridLayout.addWidget(self.node2_net_write_label, 2, 4, 1, 1)
+        self.node2_net_read_v.setFont(font)
+        self.node2_net_read_v.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node2_net_read_v.setObjectName("node1_net_read_v")
+        self.node2_res_gridLayout.addWidget(self.node2_net_read_v, 2, 4, 1, 1)
 
         self.node2_net_name = QtWidgets.QLabel(self.node2_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
@@ -695,39 +716,39 @@ class data_visualize(QWidget):
         font.setFamily("Arial")
         font.setPointSize(16)
         self.node2_net_name.setFont(font)
-        self.node2_net_name.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node2_net_name.setStyleSheet("color: rgb(0, 17, 53);")
         self.node2_net_name.setObjectName("node2_net_name")
         self.node2_res_gridLayout.addWidget(self.node2_net_name, 3, 0, 1, 1)
 
         # disk_read
-        self.node2_net_read_value = QtWidgets.QLabel(self.node2_resource)
+        self.node2_net_write_label = QtWidgets.QLabel(self.node2_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node2_net_read_value.sizePolicy().hasHeightForWidth())
-        self.node2_net_read_value.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.node2_net_write_label.sizePolicy().hasHeightForWidth())
+        self.node2_net_write_label.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        self.node2_net_read_value.setFont(font)
-        self.node2_net_read_value.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node2_net_read_value.setObjectName("node2_net_read_value")
-        self.node2_res_gridLayout.addWidget(self.node2_net_read_value, 3, 2, 1, 1)
+        self.node2_net_write_label.setFont(font)
+        self.node2_net_write_label.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node2_net_write_label.setObjectName("node2_net_write_label")
+        self.node2_res_gridLayout.addWidget(self.node2_net_write_label, 3, 2, 1, 1)
 
         # disk_write
-        self.node2_net_write_value = QtWidgets.QLabel(self.node2_resource)
+        self.node2_net_write_v = QtWidgets.QLabel(self.node2_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node2_net_write_value.sizePolicy().hasHeightForWidth())
-        self.node2_net_write_value.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.node2_net_write_v.sizePolicy().hasHeightForWidth())
+        self.node2_net_write_v.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        self.node2_net_write_value.setFont(font)
-        self.node2_net_write_value.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node2_net_write_value.setObjectName("node1_net_write_value")
-        self.node2_res_gridLayout.addWidget(self.node2_net_write_value, 3, 4, 1, 1)
+        self.node2_net_write_v.setFont(font)
+        self.node2_net_write_v.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node2_net_write_v.setObjectName("node1_net_write_v")
+        self.node2_res_gridLayout.addWidget(self.node2_net_write_v, 3, 4, 1, 1)
         #################################
         # Disk
         self.node2_disk_label = QtWidgets.QLabel(self.node2_resource)
@@ -1043,6 +1064,35 @@ class data_visualize(QWidget):
         self.node3_res_gridLayout.addWidget(self.node3_net_read_label, 2, 2, 1, 1)
 
         # disk_write
+        self.node3_net_read_v = QtWidgets.QLabel(self.node3_resource)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.node3_net_read_v.sizePolicy().hasHeightForWidth())
+        self.node3_net_read_v.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(16)
+        self.node3_net_read_v.setFont(font)
+        self.node3_net_read_v.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node3_net_read_v.setObjectName("node3_net_read_v")
+        self.node3_res_gridLayout.addWidget(self.node3_net_read_v, 2, 4, 1, 1)
+
+        self.node3_net_name = QtWidgets.QLabel(self.node3_resource)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.node3_net_name.sizePolicy().hasHeightForWidth())
+        self.node3_net_name.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(16)
+        self.node3_net_name.setFont(font)
+        self.node3_net_name.setStyleSheet("color: rgb(0, 17, 53);")
+        self.node3_net_name.setObjectName("node3_net_name")
+        self.node3_res_gridLayout.addWidget(self.node3_net_name, 3, 0, 1, 1)
+
+        # disk_read
         self.node3_net_write_label = QtWidgets.QLabel(self.node3_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -1055,51 +1105,22 @@ class data_visualize(QWidget):
         self.node3_net_write_label.setFont(font)
         self.node3_net_write_label.setStyleSheet("color: rgb(255, 255, 255);")
         self.node3_net_write_label.setObjectName("node3_net_write_label")
-        self.node3_res_gridLayout.addWidget(self.node3_net_write_label, 2, 4, 1, 1)
-
-        self.node3_net_name = QtWidgets.QLabel(self.node3_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node3_net_name.sizePolicy().hasHeightForWidth())
-        self.node3_net_name.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.node3_net_name.setFont(font)
-        self.node3_net_name.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node3_net_name.setObjectName("node3_net_name")
-        self.node3_res_gridLayout.addWidget(self.node3_net_name, 3, 0, 1, 1)
-
-        # disk_read
-        self.node3_net_read_value = QtWidgets.QLabel(self.node3_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node3_net_read_value.sizePolicy().hasHeightForWidth())
-        self.node3_net_read_value.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.node3_net_read_value.setFont(font)
-        self.node3_net_read_value.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node3_net_read_value.setObjectName("node3_net_read_value")
-        self.node3_res_gridLayout.addWidget(self.node3_net_read_value, 3, 2, 1, 1)
+        self.node3_res_gridLayout.addWidget(self.node3_net_write_label, 3, 2, 1, 1)
 
         # disk_write
-        self.node3_net_write_value = QtWidgets.QLabel(self.node3_resource)
+        self.node3_net_write_v = QtWidgets.QLabel(self.node3_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node3_net_write_value.sizePolicy().hasHeightForWidth())
-        self.node3_net_write_value.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.node3_net_write_v.sizePolicy().hasHeightForWidth())
+        self.node3_net_write_v.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        self.node3_net_write_value.setFont(font)
-        self.node3_net_write_value.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node3_net_write_value.setObjectName("node3_net_write_value")
-        self.node3_res_gridLayout.addWidget(self.node3_net_write_value, 3, 4, 1, 1)
+        self.node3_net_write_v.setFont(font)
+        self.node3_net_write_v.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node3_net_write_v.setObjectName("node3_net_write_v")
+        self.node3_res_gridLayout.addWidget(self.node3_net_write_v, 3, 4, 1, 1)
         #################################
         # Disk
         self.node3_disk_label = QtWidgets.QLabel(self.node3_resource)
@@ -1415,6 +1436,35 @@ class data_visualize(QWidget):
         self.node4_res_gridLayout.addWidget(self.node4_net_read_label, 2, 2, 1, 1)
 
         # disk_write
+        self.node4_net_read_v = QtWidgets.QLabel(self.node4_resource)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.node4_net_read_v.sizePolicy().hasHeightForWidth())
+        self.node4_net_read_v.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(16)
+        self.node4_net_read_v.setFont(font)
+        self.node4_net_read_v.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node4_net_read_v.setObjectName("node4_net_read_v")
+        self.node4_res_gridLayout.addWidget(self.node4_net_read_v, 2, 4, 1, 1)
+
+        self.node4_net_name = QtWidgets.QLabel(self.node4_resource)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.node4_net_name.sizePolicy().hasHeightForWidth())
+        self.node4_net_name.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(16)
+        self.node4_net_name.setFont(font)
+        self.node4_net_name.setStyleSheet("color: rgb(0, 17, 53);")
+        self.node4_net_name.setObjectName("node4_net_name")
+        self.node4_res_gridLayout.addWidget(self.node4_net_name, 3, 0, 1, 1)
+
+        # disk_read
         self.node4_net_write_label = QtWidgets.QLabel(self.node4_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -1427,51 +1477,22 @@ class data_visualize(QWidget):
         self.node4_net_write_label.setFont(font)
         self.node4_net_write_label.setStyleSheet("color: rgb(255, 255, 255);")
         self.node4_net_write_label.setObjectName("node4_net_write_label")
-        self.node4_res_gridLayout.addWidget(self.node4_net_write_label, 2, 4, 1, 1)
-
-        self.node4_net_name = QtWidgets.QLabel(self.node4_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node4_net_name.sizePolicy().hasHeightForWidth())
-        self.node4_net_name.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.node4_net_name.setFont(font)
-        self.node4_net_name.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node4_net_name.setObjectName("node4_net_name")
-        self.node4_res_gridLayout.addWidget(self.node4_net_name, 3, 0, 1, 1)
-
-        # disk_read
-        self.node4_net_read_value = QtWidgets.QLabel(self.node4_resource)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node4_net_read_value.sizePolicy().hasHeightForWidth())
-        self.node4_net_read_value.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(16)
-        self.node4_net_read_value.setFont(font)
-        self.node4_net_read_value.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node4_net_read_value.setObjectName("node4_net_read_value")
-        self.node4_res_gridLayout.addWidget(self.node4_net_read_value, 3, 2, 1, 1)
+        self.node4_res_gridLayout.addWidget(self.node4_net_write_label, 3, 2, 1, 1)
 
         # disk_write
-        self.node4_net_write_value = QtWidgets.QLabel(self.node4_resource)
+        self.node4_net_write_v = QtWidgets.QLabel(self.node4_resource)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.node4_net_write_value.sizePolicy().hasHeightForWidth())
-        self.node4_net_write_value.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.node4_net_write_v.sizePolicy().hasHeightForWidth())
+        self.node4_net_write_v.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(16)
-        self.node4_net_write_value.setFont(font)
-        self.node4_net_write_value.setStyleSheet("color: rgb(255, 255, 255);")
-        self.node4_net_write_value.setObjectName("node4_net_write_value")
-        self.node4_res_gridLayout.addWidget(self.node4_net_write_value, 3, 4, 1, 1)
+        self.node4_net_write_v.setFont(font)
+        self.node4_net_write_v.setStyleSheet("color: rgb(255, 255, 255);")
+        self.node4_net_write_v.setObjectName("node4_net_write_v")
+        self.node4_res_gridLayout.addWidget(self.node4_net_write_v, 3, 4, 1, 1)
         #################################
         # Disk
         self.node4_disk_label = QtWidgets.QLabel(self.node4_resource)
@@ -1744,10 +1765,10 @@ class data_visualize(QWidget):
         self.node1_mem_num.setText("0.0%")
         self.node1_net_label.setText("NET I/O")
         self.node1_net_read_label.setText("Tx/s")
-        self.node1_net_write_label.setText("Rx/s")
+        self.node1_net_read_v.setText("Rx/s")
         self.node1_net_name.setText("Total")
-        self.node1_net_read_value.setText("345kb")
-        self.node1_net_write_value.setText("333kb")
+        self.node1_net_write_label.setText("345kb")
+        self.node1_net_write_v.setText("333kb")
         self.node1_disk_label.setText("DISK")
         self.node1_disk_read_label.setText("R/s")
         self.node1_disk_write_label.setText("W/s")
@@ -1763,10 +1784,10 @@ class data_visualize(QWidget):
         self.node2_mem_num.setText("0.0%")
         self.node2_net_label.setText("NET I/O")
         self.node2_net_read_label.setText("Tx/s")
-        self.node2_net_write_label.setText("Rx/s")
+        self.node2_net_read_v.setText("Rx/s")
         self.node2_net_name.setText("Total")
-        self.node2_net_read_value.setText("345kb")
-        self.node2_net_write_value.setText("333kb")
+        self.node2_net_write_label.setText("345kb")
+        self.node2_net_write_v.setText("333kb")
         self.node2_disk_label.setText("DISK")
         self.node2_disk_read_label.setText("R/s")
         self.node2_disk_write_label.setText("W/s")
@@ -1782,10 +1803,10 @@ class data_visualize(QWidget):
         self.node3_mem_num.setText("0.0%")
         self.node3_net_label.setText("NET I/O")
         self.node3_net_read_label.setText("Tx/s")
-        self.node3_net_write_label.setText("Rx/s")
+        self.node3_net_read_v.setText("Rx/s")
         self.node3_net_name.setText("Total")
-        self.node3_net_read_value.setText("345kb")
-        self.node3_net_write_value.setText("333kb")
+        self.node3_net_write_label.setText("345kb")
+        self.node3_net_write_v.setText("333kb")
         self.node3_disk_label.setText("DISK")
         self.node3_disk_read_label.setText("R/s")
         self.node3_disk_write_label.setText("W/s")
@@ -1801,10 +1822,10 @@ class data_visualize(QWidget):
         self.node4_mem_num.setText("0.0%")
         self.node4_net_label.setText("NET I/O")
         self.node4_net_read_label.setText("Tx/s")
-        self.node4_net_write_label.setText("Rx/s")
+        self.node4_net_read_v.setText("Rx/s")
         self.node4_net_name.setText("Total")
-        self.node4_net_read_value.setText("345kb")
-        self.node4_net_write_value.setText("333kb")
+        self.node4_net_write_label.setText("345kb")
+        self.node4_net_write_v.setText("333kb")
         self.node4_disk_label.setText("DISK")
         self.node4_disk_read_label.setText("R/s")
         self.node4_disk_write_label.setText("W/s")
@@ -1849,10 +1870,10 @@ class data_visualize(QWidget):
             self.node4_mem_bar,
         ]
         self.Net_Info = [
-            [self.node1_net_read_value, self.node1_net_write_value],
-            [self.node2_net_read_value, self.node2_net_write_value],
-            [self.node3_net_read_value, self.node3_net_write_value],
-            [self.node4_net_read_value, self.node4_net_write_value],
+            [self.node1_net_write_label, self.node1_net_write_v],
+            [self.node2_net_write_label, self.node2_net_write_v],
+            [self.node3_net_write_label, self.node3_net_write_v],
+            [self.node4_net_write_label, self.node4_net_write_v],
         ]
         self.Disk_Info = [
             [self.node1_disk_read_value, self.node1_disk_write_value],
@@ -1861,188 +1882,6 @@ class data_visualize(QWidget):
             [self.node4_disk_read_value, self.node4_disk_write_value],
         ]
         self.CPU_HistoryList = [self.history_cpu_1, self.history_cpu_2, self.history_cpu_3, self.history_cpu_4]
-
-    def update_datav(self):
-        self._updateCPUInfo()
-        self._updateMemInfo()
-        self._updateNetInfo()
-        self._updateDiskInfo()
-
-    def _updateCPUInfo(self):
-        print("_updateCPUInfo")
-        CPU_Nums = [
-            self.node1_cpu_num,
-            self.node2_cpu_num,
-            self.node3_cpu_num,
-            self.node4_cpu_num,
-        ]
-        CPU_Bars = [
-            self.node1_cpu_bar,
-            self.node2_cpu_bar,
-            self.node3_cpu_bar,
-            self.node4_cpu_bar,
-        ]
-        CPU_SpeedMeters = [
-            self.speed_meter_1,
-            self.speed_meter_2,
-            self.speed_meter_3,
-            self.speed_meter_4,
-        ]
-        CPU_Qs = [
-            self.node_res_monitor_queue_dict['c_node1_cpu_q'],
-            self.node_res_monitor_queue_dict['c_node2_cpu_q'],
-            self.node_res_monitor_queue_dict['c_node3_cpu_q'],
-        ]
-        CPU_Utilize = [0, 0, 0, 0]
-
-        for i, cpu_q in enumerate(CPU_Qs):
-            if not cpu_q.empty():
-                cpu_q = reverseQueue(cpu_q)
-                cpu_v = cpu_q.get()
-                # self.CPU_HistoryList[i].put(cpu_v)
-                CPU_Utilize[i] = round(cpu_v[0], 2)
-        CPU_Utilize[-1] = round(sum(CPU_Utilize[:-1]) / len(CPU_Utilize[:-1]), 2)
-
-        for i, cu in enumerate(CPU_Utilize):
-            print(f"{i} ...cpu... {cu}")
-            CPU_Nums[i].setText((str(cu) + "%"))
-            CPU_SpeedMeters[i].setSpeed(cu)
-            CPU_Bars[i].setProperty("value", cu)
-            if cu <= 50.0:
-                CPU_Bars[i].setStyleSheet(
-                    "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * cu * 2)}'",'255','0')}")
-            else:
-                CPU_Bars[i].setStyleSheet(
-                    "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (cu - 50) * 2))}'",'255','0')}")
-            CPU_Bars[i].sharedPainter()
-        print("_updateCPUInfo")
-
-    def _updateMemInfo(self):
-        print("_updateMemInfo")
-        Mem_Nums = [
-            self.node1_mem_num,
-            self.node2_mem_num,
-            self.node3_mem_num,
-            self.node4_mem_num,
-        ]
-        Mem_Bars = [
-            self.node1_mem_bar,
-            self.node2_mem_bar,
-            self.node3_mem_bar,
-            self.node4_mem_bar,
-        ]
-
-        Mem_Qs = [
-            self.node_res_monitor_queue_dict['c_node1_mem_q'],
-            self.node_res_monitor_queue_dict['c_node2_mem_q'],
-            self.node_res_monitor_queue_dict['c_node3_mem_q'],
-        ]
-        Mem_Utilize = [0, 0, 0, 0]
-
-        for i, mem_q in enumerate(Mem_Qs):
-            if not mem_q.empty():
-                mem_q = reverseQueue(mem_q)
-                mem_v = mem_q.get()
-                Mem_Utilize[i] = round(mem_v[0], 2)
-        Mem_Utilize[-1] = round(sum(Mem_Utilize[:-1]) / len(Mem_Utilize[:-1]), 2)
-
-        for i, mu in enumerate(Mem_Utilize):
-            print(f"{i} ...mem... {mu}")
-            Mem_Nums[i].setText((str(mu) + "%"))
-            Mem_Bars[i].setProperty("value", mu)
-            if mu <= 50.0:
-                Mem_Bars[i].setStyleSheet(
-                    "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * mu * 2)}'",'255','0')}")
-            else:
-                Mem_Bars[i].setStyleSheet(
-                    "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
-            Mem_Bars[i].sharedPainter()
-        print("_updateMemInfo")
-
-    def _updateNetInfo(self):
-        Net_Info = [
-            [self.node1_net_read_value, self.node1_net_write_value],
-            [self.node2_net_read_value, self.node2_net_write_value],
-            [self.node3_net_read_value, self.node3_net_write_value],
-            [self.node4_net_read_value, self.node4_net_write_value],
-        ]
-        Net_Qs = [
-            self.node_res_monitor_queue_dict['c_node1_net_q'],
-            self.node_res_monitor_queue_dict['c_node2_net_q'],
-            self.node_res_monitor_queue_dict['c_node3_net_q'],
-        ]
-        Net_TxDx = [[0, 0], [0, 0], [0, 0], [0, 0]]
-
-        for i, net_q in enumerate(Net_Qs):
-            if not net_q.empty():
-                net_q = reverseQueue(net_q)
-                Net_TxDx[i] = net_q.get()
-        tx_sum, dx_sum = round(sum(Net_TxDx[i][0] for i in range(3)), 2), round(sum(Net_TxDx[i][1] for i in range(3)), 2)
-        Net_TxDx[-1][0], Net_TxDx[-1][1] = round(tx_sum / 3, 2), round(dx_sum / 3, 2)
-
-        for i, net_txdx in enumerate(Net_TxDx):
-            tx_tag, dx_tag = "", ""
-            if (net_txdx[0] / 1000) < 1:
-                tx_tag = f"{round(net_txdx[0], 2)} b"
-            if 1 < (net_txdx[0] / 1000) < 1000:
-                tx_tag = f"{round(net_txdx[0] / 1000, 2)} kb"
-            if 1 < (net_txdx[0] / 1000000) < 1000:
-                tx_tag = f"{round(net_txdx[0] / 1000000, 2)} Mb"
-
-            if (net_txdx[1] / 1000) < 1:
-                dx_tag = f"{round(net_txdx[1], 2)} b"
-            if 1 < (net_txdx[1] / 1000) < 1000:
-                dx_tag = f"{round(net_txdx[1] / 1000, 2)} kb"
-            if 1 < (net_txdx[1] / 1000000) < 1000:
-                dx_tag = f"{round(net_txdx[1] / 1000000, 2)} Mb"
-
-            Net_Info[i][0].setText(tx_tag)
-            Net_Info[i][1].setText(dx_tag)
-        print("_updateNetInfo")
-
-    def _updateDiskInfo(self):
-        Disk_Info = [
-            [self.node1_disk_read_value, self.node1_disk_write_value],
-            [self.node2_disk_read_value, self.node2_disk_write_value],
-            [self.node3_disk_read_value, self.node3_disk_write_value],
-            [self.node4_disk_read_value, self.node4_disk_write_value],
-        ]
-        Disk_Qs = [
-            self.node_res_monitor_queue_dict['c_node1_disk_q'],
-            self.node_res_monitor_queue_dict['c_node2_disk_q'],
-            self.node_res_monitor_queue_dict['c_node3_disk_q'],
-        ]
-        Disk_RW = [[0, 0], [0, 0], [0, 0], [0, 0]]
-
-        for i, disk_q in enumerate(Disk_Qs):
-            if not disk_q.empty():
-                disk_q = reverseQueue(disk_q)
-                Disk_RW[i] = disk_q.get()
-        r_sum, w_sum = round(sum(Disk_RW[i][0] for i in range(3)), 2), round(sum(Disk_RW[i][1] for i in range(3)), 2)
-        Disk_RW[-1][0], Disk_RW[-1][1] = round(r_sum / 3, 2), round(w_sum / 3, 2)
-
-        for i, disk_rw in enumerate(Disk_RW):
-            r_tag, w_tag = "", ""
-            if (disk_rw[0] / 1000) < 1:
-                r_tag = f"{round(disk_rw[0], 2)} b"
-            elif 1 < (disk_rw[0] / 1000) < 1000:
-                r_tag = f"{round(disk_rw[0] / 1000, 2)} kb"
-            elif 1 < (disk_rw[0] / 1000000) < 1000:
-                r_tag = f"{round(disk_rw[0] / 1000000, 2)} Mb"
-            elif 1 < (disk_rw[0] / 1000000000) < 1000:
-                r_tag = f"{round(disk_rw[0] / 1000000000, 2)} Gb"
-
-            if (disk_rw[1] / 1000) < 1:
-                w_tag = f"{round(disk_rw[1], 2)} b"
-            elif 1 < (disk_rw[1] / 1000) < 1000:
-                w_tag = f"{round(disk_rw[1] / 1000, 2)} kb"
-            elif 1 < (disk_rw[1] / 1000000) < 1000:
-                w_tag = f"{round(disk_rw[1] / 1000000, 2)} Mb"
-            elif 1 < (disk_rw[1] / 1000000000) < 1000:
-                w_tag = f"{round(disk_rw[1] / 1000000000, 2)} Gb"
-            Disk_Info[i][0].setText(r_tag)
-            Disk_Info[i][1].setText(w_tag)
-        print("_updateDiskInfo")
 
     def requestResourceInfo(self):
         nodes_info = []
@@ -2072,94 +1911,6 @@ class data_visualize(QWidget):
         finally:
             pass
         return nodes_info
-
-    def updateSyntheticResource(self):
-        syntheticResInfo = self.requestResourceInfo()
-        while not (len(syntheticResInfo) == 4):
-            syntheticResInfo = self.requestResourceInfo()
-            sleep(2)
-        for i, SRI in enumerate(syntheticResInfo):
-            sleep(0.5)
-            cu = SRI["cpu"]
-            mu = SRI["mem"]
-            tx, dx = SRI['net'][0], SRI['net'][1]
-            rb, wb = SRI['disk'][0], SRI['disk'][1]
-            try:
-                self.CPU_HistoryList[i].put(cu)
-                self.CPU_Nums[i].setText((str(cu) + "%"))
-                self.CPU_SpeedMeters[i].setSpeed(cu)
-                self.CPU_Bars[i].setProperty("value", cu)
-                if cu <= 50.0:
-                    self.CPU_Bars[i].setStyleSheet(
-                        "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * cu * 2)}'",'255','0')}")
-                else:
-                    self.CPU_Bars[i].setStyleSheet(
-                        "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (cu - 50) * 2))}'",'255','0')}")
-            except Exception as exp:
-                print(f"CPU Info Updated: {exp}")
-            finally:
-                pass
-            try:
-                self.Mem_Nums[i].setText((str(mu) + "%"))
-                self.Mem_Bars[i].setProperty("value", mu)
-                if mu <= 50.0:
-                    self.Mem_Bars[i].setStyleSheet(
-                        "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * mu * 2)}'",'255','0')}")
-                else:
-                    self.Mem_Bars[i].setStyleSheet(
-                        "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
-            except Exception as exp:
-                print(f"Mem Info Updated: {exp}")
-            finally:
-                pass
-
-            try:
-                tx_tag, dx_tag = "", ""
-                if (tx / 1000) < 1:
-                    tx_tag = f"{tx} b"
-                elif 1 < (tx / 1000) < 1000:
-                    tx_tag = f"{round(tx / 1000, 2)} kb"
-                elif 1 < (tx / 1000000):
-                    tx_tag = f"{round(tx / 1000000, 2)} Mb"
-                if (dx / 1000) < 1:
-                    dx_tag = f"{dx} b"
-                elif 1 < (dx / 1000) < 1000:
-                    dx_tag = f"{round(dx / 1000, 2)} kb"
-                elif 1 < (dx / 1000000):
-                    dx_tag = f"{round(dx / 1000000, 2)} Mb"
-
-                self.Net_Info[i][0].setText(tx_tag)
-                self.Net_Info[i][1].setText(dx_tag)
-            except Exception as exp:
-                print(f"Net Info Updated: {exp}")
-            finally:
-                pass
-
-            try:
-                r_tag, w_tag = "", ""
-                if (rb / 1000) < 1:
-                    r_tag = f"{rb} b"
-                elif 1 < (rb / 1000) < 1000:
-                    r_tag = f"{round(rb / 1000, 2)} kb"
-                elif 1 < (rb / 1000000) < 1000:
-                    r_tag = f"{round(rb / 1000000, 2)} Mb"
-                elif 1 < (rb / 1000000000):
-                    r_tag = f"{round(rb / 1000000000, 2)} Gb"
-
-                if (wb / 1000) < 1:
-                    w_tag = f"{wb} b"
-                elif 1 < (wb / 1000) < 1000:
-                    w_tag = f"{round(wb / 1000, 2)} kb"
-                elif 1 < (wb / 1000000) < 1000:
-                    w_tag = f"{round(wb / 1000000, 2)} Mb"
-                elif 1 < (wb / 1000000000):
-                    w_tag = f"{round(wb / 1000000000, 2)} Gb"
-                self.Disk_Info[i][0].setText(r_tag)
-                self.Disk_Info[i][1].setText(w_tag)
-            except Exception as exp:
-                print(f"Disk Info Updated: {exp}")
-            finally:
-                pass
 
     def updateNodesInfo(self):
         syntheticResInfo = self.requestResourceInfo()
@@ -2199,26 +1950,12 @@ class data_visualize(QWidget):
             self.node1_mem_bar.setStyleSheet(
                 "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
         self.node1_mem_bar.sharedPainter()
-        tx_tag, dx_tag = "", ""
-        if (tx / 1000) < 1:
-            tx_tag = f"{tx} b"
-        elif 1 < (tx / 1000) < 1000:
-            tx_tag = f"{round(tx / 1000, 2)} kb"
-        elif 1 < (tx / 1000000):
-            tx_tag = f"{round(tx / 1000000, 2)} Mb"
-        else:
-            tx_tag = f"{round(tx / 1000000000, 2)} Gb"
-        if (dx / 1000) < 1:
-            dx_tag = f"{dx} b"
-        elif 1 < (dx / 1000) < 1000:
-            dx_tag = f"{round(dx / 1000, 2)} kb"
-        elif 1 < (dx / 1000000):
-            dx_tag = f"{round(dx / 1000000, 2)} Mb"
-        else:
-            dx_tag = f"{round(dx / 1000000000, 2)} Gb"
+        tx_tag, dx_tag = net_formatter(tx, dx)
 
-        eval("self.node1_net_read_value.setText('" + tx_tag + "')")
-        eval("self.node1_net_write_value.setText('" + dx_tag + "')")
+        self.node1_net_read_label.setText(f"Tx({tx_tag.split(' ')[1]})")
+        self.node1_net_read_v.setText(f"{tx_tag.split(' ')[0]}")
+        self.node1_net_write_label.setText(f"Rx({dx_tag.split(' ')[1]})")
+        self.node1_net_write_v.setText(f"{dx_tag.split(' ')[0]}")
 
         r_tag, w_tag = "", ""
         if (rb / 1000) < 1:
@@ -2268,26 +2005,12 @@ class data_visualize(QWidget):
             self.node2_mem_bar.setStyleSheet(
                 "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
             self.node2_mem_bar.sharedPainter()
-        tx_tag, dx_tag = "", ""
-        if (tx / 1000) < 1:
-            tx_tag = f"{tx} b"
-        elif 1 < (tx / 1000) < 1000:
-            tx_tag = f"{round(tx / 1000, 2)} kb"
-        elif 1 < (tx / 1000000):
-            tx_tag = f"{round(tx / 1000000, 2)} Mb"
-        else:
-            tx_tag = f"{round(tx / 1000000000, 2)} Gb"
-        if (dx / 1000) < 1:
-            dx_tag = f"{dx} b"
-        elif 1 < (dx / 1000) < 1000:
-            dx_tag = f"{round(dx / 1000, 2)} kb"
-        elif 1 < (dx / 1000000):
-            dx_tag = f"{round(dx / 1000000, 2)} Mb"
-        else:
-            dx_tag = f"{round(dx / 1000000000, 2)} Gb"
+        tx_tag, dx_tag = net_formatter(tx, dx)
 
-        eval("self.node2_net_read_value.setText('" + tx_tag + "')")
-        eval("self.node2_net_write_value.setText('" + dx_tag + "')")
+        self.node2_net_read_label.setText(f"Tx({tx_tag.split(' ')[1]})")
+        self.node2_net_read_v.setText(f"{tx_tag.split(' ')[0]}")
+        self.node2_net_write_label.setText(f"Rx({dx_tag.split(' ')[1]})")
+        self.node2_net_write_v.setText(f"{dx_tag.split(' ')[0]}")
 
         r_tag, w_tag = "", ""
         if (rb / 1000) < 1:
@@ -2337,26 +2060,12 @@ class data_visualize(QWidget):
             self.node3_mem_bar.setStyleSheet(
                 "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
         self.node3_mem_bar.sharedPainter()
-        tx_tag, dx_tag = "", ""
-        if (tx / 1000) < 1:
-            tx_tag = f"{tx} b"
-        elif 1 < (tx / 1000) < 1000:
-            tx_tag = f"{round(tx / 1000, 2)} kb"
-        elif 1 < (tx / 1000000):
-            tx_tag = f"{round(tx / 1000000, 2)} Mb"
-        else:
-            tx_tag = f"{round(tx / 1000000000, 2)} Gb"
-        if (dx / 1000) < 1:
-            dx_tag = f"{dx} b"
-        elif 1 < (dx / 1000) < 1000:
-            dx_tag = f"{round(dx / 1000, 2)} kb"
-        elif 1 < (dx / 1000000):
-            dx_tag = f"{round(dx / 1000000, 2)} Mb"
-        else:
-            dx_tag = f"{round(dx / 1000000000, 2)} Gb"
+        tx_tag, dx_tag = net_formatter(tx, dx)
 
-        eval("self.node3_net_read_value.setText('" + tx_tag + "')")
-        eval("self.node3_net_write_value.setText('" + dx_tag + "')")
+        self.node3_net_read_label.setText(f"Tx({tx_tag.split(' ')[1]})")
+        self.node3_net_read_v.setText(f"{tx_tag.split(' ')[0]}")
+        self.node3_net_write_label.setText(f"Rx({dx_tag.split(' ')[1]})")
+        self.node3_net_write_v.setText(f"{dx_tag.split(' ')[0]}")
 
         r_tag, w_tag = "", ""
         if (rb / 1000) < 1:
@@ -2406,26 +2115,11 @@ class data_visualize(QWidget):
             self.node4_mem_bar.setStyleSheet(
                 "QProgressBar::chunk {background-color:rgb("f'{int(2.55 * (100 - (mu - 50) * 2))}'",'255','0')}")
         self.node4_mem_bar.sharedPainter()
-        tx_tag, dx_tag = "", ""
-        if (tx / 1000) < 1:
-            tx_tag = f"{tx} b"
-        elif 1 < (tx / 1000) < 1000:
-            tx_tag = f"{round(tx / 1000, 2)} kb"
-        elif 1 < (tx / 1000000):
-            tx_tag = f"{round(tx / 1000000, 2)} Mb"
-        else:
-            tx_tag = f"{round(tx / 1000000000, 2)} Gb"
-        if (dx / 1000) < 1:
-            dx_tag = f"{dx} b"
-        elif 1 < (dx / 1000) < 1000:
-            dx_tag = f"{round(dx / 1000, 2)} kb"
-        elif 1 < (dx / 1000000):
-            dx_tag = f"{round(dx / 1000000, 2)} Mb"
-        else:
-            dx_tag = f"{round(dx / 1000000000, 2)} Gb"
-
-        eval("self.node4_net_read_value.setText('" + tx_tag + "')")
-        eval("self.node4_net_write_value.setText('" + dx_tag + "')")
+        tx_tag, dx_tag = net_formatter(tx, dx)
+        self.node4_net_read_label.setText(f"Tx({tx_tag.split(' ')[1]})")
+        self.node4_net_read_v.setText(f"{tx_tag.split(' ')[0]}")
+        self.node4_net_write_label.setText(f"Rx({dx_tag.split(' ')[1]})")
+        self.node4_net_write_v.setText(f"{dx_tag.split(' ')[0]}")
 
         r_tag, w_tag = "", ""
         if (rb / 1000) < 1:

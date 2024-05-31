@@ -70,6 +70,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
 
     def _initDataVisualize(self):
         self.data_visual = data_visualize(parent=self, demo_manager=self.cfn_manager, res_queue_dict=None)
+
         self.data_visual.setVisible(False)
         self.computingNetResMonTimer = QtCore.QTimer(self)
         self.computingNetResMonTimer.setInterval(3000)
@@ -231,39 +232,40 @@ class CpnAppWindow(QtWidgets.QMainWindow):
                 self.reset()
             elif self.CPAARWidget.isVisible():
                 self.CPAARWidget.reset()
+            elif self.SSRUWidget.isVisible():
+                self.SSRUWidget.reset()
             elif self.scene3.scene31.isVisible():
                 self.scene3.scene31.reset()
             elif self.scene3.scene32.isVisible():
                 self.scene3.scene32.reset()
             elif self.scene3.scene33.isVisible():
                 self.scene3.scene33.reset()
-        elif k == QtCore.Qt.Key_2:
-            self.CPAARWidget.reset()
-            # self.CPAARWidget.user_first_pkg.label.setVisible(True)
-            self.CPAARWidget.user_first_pkg.start("sc1_sp1")
         elif k == QtCore.Qt.Key_1:
             print("Pressed Key-1")
-            # self.CPAARWidget.reset()
             self.CPAARWidget.deployAITrainerOnCNode1()
-        elif k == QtCore.Qt.Key_Q:
-            print("Pressed Key-Q")
-            self.scene3.scene31.reset()
-            # self.scene3.scene31.service_step1.label.setVisible(True)
-            self.scene3.scene31.service_step1.start("sp1")
-        elif k == QtCore.Qt.Key_W:
-            self.scene3.scene32.reset()
-            # self.scene3.scene32.service_step1.label.setVisible(True)
-            self.scene3.scene32.step1_label1.setVisible(True)
-            self.scene3.scene32.step1_label2.setVisible(True)
-            self.scene3.scene32.service_step1.start("sp1")
-        elif k == QtCore.Qt.Key_E:
-            self.scene3.scene33.reset()
-            # self.scene3.scene33.service_step1.label.setVisible(True)
-            self.scene3.scene33.service_step1.start("sp1")
-        elif k == QtCore.Qt.Key_N:
-            self.cfn_manager.send_command("c_node1", "task", "surveillance up")
-        elif k == QtCore.Qt.Key_M:
-            self.cfn_manager.send_command("c_node1", "stop_task", "surveillance up")
+        # elif k == QtCore.Qt.Key_2:
+        #     self.CPAARWidget.reset()
+        #     # self.CPAARWidget.user_first_pkg.label.setVisible(True)
+        #     self.CPAARWidget.user_first_pkg.start("sc1_sp1")
+        # elif k == QtCore.Qt.Key_Q:
+        #     print("Pressed Key-Q")
+        #     self.scene3.scene31.reset()
+        #     # self.scene3.scene31.service_step1.label.setVisible(True)
+        #     self.scene3.scene31.service_step1.start("sp1")
+        # elif k == QtCore.Qt.Key_W:
+        #     self.scene3.scene32.reset()
+        #     # self.scene3.scene32.service_step1.label.setVisible(True)
+        #     self.scene3.scene32.step1_label1.setVisible(True)
+        #     self.scene3.scene32.step1_label2.setVisible(True)
+        #     self.scene3.scene32.service_step1.start("sp1")
+        # elif k == QtCore.Qt.Key_E:
+        #     self.scene3.scene33.reset()
+        #     # self.scene3.scene33.service_step1.label.setVisible(True)
+        #     self.scene3.scene33.service_step1.start("sp1")
+        # elif k == QtCore.Qt.Key_N:
+        #     self.cfn_manager.send_command("c_node1", "task", "surveillance up")
+        # elif k == QtCore.Qt.Key_M:
+        #     self.cfn_manager.send_command("c_node1", "stop_task", "surveillance up")
         else:
             pass
 
