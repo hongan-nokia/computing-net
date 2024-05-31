@@ -195,6 +195,11 @@ class CpnAppWindow(QtWidgets.QMainWindow):
     def _showTestScene1(self):
         self.SSRUWidget.setVisible(False)
         self.CPAARWidget.reset()
+        self.SSRUWidget.reset()
+        self.scene3.reset()
+        self.scene3.scene31.reset()
+        self.scene3.scene32.reset()
+        self.scene3.scene33.reset()
         # self.CPAARWidget.user_first_pkg.label.setVisible(True)
         self.CPAARWidget.setVisible(True)
         self.scene3.setVisible(False)
@@ -206,7 +211,12 @@ class CpnAppWindow(QtWidgets.QMainWindow):
     def _showTestScene2(self):
         self.CPAARWidget.setVisible(False)
 
+        self.CPAARWidget.reset()
         self.SSRUWidget.reset()
+        self.scene3.reset()
+        self.scene3.scene31.reset()
+        self.scene3.scene32.reset()
+        self.scene3.scene33.reset()
 
         self.SSRUWidget.setVisible(True)
         self.scene3.setVisible(False)
@@ -222,7 +232,12 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene31.setVisible(False)
         self.scene3.scene32.setVisible(False)
         self.scene3.scene33.setVisible(False)
+        self.CPAARWidget.reset()
+        self.SSRUWidget.reset()
         self.scene3.reset()
+        self.scene3.scene31.reset()
+        self.scene3.scene32.reset()
+        self.scene3.scene33.reset()
         print("This is TestScene3")
 
     # def keyPressEvent(self, KEvent):
