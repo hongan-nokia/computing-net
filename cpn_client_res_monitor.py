@@ -85,8 +85,28 @@ async def read_performance_info():
     return synthetic_info
 
 
+def get_info():
+    disk_usage = psutil.disk_io_counters()
+    net_usage = psutil.net_io_counters(pernic=True)
+    net_info_list = net_usage.values()
+    tx_sum = 0
+    rx_sum = 0
+    for net_info in net_info_list:
+        tx_sum += net_info.bytes_sent
+        rx_sum += net_info.bytes_recv
+    tx = tx_sum / len(net_info_list)
+    rx = rx_sum / len(net_info_list)
+
+    synthetic_info = {
+        "disk": [disk_usage.read_count, disk_usage.write_count],
+        "net": [tx, rx]
+    }
+    return synthetic_info
+
+
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app='cpn_client_res_monitor:app', host='0.0.0.0', port=8000, workers=5)
+    # import uvicorn
+    # uvicorn.run(app='cpn_client_res_monitor:app', host='0.0.0.0', port=8000, workers=5)
+    print(get_info())
     # disk_usage = psutil.disk_io_counters()
     # print(disk_usage)
