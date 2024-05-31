@@ -46,6 +46,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self._initHeapMap()
         self._initImageLoad()
         self._initWarningBtn()
+        self.listenNode1CPUUse()
         self.initConnections()
         # self._initHearRate()
         # self.user_first_pkg.start("sc1_sp1")
@@ -230,22 +231,40 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         warning_icon_img = QtGui.QPixmap("./images_test3/warning.svg").scaled(QSize(80, 80))
         self.warning_icon = BlinkingPic(parent=self, pixmap=warning_icon_img, auto_dim=True, dim_opacity=0.1,
                                          blink_period=1200).pixmap_item
-
-        self.view.scene().addItem(self.warning_icon)
         self.warning_icon.setPos(950, 350)
         self.warning_icon.start_blink()
-        self.warning_icon.setVisible(True)
+        self.warning_icon.setVisible(False)
+        self.view.scene().addItem(self.warning_icon)
+
 
         self.warning_btn = QPushButton()
         self.warning_btn.setGeometry(950,350, 80, 80)
         self.warning_btn.setStyleSheet("background-color: rgba(240, 240, 240, 0);")
         self.warning_btn.clicked.connect(self.warning_event)
         self.warning_btn.raise_()
+        self.warning_btn.setVisible(False)
         self.view.scene().addWidget(self.warning_btn)
 
     def warning_event(self):
         # self.warning_icon.setVisible(False)
+        self.deployAITrainerOnCNode1()
         pass
+
+    def listenNode1CPUUse(self):
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.read_queue)
+        self.timer.start(3000)  # 3000 milliseconds = 3 seconds
+
+    def read_queue(self):
+        if not self.monitor_q_cpu_hm_node1.empty():
+            value = self.monitor_q_cpu_hm_node1.get()[0]
+            # value = 70
+            if value >= 70:
+                self.warning_icon.setVisible(True)
+                self.warning_btn.setVisible(True)
+            else:
+                self.warning_icon.setVisible(False)
+                self.warning_btn.setVisible(False)
 
     def initConnections(self):
         # self.cfn_manager.signal_emitter.QtSignals.container_pulsate_update.connect(self.update_pulserate)
@@ -417,7 +436,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.cfn_manager.send_command("c_node1", "task", "vlc worldCup.mp4_0")
 
     def deployAITrainerOnCNode1(self):
-        self.cfn_manager.send_command("c_node1", "task", "AI_trainer1 up")
+        # self.cfn_manager.send_command("c_node1", "task", "AI_trainer1 up")
         self.startAITrainer.label.setVisible(True)
         self.startAITrainer.start("sc1_sp6")
 

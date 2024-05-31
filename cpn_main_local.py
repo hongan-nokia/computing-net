@@ -243,29 +243,29 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         elif k == QtCore.Qt.Key_1:
             print("Pressed Key-1")
             self.CPAARWidget.deployAITrainerOnCNode1()
-        # elif k == QtCore.Qt.Key_2:
-        #     self.CPAARWidget.reset()
-        #     # self.CPAARWidget.user_first_pkg.label.setVisible(True)
-        #     self.CPAARWidget.user_first_pkg.start("sc1_sp1")
-        # elif k == QtCore.Qt.Key_Q:
-        #     print("Pressed Key-Q")
-        #     self.scene3.scene31.reset()
-        #     # self.scene3.scene31.service_step1.label.setVisible(True)
-        #     self.scene3.scene31.service_step1.start("sp1")
-        # elif k == QtCore.Qt.Key_W:
-        #     self.scene3.scene32.reset()
-        #     # self.scene3.scene32.service_step1.label.setVisible(True)
-        #     self.scene3.scene32.step1_label1.setVisible(True)
-        #     self.scene3.scene32.step1_label2.setVisible(True)
-        #     self.scene3.scene32.service_step1.start("sp1")
-        # elif k == QtCore.Qt.Key_E:
-        #     self.scene3.scene33.reset()
-        #     # self.scene3.scene33.service_step1.label.setVisible(True)
-        #     self.scene3.scene33.service_step1.start("sp1")
-        # elif k == QtCore.Qt.Key_N:
-        #     self.cfn_manager.send_command("c_node1", "task", "surveillance up")
-        # elif k == QtCore.Qt.Key_M:
-        #     self.cfn_manager.send_command("c_node1", "stop_task", "surveillance up")
+        elif k == QtCore.Qt.Key_2:
+            self.CPAARWidget.reset()
+            # self.CPAARWidget.user_first_pkg.label.setVisible(True)
+            self.CPAARWidget.user_first_pkg.start("sc1_sp1")
+        elif k == QtCore.Qt.Key_Q:
+            print("Pressed Key-Q")
+            self.scene3.scene31.reset()
+            # self.scene3.scene31.service_step1.label.setVisible(True)
+            self.scene3.scene31.service_step1.start("sp1")
+        elif k == QtCore.Qt.Key_W:
+            self.scene3.scene32.reset()
+            # self.scene3.scene32.service_step1.label.setVisible(True)
+            self.scene3.scene32.step1_label1.setVisible(True)
+            self.scene3.scene32.step1_label2.setVisible(True)
+            self.scene3.scene32.service_step1.start("sp1")
+        elif k == QtCore.Qt.Key_E:
+            self.scene3.scene33.reset()
+            # self.scene3.scene33.service_step1.label.setVisible(True)
+            self.scene3.scene33.service_step1.start("sp1")
+        elif k == QtCore.Qt.Key_N:
+            self.cfn_manager.send_command("c_node1", "task", "surveillance up")
+        elif k == QtCore.Qt.Key_M:
+            self.cfn_manager.send_command("c_node1", "stop_task", "surveillance up")
         else:
             pass
 
@@ -298,6 +298,10 @@ if __name__ == '__main__':
     inter_process_resource_NodeMan = [(i['node_name'], Pipe()) for i in configuration.nodes]
     inter_process_resource_StatMon = [(i['monitoring_source_name'], Queue(100)) for i in configuration.monitoring_sources]  # for state_monitor_process. new Queue()
     cfn_manager = CfnDemoManager(configuration, inter_process_resource_NodeMan, inter_process_resource_StatMon)
+
+    # print("######################################")
+    # print(inter_process_resource_StatMon)
+
     print(cfn_manager.n_nodes)
     mainWidget = CpnAppWindow(cfn_manager)
     mainWidget.show()

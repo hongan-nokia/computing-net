@@ -225,24 +225,24 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.reset()
         print("This is TestScene3")
 
-    def keyPressEvent(self, KEvent):
-        k = KEvent.key()
-        if k == QtCore.Qt.Key_R:
-            if self.isVisible():
-                self.reset()
-            elif self.CPAARWidget.isVisible():
-                self.CPAARWidget.reset()
-            elif self.SSRUWidget.isVisible():
-                self.SSRUWidget.reset()
-            elif self.scene3.scene31.isVisible():
-                self.scene3.scene31.reset()
-            elif self.scene3.scene32.isVisible():
-                self.scene3.scene32.reset()
-            elif self.scene3.scene33.isVisible():
-                self.scene3.scene33.reset()
-        elif k == QtCore.Qt.Key_1:
-            print("Pressed Key-1")
-            self.CPAARWidget.deployAITrainerOnCNode1()
+    # def keyPressEvent(self, KEvent):
+    #     k = KEvent.key()
+        # if k == QtCore.Qt.Key_R:
+        #     if self.isVisible():
+        #         self.reset()
+        #     elif self.CPAARWidget.isVisible():
+        #         self.CPAARWidget.reset()
+        #     elif self.SSRUWidget.isVisible():
+        #         self.SSRUWidget.reset()
+        #     elif self.scene3.scene31.isVisible():
+        #         self.scene3.scene31.reset()
+        #     elif self.scene3.scene32.isVisible():
+        #         self.scene3.scene32.reset()
+        #     elif self.scene3.scene33.isVisible():
+        #         self.scene3.scene33.reset()
+        # elif k == QtCore.Qt.Key_1:
+        #     print("Pressed Key-1")
+        #     self.CPAARWidget.deployAITrainerOnCNode1()
         # elif k == QtCore.Qt.Key_2:
         #     self.CPAARWidget.reset()
         #     # self.CPAARWidget.user_first_pkg.label.setVisible(True)
@@ -266,8 +266,8 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         #     self.cfn_manager.send_command("c_node1", "task", "surveillance up")
         # elif k == QtCore.Qt.Key_M:
         #     self.cfn_manager.send_command("c_node1", "stop_task", "surveillance up")
-        else:
-            pass
+        # else:
+        #     pass
 
     def get_mouse_position(self):
         x, y = self.mouse.get_mouse_pos()
