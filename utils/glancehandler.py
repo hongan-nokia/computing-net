@@ -149,27 +149,26 @@ class GlancesHandler(object):
                     for metric in self.metrics:
                         r_dict[metric] = [0]
                         r_dict[metric] = disk_result[metric]
-                if not self.q.full():
-                    # print(f"GlancesHandler -> r_dict: {r_dict}")
-                    if self.plugin in ['cpu']:
-                        random_number = random.randint(1, 5)
-                        for i in range(random_number):
-                            self.q.put([float(r_dict.get(item)) for item in self.metrics])  # 将收集到的数据放入队列 self.q 中  [0.0, 0.0]
-                    else:
-                        self.q.put([float(r_dict.get(item)) for item in self.metrics])
-                        self.q.put([float(r_dict.get(item)) for item in self.metrics])
-                        self.q.put([float(r_dict.get(item)) for item in self.metrics])
-                        # else:
-                #     for i in range(6):
-                #         self.q.get_nowait()
-
+                try:
+                    if not self.q.full():
+                        # print(f"GlancesHandler -> r_dict: {r_dict}")
+                        if self.plugin in ['cpu']:
+                            random_number = random.randint(1, 5)
+                            for i in range(random_number):
+                                self.q.put([float(r_dict.get(item)) for item in self.metrics])  # 将收集到的数据放入队列 self.q 中  [0.0, 0.0]
+                        else:
+                            self.q.put([float(r_dict.get(item)) for item in self.metrics])
+                            self.q.put([float(r_dict.get(item)) for item in self.metrics])
+                            self.q.put([float(r_dict.get(item)) for item in self.metrics])
+                except Exception as exp:
+                    print(f"GlancesHandler Put data into Queue ERROR!!! >>> {exp}")
         except Exception as err:
             self.err_times += 1
             if (self.err_times % 4) == 1:
                 print(f"{'-' * 50}\nERROR: glances handler {self.url} fails {self.err_times} times:\n{err}\n{'-' * 50}")
         if self.err_times == self.retry_times:
             print(f"Glances handler for {self.url} aborting. Check server status.")
-            self.pause()
+            # self.pause()
 
     def set_netifname(self, ifname: str):
         """ Change the network interface name in the url. Only valid if the metrics is network. """
