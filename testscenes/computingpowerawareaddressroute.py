@@ -453,6 +453,16 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         elif self.cfn_manager.node_names[containerId] == 'c_node1' and self.path == 2:
             self.cfn_manager.send_command('c_node3', 'task', 'vlc worldCup.mp4_' + current_position)
 
+    def start_timer(self):
+        self.cloud1_hm.timer.start()
+        self.cloud2_hm.timer.start()
+        self.cloud3_hm.timer.start()
+
+    def stop_timer(self):
+        self.cloud1_hm.timer.stop()
+        self.cloud2_hm.timer.stop()
+        self.cloud3_hm.timer.stop()
+
     def reset(self):
         self.cfn_manager.send_command("c_node1", "stop_task", "AI_trainer1 up")
         self.cfn_manager.send_command("c_node1", "stop_task", "vlc worldCup.mp4_0")
@@ -481,4 +491,6 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.selNewService2.label.setVisible(False)
         self.finalServiceProvideByNode2.label.setVisible(False)
         self.finalServiceProvideByNode3.label.setVisible(False)
+
+        self.stop_timer()
 

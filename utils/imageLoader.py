@@ -98,6 +98,7 @@ class ImageLoader(QWidget, QtCore.QObject):
                 print(f"self.tag is : {self.tag}")
                 self.scheduling_label.setVisible(True)
             self.timer.stop()
+            # self.timer = None
             self.QtSignals.anim_over.emit(self.destination)
             self.index = 0
             print(f"l2r >>>  self.QtSignals.anim_over.emit({self.destination})")
@@ -109,6 +110,7 @@ class ImageLoader(QWidget, QtCore.QObject):
             self.index -= 1
         else:
             self.timer.stop()
+            # self.timer = None
             self.QtSignals.anim_over.emit(self.destination)
             # self.tag_label.setVisible(True)
             self.index = self.width
@@ -122,6 +124,7 @@ class ImageLoader(QWidget, QtCore.QObject):
         else:
             self.tag_label.setVisible(True)
             self.timer.stop()
+            # self.timer = None
             self.QtSignals.anim_over.emit(self.destination)
             self.index = 0
             print(f"u2d >>>  self.QtSignals.anim_over.emit({self.destination})")
@@ -134,6 +137,7 @@ class ImageLoader(QWidget, QtCore.QObject):
         else:
             self.tag_label.setVisible(True)
             self.timer.stop()
+            # self.timer = None
             self.QtSignals.anim_over.emit(self.destination)
             self.index = self.height
             print(f"d2u >>>  self.QtSignals.anim_over.emit({self.destination})")
@@ -150,6 +154,7 @@ class ImageLoader(QWidget, QtCore.QObject):
         else:
             self.tag_label.setVisible(True)
             self.timer.stop()
+            # self.timer = None
             self.QtSignals.anim_over.emit(self.destination)
             print(f"self.QtSignals.anim_over.emit({self.destination})")
 

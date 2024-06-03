@@ -453,9 +453,6 @@ class SystemSyntheticResUtilize(QWidget):
         self.s2cloud1_hm.setVisible(True)
         self.s2cloud2_hm.setVisible(True)
         self.s2cloud3_hm.setVisible(True)
-        self.s2cloud1_hm.timer.start()
-        self.s2cloud2_hm.timer.start()
-        self.s2cloud3_hm.timer.start()
 
     def _initHearRate(self):
         self.heartrate = QtWidgets.QLabel(parent=self)
@@ -556,6 +553,16 @@ class SystemSyntheticResUtilize(QWidget):
         self.cfn_manager.send_command('c_node3', 'stop_task', 'AI_trainer3 up')
         self.cfn_manager.send_command('c_node3', 'stop_task', 'vlcc fake2-WorldCup.mp4_0')
 
+    def start_timer(self):
+        self.s2cloud1_hm.timer.start()
+        self.s2cloud2_hm.timer.start()
+        self.s2cloud3_hm.timer.start()
+
+    def stop_timer(self):
+        self.s2cloud1_hm.timer.stop()
+        self.s2cloud2_hm.timer.stop()
+        self.s2cloud3_hm.timer.stop()
+
     def reset(self):
         self.unsetTraditionalMEC()
         self.unsetComputingNetConverge()
@@ -584,3 +591,5 @@ class SystemSyntheticResUtilize(QWidget):
 
         self.leftBtn1.setStyleSheet(self.leftBtnStyleSheet)
         self.leftBtn2.setStyleSheet(self.leftBtnStyleSheet)
+
+        self.stop_timer()

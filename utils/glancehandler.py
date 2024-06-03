@@ -11,6 +11,8 @@ import httpx
 from time import sleep
 import socket
 
+import random
+
 from utils.repeatimer import repeatTimer
 
 
@@ -150,7 +152,8 @@ class GlancesHandler(object):
                 if not self.q.full():
                     # print(f"GlancesHandler -> r_dict: {r_dict}")
                     if self.plugin in ['cpu']:
-                        for i in range(10):
+                        random_number = random.randint(1, 5)
+                        for i in range(random_number):
                             self.q.put([float(r_dict.get(item)) for item in self.metrics])  # 将收集到的数据放入队列 self.q 中  [0.0, 0.0]
                     else:
                         self.q.put([float(r_dict.get(item)) for item in self.metrics])

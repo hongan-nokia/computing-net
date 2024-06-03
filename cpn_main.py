@@ -75,7 +75,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.computingNetResMonTimer = QtCore.QTimer(self)
         self.computingNetResMonTimer.setInterval(3000)
         self.computingNetResMonTimer.timeout.connect(self.data_visual.updateNodesInfo)
-        self.computingNetResMonTimer.start()
+        # self.computingNetResMonTimer.start()
         # self.data_mon = repeatTimer(3, self.data_visual.updateNodesInfo, autostart=True)
         # self.data_mon.start()
 
@@ -179,9 +179,11 @@ class CpnAppWindow(QtWidgets.QMainWindow):
             self.data_visual.history1.setVisible(False)
             self.data_visual.history2.setVisible(False)
             self.data_visual.history3.setVisible(False)
+            self.computingNetResMonTimer.stop()
         else:
             print("self.data_visual.isVisible() -> False")
             self.data_visual.setVisible(True)
+            self.computingNetResMonTimer.start()
 
     def _showMainPage(self):
         self.CPAARWidget.setVisible(False)
@@ -206,6 +208,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene31.setVisible(False)
         self.scene3.scene32.setVisible(False)
         self.scene3.scene33.setVisible(False)
+        self.SSRUWidget.start_timer()
         print("This is TestScene1")
 
     def _showTestScene2(self):
@@ -223,6 +226,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene31.setVisible(False)
         self.scene3.scene32.setVisible(False)
         self.scene3.scene33.setVisible(False)
+        self.CPAARWidget.start_timer()
         print("This is TestScene2")
 
     def _showTestScene3(self):

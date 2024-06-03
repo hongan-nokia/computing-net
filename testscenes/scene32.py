@@ -166,9 +166,6 @@ class Scene32(QWidget):
         self.cloud1_hm.setVisible(True)
         self.cloud2_hm.setVisible(True)
         self.cloud3_hm.setVisible(True)
-        self.cloud1_hm.timer.start()
-        self.cloud2_hm.timer.start()
-        self.cloud3_hm.timer.start()
 
     def _initImageLoad(self):
         # -------------------------------------- Scenario_0 --------------------------------------
@@ -398,6 +395,16 @@ class Scene32(QWidget):
         self.setVisible(False)
         self.parent().scene3.setVisible(True)
 
+    def start_timer(self):
+        self.cloud1_hm.timer.start()
+        self.cloud2_hm.timer.start()
+        self.cloud3_hm.timer.start()
+
+    def stop_timer(self):
+        self.cloud1_hm.timer.stop()
+        self.cloud2_hm.timer.stop()
+        self.cloud3_hm.timer.stop()
+
     def reset(self):
         self.service_step1.tag_label.setVisible(False)
         self.service_step2.tag_label.setVisible(False)
@@ -430,3 +437,5 @@ class Scene32(QWidget):
         self.cfn_manager.send_command('c_node1', 'stop_task', 'cam_health camera_1')
         self.cfn_manager.send_command('c_node2', 'stop_task', 'cam_health camera_1')
         self.cfn_manager.send_command('c_node3', 'stop_task', 'cam_health camera_1')
+
+        self.stop_timer()

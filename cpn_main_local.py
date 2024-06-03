@@ -75,7 +75,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.computingNetResMonTimer = QtCore.QTimer(self)
         self.computingNetResMonTimer.setInterval(3000)
         self.computingNetResMonTimer.timeout.connect(self.data_visual.updateNodesInfo)
-        self.computingNetResMonTimer.start()
+        # self.computingNetResMonTimer.start()
         # self.data_mon = repeatTimer(3, self.data_visual.updateNodesInfo, autostart=True)
         # self.data_mon.start()
 
@@ -179,9 +179,11 @@ class CpnAppWindow(QtWidgets.QMainWindow):
             self.data_visual.history1.setVisible(False)
             self.data_visual.history2.setVisible(False)
             self.data_visual.history3.setVisible(False)
+            self.computingNetResMonTimer.stop()
         else:
             print("self.data_visual.isVisible() -> False")
             self.data_visual.setVisible(True)
+            self.computingNetResMonTimer.start()
 
     def _showMainPage(self):
         self.CPAARWidget.setVisible(False)
@@ -195,24 +197,36 @@ class CpnAppWindow(QtWidgets.QMainWindow):
     def _showTestScene1(self):
         self.SSRUWidget.setVisible(False)
         self.CPAARWidget.reset()
+        self.SSRUWidget.reset()
+        self.scene3.reset()
+        self.scene3.scene31.reset()
+        self.scene3.scene32.reset()
+        self.scene3.scene33.reset()
         # self.CPAARWidget.user_first_pkg.label.setVisible(True)
         self.CPAARWidget.setVisible(True)
         self.scene3.setVisible(False)
         self.scene3.scene31.setVisible(False)
         self.scene3.scene32.setVisible(False)
         self.scene3.scene33.setVisible(False)
+        self.SSRUWidget.start_timer()
         print("This is TestScene1")
 
     def _showTestScene2(self):
         self.CPAARWidget.setVisible(False)
 
+        self.CPAARWidget.reset()
         self.SSRUWidget.reset()
+        self.scene3.reset()
+        self.scene3.scene31.reset()
+        self.scene3.scene32.reset()
+        self.scene3.scene33.reset()
 
         self.SSRUWidget.setVisible(True)
         self.scene3.setVisible(False)
         self.scene3.scene31.setVisible(False)
         self.scene3.scene32.setVisible(False)
         self.scene3.scene33.setVisible(False)
+        self.CPAARWidget.start_timer()
         print("This is TestScene2")
 
     def _showTestScene3(self):
@@ -296,7 +310,7 @@ if __name__ == '__main__':
     configuration = DemoConfigParser("cpn_config-test-only-cpu.json")
     check_port(configuration.gui_controller_host_port)
     inter_process_resource_NodeMan = [(i['node_name'], Pipe()) for i in configuration.nodes]
-    inter_process_resource_StatMon = [(i['monitoring_source_name'], Queue(100)) for i in configuration.monitoring_sources]  # for state_monitor_process. new Queue()
+    inter_process_resource_StatMon = [(i['monitoring_source_name'], Queue(-1)) for i in configuration.monitoring_sources]  # for state_monitor_process. new Queue()
     cfn_manager = CfnDemoManager(configuration, inter_process_resource_NodeMan, inter_process_resource_StatMon)
 
     # print("######################################")

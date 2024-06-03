@@ -146,9 +146,6 @@ class Scene31(QWidget):
         self.cloud1_hm.setVisible(True)
         self.cloud2_hm.setVisible(True)
         self.cloud3_hm.setVisible(True)
-        self.cloud1_hm.timer.start()
-        self.cloud2_hm.timer.start()
-        self.cloud3_hm.timer.start()
 
     def _initImageLoad(self):
         # -------------------------------------- Scenario_0 --------------------------------------
@@ -288,6 +285,16 @@ class Scene31(QWidget):
         self.setVisible(False)
         self.parent().scene3.setVisible(True)
 
+    def start_timer(self):
+        self.cloud1_hm.timer.start()
+        self.cloud2_hm.timer.start()
+        self.cloud3_hm.timer.start()
+
+    def stop_timer(self):
+        self.cloud1_hm.timer.stop()
+        self.cloud2_hm.timer.stop()
+        self.cloud3_hm.timer.stop()
+
     def reset(self):
         self.cfn_manager.send_command('c_node1', 'stop_task', 'vlcc worldCup.mp4_0')
         self.cfn_manager.send_command('c_node2', 'stop_task', 'vlcc worldCup.mp4_0')
@@ -310,3 +317,5 @@ class Scene31(QWidget):
         self.service_step51.label.setVisible(False)
         self.service_step52.label.setVisible(False)
         self.service_step53.label.setVisible(False)
+
+        self.stop_timer()

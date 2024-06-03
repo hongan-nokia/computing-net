@@ -142,9 +142,6 @@ class Scene33(QWidget):
         self.cloud1_hm.setVisible(True)
         self.cloud2_hm.setVisible(True)
         self.cloud3_hm.setVisible(True)
-        self.cloud1_hm.timer.start()
-        self.cloud2_hm.timer.start()
-        self.cloud3_hm.timer.start()
 
     def _initImageLoad(self):
         # -------------------------------------- Scenario_0 --------------------------------------
@@ -213,6 +210,16 @@ class Scene33(QWidget):
         self.setVisible(False)
         self.parent().scene3.setVisible(True)
 
+    def start_timer(self):
+        self.cloud1_hm.timer.start()
+        self.cloud2_hm.timer.start()
+        self.cloud3_hm.timer.start()
+
+    def stop_timer(self):
+        self.cloud1_hm.timer.stop()
+        self.cloud2_hm.timer.stop()
+        self.cloud3_hm.timer.stop()
+
     def reset(self):
         self.service_step1.tag_label.setVisible(False)
         self.service_step2.tag_label.setVisible(False)
@@ -227,3 +234,5 @@ class Scene33(QWidget):
         self.service_step5.label.setVisible(False)
         self.cfn_manager.send_command('monitor_client', 'stop_task', 'surveillance up')
         self.step1_label1.setVisible(False)
+
+        self.stop_timer()

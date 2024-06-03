@@ -115,6 +115,7 @@ class Scene3(QWidget):
         self.scene31.setVisible(True)
         self.scene32.setVisible(False)
         self.scene33.setVisible(False)
+        self.scene31.start_timer()
 
     def btn2_click(self):
         self.setVisible(False)
@@ -125,6 +126,7 @@ class Scene3(QWidget):
         # self.scene32.service_step1.label.setVisible(True)
         self.scene32.setVisible(True)
         self.scene33.setVisible(False)
+        self.scene32.start_timer()
 
     def btn3_click(self):
         self.setVisible(False)
@@ -135,6 +137,7 @@ class Scene3(QWidget):
         self.scene33.reset()
         # self.scene33.service_step1.label.setVisible(True)
         self.scene33.setVisible(True)
+        self.scene33.start_timer()
 
     def reset(self):
         self.btn1.setStyleSheet(self.btnStyleSheet)

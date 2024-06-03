@@ -1637,10 +1637,10 @@ class data_visualize(QWidget):
         self.setText()
         self.layout.addWidget(self.groupBox)
 
-        self.history_cpu_1 = Queue(15000)
-        self.history_cpu_2 = Queue(15000)
-        self.history_cpu_3 = Queue(15000)
-        self.history_cpu_4 = Queue(15000)
+        self.history_cpu_1 = Queue(-1)
+        self.history_cpu_2 = Queue(-1)
+        self.history_cpu_3 = Queue(-1)
+        self.history_cpu_4 = Queue(-1)
 
         # self.history_delay_1 = Queue(15000)
         # self.history_delay_2 = Queue(15000)
