@@ -67,9 +67,9 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.cloud1_hm.setVisible(True)
         self.cloud2_hm.setVisible(True)
         self.cloud3_hm.setVisible(True)
-        self.cloud1_hm.timer.start()
-        self.cloud2_hm.timer.start()
-        self.cloud3_hm.timer.start()
+        # self.cloud1_hm.timer.start()
+        # self.cloud2_hm.timer.start()
+        # self.cloud3_hm.timer.start()
 
     def _initView(self):
         self.setWindowTitle(" ")
