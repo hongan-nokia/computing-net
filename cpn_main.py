@@ -315,7 +315,7 @@ if __name__ == '__main__':
     configuration = DemoConfigParser("cpn_config.json")
     check_port(configuration.gui_controller_host_port)
     inter_process_resource_NodeMan = [(i['node_name'], Pipe()) for i in configuration.nodes]
-    inter_process_resource_StatMon = [(i['monitoring_source_name'], Queue(100)) for i in configuration.monitoring_sources]  # for state_monitor_process. new Queue()
+    inter_process_resource_StatMon = [(i['monitoring_source_name'], Queue(-1)) for i in configuration.monitoring_sources]  # for state_monitor_process. new Queue()
     cfn_manager = CfnDemoManager(configuration, inter_process_resource_NodeMan, inter_process_resource_StatMon)
     print(cfn_manager.n_nodes)
     mainWidget = CpnAppWindow(cfn_manager)
