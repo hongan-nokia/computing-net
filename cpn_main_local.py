@@ -18,6 +18,7 @@ from nodemodels.cfndemomanager import CfnDemoManager
 from resourcevisiualize.resvisualize import data_visualize
 from testscenes.computingpowerawareaddressroute import ComputingPowerAwareAddressRouteWindow
 from testscenes.scene3 import Scene3
+from testscenes.scene4 import Scene4
 from testscenes.systemsyntheticresutilize import SystemSyntheticResUtilize
 from utils.configparser import DemoConfigParser
 from utils.repeatimer import repeatTimer
@@ -67,6 +68,8 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.SSRUWidget.setVisible(False)
         self.scene3 = Scene3(self, cfn_manager)
         self.scene3.setVisible(False)
+        self.scene4 = Scene4(self, cfn_manager)
+        self.scene4.setVisible(False)
 
     def _initDataVisualize(self):
         self.data_visual = data_visualize(parent=self, demo_manager=self.cfn_manager, res_queue_dict=None)
@@ -158,11 +161,22 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         palette.setColor(QPalette.ButtonText, QColor(255, 255, 255))  # 设置按钮上字体的颜色为红色
         self.test3_btn.setPalette(palette)
 
+        self.test4_btn = QPushButton(parent=self)
+        self.test4_btn.setText("测试四")
+        self.test4_btn.setFont(btn_font)
+        self.test4_btn.setGeometry(20, 320, 100, 60)
+        self.test4_btn.setStyleSheet(
+            "border-radius:8px;border-style:outset;border:none;background-color: {}".format(QColor(0, 45, 127).name()))
+        palette = self.test4_btn.palette()
+        palette.setColor(QPalette.ButtonText, QColor(255, 255, 255))  # 设置按钮上字体的颜色为红色
+        self.test4_btn.setPalette(palette)
+
         self.net_compute_aware_btn.show()
         self.main_page_btn.show()
         self.test1_btn.show()
         self.test2_btn.show()
         self.test3_btn.show()
+        self.test4_btn.show()
 
         self.net_compute_aware_btn.clicked.connect(self._resourceAwarenessShow)
         self.main_page_btn.clicked.connect(self._showMainPage)
@@ -170,6 +184,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
 
         self.test2_btn.clicked.connect(self._showTestScene2)
         self.test3_btn.clicked.connect(self._showTestScene3)
+        self.test4_btn.clicked.connect(self._showTestScene4)
 
     def _resourceAwarenessShow(self):
         print("_resourceAwarenessShow")
@@ -192,6 +207,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene31.setVisible(False)
         self.scene3.scene32.setVisible(False)
         self.scene3.scene33.setVisible(False)
+        self.scene4.setVisible(False)
         print("Show Main Page")
 
     def _showTestScene1(self):
@@ -208,6 +224,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene31.setVisible(False)
         self.scene3.scene32.setVisible(False)
         self.scene3.scene33.setVisible(False)
+        self.scene4.setVisible(False)
         self.SSRUWidget.start_timer()
         print("This is TestScene1")
 
@@ -226,6 +243,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene31.setVisible(False)
         self.scene3.scene32.setVisible(False)
         self.scene3.scene33.setVisible(False)
+        self.scene4.setVisible(False)
         self.CPAARWidget.start_timer()
         print("This is TestScene2")
 
@@ -236,8 +254,22 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene31.setVisible(False)
         self.scene3.scene32.setVisible(False)
         self.scene3.scene33.setVisible(False)
+        self.scene4.setVisible(False)
         self.scene3.reset()
         print("This is TestScene3")
+
+    def _showTestScene4(self):
+        self.SSRUWidget.setVisible(False)
+        self.CPAARWidget.setVisible(False)
+        self.scene3.setVisible(True)
+        self.scene3.scene31.setVisible(False)
+        self.scene3.scene32.setVisible(False)
+        self.scene3.scene33.setVisible(False)
+        self.scene4.setVisible(True)
+        self.scene4.reset()
+        self.scene4.addrRequest()
+        # self.scene4.receivePackage()
+        print("This is TestScene4")
 
     def keyPressEvent(self, KEvent):
         k = KEvent.key()
@@ -293,11 +325,13 @@ class CpnAppWindow(QtWidgets.QMainWindow):
             self.test1_btn.setVisible(True)
             self.test2_btn.setVisible(True)
             self.test3_btn.setVisible(True)
+            self.test4_btn.setVisible(True)
             self.main_page_btn.setVisible(True)
         else:
             self.test1_btn.setVisible(False)
             self.test2_btn.setVisible(False)
             self.test3_btn.setVisible(False)
+            self.test4_btn.setVisible(False)
             self.main_page_btn.setVisible(False)
 
     def reset(self):

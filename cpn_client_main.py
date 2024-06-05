@@ -1,11 +1,12 @@
 import argparse
+import signal
 import socket
 import sys
 import threading
 import time
 from pathlib import Path
 
-from PyQt5.QtCore import Qt, pyqtSlot, QSize
+from PyQt5.QtCore import Qt, pyqtSlot, QSize, QThread, pyqtSignal
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtCore import QEvent, Qt
@@ -18,6 +19,54 @@ from nodemodels.cfnnodemodel import CfnNodeModel
 from nodemodels.fogcamera import FogCam
 from utils.configparser import DemoConfigParser
 
+class SocketThread(QThread):
+    message_received = pyqtSignal(str)
+
+    def __init__(self, ip, port, num_packets):
+        super().__init__()
+        self.ip = ip
+        self.port = port
+        self.num_packets = num_packets
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.connected = False
+        self.running = True
+
+    def run(self):
+        try:
+            self.socket.connect((self.ip, self.port))
+            self.connected = True
+            self.listen_for_messages()
+        except Exception as e:
+            self.message_received.emit(f"Failed to connect to {self.ip}:{self.port} - {str(e)}")
+
+    def listen_for_messages(self):
+        while self.running and self.connected:
+            try:
+                data = self.socket.recv(1024)
+                if data:
+                    self.message_received.emit(f"Received from {self.ip}:{self.port} - {data.decode('utf-8')}")
+            except Exception as e:
+                self.message_received.emit(f"Error receiving data from {self.ip}:{self.port} - {str(e)}")
+                self.connected = False
+
+    def send_message(self, message):
+        if self.connected:
+            try:
+                self.socket.sendall(message.encode('utf-8'))
+            except Exception as e:
+                self.message_received.emit(f"Error sending data to {self.ip}:{self.port} - {str(e)}")
+
+    def send_multiple_messages(self, message):
+        for _ in range(self.num_packets):
+            if not self.running:
+                break
+            self.send_message(message)
+        self.close()
+
+    def close(self):
+        self.running = False
+        self.connected = False
+        self.socket.close()
 
 class ClientCanvas(QWidget):
     def __init__(self, parent, client_mgn: CfnNodeModel):
@@ -28,6 +77,8 @@ class ClientCanvas(QWidget):
         self.resize(1920, 1080)
         self.groupBox = QGroupBox("")
         self.client_mgn = client_mgn
+
+        self.threads = []
 
         # 最外层布局、字体、粗体、字体大小
         self.mainLayout = QtWidgets.QVBoxLayout(self.groupBox)
@@ -63,6 +114,11 @@ class ClientCanvas(QWidget):
         self.horizontalLayout.addItem(self.middle_spacer)
 
         self._initTaskTwo()
+
+        self.right_spacer = QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(self.right_spacer)
+
+        self._initTaskFour()
 
         self.right_spacer = QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
         self.horizontalLayout.addItem(self.right_spacer)
@@ -240,6 +296,68 @@ class ClientCanvas(QWidget):
 
         self.horizontalLayout.addWidget(self.task2_box)
 
+    def _initTaskFour(self):
+        self.task4_box = QtWidgets.QGroupBox(self.view_box)
+        self.task4_box.setStyleSheet("background: #ccc; border-radius: 50px;")
+        self.task4_layout = QtWidgets.QVBoxLayout(self.task4_box)
+
+        # ####
+        self.task4_title_box = QtWidgets.QGroupBox(self.task4_box)
+        self.task4_title_box.setStyleSheet("border-radius: 20px; width: 400px;")
+        self.task4_title_layout = QtWidgets.QVBoxLayout(self.task4_title_box)
+
+        self.task4_title = QtWidgets.QLabel(self.task4_box)
+        self.task4_title.setText("测试四")
+        self.task4_title.setFont(self.task_font_size)
+        self.task4_title.setStyleSheet("color: #222;")
+        self.task4_title.setAlignment(Qt.AlignCenter)
+
+        self.task4_title_layout.addWidget(self.task4_title)
+        self.task4_layout.addWidget(self.task4_title_box)
+
+        # ####
+        self.task4_btn1_box = QtWidgets.QGroupBox(self.task4_box)
+        self.task4_btn1_layout = QtWidgets.QVBoxLayout(self.task4_btn1_box)
+
+        self.task4_btn1 = QtWidgets.QPushButton(self.task4_box)
+        self.task4_btn1.setText("")
+        self.task4_btn1.setFont(self.task_font_size)
+        # self.task4_btn1.setStyleSheet(self.btn_style)
+        # self.task4_btn1.clicked.connect(self._serviceAddress)
+
+        self.task4_btn1_layout.addWidget(self.task4_btn1)
+        self.task4_layout.addWidget(self.task4_btn1_box)
+
+        self.horizontalLayout.addWidget(self.task4_box)
+
+        self.task4_btn2_box = QtWidgets.QGroupBox(self.task4_box)
+        self.task4_btn2_layout = QtWidgets.QVBoxLayout(self.task4_btn2_box)
+
+        self.task4_btn2 = QtWidgets.QPushButton(self.task4_box)
+        self.task4_btn2.setText("寻址请求发生器")
+        self.task4_btn2.setFont(self.task_font_size)
+        self.task4_btn2.setStyleSheet(self.btn_style)
+        self.task4_btn2.clicked.connect(self._addressingRequest)
+
+        self.task4_btn2_layout.addWidget(self.task4_btn2)
+        self.task4_layout.addWidget(self.task4_btn2_box)
+
+        self.horizontalLayout.addWidget(self.task4_box)
+
+        self.task4_btn3_box = QtWidgets.QGroupBox(self.task4_box)
+        self.task4_btn3_layout = QtWidgets.QVBoxLayout(self.task4_btn3_box)
+
+        self.task4_btn3 = QtWidgets.QPushButton(self.task4_box)
+        self.task4_btn3.setText("")
+        self.task4_btn3.setFont(self.task_font_size)
+        # self.task4_btn3.setStyleSheet(self.btn_style)
+        # self.task4_btn3.clicked.connect(self._serviceAddress)
+
+        self.task4_btn3_layout.addWidget(self.task4_btn3)
+        self.task4_layout.addWidget(self.task4_btn3_box)
+
+        self.horizontalLayout.addWidget(self.task4_box)
+
     def _initNokiaLogo(self):
         self.nokia_logo = QtWidgets.QLabel()
         self.nokia_logo.setPixmap(QtGui.QPixmap("./images/bell_logo.png"))
@@ -278,6 +396,38 @@ class ClientCanvas(QWidget):
     def _contentAddress(self):
         print("This _contentAddress func")
         self.client_mgn.conn_GUI.send(('cpn_test', 'contentAddr'))
+
+    def _addressingRequest(self):
+        print("This _addressingRequest func")
+        # self.client_mgn.conn_GUI.send(('cpn_test', 'addrRequest'))
+        server_ip = self.client_mgn.demo_conf.gui_controller_host_ip  # 本地IP地址
+        base_server_port = self.client_mgn.demo_conf.gui_controller_host_port  # 基础端口，后续端口依次递增
+        thread_count = 1  # 直接在代码中设置线程数量
+        num_packets = 1000000  # 每个线程发送的包数量
+        nodes = [{"ip": "127.0.0.1", "port": 12345}]
+
+        for node in nodes:
+            for _ in range(thread_count):
+                thread = SocketThread(node["ip"], node["port"], num_packets)
+                thread.message_received.connect(self.display_message)
+                self.threads.append(thread)
+                thread.start()
+                threading.Thread(target=thread.send_multiple_messages, args=("Hello, this is a test message.",)).start()
+
+    def display_message(self, message):
+        print(message)
+
+    def closeEvent(self, event):
+        self.close_all_threads()
+        event.accept()
+
+    def close_all_threads(self):
+        for thread in self.threads:
+            thread.close()
+
+def signal_handler(sig, frame):
+    ClientWindow.close_all_threads()
+    sys.exit(0)
 
     def listenFirstPkg(self, server_conn):
         while True:
@@ -351,6 +501,8 @@ if __name__ == '__main__':
         if node_name in ['client']:
             c_window = ClientWindow(node_model)
             c_window.show()
+            signal.signal(signal.SIGINT, signal_handler)
+            signal.signal(signal.SIGTERM, signal_handler)
         if node_name in ['monitor_client']:
             monitor_window = Surveillance(node_model)
             monitor_window.show()
