@@ -19,6 +19,7 @@ from nodemodels.cfnnodemodel import CfnNodeModel
 from nodemodels.fogcamera import FogCam
 from utils.configparser import DemoConfigParser
 
+
 class SocketThread(QThread):
     message_received = pyqtSignal(str)
 
@@ -67,6 +68,7 @@ class SocketThread(QThread):
         self.running = False
         self.connected = False
         self.socket.close()
+
 
 class ClientCanvas(QWidget):
     def __init__(self, parent, client_mgn: CfnNodeModel):
@@ -425,10 +427,6 @@ class ClientCanvas(QWidget):
         for thread in self.threads:
             thread.close()
 
-def signal_handler(sig, frame):
-    ClientWindow.close_all_threads()
-    sys.exit(0)
-
     def listenFirstPkg(self, server_conn):
         while True:
             data = "123"
@@ -445,6 +443,11 @@ def signal_handler(sig, frame):
                 self.task1_text2.setText(str(latency))
                 # self.server_socket.close()
                 break
+
+
+def signal_handler(sig, frame):
+    ClientWindow.close_all_threads()
+    sys.exit(0)
 
 
 class ClientWindow(QWidget):
