@@ -77,7 +77,7 @@ class ServerThread(threading.Thread):
     def handle_client(self, client_socket):
         with client_socket:
             while self.running:
-                message = self.recv_message(client_socket)
+                message = self.recv_message(client_socket).decode('utf-8')
                 if not message:
                     break
                 check_node = message in self.nodes_name
