@@ -6,6 +6,7 @@
 Description:
 """
 import sys
+import time
 from multiprocessing import Pipe, Queue
 
 import PyWinMouse
@@ -208,6 +209,13 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene32.setVisible(False)
         self.scene3.scene33.setVisible(False)
         self.scene4.setVisible(False)
+        self.CPAARWidget.reset()
+        self.SSRUWidget.reset()
+        self.scene3.reset()
+        self.scene3.scene31.reset()
+        self.scene3.scene32.reset()
+        self.scene3.scene33.reset()
+        self.scene4.reset()
         print("Show Main Page")
 
     def _showTestScene1(self):
@@ -218,6 +226,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene31.reset()
         self.scene3.scene32.reset()
         self.scene3.scene33.reset()
+        self.scene4.reset()
         # self.CPAARWidget.user_first_pkg.label.setVisible(True)
         self.CPAARWidget.setVisible(True)
         self.scene3.setVisible(False)
@@ -237,6 +246,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene31.reset()
         self.scene3.scene32.reset()
         self.scene3.scene33.reset()
+        self.scene4.reset()
 
         self.SSRUWidget.setVisible(True)
         self.scene3.setVisible(False)
@@ -255,7 +265,13 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene32.setVisible(False)
         self.scene3.scene33.setVisible(False)
         self.scene4.setVisible(False)
+        self.CPAARWidget.reset()
+        self.SSRUWidget.reset()
         self.scene3.reset()
+        self.scene3.scene31.reset()
+        self.scene3.scene32.reset()
+        self.scene3.scene33.reset()
+        self.scene4.reset()
         print("This is TestScene3")
 
     def _showTestScene4(self):
@@ -266,9 +282,19 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene32.setVisible(False)
         self.scene3.scene33.setVisible(False)
         self.scene4.setVisible(True)
+        self.CPAARWidget.reset()
+        self.SSRUWidget.reset()
+        self.scene3.reset()
+        self.scene3.scene31.reset()
+        self.scene3.scene32.reset()
+        self.scene3.scene33.reset()
         self.scene4.reset()
+        time.sleep(0.2)
         self.scene4.addrRequest()
-        # self.scene4.receivePackage()
+        self.scene4.drawRateAndTime()
+        self.scene4.timer.start()
+        self.scene4.timer_count_lable.start()
+
         print("This is TestScene4")
 
     def keyPressEvent(self, KEvent):

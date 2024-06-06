@@ -1,4 +1,5 @@
 import argparse
+import random
 import signal
 import socket
 import sys
@@ -18,6 +19,8 @@ from Surveillance import Surveillance
 from nodemodels.cfnnodemodel import CfnNodeModel
 from nodemodels.fogcamera import FogCam
 from utils.configparser import DemoConfigParser
+
+from multiprocessing import Pipe, Queue
 
 
 class SocketThread(QThread):
@@ -79,6 +82,13 @@ class ClientCanvas(QWidget):
         self.resize(1920, 1080)
         self.groupBox = QGroupBox("")
         self.client_mgn = client_mgn
+
+        configuration = DemoConfigParser("cpn_config-test-only-cpu.json")
+        inter_process_resource_NodeMan = [(i['node_name'], Pipe()) for i in configuration.nodes]
+        resource_NodeMan = dict(inter_process_resource_NodeMan)
+        self.nodes_name = list(resource_NodeMan.keys())
+
+        self.random_node_id = 1
 
         self.threads = []
 
@@ -405,7 +415,7 @@ class ClientCanvas(QWidget):
         server_ip = self.client_mgn.demo_conf.gui_controller_host_ip  # 本地IP地址
         base_server_port = self.client_mgn.demo_conf.gui_controller_host_port  # 基础端口，后续端口依次递增
         thread_count = 1  # 直接在代码中设置线程数量
-        num_packets = 1000000  # 每个线程发送的包数量
+        num_packets = 100000  # 每个线程发送的包数量
         nodes = [{"ip": "127.0.0.1", "port": 12345}]
 
         for node in nodes:
@@ -414,7 +424,25 @@ class ClientCanvas(QWidget):
                 thread.message_received.connect(self.display_message)
                 self.threads.append(thread)
                 thread.start()
-                threading.Thread(target=thread.send_multiple_messages, args=("Hello, this is a test message.",)).start()
+                # 为每个线程生成不同的消息
+                for _ in range(num_packets):
+                    # 构建概率列表
+                    probabilities = [0.3, 0.7]  # 分别对应随机读取和随机生成的概率
+
+                    # 根据概率随机选择操作
+                    choice = random.choices([0, 1], weights=probabilities)[0]
+                    if choice == 0:
+                        # 从给定的列表中随机读取一个值
+                        message = random.choice(self.nodes_name)
+                        # print("随机读取值:", message)
+                    else:
+                        # 随机生成一个值
+                        message = f"Node {self.random_node_id}"
+                        self.random_node_id += 1
+                        # print("随机生成值:", message)
+
+                    # 向线程发送消息
+                    threading.Thread(target=thread.send_message, args=(message,)).start()
 
     def display_message(self, message):
         print(message)
