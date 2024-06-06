@@ -2,6 +2,7 @@ import argparse
 import random
 import signal
 import socket
+import struct
 import sys
 import threading
 import time
@@ -56,7 +57,10 @@ class SocketThread(QThread):
     def send_message(self, message):
         if self.connected:
             try:
-                self.socket.sendall(message.encode('utf-8'))
+                message = message.encode('utf-8')
+                message_length = struct.pack('>I', len(message))
+                self.socket.sendall(message_length + message)
+                # print(message)
             except Exception as e:
                 self.message_received.emit(f"Error sending data to {self.ip}:{self.port} - {str(e)}")
 
@@ -437,7 +441,7 @@ class ClientCanvas(QWidget):
                         # print("随机读取值:", message)
                     else:
                         # 随机生成一个值
-                        message = f"Node {self.random_node_id}"
+                        message = f"Node_{self.random_node_id}"
                         self.random_node_id += 1
                         # print("随机生成值:", message)
 

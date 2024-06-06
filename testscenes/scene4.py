@@ -8,6 +8,7 @@ Description:
 import random
 import signal
 import socket
+import struct
 import sys
 import threading
 import time
@@ -76,13 +77,32 @@ class ServerThread(threading.Thread):
     def handle_client(self, client_socket):
         with client_socket:
             while self.running:
-                data = client_socket.recv(1024).decode('utf-8')
-                if not data:
+                message = self.recv_message(client_socket)
+                if not message:
                     break
-                check_node = data in self.nodes_name
-                # print(f"{data}:{check_node}")
+                check_node = message in self.nodes_name
+                # print(f"{message}:{check_node}")
                 self.packet_count += 1
                 self.total_packet_count += 1
+
+    def recv_message(self, client_socket):
+        # Read message length
+        raw_msglen = self.recvall(client_socket, 4)
+        if not raw_msglen:
+            return None
+        msglen = struct.unpack('>I', raw_msglen)[0]
+        # Read the message data
+        return self.recvall(client_socket, msglen)
+
+    def recvall(self, client_socket, n):
+        # Helper function to receive n bytes or return None if EOF is hit
+        data = b''
+        while len(data) < n:
+            packet = client_socket.recv(n - len(data))
+            if not packet:
+                return None
+            data += packet
+        return data
 
     def count_packets(self):
         while self.running:
