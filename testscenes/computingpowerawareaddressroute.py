@@ -454,6 +454,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
             self.cfn_manager.send_command('c_node3', 'task', 'vlc worldCup.mp4_' + current_position)
 
     def start_timer(self):
+        print("start timer!!!!")
         self.cloud1_hm.timer.start()
         self.cloud2_hm.timer.start()
         self.cloud3_hm.timer.start()

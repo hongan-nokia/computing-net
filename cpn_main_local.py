@@ -234,7 +234,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene32.setVisible(False)
         self.scene3.scene33.setVisible(False)
         self.scene4.setVisible(False)
-        self.SSRUWidget.start_timer()
+        self.CPAARWidget.start_timer()
         print("This is TestScene1")
 
     def _showTestScene2(self):
@@ -254,7 +254,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene32.setVisible(False)
         self.scene3.scene33.setVisible(False)
         self.scene4.setVisible(False)
-        self.CPAARWidget.start_timer()
+        self.SSRUWidget.start_timer()
         print("This is TestScene2")
 
     def _showTestScene3(self):

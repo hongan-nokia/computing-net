@@ -139,6 +139,8 @@ class ClientCanvas(QWidget):
 
         self.threads = []
 
+        self.flagToSendMessage = True
+
         # 最外层布局、字体、粗体、字体大小
         self.mainLayout = QtWidgets.QVBoxLayout(self.groupBox)
         self.font = QtGui.QFont()
@@ -374,21 +376,7 @@ class ClientCanvas(QWidget):
         self.task4_title_layout.addWidget(self.task4_title)
         self.task4_layout.addWidget(self.task4_title_box)
 
-        # ####
-        self.task4_btn1_box = QtWidgets.QGroupBox(self.task4_box)
-        self.task4_btn1_layout = QtWidgets.QVBoxLayout(self.task4_btn1_box)
-
-        self.task4_btn1 = QtWidgets.QPushButton(self.task4_box)
-        self.task4_btn1.setText("")
-        self.task4_btn1.setFont(self.task_font_size)
-        # self.task4_btn1.setStyleSheet(self.btn_style)
-        # self.task4_btn1.clicked.connect(self._serviceAddress)
-
-        self.task4_btn1_layout.addWidget(self.task4_btn1)
-        self.task4_layout.addWidget(self.task4_btn1_box)
-
-        self.horizontalLayout.addWidget(self.task4_box)
-
+        # ######
         self.task4_btn2_box = QtWidgets.QGroupBox(self.task4_box)
         self.task4_btn2_layout = QtWidgets.QVBoxLayout(self.task4_btn2_box)
 
@@ -403,14 +391,40 @@ class ClientCanvas(QWidget):
 
         self.horizontalLayout.addWidget(self.task4_box)
 
+        # ####
+        self.task4_btn1_box = QtWidgets.QGroupBox(self.task4_box)
+        self.task4_btn1_layout = QtWidgets.QVBoxLayout(self.task4_btn1_box)
+
+        self.task4_inputbtn = QtWidgets.QLineEdit(self.task4_box)
+        self.task4_inputbtn.setFont(self.task_font_size)
+        self.task4_inputbtn.setStyleSheet("background: #fff;border-radius:20px;padding:20px;")
+        self.task4_inputbtn.setAlignment(Qt.AlignCenter)
+        self.task4_inputbtn.setFixedWidth(200)
+        self.task4_inputbtn.setText("0.3")
+
+        self.task4_inputbtn_center_layout = QHBoxLayout()
+        self.spacer = QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.task4_inputbtn_center_layout.addItem(self.spacer)
+
+        self.task4_inputbtn_center_layout.addWidget(self.task4_inputbtn)
+
+        self.spacer = QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.task4_inputbtn_center_layout.addItem(self.spacer)
+
+        self.task4_btn1_layout.addLayout(self.task4_inputbtn_center_layout)
+        self.task4_layout.addWidget(self.task4_btn1_box)
+
+        self.horizontalLayout.addWidget(self.task4_box)
+
+        # ####
         self.task4_btn3_box = QtWidgets.QGroupBox(self.task4_box)
         self.task4_btn3_layout = QtWidgets.QVBoxLayout(self.task4_btn3_box)
 
         self.task4_btn3 = QtWidgets.QPushButton(self.task4_box)
-        self.task4_btn3.setText("")
+        self.task4_btn3.setText("寻址请求终止器")
         self.task4_btn3.setFont(self.task_font_size)
-        # self.task4_btn3.setStyleSheet(self.btn_style)
-        # self.task4_btn3.clicked.connect(self._serviceAddress)
+        self.task4_btn3.setStyleSheet(self.btn_style)
+        self.task4_btn3.clicked.connect(self._stopServiceAddress)
 
         self.task4_btn3_layout.addWidget(self.task4_btn3)
         self.task4_layout.addWidget(self.task4_btn3_box)
@@ -464,6 +478,16 @@ class ClientCanvas(QWidget):
         thread_count = 1  # 直接在代码中设置线程数量
         num_packets = 100000  # 每个线程发送的包数量
         nodes = [{"ip": "127.0.0.1", "port": 12345}]
+        self.flagToSendMessage = True
+
+        probabilitie_value_QLineEdit = self.task4_inputbtn.text()
+        try:
+            probabilitie_value_QLineEdit = float(probabilitie_value_QLineEdit)  # 尝试将文本转换为浮点数
+            print(f"转换后的值: {probabilitie_value_QLineEdit}")
+        except ValueError:
+            self.result_label.setText("输入的不是有效的数字")
+        # 构建概率列表
+        probabilities = [probabilitie_value_QLineEdit, 1 - probabilitie_value_QLineEdit]  # 分别对应随机读取和随机生成的概率
 
         for node in nodes:
             for _ in range(thread_count):
@@ -472,10 +496,8 @@ class ClientCanvas(QWidget):
                 self.threads.append(thread)
                 thread.start()
                 # 为每个线程生成不同的消息
+                # while self.flagToSendMessage:
                 for _ in range(num_packets):
-                    # 构建概率列表
-                    probabilities = [0.3, 0.7]  # 分别对应随机读取和随机生成的概率
-
                     # 根据概率随机选择操作
                     choice = random.choices([0, 1], weights=probabilities)[0]
                     if choice == 0:
@@ -490,6 +512,9 @@ class ClientCanvas(QWidget):
 
                     # 向线程发送消息
                     threading.Thread(target=thread.send_message, args=(message,)).start()
+
+    def _stopServiceAddress(self):
+        self.flagToSendMessage = False
 
     def display_message(self, message):
         print(message)
