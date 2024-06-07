@@ -23,6 +23,59 @@ from utils.configparser import DemoConfigParser
 
 from multiprocessing import Pipe, Queue
 
+#TCP
+# class SocketThread(QThread):
+#     message_received = pyqtSignal(str)
+#
+#     def __init__(self, ip, port, num_packets):
+#         super().__init__()
+#         self.ip = ip
+#         self.port = port
+#         self.num_packets = num_packets
+#         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+#         self.connected = False
+#         self.running = True
+#
+#     def run(self):
+#         try:
+#             self.socket.connect((self.ip, self.port))
+#             self.connected = True
+#             self.listen_for_messages()
+#         except Exception as e:
+#             self.message_received.emit(f"Failed to connect to {self.ip}:{self.port} - {str(e)}")
+#
+#     def listen_for_messages(self):
+#         while self.running and self.connected:
+#             try:
+#                 data = self.socket.recv(1024)
+#                 if data:
+#                     self.message_received.emit(f"Received from {self.ip}:{self.port} - {data.decode('utf-8')}")
+#             except Exception as e:
+#                 self.message_received.emit(f"Error receiving data from {self.ip}:{self.port} - {str(e)}")
+#                 self.connected = False
+#
+#     def send_message(self, message):
+#         if self.connected:
+#             try:
+#                 message = message.encode('utf-8')
+#                 message_length = struct.pack('>I', len(message))
+#                 self.socket.sendall(message_length + message)
+#                 # print(message)
+#             except Exception as e:
+#                 self.message_received.emit(f"Error sending data to {self.ip}:{self.port} - {str(e)}")
+#
+#     def send_multiple_messages(self, message):
+#         for _ in range(self.num_packets):
+#             if not self.running:
+#                 break
+#             self.send_message(message)
+#         self.close()
+#
+#     def close(self):
+#         self.running = False
+#         self.connected = False
+#         self.socket.close()
+
 
 class SocketThread(QThread):
     message_received = pyqtSignal(str)
@@ -32,37 +85,28 @@ class SocketThread(QThread):
         self.ip = ip
         self.port = port
         self.num_packets = num_packets
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.connected = False
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.running = True
 
     def run(self):
-        try:
-            self.socket.connect((self.ip, self.port))
-            self.connected = True
-            self.listen_for_messages()
-        except Exception as e:
-            self.message_received.emit(f"Failed to connect to {self.ip}:{self.port} - {str(e)}")
+        self.listen_for_messages()
 
     def listen_for_messages(self):
-        while self.running and self.connected:
-            try:
-                data = self.socket.recv(1024)
+        try:
+            self.socket.bind((self.ip, self.port))
+            while self.running:
+                data, addr = self.socket.recvfrom(1024)
                 if data:
-                    self.message_received.emit(f"Received from {self.ip}:{self.port} - {data.decode('utf-8')}")
-            except Exception as e:
-                self.message_received.emit(f"Error receiving data from {self.ip}:{self.port} - {str(e)}")
-                self.connected = False
+                    self.message_received.emit(f"Received from {addr[0]}:{addr[1]} - {data.decode('utf-8')}")
+        except Exception as e:
+            self.message_received.emit(f"Error receiving data - {str(e)}")
 
     def send_message(self, message):
-        if self.connected:
-            try:
-                message = message.encode('utf-8')
-                message_length = struct.pack('>I', len(message))
-                self.socket.sendall(message_length + message)
-                # print(message)
-            except Exception as e:
-                self.message_received.emit(f"Error sending data to {self.ip}:{self.port} - {str(e)}")
+        try:
+            message = message.encode('utf-8')
+            self.socket.sendto(message, (self.ip, self.port))
+        except Exception as e:
+            self.message_received.emit(f"Error sending data - {str(e)}")
 
     def send_multiple_messages(self, message):
         for _ in range(self.num_packets):
@@ -73,7 +117,6 @@ class SocketThread(QThread):
 
     def close(self):
         self.running = False
-        self.connected = False
         self.socket.close()
 
 

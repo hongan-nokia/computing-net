@@ -34,6 +34,90 @@ class MplCanvas(FigureCanvas):
         super(MplCanvas, self).__init__(fig)
 
 
+# class RateUpdater(QObject):
+#     rate_updated = pyqtSignal(float)
+#
+#     def __init__(self):
+#         super().__init__()
+#
+#     def update_rate(self, rate):
+#         self.rate_updated.emit(rate)
+#
+#
+# class ServerThread(threading.Thread):
+#     def __init__(self, ip, port):
+#         super().__init__()
+#         self.ip = ip
+#         self.port = port
+#         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#         self.server_socket.bind((self.ip, self.port))
+#         self.server_socket.listen(5)  # Allow up to 5 connections
+#         self.total_packet_count = 0
+#         self.packet_count = 0
+#         self.running = True
+#         print(f"Server started at {self.ip}:{self.port}")
+#
+#         self.rate = 0
+#
+#         configuration = DemoConfigParser("cpn_config-test-only-cpu.json")
+#         inter_process_resource_NodeMan = [(i['node_name'], Pipe()) for i in configuration.nodes]
+#         resource_NodeMan = dict(inter_process_resource_NodeMan)
+#         self.nodes_name = list(resource_NodeMan.keys())
+#
+#     def run(self):
+#         packet_counter_thread = threading.Thread(target=self.count_packets)
+#         packet_counter_thread.start()
+#
+#         while self.running:
+#             client_socket, addr = self.server_socket.accept()
+#             print(f"Connection from {addr}")
+#             client_handler = threading.Thread(target=self.handle_client, args=(client_socket,))
+#             client_handler.start()
+#
+#     def handle_client(self, client_socket):
+#         with client_socket:
+#             while self.running:
+#                 message = self.recv_message(client_socket).decode('utf-8')
+#                 if not message:
+#                     break
+#                 check_node = message in self.nodes_name
+#                 # print(f"{message}:{check_node}")
+#                 self.packet_count += 1
+#                 self.total_packet_count += 1
+#
+#     def recv_message(self, client_socket):
+#         # Read message length
+#         raw_msglen = self.recvall(client_socket, 4)
+#         if not raw_msglen:
+#             return None
+#         msglen = struct.unpack('>I', raw_msglen)[0]
+#         # Read the message data
+#         return self.recvall(client_socket, msglen)
+#
+#     def recvall(self, client_socket, n):
+#         # Helper function to receive n bytes or return None if EOF is hit
+#         data = b''
+#         while len(data) < n:
+#             packet = client_socket.recv(n - len(data))
+#             if not packet:
+#                 return None
+#             data += packet
+#         return data
+#
+#     def count_packets(self):
+#         while self.running:
+#             time.sleep(1)
+#             print(f"Packets received in the last second: {self.packet_count}")
+#             self.rate = self.packet_count
+#             self.packet_count = 0
+#             # print(self.total_packet_count)
+#
+#     def stop(self):
+#         self.running = False
+#         self.server_socket.close()
+#         print("Server stopped.")
+
+
 class RateUpdater(QObject):
     rate_updated = pyqtSignal(float)
 
@@ -49,9 +133,8 @@ class ServerThread(threading.Thread):
         super().__init__()
         self.ip = ip
         self.port = port
-        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.server_socket.bind((self.ip, self.port))
-        self.server_socket.listen(5)  # Allow up to 5 connections
         self.total_packet_count = 0
         self.packet_count = 0
         self.running = True
@@ -69,40 +152,12 @@ class ServerThread(threading.Thread):
         packet_counter_thread.start()
 
         while self.running:
-            client_socket, addr = self.server_socket.accept()
-            print(f"Connection from {addr}")
-            client_handler = threading.Thread(target=self.handle_client, args=(client_socket,))
-            client_handler.start()
-
-    def handle_client(self, client_socket):
-        with client_socket:
-            while self.running:
-                message = self.recv_message(client_socket).decode('utf-8')
-                if not message:
-                    break
-                check_node = message in self.nodes_name
-                # print(f"{message}:{check_node}")
-                self.packet_count += 1
-                self.total_packet_count += 1
-
-    def recv_message(self, client_socket):
-        # Read message length
-        raw_msglen = self.recvall(client_socket, 4)
-        if not raw_msglen:
-            return None
-        msglen = struct.unpack('>I', raw_msglen)[0]
-        # Read the message data
-        return self.recvall(client_socket, msglen)
-
-    def recvall(self, client_socket, n):
-        # Helper function to receive n bytes or return None if EOF is hit
-        data = b''
-        while len(data) < n:
-            packet = client_socket.recv(n - len(data))
-            if not packet:
-                return None
-            data += packet
-        return data
+            data, addr = self.server_socket.recvfrom(1024)
+            message = data.decode('utf-8')
+            check_node = message in self.nodes_name
+            # print(f"{message}:{check_node}")
+            self.packet_count += 1
+            self.total_packet_count += 1
 
     def count_packets(self):
         while self.running:
