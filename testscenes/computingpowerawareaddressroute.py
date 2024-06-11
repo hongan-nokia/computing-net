@@ -367,6 +367,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
     @pyqtSlot(int, str)
     def firstPkgLatWorkFlow(self, node_id, command_args):
         print("Here is firstPkgLatWorkFlow")
+        self.reset()
         self.user_first_pkg.start("sc1_sp1")
         self._sendFirstPkg2UE()
         # self.cfn_manager.send_command("c_node1", "task", "send_pkg2ue")

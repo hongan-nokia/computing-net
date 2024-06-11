@@ -51,6 +51,7 @@ class Scene33(QWidget):
         self.initConnections()
 
         self.path = 1
+        self.commomd = None
 
     def _initView(self):
         self.setWindowTitle(" ")
@@ -196,6 +197,7 @@ class Scene33(QWidget):
 
     @pyqtSlot(int, str)
     def contentAddressWorkFlow(self):
+        self.reset()
         self.path = 1
         self.service_step1.start("sp1")
 
@@ -206,6 +208,7 @@ class Scene33(QWidget):
         print(commond_arg1)
         print(commond_arg2)
         print(commond_arg3)
+        self.reset()
         self.path = 2
         self.video_name = commond_arg2
         self.video_startTime = commond_arg3
@@ -232,8 +235,8 @@ class Scene33(QWidget):
                 self.service_step42.start("")
                 video_totaltime = 300
                 ratio = int(self.video_startTime) / video_totaltime
-                commomd = f"vlc fake1-WorldCup.mp4_{ratio}"
-                self.cfn_manager.send_command('c_node3', 'task', commomd)
+                self.commomd = f"vlc fake1-WorldCup.mp4_{ratio}"
+                self.cfn_manager.send_command('c_node3', 'task', self.commomd)
         elif destination == "sp4":
             self.service_step5.start("")
             self.cfn_manager.send_command('monitor_client', 'task', 'surveillance up')
@@ -269,6 +272,7 @@ class Scene33(QWidget):
         self.service_step42.label.setVisible(False)
         self.service_step5.label.setVisible(False)
         self.cfn_manager.send_command('monitor_client', 'stop_task', 'surveillance up')
+        self.cfn_manager.send_command('c_node3', 'stop_task', self.commomd)
         self.step1_label1.setVisible(False)
 
         self.stop_timer()

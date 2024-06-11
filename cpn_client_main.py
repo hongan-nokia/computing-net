@@ -384,18 +384,19 @@ class ClientCanvas(QWidget):
         self.task2_btn4.setFont(self.task_font_size)
         # self.task2_btn4.setStyleSheet()
 
-        self.task2_btn5 = QtWidgets.QRadioButton("视频")
-        self.task2_btn5.toggled.connect(self.onRadioButtonToggled)
-        self.task2_btn5.setFont(self.task_font_size)
-        # self.task2_btn5.setStyleSheet()
-
         self.task2_label_box = QtWidgets.QGroupBox()
         self.task2_label_layout = QtWidgets.QHBoxLayout(self.task2_label_box)
 
+        self.task2_btn5 = QtWidgets.QRadioButton("视频")
+        self.task2_btn5.toggled.connect(self.onRadioButtonToggled)
+        self.task2_btn5.setFont(self.task_font_size)
+        self.task2_label_layout.addWidget(self.task2_btn5)
+        # self.task2_btn5.setStyleSheet()
+
         self.task2_btn5_edit1 = QtWidgets.QLineEdit()
         self.task2_btn5_edit1.setFont(self.task_font_size)
-        self.task2_btn5_edit1.setStyleSheet("background: #fff;border-radius:20px;padding:20px;")
-        self.task2_btn5_edit1.setMaximumWidth(150)
+        self.task2_btn5_edit1.setStyleSheet("background: #fff;border-radius:20px;padding:10px;")
+        self.task2_btn5_edit1.setMaximumWidth(100)
         self.task2_btn5_edit1.setText("足球")
         self.task2_label_layout.addWidget(self.task2_btn5_edit1)
 
@@ -405,8 +406,8 @@ class ClientCanvas(QWidget):
 
         self.task2_btn5_edit2 = QtWidgets.QLineEdit()
         self.task2_btn5_edit2.setFont(self.task_font_size)
-        self.task2_btn5_edit2.setStyleSheet("background: #fff;border-radius:20px;padding:20px;")
-        self.task2_btn5_edit2.setMaximumWidth(150)
+        self.task2_btn5_edit2.setStyleSheet("background: #fff;border-radius:20px;padding:10px;")
+        self.task2_btn5_edit2.setMaximumWidth(100)
         self.task2_btn5_edit2.setText("36")
         self.task2_btn5_edit2.setAlignment(Qt.AlignRight)
         self.task2_label_layout.addWidget(self.task2_btn5_edit2)
@@ -415,9 +416,13 @@ class ClientCanvas(QWidget):
         self.task2_btn5_label2.setFont(self.task_font_size)
         self.task2_label_layout.addWidget(self.task2_btn5_label2)
 
+        self.task2_radioBtnGroup = QtWidgets.QButtonGroup(self.task2_box)
+        self.task2_radioBtnGroup.addButton(self.task2_btn4)
+        self.task2_radioBtnGroup.addButton(self.task2_btn5)
+
         self.task2_btn3_layout.addWidget(self.task2_btn3)
         self.task2_btn3_layout.addWidget(self.task2_btn4)
-        self.task2_btn3_layout.addWidget(self.task2_btn5)
+        # self.task2_btn3_layout.addWidget(self.task2_btn5)
         self.task2_btn3_layout.addWidget(self.task2_label_box)
 
         self.task2_layout.addWidget(self.task2_btn3_box)

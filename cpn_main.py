@@ -189,6 +189,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
             self.data_visual.history1.setVisible(False)
             self.data_visual.history2.setVisible(False)
             self.data_visual.history3.setVisible(False)
+            self.data_visual.history4.setVisible(False)
             self.computingNetResMonTimer.stop()
         else:
             print("self.data_visual.isVisible() -> False")
