@@ -50,6 +50,8 @@ class Scene33(QWidget):
         self._initImageLoad()
         self.initConnections()
 
+        self.path = 1
+
     def _initView(self):
         self.setWindowTitle(" ")
         self.setWindowFlag(Qt.FramelessWindowHint)
@@ -110,7 +112,7 @@ class Scene33(QWidget):
 
         font1 = QtGui.QFont("微软雅黑", 11)
         self.step1_label1 = QtWidgets.QLabel(parent=self)
-        self.step1_label1.setText("c.房间1的监控")
+        self.step1_label1.setText("房间1的监控")
         self.step1_label1.setWordWrap(True)
         self.step1_label1.setGeometry(587, 446, 110, 50)
         self.step1_label1.setFont(font1)
@@ -163,11 +165,17 @@ class Scene33(QWidget):
                                          img_scale_h=240,
                                          direction="r2l",
                                          interval=3, title='3.网络路径控制', tag_geo=[420, 75, 400, 20])
-        self.service_step4 = ImageLoader(parent=self, geo=[350, 550, 530, 310],
-                                         image_url='./images_test3/content_addressing_step4.png',
+        self.service_step41 = ImageLoader(parent=self, geo=[350, 550, 530, 310],
+                                         image_url='./images_test3/content_addressing_step41.png',
                                          img_scale_w=530,
                                          img_scale_h=260,
                                          direction="l2r",
+                                         interval=3, title='', tag_geo=[280, 20, 200, 30])
+        self.service_step42 = ImageLoader(parent=self, geo=[350, 480, 730, 400],
+                                         image_url='./images_test3/content_addressing_step42.png',
+                                         img_scale_w=730,
+                                         img_scale_h=400,
+                                         direction="r2l",
                                          interval=3, title='', tag_geo=[280, 20, 200, 30])
         self.service_step5 = ImageLoader(parent=self, geo=[340, 517, 539, 310],
                                          image_url='./images_test3/content_addressing_step5.png',
@@ -178,19 +186,38 @@ class Scene33(QWidget):
 
     def initConnections(self):
         self.cfn_manager.signal_emitter.QtSignals.contentAddr_test.connect(self.contentAddressWorkFlow)
+        self.cfn_manager.signal_emitter.QtSignals.contentAddr_test_video.connect(self.contentAddressVideoWorkFlow)
         self.service_step1.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step2.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step3.QtSignals.anim_over.connect(self.service_provision_anim)
-        self.service_step4.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.service_step41.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.service_step42.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step5.QtSignals.anim_over.connect(self.service_provision_anim)
 
     @pyqtSlot(int, str)
     def contentAddressWorkFlow(self):
+        self.path = 1
+        self.service_step1.start("sp1")
+
+    @pyqtSlot(int, str, str, str)
+    def contentAddressVideoWorkFlow(self, Node_id, commond_arg1, commond_arg2, commond_arg3):
+        print("in video workflow")
+        print(Node_id)
+        print(commond_arg1)
+        print(commond_arg2)
+        print(commond_arg3)
+        self.path = 2
+        self.video_name = commond_arg2
+        self.video_startTime = commond_arg3
         self.service_step1.start("sp1")
 
     @pyqtSlot(str)
     def service_provision_anim(self, destination: str):
         if destination == "sp1":
+            if self.path == 1:
+                self.step1_label1.setText("房间1的监控")
+            elif self.path == 2:
+                self.step1_label1.setText("视频流")
             self.step1_label1.setVisible(True)
             # self.service_step2.label.setVisible(True)
             self.service_step2.start("sp2")
@@ -199,7 +226,14 @@ class Scene33(QWidget):
             self.service_step3.start("sp3")
         elif destination == "sp3":
             # self.service_step4.label.setVisible(True)
-            self.service_step4.start("sp4")
+            if self.path == 1:
+                self.service_step41.start("sp4")
+            elif self.path == 2:
+                self.service_step42.start("")
+                video_totaltime = 300
+                ratio = int(self.video_startTime) / video_totaltime
+                commomd = f"vlc fake1-WorldCup.mp4_{ratio}"
+                self.cfn_manager.send_command('c_node3', 'task', commomd)
         elif destination == "sp4":
             self.service_step5.start("")
             self.cfn_manager.send_command('monitor_client', 'task', 'surveillance up')
@@ -224,13 +258,15 @@ class Scene33(QWidget):
         self.service_step1.tag_label.setVisible(False)
         self.service_step2.tag_label.setVisible(False)
         self.service_step3.tag_label.setVisible(False)
-        self.service_step4.tag_label.setVisible(False)
+        self.service_step41.tag_label.setVisible(False)
+        self.service_step42.tag_label.setVisible(False)
         self.service_step5.tag_label.setVisible(False)
 
         self.service_step1.label.setVisible(False)
         self.service_step2.label.setVisible(False)
         self.service_step3.label.setVisible(False)
-        self.service_step4.label.setVisible(False)
+        self.service_step41.label.setVisible(False)
+        self.service_step42.label.setVisible(False)
         self.service_step5.label.setVisible(False)
         self.cfn_manager.send_command('monitor_client', 'stop_task', 'surveillance up')
         self.step1_label1.setVisible(False)

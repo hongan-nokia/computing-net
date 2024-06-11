@@ -39,6 +39,7 @@ class CfnDemoManagerSignals(QObject):
     serviceAddr_test = pyqtSignal(int, str)  # node_id, test-case name
     computingAddr_test = pyqtSignal(int, str)  # node_id, test-case name
     contentAddr_test = pyqtSignal(int, str)  # node_id, test-case name
+    contentAddr_test_video = pyqtSignal(int, str, str, str)
 
 
 class SgnlEmitter:
@@ -51,7 +52,7 @@ class SgnlEmitter:
         self.demo_manager = dm
         self.QtSignals = CfnDemoManagerSignals()
 
-    def signal_emit_logic(self, node_name: str, command: str, command_arg):
+    def signal_emit_logic(self, node_name: str, command: str, command_arg, other_arg: tuple = None):
         """
         函数参数就是从节点发来的信息, 格式是个三元组: node_name, command, command_arg, 分别代表
         节点名(谁发来的命令)、命令关键字、命令参数。本函数负责判断这些信息, 并转换成某种具体的信号触发。
@@ -60,7 +61,6 @@ class SgnlEmitter:
         """
         node_id = self.demo_manager.node_names.index(node_name) if (node_name in self.demo_manager.node_names) else -1
         ret = ''
-
         if command == '_disconnect':
             self.QtSignals.container_disconnected.emit(node_id)
             self.demo_manager.send_command(node_name, '_disconnect')
@@ -75,8 +75,12 @@ class SgnlEmitter:
                 self.QtSignals.serviceAddr_test.emit(node_id, command_arg)
             elif "computingAddr" in command_arg:
                 self.QtSignals.computingAddr_test.emit(node_id, command_arg)
-            elif "contentAddr" in command_arg:
+            elif "contentAddr" == command_arg:
+                print("in contentAddr")
                 self.QtSignals.contentAddr_test.emit(node_id, command_arg)
+            elif "contentAddrVideo" == command_arg:
+                print("in contentAddrVideo")
+                self.QtSignals.contentAddr_test_video.emit(node_id, command_arg, other_arg[0], other_arg[1])
 
         elif command == 'vlc_state':
             print(f'node {node_name} reported vlc_state: {command_arg}')
@@ -172,8 +176,10 @@ class CfnDemoManager(object):
                     break
                 except Exception as err:
                     print('(gui_sgnl_gen) msg = ', msg, 'error=', err)
-
-                ret = self.signal_emitter.signal_emit_logic(msg[0], msg[1], msg[2])
+                if len(msg) == 3:
+                    ret = self.signal_emitter.signal_emit_logic(msg[0], msg[1], msg[2])
+                elif len(msg) == 4:
+                    ret = self.signal_emitter.signal_emit_logic(msg[0], msg[1], msg[2], msg[3])
                 if ret == _EXIT_DEMO_SIGNAL:
                     print(f"DEBUG - _gui_sgnl_gen thread received {_EXIT_DEMO_SIGNAL}, exiting.")
                     readers = []

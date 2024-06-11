@@ -8,7 +8,7 @@ import threading
 import time
 from pathlib import Path
 
-from PyQt5.QtCore import Qt, pyqtSlot, QSize, QThread, pyqtSignal
+from PyQt5.QtCore import Qt, pyqtSlot, QSize, QThread, pyqtSignal, QMutex, QMutexLocker
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtCore import QEvent, Qt
@@ -80,13 +80,13 @@ from multiprocessing import Pipe, Queue
 class SocketThread(QThread):
     message_received = pyqtSignal(str)
 
-    def __init__(self, ip, port, num_packets):
+    def __init__(self, ip, port):
         super().__init__()
         self.ip = ip
         self.port = port
-        self.num_packets = num_packets
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.running = True
+        self.mutex = QMutex()
 
     def run(self):
         self.listen_for_messages()
@@ -103,21 +103,47 @@ class SocketThread(QThread):
 
     def send_message(self, message):
         try:
-            message = message.encode('utf-8')
-            self.socket.sendto(message, (self.ip, self.port))
+            with QMutexLocker(self.mutex):
+                message = message.encode('utf-8')
+                self.socket.sendto(message, (self.ip, self.port))
         except Exception as e:
             self.message_received.emit(f"Error sending data - {str(e)}")
-
-    def send_multiple_messages(self, message):
-        for _ in range(self.num_packets):
-            if not self.running:
-                break
-            self.send_message(message)
-        self.close()
 
     def close(self):
         self.running = False
         self.socket.close()
+
+
+class SendPacketsThread(QThread):
+    def __init__(self, socket_thread, num_packets, probabilities, nodes_name):
+        super().__init__()
+        self.socket_thread = socket_thread
+        self.num_packets = num_packets
+        self.running = True
+        self.probabilities = probabilities
+        self.nodes_name = nodes_name
+        self.random_node_id = 1
+
+    def run(self):
+        self.send_multiple_messages()
+
+    def send_multiple_messages(self):
+        for _ in range(self.num_packets):
+            if not self.running:
+                break
+            choice = random.choices([0, 1], weights=self.probabilities)[0]
+            if choice == 0:
+                # 从给定的列表中随机读取一个值
+                message = random.choice(self.nodes_name)
+                # print("随机读取值:", message)
+            else:
+                # 随机生成一个值
+                message = f"Node_{self.random_node_id}"
+                self.random_node_id += 1
+            self.socket_thread.send_message(message)
+
+    def stop(self):
+        self.running = False
 
 
 class ClientCanvas(QWidget):
@@ -139,7 +165,7 @@ class ClientCanvas(QWidget):
 
         self.threads = []
 
-        self.flagToSendMessage = True
+        self.selected_button = None
 
         # 最外层布局、字体、粗体、字体大小
         self.mainLayout = QtWidgets.QVBoxLayout(self.groupBox)
@@ -352,10 +378,54 @@ class ClientCanvas(QWidget):
         self.task2_btn3.setStyleSheet(self.btn_style)
         self.task2_btn3.clicked.connect(self._contentAddress)
 
+        self.task2_btn4 = QtWidgets.QRadioButton("房间监控")
+        self.task2_btn4.toggled.connect(self.onRadioButtonToggled)
+        self.task2_btn4.setChecked(True)
+        self.task2_btn4.setFont(self.task_font_size)
+        # self.task2_btn4.setStyleSheet()
+
+        self.task2_btn5 = QtWidgets.QRadioButton("视频")
+        self.task2_btn5.toggled.connect(self.onRadioButtonToggled)
+        self.task2_btn5.setFont(self.task_font_size)
+        # self.task2_btn5.setStyleSheet()
+
+        self.task2_label_box = QtWidgets.QGroupBox()
+        self.task2_label_layout = QtWidgets.QHBoxLayout(self.task2_label_box)
+
+        self.task2_btn5_edit1 = QtWidgets.QLineEdit()
+        self.task2_btn5_edit1.setFont(self.task_font_size)
+        self.task2_btn5_edit1.setStyleSheet("background: #fff;border-radius:20px;padding:20px;")
+        self.task2_btn5_edit1.setMaximumWidth(150)
+        self.task2_btn5_edit1.setText("足球")
+        self.task2_label_layout.addWidget(self.task2_btn5_edit1)
+
+        self.task2_btn5_label1 = QtWidgets.QLabel("第")
+        self.task2_btn5_label1.setFont(self.task_font_size)
+        self.task2_label_layout.addWidget(self.task2_btn5_label1)
+
+        self.task2_btn5_edit2 = QtWidgets.QLineEdit()
+        self.task2_btn5_edit2.setFont(self.task_font_size)
+        self.task2_btn5_edit2.setStyleSheet("background: #fff;border-radius:20px;padding:20px;")
+        self.task2_btn5_edit2.setMaximumWidth(150)
+        self.task2_btn5_edit2.setText("36")
+        self.task2_btn5_edit2.setAlignment(Qt.AlignRight)
+        self.task2_label_layout.addWidget(self.task2_btn5_edit2)
+
+        self.task2_btn5_label2 = QtWidgets.QLabel("秒")
+        self.task2_btn5_label2.setFont(self.task_font_size)
+        self.task2_label_layout.addWidget(self.task2_btn5_label2)
+
         self.task2_btn3_layout.addWidget(self.task2_btn3)
+        self.task2_btn3_layout.addWidget(self.task2_btn4)
+        self.task2_btn3_layout.addWidget(self.task2_btn5)
+        self.task2_btn3_layout.addWidget(self.task2_label_box)
+
         self.task2_layout.addWidget(self.task2_btn3_box)
 
         self.horizontalLayout.addWidget(self.task2_box)
+
+
+
 
     def _initTaskFour(self):
         self.task4_box = QtWidgets.QGroupBox(self.view_box)
@@ -468,7 +538,16 @@ class ClientCanvas(QWidget):
 
     def _contentAddress(self):
         print("This _contentAddress func")
-        self.client_mgn.conn_GUI.send(('cpn_test', 'contentAddr'))
+        if self.selected_button == self.task2_btn4:
+            print("房间监控事件")
+            self.client_mgn.conn_GUI.send(('cpn_test', 'contentAddr'))
+        elif self.selected_button == self.task2_btn5:
+            print("视频播放事件")
+            video_name = self.task2_btn5_edit1.text()
+            video_startTime = self.task2_btn5_edit2.text()
+            video_tuple = (video_name, video_startTime)
+            # self.client_mgn.conn_GUI.send(('cpn_test', 'contentAddr'))
+            self.client_mgn.conn_GUI.send(('cpn_test', 'contentAddrVideo', video_tuple))
 
     def _addressingRequest(self):
         print("This _addressingRequest func")
@@ -476,7 +555,7 @@ class ClientCanvas(QWidget):
         server_ip = self.client_mgn.demo_conf.gui_controller_host_ip  # 本地IP地址
         base_server_port = self.client_mgn.demo_conf.gui_controller_host_port  # 基础端口，后续端口依次递增
         thread_count = 1  # 直接在代码中设置线程数量
-        num_packets = 100000  # 每个线程发送的包数量
+        num_packets = 1000000  # 每个线程发送的包数量
         nodes = [{"ip": "127.0.0.1", "port": 12345}]
         self.flagToSendMessage = True
 
@@ -491,30 +570,17 @@ class ClientCanvas(QWidget):
 
         for node in nodes:
             for _ in range(thread_count):
-                thread = SocketThread(node["ip"], node["port"], num_packets)
+                thread = SocketThread(node["ip"], node["port"])
                 thread.message_received.connect(self.display_message)
-                self.threads.append(thread)
-                thread.start()
-                # 为每个线程生成不同的消息
-                # while self.flagToSendMessage:
-                for _ in range(num_packets):
-                    # 根据概率随机选择操作
-                    choice = random.choices([0, 1], weights=probabilities)[0]
-                    if choice == 0:
-                        # 从给定的列表中随机读取一个值
-                        message = random.choice(self.nodes_name)
-                        # print("随机读取值:", message)
-                    else:
-                        # 随机生成一个值
-                        message = f"Node_{self.random_node_id}"
-                        self.random_node_id += 1
-                        # print("随机生成值:", message)
 
-                    # 向线程发送消息
-                    threading.Thread(target=thread.send_message, args=(message,)).start()
+                send_thread = SendPacketsThread(thread, num_packets, probabilities, self.nodes_name)
+                self.threads.append(send_thread)
+                send_thread.start()
 
     def _stopServiceAddress(self):
-        self.flagToSendMessage = False
+        print("stopServiceAddress")
+        for send_thread in self.threads:
+            send_thread.stop()
 
     def display_message(self, message):
         print(message)
@@ -543,6 +609,16 @@ class ClientCanvas(QWidget):
                 self.task1_text2.setText(str(latency))
                 # self.server_socket.close()
                 break
+
+    def onRadioButtonToggled(self):
+        self.selected_button = self.sender()
+        if self.selected_button.isChecked():
+            print(f'你选择了: {self.selected_button.text()}')
+
+        if self.selected_button == self.task2_btn4:
+            print("选项 1 被选中")
+        elif self.selected_button == self.task2_btn5:
+            print("选项 2 被选中")
 
 
 def signal_handler(sig, frame):

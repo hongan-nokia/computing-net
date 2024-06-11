@@ -291,7 +291,7 @@ class Scene4(QWidget):
         self.canvas.ax.clear()
         self.canvas.ax.plot(self.x_data, self.y_data, label="Rate")
 
-        self.canvas.ax.set_xlabel('Index')
+        self.canvas.ax.set_xlabel('Time/s')
         self.canvas.ax.set_ylabel('Rate')
         self.canvas.ax.legend()
         self.canvas.ax.grid(True)

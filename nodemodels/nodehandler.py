@@ -37,11 +37,18 @@ def node_handler_node2gui(node_name: str, node_conn: Connection, gui_conn: Conne
         # （node_name: str, cmd:str, arg: Any）
 
         if type(msg) is tuple:
-            (cmd, arg) = msg
+            print(msg)
+            if len(msg) == 2:
+                (cmd, arg) = msg
+            elif len(msg) == 3:
+                (cmd, arg, arg1) = msg
         else:
             cmd = msg
             arg = None
-        msg_with_name = (node_name, cmd, arg)
+        if len(msg) == 3:
+            msg_with_name = (node_name, cmd, arg, arg1)
+        else:
+            msg_with_name = (node_name, cmd, arg)
         # print(f" node_handler_node2gui : {msg_with_name}")
         if cmd == '_disconnect':  # special message
             gui_conn.send((node_name, '_disconnect', None))
