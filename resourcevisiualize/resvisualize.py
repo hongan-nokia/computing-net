@@ -13,7 +13,7 @@ from typing import List, Dict
 
 import requests
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal, QObject, QTimer
 from PyQt5.QtChart import QChartView
 from PyQt5.QtWidgets import QHBoxLayout
 from PyQt5.QtWidgets import QVBoxLayout, QWidget, QGroupBox, QPushButton
@@ -23,6 +23,9 @@ from resourcevisiualize.resourcehistory import HistoryWindow
 from resourcevisiualize.speedmeter import SpeedMeter
 from utils.repeatimer import repeatTimer
 from utils.reversequeue import reverseQueue
+
+from matplotlib import pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 
 def net_formatter(net_tx_bytes, net_rx_bytes):
@@ -67,25 +70,89 @@ def disk_formatter(disk_read_bytes, disk_write_bytes):
     return r_tag, w_tag
 
 
+class MplCanvas(FigureCanvas):
+
+    def __init__(self, parent=None, width=5, height=4, dpi=100):
+        fig, self.ax = plt.subplots(figsize=(width, height), dpi=dpi)
+        super(MplCanvas, self).__init__(fig)
+
+
+class RateUpdater(QObject):
+    rate_updated = pyqtSignal(float)
+
+    def __init__(self):
+        super().__init__()
+
+    def update_rate(self, rate):
+        self.rate_updated.emit(rate)
+
+
 class DataVisualizationWindow(QWidget):
     def __init__(self, cpu_q, delay_q, windowTitle="History"):
         super().__init__()
         self.cpu_queue = cpu_q
         self.delay_queue = delay_q
         self.setWindowTitle(windowTitle)
-        self.setGeometry(100, 100, 800, 600)
+        self.setGeometry(100, 100, 600, 450)
+        self._initView()
+
+    def _initView(self):
+        # self.setWindowFlag(Qt.FramelessWindowHint)
+        self.view = QtWidgets.QGraphicsView(parent=self)
+        self.view.setCacheMode(QtWidgets.QGraphicsView.CacheBackground)
+        self.view.setScene(QtWidgets.QGraphicsScene())
+
+        self.drawRateAndTime()
+
+    def drawRateAndTime(self):
+        self.canvas = MplCanvas(self, width=5, height=4, dpi=100)
+
+        self.plot_widget = QWidget()  # 创建一个包装了 MplCanvas 的 QWidget
         layout = QVBoxLayout()
+        layout.addWidget(self.canvas)
+        self.plot_widget.setLayout(layout)
 
-        self.cpu_history = HistoryWindow(parent=self, cpu_q=self.cpu_queue, delay_q=self.delay_queue)
-        self.cpuHistoryView = QChartView(self.cpu_history)
-        self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
+        # self.canvas.setMinimumSize(400, 300)  # 设置最小尺寸
+        # self.canvas.setMaximumSize(800, 600)  # 设置最大尺寸
 
-        layout.addWidget(self.cpuHistoryView)
-        self.setLayout(layout)
+        self.y_data = [0]
+        self.x_data = [0]  # 使用索引作为横坐标
 
-    def closeEvent(self, event):
-        self.hide()
-        event.ignore()
+        # main_layout = QVBoxLayout()
+        # main_layout.addWidget(self.plot_widget)
+
+        self.plot_widget.setGeometry(80, 80, 600, 450)
+
+        self.view.scene().addWidget(self.plot_widget)
+
+        self.rate_updater = RateUpdater()
+        self.rate_updater.rate_updated.connect(lambda rate: self.update_plot(rate))
+
+        # self.timer = QTimer()
+        # self.timer.setInterval(1000)  # 更新间隔为1000毫秒，即1秒
+        # self.timer.timeout.connect(self.update_plot)
+        # self.timer.start()
+
+    # def simulate_rate_update(self):
+    #     # 生成0到100之间的随机速率值
+    #     simulated_rate = random.uniform(0, 100)
+    #     self.rate_updater.update_rate(simulated_rate)
+
+    def update_plot(self):
+        current_cpu = self.cpu_queue.get()
+
+        self.y_data.append(current_cpu)
+        self.x_data.append(len(self.x_data))  # 添加索引
+
+        self.canvas.ax.clear()
+        self.canvas.ax.plot(self.x_data, self.y_data, label="Rate")
+
+        self.canvas.ax.set_xlabel('Time/s')
+        self.canvas.ax.set_ylabel('Rate')
+        self.canvas.ax.legend()
+        self.canvas.ax.grid(True)
+
+        self.canvas.draw()
 
 
 class data_visualize(QWidget):
@@ -1938,7 +2005,8 @@ class data_visualize(QWidget):
         tx, dx = node1_info['net'][0] - self.node1_globe_info[0][0], node1_info['net'][1] - self.node1_globe_info[0][1]
         rb, wb = node1_info['disk'][0] - self.node1_globe_info[1][0], node1_info['disk'][1] - self.node1_globe_info[1][1]
         self.history_cpu_1.put(cu)
-        self.history1.cpu_history.update_data_home()
+        self.history1.update_plot()
+        # self.history1.cpu_history.update_data_home()
         eval("self.node1_cpu_num.setText('" + str(cu) + "%'" + ")")
         eval("self.node1_mem_num.setText('" + str(mu) + "%'" + ")")
         self.speed_meter_1.setSpeed(cu)
@@ -1979,7 +2047,8 @@ class data_visualize(QWidget):
         tx, dx = node2_info['net'][0] - self.node2_globe_info[0][0], node2_info['net'][1] - self.node2_globe_info[0][1]
         rb, wb = node2_info['disk'][0] - self.node2_globe_info[1][0], node2_info['disk'][1] - self.node2_globe_info[1][1]
         self.history_cpu_2.put(cu)
-        self.history2.cpu_history.update_data_home()
+        self.history2.update_plot()
+        # self.history2.cpu_history.update_data_home()
         eval("self.node2_cpu_num.setText('" + str(cu) + "%'" + ")")
         eval("self.node2_mem_num.setText('" + str(mu) + "%'" + ")")
         self.speed_meter_2.setSpeed(cu)
@@ -2020,7 +2089,8 @@ class data_visualize(QWidget):
         tx, dx = node3_info['net'][0] - self.node3_globe_info[0][0], node3_info['net'][1] - self.node3_globe_info[0][1]
         rb, wb = node3_info['disk'][0] - self.node3_globe_info[1][0], node3_info['disk'][1] - self.node3_globe_info[1][1]
         self.history_cpu_3.put(cu)
-        self.history3.cpu_history.update_data_home()
+        self.history3.update_plot()
+        # self.history3.cpu_history.update_data_home()
         eval("self.node3_cpu_num.setText('" + str(cu) + "%'" + ")")
         eval("self.node3_mem_num.setText('" + str(mu) + "%'" + ")")
         self.speed_meter_3.setSpeed(cu)
@@ -2061,7 +2131,8 @@ class data_visualize(QWidget):
         tx, dx = node4_info['net'][0] - self.node4_globe_info[0][0], node4_info['net'][1] - self.node4_globe_info[0][1]
         rb, wb = node4_info['disk'][0] - self.node4_globe_info[1][0], node4_info['disk'][1] - self.node4_globe_info[1][1]
         self.history_cpu_4.put(cu)
-        self.history4.cpu_history.update_data_home()
+        self.history4.update_plot()
+        # self.history4.cpu_history.update_data_home()
         eval("self.node4_cpu_num.setText('" + str(cu) + "%'" + ")")
         eval("self.node4_mem_num.setText('" + str(mu) + "%'" + ")")
         self.speed_meter_4.setSpeed(cu)
