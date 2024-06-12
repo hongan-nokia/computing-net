@@ -194,6 +194,10 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         else:
             print("self.data_visual.isVisible() -> False")
             self.data_visual.setVisible(True)
+            self.data_visual.history1.drawRateAndTime()
+            self.data_visual.history2.drawRateAndTime()
+            self.data_visual.history3.drawRateAndTime()
+            self.data_visual.history4.drawRateAndTime()
             self.computingNetResMonTimer.start()
 
     def _showMainPage(self):
