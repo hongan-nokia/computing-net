@@ -19,5 +19,5 @@ def matrix_util(dim):
 
 if __name__ == '__main__':
     while True:
-        matrix_util(100)
-        sleep(1)
+        matrix_util(700)
+        sleep(0.2)
