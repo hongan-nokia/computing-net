@@ -22,6 +22,8 @@ from utils.HeatMap import HeatMap
 from utils.configparser import DemoConfigParser
 from utils.imageLoader import ImageLoader
 from utils.repeatimer import repeatTimer
+from utils.reversequeue import reverseQueue
+
 
 
 class ComputingPowerAwareAddressRouteWindow(QWidget):
@@ -191,41 +193,41 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
                                           img_scale_w=200,
                                           img_scale_h=3,
                                           direction="l2r",
-                                          interval=3, title='6. 启动一计算密集型应用', tag_geo=[90, 0, 200, 20])
+                                          interval=3, title='', tag_geo=[90, 0, 200, 20])
         self.reScheduling = ImageLoader(parent=self, geo=[1433, 342, 290, 100],
                                         image_url='./images_test3/server_addressing_step3.png',
                                         img_scale_w=200,
                                         img_scale_h=3,
                                         direction="l2r",
-                                        interval=3, title='7. 感知算力变化，重新寻址调度编排', tag_geo=[90, 0, 180, 50])
+                                        interval=3, title='6.感知算力变化，重新寻址调度编排', tag_geo=[90, 0, 180, 50])
         self.selNewService1 = ImageLoader(parent=self, geo=[1211, 541, 500, 300],
                                           image_url='./images_test3/scene1_step81.png',
                                           img_scale_w=350,
                                           img_scale_h=75,
                                           direction="r2l",
-                                          interval=3, title='8. 选择新服务实例，完成网络路径控制',
+                                          interval=3, title='7.选择新服务实例，完成网络路径控制',
                                           tag_geo=[300, 100, 200, 50])
         self.selNewService2 = ImageLoader(parent=self, geo=[1139, 617, 443, 300],
                                           image_url='./images/choose_new_svc.png',
                                           img_scale_w=410,
                                           img_scale_h=260,
                                           direction="r2l",
-                                          interval=3, title='8. 选择新服务实例，完成网络路径控制',
+                                          interval=3, title='7.选择新服务实例，完成网络路径控制',
                                           tag_geo=[90, 200, 200, 50])
         self.finalServiceProvideByNode2 = ImageLoader(parent=self, geo=[327, 510, 810, 280],
                                                       image_url='./images_test3/scene1_step91.png',
                                                       img_scale_w=810,
                                                       img_scale_h=280,
                                                       direction="r2l",
-                                                      interval=3, title='',
-                                                      tag_geo=[90, 0, 200, 20])
-        self.finalServiceProvideByNode3 = ImageLoader(parent=self, geo=[327, 501, 755, 394],
+                                                      interval=3, title='8.视频传输数据',
+                                                      tag_geo=[20, 50, 200, 30])
+        self.finalServiceProvideByNode3 = ImageLoader(parent=self, geo=[327, 511, 755, 384],
                                                       image_url='./images_test3/scene1_step92.png',
                                                       img_scale_w=755,
-                                                      img_scale_h=394,
+                                                      img_scale_h=384,
                                                       direction="r2l",
-                                                      interval=3, title='',
-                                                      tag_geo=[90, 0, 200, 20])
+                                                      interval=3, title='8.视频传输数据',
+                                                      tag_geo=[20, 50, 200, 30])
 
     def _initWarningBtn(self):
         warning_icon_img = QtGui.QPixmap("./images_test3/warning.svg").scaled(QSize(80, 80))
@@ -257,9 +259,9 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
 
     def read_queue(self):
         if not self.monitor_q_cpu_hm_node1.empty():
-            value = self.monitor_q_cpu_hm_node1.get()[0]
+            value = reverseQueue(self.monitor_q_cpu_hm_node1).get()[0]
             # value = 70
-            if value >= 70:
+            if value >= 50:
                 self.warning_icon.setVisible(True)
                 self.warning_btn.setVisible(True)
             else:
@@ -356,9 +358,11 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
             if self.path == 1:
                 self.cfn_manager.send_command("c_node1", "stop_task", "vlc worldCup.mp4_0")
                 # self.finalServiceProvideByNode2.label.setVisible(True)
+                self.video_stream.setVisible(False)
                 self.finalServiceProvideByNode2.start("")
             elif self.path == 2:
                 # self.finalServiceProvideByNode3.label.setVisible(True)
+                self.video_stream.setVisible(False)
                 self.finalServiceProvideByNode3.start("")
                 self.cfn_manager.send_command("c_node1", "stop_task", "vlc worldCup.mp4_0")
         else:
