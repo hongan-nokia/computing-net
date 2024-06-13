@@ -382,6 +382,7 @@ class Scene32(QWidget):
     @pyqtSlot(int, str)
     def computingAddrWorkFlow(self):
         self.reset()
+        self.start_timer()
         self.service_step1.start("sp1")
 
     def on_animation_over(self, target_node):

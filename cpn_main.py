@@ -246,7 +246,6 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene32.reset()
         self.scene3.scene33.reset()
         self.scene4.reset()
-
         self.SSRUWidget.setVisible(True)
         self.scene3.setVisible(False)
         self.scene3.scene31.setVisible(False)

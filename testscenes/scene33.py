@@ -198,6 +198,7 @@ class Scene33(QWidget):
     @pyqtSlot(int, str)
     def contentAddressWorkFlow(self):
         self.reset()
+        self.start_timer()
         self.path = 1
         self.service_step1.start("sp1")
 
@@ -209,6 +210,7 @@ class Scene33(QWidget):
         print(commond_arg2)
         print(commond_arg3)
         self.reset()
+        self.start_timer()
         self.path = 2
         self.video_name = commond_arg2
         self.video_startTime = commond_arg3

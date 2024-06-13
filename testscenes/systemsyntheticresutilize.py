@@ -376,6 +376,7 @@ class SystemSyntheticResUtilize(QWidget):
     def traditionalMEC(self):
         if self.leftBtn1Tag == 0:
             self.reset()
+            self.start_timer()
             self.setTraditionalMEC()
             self.leftBtn1Tag = 1
             self.leftBtn2Tag = 0
@@ -406,6 +407,7 @@ class SystemSyntheticResUtilize(QWidget):
     def computingNetConverge(self):
         if self.leftBtn2Tag == 0:
             self.reset()
+            self.start_timer()
             self.setComputingNetConverge()
             self.leftBtn1Tag = 0
             self.leftBtn2Tag = 1
