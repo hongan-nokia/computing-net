@@ -234,14 +234,14 @@ class Scene33(QWidget):
             if self.path == 1:
                 self.service_step41.start("sp4")
             elif self.path == 2:
-                self.service_step42.start("")
                 video_totaltime = 300
                 ratio = int(self.video_startTime) / video_totaltime
                 self.commomd = f"vlc fake1-WorldCup.mp4_{ratio}"
                 self.cfn_manager.send_command('c_node3', 'task', self.commomd)
+                self.service_step42.start("")
         elif destination == "sp4":
-            self.service_step5.start("")
             self.cfn_manager.send_command('monitor_client', 'task', 'surveillance up')
+            self.service_step5.start("")
         else:
             pass
 

@@ -367,17 +367,17 @@ class Scene32(QWidget):
                 self.c_node3_heart_rate.setVisible(True)
         elif destination == "sp4":
             if self.path == 1:
+                self.cfn_manager.send_command(f'c_node{self.path}', 'task', 'cam_health camera_1')
                 self.service_step51.start("")
                 self.c_node1_heart_rate.setVisible(True)
-                self.cfn_manager.send_command(f'c_node{self.path}', 'task', 'cam_health camera_1')
             elif self.path == 2:
+                self.cfn_manager.send_command(f'c_node{self.path}', 'task', 'cam_health camera_1')
                 self.service_step52.start("")
                 self.c_node2_heart_rate.setVisible(True)
-                self.cfn_manager.send_command(f'c_node{self.path}', 'task', 'cam_health camera_1')
             elif self.path == 3:
+                self.cfn_manager.send_command(f'c_node{self.path}', 'task', 'cam_health camera_1')
                 self.service_step53.start("")
                 self.c_node3_heart_rate.setVisible(True)
-                self.cfn_manager.send_command(f'c_node{self.path}', 'task', 'cam_health camera_1')
 
     @pyqtSlot(int, str)
     def computingAddrWorkFlow(self):

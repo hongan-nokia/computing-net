@@ -297,7 +297,7 @@ def cfn_bk_service(task_name, pig_args: str, cmd_q: SimpleQueue,
                 X = np.random.randn(700, 700)
                 Y = np.random.randn(700, 700)
                 Z = X.dot(Y)
-                sleep(0.2)
+                sleep(0.1)
         except Exception as err:  # 运行中出现连接断开之类错误
             s = f"Error encountered with vlc_receiver: {err}. Aborting task."
             print(f'(PID-{pid})' + s)
@@ -369,7 +369,8 @@ def vlc_streaming(task_name: str, task_args: str, addr: str, port: int, file_pat
             media_player.set_position(float(start_pos))
             sleep(1)
     elif 'fake1' in file_path:
-        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "10045" + "},dst=display}"
+        # ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "10045" + "},dst=display}"
+        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "1234" + "},dst=display}"
         params = [ad, "sout-all", "sout-keep", "repeat"]
         inst = vlc.Instance()
         media = inst.media_new('./worldCup.mp4', *params)
@@ -383,7 +384,8 @@ def vlc_streaming(task_name: str, task_args: str, addr: str, port: int, file_pat
             media_player.set_position(float(start_pos))
             sleep(1)
     elif 'fake2' in file_path:
-        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "10046" + "},dst=display}"
+        # ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "10046" + "},dst=display}"
+        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "1235" + "},dst=display}"
         params = [ad, "sout-all", "sout-keep", "repeat"]
         inst = vlc.Instance()
         media = inst.media_new('./worldCup.mp4', *params)

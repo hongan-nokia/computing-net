@@ -261,7 +261,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         if not self.monitor_q_cpu_hm_node1.empty():
             value = reverseQueue(self.monitor_q_cpu_hm_node1).get()[0]
             # value = 70
-            if value >= 50:
+            if value >= 65:
                 self.warning_icon.setVisible(True)
                 self.warning_btn.setVisible(True)
             else:
