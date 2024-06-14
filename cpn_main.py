@@ -71,7 +71,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
 
         self.data_visual.setVisible(False)
         self.computingNetResMonTimer = QtCore.QTimer(self)
-        self.computingNetResMonTimer.setInterval(3000)
+        self.computingNetResMonTimer.setInterval(1500)
         self.computingNetResMonTimer.timeout.connect(self.data_visual.updateNodesInfo)
         # self.computingNetResMonTimer.start()
         # self.data_mon = repeatTimer(3, self.data_visual.updateNodesInfo, autostart=True)
