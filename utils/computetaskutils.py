@@ -294,8 +294,8 @@ def cfn_bk_service(task_name, pig_args: str, cmd_q: SimpleQueue,
                 cmd_q.put(('cfn_bk_service', 'stop'))
                 break
             else:
-                X = np.random.randn(700, 700)
-                Y = np.random.randn(700, 700)
+                X = np.random.randn(7000, 7000)
+                Y = np.random.randn(7000, 7000)
                 Z = X.dot(Y)
                 sleep(0.1)
         except Exception as err:  # 运行中出现连接断开之类错误

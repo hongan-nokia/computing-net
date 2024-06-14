@@ -135,10 +135,10 @@ class Scene33(QWidget):
         self.monitor_q_cpu_hm_node3 = self.cfn_manager.resource_StatMon['c_node3_cpu']  # 算力节点3 CPU
 
     def _initHeapMap(self):
-        self.cloud1_hm = HeatMap(parent=self, geo=[793, 365, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node1)
-        self.cloud2_hm = HeatMap(parent=self, geo=[1058, 520, 40, 80], interval=4000,
+        self.cloud1_hm = HeatMap(parent=self, geo=[793, 365, 40, 80], interval=1500, data_q=self.monitor_q_cpu_hm_node1)
+        self.cloud2_hm = HeatMap(parent=self, geo=[1058, 520, 40, 80], interval=1500,
                                  data_q=self.monitor_q_cpu_hm_node2)
-        self.cloud3_hm = HeatMap(parent=self, geo=[986, 857, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node3)
+        self.cloud3_hm = HeatMap(parent=self, geo=[986, 857, 40, 80], interval=1500, data_q=self.monitor_q_cpu_hm_node3)
         self.cloud1_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.cloud2_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.cloud3_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
@@ -234,7 +234,7 @@ class Scene33(QWidget):
             if self.path == 1:
                 self.service_step41.start("sp4")
             elif self.path == 2:
-                video_totaltime = 300
+                video_totaltime = 6776
                 ratio = int(self.video_startTime) / video_totaltime
                 self.commomd = f"vlc fake1-WorldCup.mp4_{ratio}"
                 self.cfn_manager.send_command('c_node3', 'task', self.commomd)

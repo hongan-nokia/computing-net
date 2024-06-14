@@ -170,8 +170,12 @@ class Surveillance(QWidget):
             self.vlc_streamer.startStream()
             self.vlc_player.startPlayer()
         elif action == 'down':
-            self.vlc_streamer.stopStream()
-            self.vlc_player.stopPlayer()
+            while True:
+                if self.vlc_streamer.video_streamer.is_playing() or self.vlc_player.media_player.is_playing():
+                    self.vlc_streamer.video_streamer.pause()
+                    self.vlc_player.media_player.pause()
+                else:
+                    break
 
     def update_time(self):
         current_datetime = datetime.datetime.now()

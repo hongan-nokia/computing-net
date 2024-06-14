@@ -443,11 +443,11 @@ class SystemSyntheticResUtilize(QWidget):
         self.monitor_q_cpu_hm_node3 = self.cfn_manager.resource_StatMon['c_node3_cpu']  # 算力节点3 CPU
 
     def _initHeapMap(self):
-        self.s2cloud1_hm = HeatMap(parent=self, geo=[793, 405, 40, 80], interval=4000,
+        self.s2cloud1_hm = HeatMap(parent=self, geo=[793, 405, 40, 80], interval=1500,
                                    data_q=self.monitor_q_cpu_hm_node1)
-        self.s2cloud2_hm = HeatMap(parent=self, geo=[1058, 520, 40, 80], interval=4000,
+        self.s2cloud2_hm = HeatMap(parent=self, geo=[1058, 520, 40, 80], interval=1500,
                                    data_q=self.monitor_q_cpu_hm_node2)
-        self.s2cloud3_hm = HeatMap(parent=self, geo=[986, 857, 40, 80], interval=4000,
+        self.s2cloud3_hm = HeatMap(parent=self, geo=[986, 857, 40, 80], interval=1500,
                                    data_q=self.monitor_q_cpu_hm_node3)
         self.s2cloud1_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.s2cloud2_hm.setWindowFlags(Qt.WindowStaysOnTopHint)

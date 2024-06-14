@@ -157,9 +157,9 @@ class Scene32(QWidget):
         self.monitor_q_cpu_hm_node3 = self.cfn_manager.resource_StatMon['c_node3_cpu']  # 算力节点3 CPU
 
     def _initHeapMap(self):
-        self.cloud1_hm = HeatMap(parent=self, geo=[793, 365, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node1)
-        self.cloud2_hm = HeatMap(parent=self, geo=[1058, 520, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node2)
-        self.cloud3_hm = HeatMap(parent=self, geo=[986, 857, 40, 80], interval=4000, data_q=self.monitor_q_cpu_hm_node3)
+        self.cloud1_hm = HeatMap(parent=self, geo=[793, 365, 40, 80], interval=1500, data_q=self.monitor_q_cpu_hm_node1)
+        self.cloud2_hm = HeatMap(parent=self, geo=[1058, 520, 40, 80], interval=1500, data_q=self.monitor_q_cpu_hm_node2)
+        self.cloud3_hm = HeatMap(parent=self, geo=[986, 857, 40, 80], interval=1500, data_q=self.monitor_q_cpu_hm_node3)
         self.cloud1_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.cloud2_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.cloud3_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
@@ -371,12 +371,12 @@ class Scene32(QWidget):
                 self.service_step51.start("")
                 self.c_node1_heart_rate.setVisible(True)
             elif self.path == 2:
-                self.cfn_manager.send_command(f'c_node{self.path}', 'task', 'cam_health camera_1')
                 self.service_step52.start("")
+                self.cfn_manager.send_command(f'c_node{self.path}', 'task', 'cam_health camera_1')
                 self.c_node2_heart_rate.setVisible(True)
             elif self.path == 3:
-                self.cfn_manager.send_command(f'c_node{self.path}', 'task', 'cam_health camera_1')
                 self.service_step53.start("")
+                self.cfn_manager.send_command(f'c_node{self.path}', 'task', 'cam_health camera_1')
                 self.c_node3_heart_rate.setVisible(True)
 
     @pyqtSlot(int, str)
