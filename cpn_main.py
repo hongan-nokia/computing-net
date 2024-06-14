@@ -190,15 +190,15 @@ class CpnAppWindow(QtWidgets.QMainWindow):
             self.data_visual.history2.setVisible(False)
             self.data_visual.history3.setVisible(False)
             self.data_visual.history4.setVisible(False)
-            self.computingNetResMonTimer.stop()
+            # self.computingNetResMonTimer.stop()
         else:
             print("self.data_visual.isVisible() -> False")
             self.data_visual.setVisible(True)
-            self.data_visual.history1.drawRateAndTime()
-            self.data_visual.history2.drawRateAndTime()
-            self.data_visual.history3.drawRateAndTime()
-            self.data_visual.history4.drawRateAndTime()
-            self.computingNetResMonTimer.start()
+            # self.data_visual.history1.drawRateAndTime()
+            # self.data_visual.history2.drawRateAndTime()
+            # self.data_visual.history3.drawRateAndTime()
+            # self.data_visual.history4.drawRateAndTime()
+            # self.computingNetResMonTimer.start()
 
     def _showMainPage(self):
         self.CPAARWidget.setVisible(False)
@@ -215,6 +215,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene32.reset()
         self.scene3.scene33.reset()
         self.scene4.reset()
+        self.computingNetResMonTimer.stop()
         print("Show Main Page")
 
     def _showTestScene1(self):
@@ -234,6 +235,13 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene33.setVisible(False)
         self.scene4.setVisible(False)
         self.CPAARWidget.start_timer()
+
+        self.computingNetResMonTimer.stop()
+        self.data_visual.history1.drawRateAndTime()
+        self.data_visual.history2.drawRateAndTime()
+        self.data_visual.history3.drawRateAndTime()
+        self.data_visual.history4.drawRateAndTime()
+        self.computingNetResMonTimer.start()
         print("This is TestScene1")
 
     def _showTestScene2(self):
@@ -253,6 +261,13 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene33.setVisible(False)
         self.scene4.setVisible(False)
         self.SSRUWidget.start_timer()
+
+        self.computingNetResMonTimer.stop()
+        self.data_visual.history1.drawRateAndTime()
+        self.data_visual.history2.drawRateAndTime()
+        self.data_visual.history3.drawRateAndTime()
+        self.data_visual.history4.drawRateAndTime()
+        self.computingNetResMonTimer.start()
         print("This is TestScene2")
 
     def _showTestScene3(self):
@@ -270,9 +285,18 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene32.reset()
         self.scene3.scene33.reset()
         self.scene4.reset()
+
+        self.computingNetResMonTimer.stop()
+        self.data_visual.history1.drawRateAndTime()
+        self.data_visual.history2.drawRateAndTime()
+        self.data_visual.history3.drawRateAndTime()
+        self.data_visual.history4.drawRateAndTime()
+        self.computingNetResMonTimer.start()
         print("This is TestScene3")
 
     def _showTestScene4(self):
+        self.computingNetResMonTimer.stop()
+
         self.SSRUWidget.setVisible(False)
         self.CPAARWidget.setVisible(False)
         self.scene3.setVisible(True)
