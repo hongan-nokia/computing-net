@@ -294,8 +294,14 @@ def cfn_bk_service(task_name, pig_args: str, cmd_q: SimpleQueue,
                 cmd_q.put(('cfn_bk_service', 'stop'))
                 break
             else:
-                X = np.random.randn(7000, 7000)
-                Y = np.random.randn(7000, 7000)
+                # node1
+                n = 700
+                # node2
+                # n = 2000
+                # node 3
+                # n = 2000
+                X = np.random.randn(n, n)
+                Y = np.random.randn(n, n)
                 Z = X.dot(Y)
                 sleep(0.1)
         except Exception as err:  # 运行中出现连接断开之类错误
@@ -459,7 +465,8 @@ def vlcc_streaming(addr: str, port: int, file_path: str, start_pos: float, cmd_q
             media_player.set_position(float(start_pos))
             sleep(1)
     elif 'fake1' in file_path:
-        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "10045" + "},dst=display}"
+        # ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "10045" + "},dst=display}"
+        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "1234" + "},dst=display}"
         params = [ad, "sout-all", "sout-keep", "repeat"]
         inst = vlc.Instance()
         media = inst.media_new('./worldCup.mp4', *params)
@@ -473,7 +480,8 @@ def vlcc_streaming(addr: str, port: int, file_path: str, start_pos: float, cmd_q
             media_player.set_position(float(start_pos))
             sleep(1)
     elif 'fake2' in file_path:
-        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "10046" + "},dst=display}"
+        # ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "10046" + "},dst=display}"
+        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "1235" + "},dst=display}"
         params = [ad, "sout-all", "sout-keep", "repeat"]
         inst = vlc.Instance()
         media = inst.media_new('./worldCup.mp4', *params)
