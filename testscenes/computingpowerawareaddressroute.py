@@ -256,14 +256,13 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.timer.start(1000)  # 3000 milliseconds = 3 seconds
 
     def read_queue(self):
-        if not self.monitor_q_cpu_hm_node1.empty():
-            value = self.cloud1_hm.index
-            if value >= 65:
-                self.warning_icon.setVisible(True)
-                self.warning_btn.setVisible(True)
-            else:
-                self.warning_icon.setVisible(False)
-                self.warning_btn.setVisible(False)
+        value = self.cloud1_hm.index
+        if value >= 65:
+            self.warning_icon.setVisible(True)
+            self.warning_btn.setVisible(True)
+        else:
+            self.warning_icon.setVisible(False)
+            self.warning_btn.setVisible(False)
 
     def initConnections(self):
         # self.cfn_manager.signal_emitter.QtSignals.container_pulsate_update.connect(self.update_pulserate)
