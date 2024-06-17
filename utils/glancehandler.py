@@ -154,7 +154,7 @@ class GlancesHandler(object):
                     if not self.q.full():
                         # print(f"GlancesHandler -> r_dict: {r_dict}")
                         if self.plugin in ['cpu']:
-                            random_number = random.randint(5, 8)
+                            random_number = random.randint(3, 5)
                             # print(f"存入队列的值{[float(r_dict.get(item)) for item in self.metrics]}")
                             for i in range(random_number):
                                 self.q.put([float(r_dict.get(item)) for item in self.metrics])  # 将收集到的数据放入队列 self.q 中  [0.0, 0.0]

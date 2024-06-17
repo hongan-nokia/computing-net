@@ -25,7 +25,6 @@ from utils.repeatimer import repeatTimer
 from utils.reversequeue import reverseQueue
 
 
-
 class ComputingPowerAwareAddressRouteWindow(QWidget):
     def __init__(self, parent, demo_manager: CfnDemoManager):
         super().__init__()
@@ -258,8 +257,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
 
     def read_queue(self):
         if not self.monitor_q_cpu_hm_node1.empty():
-            value = reverseQueue(self.monitor_q_cpu_hm_node1).get()[0]
-            # value = 70
+            value = self.cloud1_hm.index
             if value >= 65:
                 self.warning_icon.setVisible(True)
                 self.warning_btn.setVisible(True)
@@ -310,7 +308,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
     @pyqtSlot(str)
     def service_provision_anim(self, destination: str):
         print(f"destination is: {destination}")
-        self.queueFlag = 1
+        # self.queueFlag = 1
         if destination == "sc1_sp1":
             self.user_first_pkg.setVisible(True)
             self.addr_request.setVisible(True)
@@ -331,19 +329,10 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
             self.reScheduling.start("sc1_sp7")
         elif destination == "sc1_sp7":
             print("sc1_sp8 sc1_sp8 sc1_sp8")
-            temps = [0, 0]
-            if not self.monitor_q_cpu_hm_node2.empty():
-                temp2 = self.monitor_q_cpu_hm_node1.get()[-1]
-            else:
-                self.queueFlag = 0
-            if not self.monitor_q_cpu_hm_node3.empty():
-                temp3 = self.monitor_q_cpu_hm_node1.get()[-1]
-            else:
-                self.queueFlag = 0
-
-            if self.queueFlag:
-                temps = [temp2, temp3]
-                self.path = temps.index(min(temps)) + 1
+            temp2 = self.cloud2_hm.index
+            temp3 = self.cloud3_hm.index
+            temps = [temp2, temp3]
+            self.path = temps.index(min(temps)) + 1
             # self.path = 1
 
             if self.path == 1:

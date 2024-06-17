@@ -27,6 +27,7 @@ from utils.tools import check_port
 
 import threading
 
+
 class CpnAppWindow(QtWidgets.QMainWindow):
     def __init__(self, demo_manager: CfnDemoManager):
         super().__init__()
@@ -81,6 +82,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.data_visual = data_visualize(parent=self, demo_manager=self.cfn_manager, res_queue_dict=None)
         self.data_visual.setVisible(False)
         self.startRequestResourceInfoThread()
+        self.data_visual.updateHeatMap.connect(self.updateHeatMapIndex)
         self.computingNetResMonTimer = QtCore.QTimer(self)
         self.computingNetResMonTimer.setInterval(1000)
         self.computingNetResMonTimer.timeout.connect(self.updateNodesInfoThread)
@@ -102,6 +104,28 @@ class CpnAppWindow(QtWidgets.QMainWindow):
 
     def updateNodesInfoThread(self):
         self.data_visual.updateNodesInfo()
+
+    def updateHeatMapIndex(self, data):
+        print("signal")
+        self.CPAARWidget.cloud1_hm.index = data[0]
+        self.CPAARWidget.cloud2_hm.index = data[1]
+        self.CPAARWidget.cloud3_hm.index = data[2]
+
+        self.SSRUWidget.s2cloud1_hm.index = data[0]
+        self.SSRUWidget.s2cloud2_hm.index = data[1]
+        self.SSRUWidget.s2cloud3_hm.index = data[2]
+
+        self.scene3.scene31.cloud1_hm.index = data[0]
+        self.scene3.scene31.cloud2_hm.index = data[1]
+        self.scene3.scene31.cloud3_hm.index = data[2]
+
+        self.scene3.scene32.cloud1_hm.index = data[0]
+        self.scene3.scene32.cloud2_hm.index = data[1]
+        self.scene3.scene32.cloud3_hm.index = data[2]
+
+        self.scene3.scene33.cloud1_hm.index = data[0]
+        self.scene3.scene33.cloud2_hm.index = data[1]
+        self.scene3.scene33.cloud3_hm.index = data[2]
 
     def _initView(self):
         self.setWindowTitle(" ")

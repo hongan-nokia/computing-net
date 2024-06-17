@@ -322,30 +322,21 @@ class Scene32(QWidget):
 
     @pyqtSlot(str)
     def service_provision_anim(self, destination: str):
-        self.queueFlag = 1
+        # self.queueFlag = 1
         if destination == "sp1":
             # self.service_step2.label.setVisible(True)
             self.service_step2.start("sp2")
         elif destination == "sp2":
-            temp1, temp2, temp3 = 0, 0, 0
-            if not self.monitor_q_cpu_hm_node1.empty():
-                temp1 = self.monitor_q_cpu_hm_node1.get()[-1]
-            else:
-                self.queueFlag = 0
-            if not self.monitor_q_cpu_hm_node2.empty():
-                temp2 = self.monitor_q_cpu_hm_node2.get()[-1]
-            else:
-                self.queueFlag = 0
-            if not self.monitor_q_cpu_hm_node3.empty():
-                temp3 = self.monitor_q_cpu_hm_node3.get()[-1]
-            else:
-                self.queueFlag = 0
+            temp1 = self.cloud1_hm.index
+            temp2 = self.cloud2_hm.index
+            temp3 = self.cloud3_hm.index
+
             temps = [temp1, temp2, temp3]
-            print(f"------------------------------------------------------------------------------\n"
-                  f">>>> Computing Addressing self.queueFlag is: {self.queueFlag}, CPU utilization's are: {temps} "
-                  f"------------------------------------------------------------------------------\n")
-            if self.queueFlag:
-                self.path = temps.index(min(temps)) + 1
+            self.path = temps.index(min(temps)) + 1
+            # print(f"------------------------------------------------------------------------------\n"
+            #       f">>>> Computing Addressing self.queueFlag is: {self.queueFlag}, CPU utilization's are: {temps} "
+            #       f"------------------------------------------------------------------------------\n")
+
             if self.path == 1:
                 self.service_step31.start("sp3")
                 self.service_step31.QtSignals.anim_over.connect(self.on_animation_over)

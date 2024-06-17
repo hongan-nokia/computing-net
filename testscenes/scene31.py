@@ -221,7 +221,7 @@ class Scene31(QWidget):
 
     @pyqtSlot(str)
     def service_provision_anim(self, destination: str):
-        self.queueFlag = 1
+        # self.queueFlag = 1
         if destination == "sp1":
             # self.service_step2.label.setVisible(True)
             self.service_step2.start("sp2")
@@ -230,23 +230,12 @@ class Scene31(QWidget):
             # self.service_step3.label.setVisible(True)
             self.service_step3.start("sp3")
         elif destination == "sp3":
-            temps = [0, 0, 0]
-            if not self.monitor_q_cpu_hm_node1.empty():
-                temp1 = self.monitor_q_cpu_hm_node1.get()[-1]
-            else:
-                self.queueFlag = 0
-            if not self.monitor_q_cpu_hm_node2.empty():
-                temp2 = self.monitor_q_cpu_hm_node1.get()[-1]
-            else:
-                self.queueFlag = 0
-            if not self.monitor_q_cpu_hm_node3.empty():
-                temp3 = self.monitor_q_cpu_hm_node1.get()[-1]
-            else:
-                self.queueFlag = 0
+            temp1 = self.cloud1_hm.index
+            temp2 = self.cloud2_hm.index
+            temp3 = self.cloud3_hm.index
 
-            if self.queueFlag:
-                temps = [temp1, temp2, temp3]
-                self.path = temps.index(min(temps)) + 1
+            temps = [temp1, temp2, temp3]
+            self.path = temps.index(min(temps)) + 1
             # self.path = 3
             if self.path == 1:
                 # self.service_step41.label.setVisible(True)

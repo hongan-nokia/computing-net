@@ -158,6 +158,9 @@ class DataVisualizationWindow(QWidget):
 
 
 class data_visualize(QWidget):
+
+    updateHeatMap = pyqtSignal(list)
+
     def __init__(self, parent, demo_manager, res_queue_dict):
         super().__init__()
         self.cfn_manager = demo_manager
@@ -2018,6 +2021,7 @@ class data_visualize(QWidget):
                 ]
             }
             nodes_info.append(self.node4_info)
+            self.updateHeatMap.emit([self.node1_info['cpu'], self.node2_info['cpu'], self.node3_info['cpu']])
         except Exception as exp:
             print(f"Get Info exp: {exp}")
         finally:
