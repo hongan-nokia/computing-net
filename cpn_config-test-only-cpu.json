@@ -89,7 +89,7 @@
         "backend_tool": "Glances",
         "keyword": "cpu",
         "url": "http://127.0.0.1:8000/cpu",
-        "refresh_interval": 3
+        "refresh_interval": 1
       },
       "simulation": {
         "default": [
@@ -114,7 +114,7 @@
         "backend_tool": "Glances",
         "keyword": "cpu",
         "url": "http://127.0.0.1:8000/cpu",
-        "refresh_interval": 3
+        "refresh_interval": 1
       },
       "simulation": {
         "default": [
@@ -139,7 +139,7 @@
         "backend_tool": "Glances",
         "keyword": "cpu",
         "url": "http://127.0.0.1:8000/cpu",
-        "refresh_interval": 3
+        "refresh_interval": 1
       },
       "simulation": {
         "default": [

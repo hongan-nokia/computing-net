@@ -88,7 +88,7 @@
         "backend_tool": "Glances",
         "keyword": "cpu",
         "url": "http://127.0.0.1:8000/cpu",
-        "refresh_interval": 3
+        "refresh_interval": 1
       },
       "simulation": {
         "default": [
@@ -113,7 +113,7 @@
         "backend_tool": "Glances",
         "keyword": "memory",
         "url": "http://127.0.0.1:8000/memory",
-        "refresh_interval": 3
+        "refresh_interval": 1
       },
       "simulation": {
         "default": [
@@ -139,7 +139,7 @@
         "keyword": "net",
         "net_interface": "Ethernet",
         "url": "http://127.0.0.1:8000/net",
-        "refresh_interval": 3
+        "refresh_interval": 1
       },
       "simulation": {
         "default": [
@@ -165,7 +165,7 @@
         "keyword": "disk",
         "disk_id": "PhysicalDrive0",
         "url": "http://127.0.0.1:8000/disk",
-        "refresh_interval": 3
+        "refresh_interval": 1
       },
       "simulation": {
         "default": [
@@ -190,7 +190,7 @@
         "backend_tool": "Glances",
         "keyword": "cpu",
         "url": "http://127.0.0.1:8000/cpu",
-        "refresh_interval": 3
+        "refresh_interval": 1
       },
       "simulation": {
         "default": [
@@ -215,7 +215,7 @@
         "backend_tool": "Glances",
         "keyword": "memory",
         "url": "http://127.0.0.1:8000/memory",
-        "refresh_interval": 3
+        "refresh_interval": 1
       },
       "simulation": {
         "default": [
@@ -241,7 +241,7 @@
         "keyword": "net",
         "net_interface": "Ethernet",
         "url": "http://127.0.0.1:8000/net",
-        "refresh_interval": 3
+        "refresh_interval": 1
       },
       "simulation": {
         "default": [
@@ -267,7 +267,7 @@
         "keyword": "disk",
         "disk_id": "PhysicalDrive0",
         "url": "http://127.0.0.1:8000/disk",
-        "refresh_interval": 3
+        "refresh_interval": 1
       },
       "simulation": {
         "default": [
@@ -292,7 +292,7 @@
         "backend_tool": "Glances",
         "keyword": "cpu",
         "url": "http://127.0.0.1:8000/cpu",
-        "refresh_interval": 3
+        "refresh_interval": 1
       },
       "simulation": {
         "default": [
@@ -317,7 +317,7 @@
         "backend_tool": "Glances",
         "keyword": "memory",
         "url": "http://127.0.0.1:8000/memory",
-        "refresh_interval": 3
+        "refresh_interval": 1
       },
       "simulation": {
         "default": [
@@ -343,7 +343,7 @@
         "keyword": "net",
         "net_interface": "Ethernet",
         "url": "http://127.0.0.1:8000/net",
-        "refresh_interval": 3
+        "refresh_interval": 1
       },
       "simulation": {
         "default": [
@@ -369,7 +369,7 @@
         "keyword": "disk",
         "disk_id": "PhysicalDrive0",
         "url": "http://127.0.0.1:8000/disk",
-        "refresh_interval": 3
+        "refresh_interval": 1
       },
       "simulation": {
         "default": [

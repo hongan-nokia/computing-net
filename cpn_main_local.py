@@ -25,6 +25,7 @@ from utils.configparser import DemoConfigParser
 from utils.repeatimer import repeatTimer
 from utils.tools import check_port
 
+import threading
 
 class CpnAppWindow(QtWidgets.QMainWindow):
     def __init__(self, demo_manager: CfnDemoManager):
@@ -40,6 +41,10 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         # self.node_names = demo_manager.node_names
         self.mainTitle = QtWidgets.QLabel(parent=self)
         self._initResMonitorQueue()
+
+        self.update_interval = 1  # Interval in seconds
+        self.timer = None
+        self.stop_event = threading.Event()
 
         self._initView()
         self._initMainTitle()
@@ -74,16 +79,29 @@ class CpnAppWindow(QtWidgets.QMainWindow):
 
     def _initDataVisualize(self):
         self.data_visual = data_visualize(parent=self, demo_manager=self.cfn_manager, res_queue_dict=None)
-
         self.data_visual.setVisible(False)
+        self.startRequestResourceInfoThread()
         self.computingNetResMonTimer = QtCore.QTimer(self)
-        self.computingNetResMonTimer.setInterval(1500)
-        self.computingNetResMonTimer.timeout.connect(self.data_visual.updateNodesInfo)
-        # self.computingNetResMonTimer.start()
-        # self.data_mon = repeatTimer(3, self.data_visual.updateNodesInfo, autostart=True)
-        # self.data_mon.start()
+        self.computingNetResMonTimer.setInterval(1000)
+        self.computingNetResMonTimer.timeout.connect(self.updateNodesInfoThread)
 
         print("_initDataVisualize Done ")
+
+    def startRequestResourceInfoThread(self):
+        def run():
+            while not self.stop_event.is_set():
+                threading.Thread(target=self.data_visual.requestResourceInfo).start()
+                time.sleep(self.update_interval)
+
+        self.timer_thread = threading.Thread(target=run)
+        self.timer_thread.start()
+
+    def stopRequestResourceInfoThread(self):
+        self.stop_event.set()
+        self.timer_thread.join()
+
+    def updateNodesInfoThread(self):
+        self.data_visual.updateNodesInfo()
 
     def _initView(self):
         self.setWindowTitle(" ")

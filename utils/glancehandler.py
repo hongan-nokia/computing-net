@@ -62,6 +62,7 @@ class GlancesHandler(object):
         self.q = result_q  # message queue
         self.period_s = get_period
         self.err_times = 0
+        print(f"perid_s：{self.period_s}")
         self.get_data_thread = repeatTimer(self.period_s, self._get_data, args=[], autostart=autostart)  # data collect
         self.close = self.stop  # add an alias for stop()
         self.restart = self.start  # add an alias for start()
@@ -153,7 +154,8 @@ class GlancesHandler(object):
                     if not self.q.full():
                         # print(f"GlancesHandler -> r_dict: {r_dict}")
                         if self.plugin in ['cpu']:
-                            random_number = random.randint(1, 5)
+                            random_number = random.randint(5, 8)
+                            # print(f"存入队列的值{[float(r_dict.get(item)) for item in self.metrics]}")
                             for i in range(random_number):
                                 self.q.put([float(r_dict.get(item)) for item in self.metrics])  # 将收集到的数据放入队列 self.q 中  [0.0, 0.0]
                         else:

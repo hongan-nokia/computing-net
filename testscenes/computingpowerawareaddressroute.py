@@ -59,10 +59,9 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.monitor_q_cpu_hm_node3 = self.cfn_manager.resource_StatMon['c_node3_cpu']  # 算力节点3 CPU
 
     def _initHeapMap(self):
-        self.cloud1_hm = HeatMap(parent=self, geo=[793, 405, 40, 80], interval=1500, data_q=self.monitor_q_cpu_hm_node1)
-        self.cloud2_hm = HeatMap(parent=self, geo=[1058, 520, 40, 80], interval=1500,
-                                 data_q=self.monitor_q_cpu_hm_node2)
-        self.cloud3_hm = HeatMap(parent=self, geo=[986, 857, 40, 80], interval=1500, data_q=self.monitor_q_cpu_hm_node3)
+        self.cloud1_hm = HeatMap(parent=self, geo=[793, 405, 40, 80], interval=1000, data_q=self.monitor_q_cpu_hm_node1)
+        self.cloud2_hm = HeatMap(parent=self, geo=[1058, 520, 40, 80], interval=1000, data_q=self.monitor_q_cpu_hm_node2)
+        self.cloud3_hm = HeatMap(parent=self, geo=[986, 857, 40, 80], interval=1000, data_q=self.monitor_q_cpu_hm_node3)
         self.cloud1_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.cloud2_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.cloud3_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
@@ -255,7 +254,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
     def listenNode1CPUUse(self):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.read_queue)
-        self.timer.start(1500)  # 3000 milliseconds = 3 seconds
+        self.timer.start(1000)  # 3000 milliseconds = 3 seconds
 
     def read_queue(self):
         if not self.monitor_q_cpu_hm_node1.empty():
