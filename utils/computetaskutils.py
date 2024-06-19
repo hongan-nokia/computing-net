@@ -294,18 +294,13 @@ def cfn_bk_service(task_name, pig_args: str, cmd_q: SimpleQueue,
                 cmd_q.put(('cfn_bk_service', 'stop'))
                 break
             else:
-                # node1
                 n = 700
-                # node2
-                # n = 2000
-                # node 3
-                # n = 2000
                 X = np.random.randn(n, n)
                 Y = np.random.randn(n, n)
                 Z = X.dot(Y)
                 sleep(0.1)
         except Exception as err:  # 运行中出现连接断开之类错误
-            s = f"Error encountered with vlc_receiver: {err}. Aborting task."
+            s = f"Error encountered with cfn_bk_service: {err}. Aborting task."
             print(f'(PID-{pid})' + s)
             cmd_q.put(('_abort', pid, s))
             return
