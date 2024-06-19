@@ -285,7 +285,7 @@ def vlc_receiver(video_uri: str, eth: str, cmd_q: SimpleQueue,
 def cfn_bk_service(task_name, pig_args: str, cmd_q: SimpleQueue,
                    cancel_task_id: Value, terminate_event: Event) -> float:
     pid = os.getpid()
-    cmd_q.put(("_PID", (f'{task_name} {pig_args}', pid)))
+    cmd_q.put(("_PID", (f'{task_name}', pid)))
     while not terminate_event.is_set():
         try:
             if cancel_task_id.value == pid:
