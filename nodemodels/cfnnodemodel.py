@@ -47,7 +47,7 @@ def process_GUI_msg(cmd: str, args: tuple, node_obj: 'CfnNodeModel'):
         task_args = task_key.split(" ")[1]
         print(f"task_name is: {task_name}, task_args is: {task_args} ......")
         node_obj.signal_emitter.signal_emit_logic(task_name, 'down', task_args)
-        if 'vlc' in task_key or 'vlcc' in task_key or "surveillance" in task_key or "AI_trainer" in task_key:
+        if 'vlc' in task_key or 'vlcc' in task_key or "surveillance" in task_key:
             node_obj.cancel_task(task_name)
         else:
             node_obj.cancel_task(task_key)
@@ -67,38 +67,16 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
         Task子命令处理函数。GUI发过来的原始消息是('task', 'taskname arg1_arg2_arg3')，其中
         taskname字符串就对应到这里函数输入的 taskname参数, 下划线或连字符连起来的args字符串，就是这里函数输入的args。
     """
-    ServiceName = ['s1', 's2', 's3']
     if f'{taskname} {args}' in node_obj.tasks.keys():  # 检查一下是否这个同样的task已经在运行
         node_obj.print(f'Already running task {taskname} {args}. Do nothing.')
         node_obj.send2gui(
             ('warning', f'Already running task {taskname} {args}. Do nothing.'))
         return
 
-    elif taskname in ServiceName:
-        # node_obj.signal_emitter.signal_emit_logic(taskname, 'up', args)
-        task_pid = random.randint(10, 100)
-        node_obj.tasks[f'{taskname} {args}'] = task_pid
-
     elif taskname == 'surveillance':
         node_obj.signal_emitter.signal_emit_logic(taskname, 'up', args)
 
     elif taskname == 'vlc':  # vlc作为server将文件stream到指定的client
-        client_host = node_obj.demo_conf.get_node("client")['node_ip']
-        client_port = 12354
-        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        message = "RESPONSE FROM C-NODE1"
-        sleep(0.1)
-        try:
-            client_socket.connect((client_host, client_port))
-        except Exception as exp:
-            print(f"*&&&&&&&&&&&&&&& {exp}")
-        try:
-            client_socket.sendall(message.encode())
-        except Exception as exp:
-            print(f"*-------------- {exp}")
-        print("FirstPkg Message Sent")
-        client_socket.close()
-
         file_path = './' + str(args).split('_', -1)[0]  # 所要播放的文件路径
         start_pos = str(args).split('_', -1)[1]
         addr, port = node_obj.demo_conf.get_node("client")['node_ip'], "1234"
@@ -122,12 +100,13 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
         p = Process(target=vlc_receiver, args=(addr, eth_face, task_cmd_q, task_cancel, node_obj.terminate_event))
         node_obj.tasks[f'{taskname} {args}'] = -1
         p.start()
+
     elif taskname == "sendFirstPkg":
         client_host = node_obj.demo_conf.get_node("client")['node_ip']
         client_port = 12354
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         message = "RESPONSE FROM C-NODE1"
-        sleep(0.1)
+        # sleep(0.1)
         try:
             client_socket.connect((client_host, client_port))
         except Exception as exp:
@@ -150,43 +129,17 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
         node_obj.tasks[f'{taskname} {args}'] = -1
         p.start()
 
-    # elif taskname == 'onos':
-    #     onos_tag = onos_handler(pid_args=args)
-    #     print(f"onos_handler tag is: {onos_tag}")
-    #
-    # elif taskname == 'onos_del_all':
-    #     onos_del_tag = onos_del_all_flow(pid_args=args)
-    #     print(f"onos_del_all_flow tag is: {onos_del_tag}")
-    #
-    # elif taskname == 'onos_add_all':
-    #     onos_post_tag = onos_post_all_flow(pid_args=args)
-    #     print(f"onos_add_all_flow tag is: {onos_post_tag}")
-
-    # elif taskname == 'kubernetes':
-    #     p = Process(target=kubernetes_pod_handler, args=(taskname, args, task_cmd_q, task_cancel, node_obj.terminate_event))
-    #     node_obj.tasks[f'{taskname} {args}'] = -1
-    #     p.start()
-    #
-    # elif taskname == 'kubernetes_del':
-    #     _stdout = sys.stdout
-    #     _stderr = sys.stderr
-    #     _stdout = subprocess.DEVNULL
-    #     _stderr = subprocess.DEVNULL
-    #     del_cmd = f"kubectl delete --all pods -n default --force"
-    #     subprocess.run(del_cmd, shell=True, stdout=_stdout, stderr=_stderr)
-    #     sleep(1)
-
     elif taskname == 'AI_trainer1':
         p = Process(target=cfn_bk_service, args=(taskname, args, task_cmd_q, task_cancel, node_obj.terminate_event))
-        node_obj.tasks[f'{taskname}'] = -1
+        node_obj.tasks[f'{taskname} {args}'] = -1
         p.start()
     elif taskname == 'AI_trainer2':
         p = Process(target=cfn_bk_service, args=(taskname, args, task_cmd_q, task_cancel, node_obj.terminate_event))
-        node_obj.tasks[f'{taskname}'] = -1
+        node_obj.tasks[f'{taskname} {args}'] = -1
         p.start()
     elif taskname == 'AI_trainer3':
         p = Process(target=cfn_bk_service, args=(taskname, args, task_cmd_q, task_cancel, node_obj.terminate_event))
-        node_obj.tasks[f'{taskname}'] = -1
+        node_obj.tasks[f'{taskname} {args}'] = -1
         p.start()
     else:
         return taskname, args
