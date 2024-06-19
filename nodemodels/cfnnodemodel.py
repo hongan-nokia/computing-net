@@ -83,6 +83,22 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
         node_obj.signal_emitter.signal_emit_logic(taskname, 'up', args)
 
     elif taskname == 'vlc':  # vlc作为server将文件stream到指定的client
+        client_host = node_obj.demo_conf.get_node("client")['node_ip']
+        client_port = 12354
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        message = "RESPONSE FROM C-NODE1"
+        sleep(0.1)
+        try:
+            client_socket.connect((client_host, client_port))
+        except Exception as exp:
+            print(f"*&&&&&&&&&&&&&&& {exp}")
+        try:
+            client_socket.sendall(message.encode())
+        except Exception as exp:
+            print(f"*-------------- {exp}")
+        print("FirstPkg Message Sent")
+        client_socket.close()
+
         file_path = './' + str(args).split('_', -1)[0]  # 所要播放的文件路径
         start_pos = str(args).split('_', -1)[1]
         addr, port = node_obj.demo_conf.get_node("client")['node_ip'], "1234"
