@@ -240,13 +240,15 @@ class Scene33(QWidget):
             if self.path == 1:
                 self.service_step41.start("sp4")
             elif self.path == 2:
-                video_totaltime = 6776
-                ratio = int(self.video_startTime) / video_totaltime
                 if self.video_name == "足球":
+                    video_totaltime = 6776
+                    ratio = int(self.video_startTime) / video_totaltime
                     self.commomd = f"vlc fake1-WorldCup.mp4_{ratio}"
                     self.cfn_manager.send_command('c_node3', 'task', self.commomd)
                     self.service_step42.start("")
                 elif self.video_name == "游戏":
+                    video_totaltime = 2096
+                    ratio = int(self.video_startTime) / video_totaltime
                     self.commomd = f"vlc fake3-game.mp4_{ratio}"
                     self.cfn_manager.send_command('c_node2', 'task', self.commomd)
                     self.service_step43.start("")
@@ -287,8 +289,8 @@ class Scene33(QWidget):
         self.service_step43.label.setVisible(False)
         self.service_step5.label.setVisible(False)
         self.cfn_manager.send_command('monitor_client', 'stop_task', 'surveillance up')
-        self.cfn_manager.send_command('c_node3', 'stop_task', self.commomd)
-        self.cfn_manager.send_command('c_node2', 'stop_task', self.commomd)
+        self.cfn_manager.send_command('c_node3', 'stop_task', 'vlc fake1-WorldCup.mp4')
+        self.cfn_manager.send_command('c_node2', 'stop_task', 'vlc fake3-game.mp4')
         self.step1_label1.setVisible(False)
 
         self.stop_timer()

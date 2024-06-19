@@ -106,7 +106,7 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.data_visual.updateNodesInfo()
 
     def updateHeatMapIndex(self, data):
-        print("signal")
+        # print("signal")
         self.CPAARWidget.cloud1_hm.index = data[0]
         self.CPAARWidget.cloud2_hm.index = data[1]
         self.CPAARWidget.cloud3_hm.index = data[2]
