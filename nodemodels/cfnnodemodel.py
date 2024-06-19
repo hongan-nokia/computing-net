@@ -47,7 +47,7 @@ def process_GUI_msg(cmd: str, args: tuple, node_obj: 'CfnNodeModel'):
         task_args = task_key.split(" ")[1]
         print(f"task_name is: {task_name}, task_args is: {task_args} ......")
         node_obj.signal_emitter.signal_emit_logic(task_name, 'down', task_args)
-        if 'vlc' in task_key or 'vlcc' in task_key or "surveillance" in task_key:
+        if 'vlc' in task_key or 'vlcc' in task_key or "surveillance" in task_key or "AI_trainer" in task_key:
             node_obj.cancel_task(task_name)
         else:
             node_obj.cancel_task(task_key)
