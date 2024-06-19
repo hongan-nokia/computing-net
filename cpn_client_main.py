@@ -480,9 +480,9 @@ class ClientCanvas(QWidget):
         self.task4_btn1_box = QtWidgets.QGroupBox(self.task4_box)
         self.task4_btn1_layout = QtWidgets.QHBoxLayout(self.task4_btn1_box)
 
-        self.task2_btn5_label1 = QtWidgets.QLabel("选择比率")
+        self.task2_btn5_label1 = QtWidgets.QLabel("寻址命中率")
         self.task2_btn5_label1.setFont(self.task_font_size)
-        self.task2_btn5_label1.setStyleSheet("margin-left:18px;")
+        # self.task2_btn5_label1.setStyleSheet("margin-left:18px;")
         self.task4_btn1_layout.addWidget(self.task2_btn5_label1)
 
         self.task4_inputbtn = QtWidgets.QLineEdit(self.task4_box)

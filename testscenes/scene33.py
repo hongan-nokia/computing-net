@@ -276,6 +276,7 @@ class Scene33(QWidget):
         self.service_step3.tag_label.setVisible(False)
         self.service_step41.tag_label.setVisible(False)
         self.service_step42.tag_label.setVisible(False)
+        self.service_step43.tag_label.setVisible(False)
         self.service_step5.tag_label.setVisible(False)
 
         self.service_step1.label.setVisible(False)
@@ -283,6 +284,7 @@ class Scene33(QWidget):
         self.service_step3.label.setVisible(False)
         self.service_step41.label.setVisible(False)
         self.service_step42.label.setVisible(False)
+        self.service_step43.label.setVisible(False)
         self.service_step5.label.setVisible(False)
         self.cfn_manager.send_command('monitor_client', 'stop_task', 'surveillance up')
         self.cfn_manager.send_command('c_node3', 'stop_task', self.commomd)

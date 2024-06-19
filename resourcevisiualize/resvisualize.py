@@ -147,10 +147,10 @@ class DataVisualizationWindow(QWidget):
         self.x_data.append(len(self.x_data))  # 添加索引
 
         self.canvas.ax.clear()
-        self.canvas.ax.plot(self.x_data, self.y_data, label="Rate")
+        self.canvas.ax.plot(self.x_data, self.y_data, label="CPU")
 
         self.canvas.ax.set_xlabel('Time/s')
-        self.canvas.ax.set_ylabel('CPU/%')
+        self.canvas.ax.set_ylabel('Utilization/%')
         self.canvas.ax.legend()
         self.canvas.ax.grid(True)
 
