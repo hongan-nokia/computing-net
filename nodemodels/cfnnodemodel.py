@@ -79,6 +79,21 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
     elif taskname == 'vlc':  # vlc作为server将文件stream到指定的client
         file_path = './' + str(args).split('_', -1)[0]  # 所要播放的文件路径
         start_pos = str(args).split('_', -1)[1]
+        if int(start_pos) == 0:
+            client_host = node_obj.demo_conf.get_node("client")['node_ip']
+            client_port = 12354
+            client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            message = "RESPONSE FROM C-NODE1"
+            try:
+                client_socket.connect((client_host, client_port))
+            except Exception as exp:
+                print(f"*&&&&&&&&&&&&&&& {exp}")
+            try:
+                client_socket.sendall(message.encode())
+            except Exception as exp:
+                print(f"*-------------- {exp}")
+            print("FirstPkg Message Sent")
+            client_socket.close()
         addr, port = node_obj.demo_conf.get_node("client")['node_ip'], "1234"
         p = Process(target=vlc_streaming, args=(taskname, args, addr, port, file_path, start_pos, task_cmd_q, task_cancel, node_obj.terminate_event))
         node_obj.tasks[f'{taskname}'] = -1
@@ -130,15 +145,15 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
         p.start()
 
     elif taskname == 'AI_trainer1':
-        p = Process(target=cfn_bk_service, args=(taskname, args, task_cmd_q, task_cancel, node_obj.terminate_event))
+        p = Process(target=cfn_bk_service1, args=(taskname, args, task_cmd_q, task_cancel, node_obj.terminate_event))
         node_obj.tasks[f'{taskname} {args}'] = -1
         p.start()
     elif taskname == 'AI_trainer2':
-        p = Process(target=cfn_bk_service, args=(taskname, args, task_cmd_q, task_cancel, node_obj.terminate_event))
+        p = Process(target=cfn_bk_service2, args=(taskname, args, task_cmd_q, task_cancel, node_obj.terminate_event))
         node_obj.tasks[f'{taskname} {args}'] = -1
         p.start()
     elif taskname == 'AI_trainer3':
-        p = Process(target=cfn_bk_service, args=(taskname, args, task_cmd_q, task_cancel, node_obj.terminate_event))
+        p = Process(target=cfn_bk_service3, args=(taskname, args, task_cmd_q, task_cancel, node_obj.terminate_event))
         node_obj.tasks[f'{taskname} {args}'] = -1
         p.start()
     else:

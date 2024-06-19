@@ -282,7 +282,55 @@ def vlc_receiver(video_uri: str, eth: str, cmd_q: SimpleQueue,
             return
 
 
-def cfn_bk_service(task_name, pig_args: str, cmd_q: SimpleQueue,
+def cfn_bk_service1(task_name, pig_args: str, cmd_q: SimpleQueue,
+                   cancel_task_id: Value, terminate_event: Event) -> float:
+    pid = os.getpid()
+    cmd_q.put(("_PID", (f'{task_name} {pig_args}', pid)))
+    while not terminate_event.is_set():
+        try:
+            if cancel_task_id.value == pid:
+                print(f"(PID-{pid}) Received task_cancel signal!")
+                cancel_task_id.value = 0
+                cmd_q.put(('cfn_bk_service', 'stop'))
+                break
+            else:
+                n = 700
+                X = np.random.randn(n, n)
+                Y = np.random.randn(n, n)
+                Z = X.dot(Y)
+                sleep(0.1)
+        except Exception as err:  # 运行中出现连接断开之类错误
+            s = f"Error encountered with cfn_bk_service: {err}. Aborting task."
+            print(f'(PID-{pid})' + s)
+            cmd_q.put(('_abort', pid, s))
+            return
+
+
+def cfn_bk_service2(task_name, pig_args: str, cmd_q: SimpleQueue,
+                   cancel_task_id: Value, terminate_event: Event) -> float:
+    pid = os.getpid()
+    cmd_q.put(("_PID", (f'{task_name} {pig_args}', pid)))
+    while not terminate_event.is_set():
+        try:
+            if cancel_task_id.value == pid:
+                print(f"(PID-{pid}) Received task_cancel signal!")
+                cancel_task_id.value = 0
+                cmd_q.put(('cfn_bk_service', 'stop'))
+                break
+            else:
+                n = 700
+                X = np.random.randn(n, n)
+                Y = np.random.randn(n, n)
+                Z = X.dot(Y)
+                sleep(0.1)
+        except Exception as err:  # 运行中出现连接断开之类错误
+            s = f"Error encountered with cfn_bk_service: {err}. Aborting task."
+            print(f'(PID-{pid})' + s)
+            cmd_q.put(('_abort', pid, s))
+            return
+
+
+def cfn_bk_service3(task_name, pig_args: str, cmd_q: SimpleQueue,
                    cancel_task_id: Value, terminate_event: Event) -> float:
     pid = os.getpid()
     cmd_q.put(("_PID", (f'{task_name} {pig_args}', pid)))

@@ -425,7 +425,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         #     print(f"*-------------- {exp}")
         # print("FirstPkg Message Sent")
         # client_socket.close()
-        self.cfn_manager.send_command("c_node1", "task", "sendFirstPkg up")
+        # self.cfn_manager.send_command("c_node1", "task", "sendFirstPkg up")
         self.cfn_manager.send_command("c_node1", "task", "vlc worldCup.mp4_0")
 
     def deployAITrainerOnCNode1(self):
