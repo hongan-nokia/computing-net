@@ -162,15 +162,15 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
 
     elif taskname == 'AI_trainer1':
         p = Process(target=cfn_bk_service, args=(taskname, args, task_cmd_q, task_cancel, node_obj.terminate_event))
-        node_obj.tasks[f'{taskname} {args}'] = -1
+        node_obj.tasks[f'{taskname}'] = -1
         p.start()
     elif taskname == 'AI_trainer2':
         p = Process(target=cfn_bk_service, args=(taskname, args, task_cmd_q, task_cancel, node_obj.terminate_event))
-        node_obj.tasks[f'{taskname} {args}'] = -1
+        node_obj.tasks[f'{taskname}'] = -1
         p.start()
     elif taskname == 'AI_trainer3':
         p = Process(target=cfn_bk_service, args=(taskname, args, task_cmd_q, task_cancel, node_obj.terminate_event))
-        node_obj.tasks[f'{taskname} {args}'] = -1
+        node_obj.tasks[f'{taskname}'] = -1
         p.start()
     else:
         return taskname, args
