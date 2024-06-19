@@ -142,10 +142,13 @@ class ServerThread(threading.Thread):
 
         self.rate = 0
 
-        configuration = DemoConfigParser("cpn_config-test-only-cpu.json")
-        inter_process_resource_NodeMan = [(i['node_name'], Pipe()) for i in configuration.nodes]
-        resource_NodeMan = dict(inter_process_resource_NodeMan)
-        self.nodes_name = list(resource_NodeMan.keys())
+        # configuration = DemoConfigParser("cpn_config-test-only-cpu.json")
+        # inter_process_resource_NodeMan = [(i['node_name'], Pipe()) for i in configuration.nodes]
+        # resource_NodeMan = dict(inter_process_resource_NodeMan)
+        # self.nodes_name = list(resource_NodeMan.keys())
+        self.nodes_name = []
+        for i in range(10000):
+            self.nodes_name.append(f"node{i}")
 
     def run(self):
         packet_counter_thread = threading.Thread(target=self.count_packets)

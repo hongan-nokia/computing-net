@@ -121,8 +121,11 @@ class SendPacketsThread(QThread):
         self.num_packets = num_packets
         self.running = True
         self.probabilities = probabilities
-        self.nodes_name = nodes_name
+        self.nodes_name = []
         self.random_node_id = 1
+
+        for i in range(10000):
+            self.nodes_name.append(f"node{i}")
 
     def run(self):
         self.send_multiple_messages()
@@ -140,6 +143,7 @@ class SendPacketsThread(QThread):
                 # 随机生成一个值
                 message = f"Node_{self.random_node_id}"
                 self.random_node_id += 1
+            # print(message)
             self.socket_thread.send_message(message)
 
     def stop(self):
@@ -190,6 +194,11 @@ class ClientCanvas(QWidget):
         self.task_font_size.setFamily("Arial")
         self.task_font_size.setBold(True)
         self.task_font_size.setPointSize(20)
+
+        self.task_font_size1 = QtGui.QFont()
+        self.task_font_size1.setFamily("Arial")
+        self.task_font_size1.setBold(True)
+        self.task_font_size1.setPointSize(15)
         self._initTitle()
 
         self.left_spacer = QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
@@ -381,39 +390,40 @@ class ClientCanvas(QWidget):
         self.task2_btn4 = QtWidgets.QRadioButton("房间监控")
         self.task2_btn4.toggled.connect(self.onRadioButtonToggled)
         self.task2_btn4.setChecked(True)
-        self.task2_btn4.setFont(self.task_font_size)
-        # self.task2_btn4.setStyleSheet()
+        self.task2_btn4.setFont(self.task_font_size1)
+        self.task2_btn4.setStyleSheet("padding-left:30px;")
 
         self.task2_label_box = QtWidgets.QGroupBox()
         self.task2_label_layout = QtWidgets.QHBoxLayout(self.task2_label_box)
 
         self.task2_btn5 = QtWidgets.QRadioButton("视频")
         self.task2_btn5.toggled.connect(self.onRadioButtonToggled)
-        self.task2_btn5.setFont(self.task_font_size)
+        self.task2_btn5.setFont(self.task_font_size1)
         self.task2_label_layout.addWidget(self.task2_btn5)
-        # self.task2_btn5.setStyleSheet()
+        self.task2_btn5.setStyleSheet("padding-left:20px;")
 
         self.task2_btn5_edit1 = QtWidgets.QLineEdit()
-        self.task2_btn5_edit1.setFont(self.task_font_size)
-        self.task2_btn5_edit1.setStyleSheet("background: #fff;border-radius:20px;padding:10px;")
-        self.task2_btn5_edit1.setMaximumWidth(100)
+        self.task2_btn5_edit1.setFont(self.task_font_size1)
+        self.task2_btn5_edit1.setStyleSheet("background: #fff;border-radius:12px;padding:5px;")
+        self.task2_btn5_edit1.setMaximumWidth(80)
         self.task2_btn5_edit1.setText("足球")
         self.task2_label_layout.addWidget(self.task2_btn5_edit1)
 
         self.task2_btn5_label1 = QtWidgets.QLabel("第")
-        self.task2_btn5_label1.setFont(self.task_font_size)
+        self.task2_btn5_label1.setFont(self.task_font_size1)
+        self.task2_btn5_label1.setMaximumWidth(30)
         self.task2_label_layout.addWidget(self.task2_btn5_label1)
 
         self.task2_btn5_edit2 = QtWidgets.QLineEdit()
-        self.task2_btn5_edit2.setFont(self.task_font_size)
-        self.task2_btn5_edit2.setStyleSheet("background: #fff;border-radius:20px;padding:10px;")
-        self.task2_btn5_edit2.setMaximumWidth(100)
+        self.task2_btn5_edit2.setFont(self.task_font_size1)
+        self.task2_btn5_edit2.setStyleSheet("background:#fff;border-radius:12px;padding:5px;")
+        self.task2_btn5_edit2.setMaximumWidth(80)
         self.task2_btn5_edit2.setText("36")
         self.task2_btn5_edit2.setAlignment(Qt.AlignRight)
         self.task2_label_layout.addWidget(self.task2_btn5_edit2)
 
         self.task2_btn5_label2 = QtWidgets.QLabel("秒")
-        self.task2_btn5_label2.setFont(self.task_font_size)
+        self.task2_btn5_label2.setFont(self.task_font_size1)
         self.task2_label_layout.addWidget(self.task2_btn5_label2)
 
         self.task2_radioBtnGroup = QtWidgets.QButtonGroup(self.task2_box)
@@ -468,7 +478,12 @@ class ClientCanvas(QWidget):
 
         # ####
         self.task4_btn1_box = QtWidgets.QGroupBox(self.task4_box)
-        self.task4_btn1_layout = QtWidgets.QVBoxLayout(self.task4_btn1_box)
+        self.task4_btn1_layout = QtWidgets.QHBoxLayout(self.task4_btn1_box)
+
+        self.task2_btn5_label1 = QtWidgets.QLabel("选择比率")
+        self.task2_btn5_label1.setFont(self.task_font_size)
+        self.task2_btn5_label1.setStyleSheet("margin-left:18px;")
+        self.task4_btn1_layout.addWidget(self.task2_btn5_label1)
 
         self.task4_inputbtn = QtWidgets.QLineEdit(self.task4_box)
         self.task4_inputbtn.setFont(self.task_font_size)

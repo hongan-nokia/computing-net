@@ -178,6 +178,12 @@ class Scene33(QWidget):
                                          img_scale_h=400,
                                          direction="r2l",
                                          interval=3, title='', tag_geo=[280, 20, 200, 30])
+        self.service_step43 = ImageLoader(parent=self, geo=[340, 525, 830, 350],
+                                          image_url='./images_test3/content_addressing_step43.png',
+                                          img_scale_w=830,
+                                          img_scale_h=350,
+                                          direction="r2l",
+                                          interval=3, title='', tag_geo=[280, 20, 200, 30])
         self.service_step5 = ImageLoader(parent=self, geo=[340, 517, 539, 310],
                                          image_url='./images_test3/content_addressing_step5.png',
                                          img_scale_w=540,
@@ -236,9 +242,14 @@ class Scene33(QWidget):
             elif self.path == 2:
                 video_totaltime = 6776
                 ratio = int(self.video_startTime) / video_totaltime
-                self.commomd = f"vlc fake1-WorldCup.mp4_{ratio}"
-                self.cfn_manager.send_command('c_node3', 'task', self.commomd)
-                self.service_step42.start("")
+                if self.video_name == "足球":
+                    self.commomd = f"vlc fake1-WorldCup.mp4_{ratio}"
+                    self.cfn_manager.send_command('c_node3', 'task', self.commomd)
+                    self.service_step42.start("")
+                elif self.video_name == "游戏":
+                    self.commomd = f"vlc fake3-game.mp4_{ratio}"
+                    self.cfn_manager.send_command('c_node2', 'task', self.commomd)
+                    self.service_step43.start("")
         elif destination == "sp4":
             self.cfn_manager.send_command('monitor_client', 'task', 'surveillance up')
             self.service_step5.start("")
@@ -275,6 +286,7 @@ class Scene33(QWidget):
         self.service_step5.label.setVisible(False)
         self.cfn_manager.send_command('monitor_client', 'stop_task', 'surveillance up')
         self.cfn_manager.send_command('c_node3', 'stop_task', self.commomd)
+        self.cfn_manager.send_command('c_node2', 'stop_task', self.commomd)
         self.step1_label1.setVisible(False)
 
         self.stop_timer()
