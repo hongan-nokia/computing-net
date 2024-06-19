@@ -526,16 +526,12 @@ class SystemSyntheticResUtilize(QWidget):
             pass
 
     def setTraditionalMEC(self):
-        self.unsetTraditionalMEC()
-        self.unsetComputingNetConverge()
+        self.unsetAllTasks()
         self.cfn_manager.send_command('c_node1', 'task', 'AI_trainer1 up')  # AI 训练
         self.cfn_manager.send_command('c_node1', 'task', 'vlcc fake1-WorldCup.mp4_0')  # 视频点播
-        # self.cfn_manager.send_command('c_node1', 'task', 'cam_health camera_1')
 
     def setComputingNetConverge(self):
-        self.unsetTraditionalMEC()
-        self.unsetComputingNetConverge()
-
+        self.unsetAllTasks()
         self.cfn_manager.send_command('c_node1', 'task', 'vlcc fake1-WorldCup.mp4_0')
         self.cfn_manager.send_command('c_node1', 'task', 'cam_health camera_1')
 
@@ -545,35 +541,13 @@ class SystemSyntheticResUtilize(QWidget):
         self.cfn_manager.send_command('c_node3', 'task', 'AI_trainer3 up')
         self.cfn_manager.send_command('c_node3', 'task', 'vlcc fake2-WorldCup.mp4_0')
 
-    def unsetTraditionalMEC(self):
-        self.cfn_manager.send_command('c_node1', 'stop_task', 'AI_trainer1 up')
-        self.cfn_manager.send_command('c_node1', 'stop_task', 'AI_trainer2 up')
-        self.cfn_manager.send_command('c_node1', 'stop_task', 'AI_trainer3 up')
-
-        self.cfn_manager.send_command('c_node2', 'stop_task', 'AI_trainer1 up')
-        self.cfn_manager.send_command('c_node2', 'stop_task', 'AI_trainer2 up')
-        self.cfn_manager.send_command('c_node2', 'stop_task', 'AI_trainer3 up')
-
-        self.cfn_manager.send_command('c_node3', 'stop_task', 'AI_trainer1 up')
-        self.cfn_manager.send_command('c_node3', 'stop_task', 'AI_trainer2 up')
-        self.cfn_manager.send_command('c_node3', 'stop_task', 'AI_trainer3 up')
+    def unsetAllTasks(self):
+        self.cfn_manager.send_command('c_node1', 'stop_task', 'AI_trainer1 up')  # AI 训练
         self.cfn_manager.send_command('c_node1', 'stop_task', 'vlcc fake1-WorldCup.mp4_0')  # 视频点播
-        # self.cfn_manager.send_command('c_node1', 'task', 'cam_health camera_1')
-
-    def unsetComputingNetConverge(self):
         self.cfn_manager.send_command('c_node1', 'stop_task', 'vlcc fake1-WorldCup.mp4_0')
         self.cfn_manager.send_command('c_node1', 'stop_task', 'cam_health camera_1')
-
-        self.cfn_manager.send_command('c_node1', 'stop_task', 'AI_trainer1 up')
-        self.cfn_manager.send_command('c_node1', 'stop_task', 'AI_trainer2 up')
-        self.cfn_manager.send_command('c_node1', 'stop_task', 'AI_trainer3 up')
-
         self.cfn_manager.send_command('c_node2', 'stop_task', 'AI_trainer1 up')
         self.cfn_manager.send_command('c_node2', 'stop_task', 'AI_trainer2 up')
-        self.cfn_manager.send_command('c_node2', 'stop_task', 'AI_trainer3 up')
-
-        self.cfn_manager.send_command('c_node3', 'stop_task', 'AI_trainer1 up')
-        self.cfn_manager.send_command('c_node3', 'stop_task', 'AI_trainer2 up')
         self.cfn_manager.send_command('c_node3', 'stop_task', 'AI_trainer3 up')
         self.cfn_manager.send_command('c_node3', 'stop_task', 'vlcc fake2-WorldCup.mp4_0')
 
@@ -588,8 +562,7 @@ class SystemSyntheticResUtilize(QWidget):
         self.s2cloud3_hm.timer.stop()
 
     def reset(self):
-        self.unsetTraditionalMEC()
-        self.unsetComputingNetConverge()
+        self.unsetAllTasks()
         self.topBtn1Tag = 0
         self.topBtn2Tag = 0
         self.topBtn3Tag = 0
