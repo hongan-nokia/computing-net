@@ -79,7 +79,8 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
     elif taskname == 'vlc':  # vlc作为server将文件stream到指定的client
         file_path = './' + str(args).split('_', -1)[0]  # 所要播放的文件路径
         start_pos = str(args).split('_', -1)[1]
-        if int(start_pos) == 0:
+        # if int(start_pos) == 0:
+        if start_pos == '0':
             client_host = node_obj.demo_conf.get_node("client")['node_ip']
             client_port = 12354
             client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
