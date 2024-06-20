@@ -68,9 +68,9 @@ class Scene32(QWidget):
 
     def _initScene(self):
 
-        c_node1_heart_rate_img = QtGui.QPixmap("./images/heart_rate.png").scaled(QSize(80, 60))
-        c_node2_heart_rate_img = QtGui.QPixmap("./images/heart_rate.png").scaled(QSize(80, 60))
-        c_node3_heart_rate_img = QtGui.QPixmap("./images/heart_rate.png").scaled(QSize(80, 60))
+        c_node1_heart_rate_img = QtGui.QPixmap("./images/heart_rate.png").scaled(QSize(60, 70))
+        c_node2_heart_rate_img = QtGui.QPixmap("./images/heart_rate.png").scaled(QSize(60, 70))
+        c_node3_heart_rate_img = QtGui.QPixmap("./images/heart_rate.png").scaled(QSize(60, 70))
         self.c_node1_heart_rate = BlinkingPic(parent=self, pixmap=c_node1_heart_rate_img, auto_dim=True, dim_opacity=0.1,
                                               blink_period=1200).pixmap_item
         self.c_node2_heart_rate = BlinkingPic(parent=self, pixmap=c_node2_heart_rate_img, auto_dim=True, dim_opacity=0.1,
@@ -82,9 +82,9 @@ class Scene32(QWidget):
         self.view.scene().addItem(self.c_node2_heart_rate)
         self.view.scene().addItem(self.c_node3_heart_rate)
 
-        self.c_node1_heart_rate.setPos(906, 428)
-        self.c_node2_heart_rate.setPos(1140, 535)
-        self.c_node3_heart_rate.setPos(1098, 840)
+        self.c_node1_heart_rate.setPos(910, 390)
+        self.c_node2_heart_rate.setPos(1170, 505)
+        self.c_node3_heart_rate.setPos(1050, 830)
 
         self.c_node1_heart_rate.setVisible(False)
         self.c_node2_heart_rate.setVisible(False)

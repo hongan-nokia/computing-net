@@ -80,9 +80,9 @@ class Scene31(QWidget):
         self.view.scene().addItem(self.c_node2_video)
         self.view.scene().addItem(self.c_node3_video)
 
-        self.c_node1_video.setPos(906, 428)
+        self.c_node1_video.setPos(886, 428)
         self.c_node2_video.setPos(1140, 535)
-        self.c_node3_video.setPos(1098, 840)
+        self.c_node3_video.setPos(1088, 860)
 
         self.c_node1_video.setVisible(True)
         self.c_node2_video.setVisible(True)
