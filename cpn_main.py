@@ -43,6 +43,8 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.mainTitle = QtWidgets.QLabel(parent=self)
         self._initResMonitorQueue()
 
+        self.task2_flag = False
+
         self.update_interval = 1  # Interval in seconds
         self.timer = None
         self.stop_event = threading.Event()
@@ -257,7 +259,9 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene33.setVisible(False)
         self.scene4.setVisible(False)
         self.CPAARWidget.reset()
-        self.SSRUWidget.reset()
+        if self.task2_flag:
+            self.SSRUWidget.reset()
+            self.task2_flag = False
         self.scene3.reset()
         self.scene3.scene31.reset()
         self.scene3.scene32.reset()
@@ -269,7 +273,9 @@ class CpnAppWindow(QtWidgets.QMainWindow):
     def _showTestScene1(self):
         self.SSRUWidget.setVisible(False)
         self.CPAARWidget.reset()
-        self.SSRUWidget.reset()
+        if self.task2_flag:
+            self.SSRUWidget.reset()
+            self.task2_flag = False
         self.scene3.reset()
         self.scene3.scene31.reset()
         self.scene3.scene32.reset()
@@ -296,7 +302,10 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.CPAARWidget.setVisible(False)
 
         self.CPAARWidget.reset()
-        self.SSRUWidget.reset()
+        if self.task2_flag:
+            self.SSRUWidget.reset()
+            self.task2_flag = False
+        self.task2_flag = True
         self.scene3.reset()
         self.scene3.scene31.reset()
         self.scene3.scene32.reset()
@@ -327,7 +336,9 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene33.setVisible(False)
         self.scene4.setVisible(False)
         self.CPAARWidget.reset()
-        self.SSRUWidget.reset()
+        if self.task2_flag:
+            self.SSRUWidget.reset()
+            self.task2_flag = False
         self.scene3.reset()
         self.scene3.scene31.reset()
         self.scene3.scene32.reset()
@@ -353,7 +364,9 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene33.setVisible(False)
         self.scene4.setVisible(True)
         self.CPAARWidget.reset()
-        self.SSRUWidget.reset()
+        if self.task2_flag:
+            self.SSRUWidget.reset()
+            self.task2_flag = False
         self.scene3.reset()
         self.scene3.scene31.reset()
         self.scene3.scene32.reset()
