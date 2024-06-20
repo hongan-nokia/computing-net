@@ -318,7 +318,7 @@ def cfn_bk_service2(task_name, pig_args: str, cmd_q: SimpleQueue,
                 cmd_q.put(('cfn_bk_service', 'stop'))
                 break
             else:
-                n = 2000
+                n = 3000
                 X = np.random.randn(n, n)
                 Y = np.random.randn(n, n)
                 Z = X.dot(Y)
@@ -342,7 +342,7 @@ def cfn_bk_service3(task_name, pig_args: str, cmd_q: SimpleQueue,
                 cmd_q.put(('cfn_bk_service', 'stop'))
                 break
             else:
-                n = 2500
+                n = 3000
                 X = np.random.randn(n, n)
                 Y = np.random.randn(n, n)
                 Z = X.dot(Y)
