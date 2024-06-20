@@ -24,7 +24,7 @@ from utils.configparser import DemoConfigParser
 from utils.repeatimer import repeatTimer
 
 from utils.HeatMap import HeatMap
-from utils.imageLoader import ImageLoader
+from utils.imageLoader import ImageLoader, ImageLoader1
 
 
 class Scene32(QWidget):
@@ -133,14 +133,14 @@ class Scene32(QWidget):
         self.backBtn.clicked.connect(self.backTest3)
         self.view.scene().addWidget(self.backBtn)
 
-        font1 = QtGui.QFont("Nokia Pure Text", 11)
-        self.step1_label1 = QtWidgets.QLabel(parent=self)
-        self.step1_label1.setText("a.算力需求用于处理心跳检测")
-        self.step1_label1.setWordWrap(True)
-        self.step1_label1.setGeometry(587, 446, 110, 50)
-        self.step1_label1.setFont(font1)
-        self.view.scene().addWidget(self.step1_label1)
-        self.step1_label1.setVisible(False)
+        # font1 = QtGui.QFont("Nokia Pure Text", 11)
+        # self.step1_label1 = QtWidgets.QLabel(parent=self)
+        # self.step1_label1.setText("a.算力需求用于处理心跳检测")
+        # self.step1_label1.setWordWrap(True)
+        # self.step1_label1.setGeometry(587, 446, 110, 50)
+        # self.step1_label1.setFont(font1)
+        # self.view.scene().addWidget(self.step1_label1)
+        # self.step1_label1.setVisible(False)
 
         font2 = QtGui.QFont("Nokia Pure Text", 14)
         self.step1_label2 = QtWidgets.QLabel(parent=self)
@@ -169,12 +169,12 @@ class Scene32(QWidget):
 
     def _initImageLoad(self):
         # -------------------------------------- Scenario_0 --------------------------------------
-        self.service_step1 = ImageLoader(parent=self, geo=[325, 450, 1040, 130],
+        self.service_step1 = ImageLoader1(parent=self, geo=[325, 450, 1040, 130],
                                          image_url='./images_test3/computing_power_addressing_step1.png',
                                          img_scale_w=1040,
                                          img_scale_h=130,
                                          direction="l2r",
-                                         interval=3, title='1.首包', tag_geo=[130, 30, 100, 20])
+                                         interval=3, title='1.算力寻址请求', tag_geo=[170, 10, 150, 20])
         self.service_step2 = ImageLoader(parent=self, geo=[1360, 375, 443, 150],
                                          image_url='./images_test3/computing_power_addressing_step2.png',
                                          img_scale_w=200,
@@ -374,6 +374,7 @@ class Scene32(QWidget):
     def computingAddrWorkFlow(self):
         self.reset()
         self.start_timer()
+        self.step1_label2.setVisible(True)
         self.service_step1.start("sp1")
 
     def on_animation_over(self, target_node):
@@ -425,7 +426,7 @@ class Scene32(QWidget):
         self.c_node2_heart_rate.setVisible(False)
         self.c_node3_heart_rate.setVisible(False)
 
-        self.step1_label1.setVisible(False)
+        # self.step1_label1.setVisible(False)
         self.step1_label2.setVisible(False)
         self.cfn_manager.send_command('c_node1', 'stop_task', 'cam_health camera_1')
         self.cfn_manager.send_command('c_node2', 'stop_task', 'cam_health camera_1')

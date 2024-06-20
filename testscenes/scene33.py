@@ -24,7 +24,7 @@ from utils.configparser import DemoConfigParser
 from utils.repeatimer import repeatTimer
 
 from utils.HeatMap import HeatMap
-from utils.imageLoader import ImageLoader
+from utils.imageLoader import ImageLoader, ImageLoader1
 
 
 class Scene33(QWidget):
@@ -111,23 +111,23 @@ class Scene33(QWidget):
         self.backBtn.clicked.connect(self.backTest3)
         self.view.scene().addWidget(self.backBtn)
 
-        font1 = QtGui.QFont("微软雅黑", 11)
-        self.step1_label1 = QtWidgets.QLabel(parent=self)
-        self.step1_label1.setText("房间1的监控")
-        self.step1_label1.setWordWrap(True)
-        self.step1_label1.setGeometry(587, 446, 110, 50)
-        self.step1_label1.setFont(font1)
-        self.view.scene().addWidget(self.step1_label1)
-        self.step1_label1.setVisible(False)
+        # font1 = QtGui.QFont("微软雅黑", 11)
+        # self.step1_label1 = QtWidgets.QLabel(parent=self)
+        # self.step1_label1.setText("房间1的监控")
+        # self.step1_label1.setWordWrap(True)
+        # self.step1_label1.setGeometry(587, 446, 110, 50)
+        # self.step1_label1.setFont(font1)
+        # self.view.scene().addWidget(self.step1_label1)
+        # self.step1_label1.setVisible(False)
 
-        # font2 = QtGui.QFont("微软雅黑", 14)
-        # self.step1_label2 = QtWidgets.QLabel(parent=self)
-        # self.step1_label2.setText("寻址请求")
-        # self.step1_label2.setWordWrap(True)
-        # self.step1_label2.setGeometry(921, 500, 110, 50)
-        # self.step1_label2.setFont(font2)
-        # self.view.scene().addWidget(self.step1_label2)
-        # self.step1_label2.setVisible(False)
+        font2 = QtGui.QFont("微软雅黑", 14)
+        self.step1_label2 = QtWidgets.QLabel(parent=self)
+        self.step1_label2.setText("寻址请求")
+        self.step1_label2.setWordWrap(True)
+        self.step1_label2.setGeometry(921, 500, 110, 50)
+        self.step1_label2.setFont(font2)
+        self.view.scene().addWidget(self.step1_label2)
+        self.step1_label2.setVisible(False)
 
     def _initMonitorQueue(self):
         self.monitor_q_cpu_hm_node1 = self.cfn_manager.resource_StatMon['c_node1_cpu']  # 算力节点1 CPU
@@ -148,12 +148,12 @@ class Scene33(QWidget):
 
     def _initImageLoad(self):
         # -------------------------------------- Scenario_0 --------------------------------------
-        self.service_step1 = ImageLoader(parent=self, geo=[325, 450, 1040, 130],
+        self.service_step1 = ImageLoader1(parent=self, geo=[325, 450, 1040, 130],
                                          image_url='./images_test3/content_addressing_step1.png',
                                          img_scale_w=1040,
                                          img_scale_h=130,
                                          direction="l2r",
-                                         interval=3, title='1.寻址请求', tag_geo=[130, 30, 150, 20])
+                                         interval=3, title='1.内容寻址请求', tag_geo=[170, 10, 150, 20])
         self.service_step2 = ImageLoader(parent=self, geo=[1360, 390, 443, 150],
                                          image_url='./images_test3/content_power_addressing_step2.png',
                                          img_scale_w=200,
@@ -220,16 +220,17 @@ class Scene33(QWidget):
         self.path = 2
         self.video_name = commond_arg2
         self.video_startTime = commond_arg3
+        self.step1_label2.setVisible(True)
         self.service_step1.start("sp1")
 
     @pyqtSlot(str)
     def service_provision_anim(self, destination: str):
         if destination == "sp1":
-            if self.path == 1:
-                self.step1_label1.setText("房间1的监控")
-            elif self.path == 2:
-                self.step1_label1.setText("视频流")
-            self.step1_label1.setVisible(True)
+            # if self.path == 1:
+            #     self.step1_label1.setText("房间1的监控")
+            # elif self.path == 2:
+            #     self.step1_label1.setText("视频流")
+            # self.step1_label1.setVisible(True)
             # self.service_step2.label.setVisible(True)
             self.service_step2.start("sp2")
         elif destination == "sp2":
@@ -291,6 +292,7 @@ class Scene33(QWidget):
         self.cfn_manager.send_command('monitor_client', 'stop_task', 'surveillance up')
         self.cfn_manager.send_command('c_node3', 'stop_task', 'vlc fake1-WorldCup.mp4')
         self.cfn_manager.send_command('c_node2', 'stop_task', 'vlc fake3-game.mp4')
-        self.step1_label1.setVisible(False)
+        # self.step1_label1.setVisible(False)
+        self.step1_label2.setVisible(False)
 
         self.stop_timer()

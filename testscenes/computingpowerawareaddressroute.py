@@ -20,7 +20,7 @@ from guiwidgets.fadingpic import BlinkingPic
 from nodemodels.cfndemomanager import CfnDemoManager
 from utils.HeatMap import HeatMap
 from utils.configparser import DemoConfigParser
-from utils.imageLoader import ImageLoader
+from utils.imageLoader import ImageLoader, ImageLoader1
 from utils.repeatimer import repeatTimer
 from utils.reversequeue import reverseQueue
 
@@ -156,12 +156,12 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         return scene
 
     def _initImageLoad(self):
-        self.user_first_pkg = ImageLoader(parent=self, geo=[320, 450, 530, 100],
+        self.user_first_pkg = ImageLoader1(parent=self, geo=[320, 450, 530, 100],
                                           image_url='./images_test3/server_addressing_step1.png',
                                           img_scale_w=530,
                                           img_scale_h=75,
                                           direction="l2r",
-                                          interval=3, title='1. 首包', tag_geo=[230, 32, 100, 20])
+                                          interval=3, title='1.业务寻址', tag_geo=[200, 32, 150, 20])
         self.addr_request = ImageLoader(parent=self, geo=[896, 449, 443, 100],
                                         image_url='./images_test3/server_addressing_step2.png',
                                         img_scale_w=443,

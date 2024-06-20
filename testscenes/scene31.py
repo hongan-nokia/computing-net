@@ -24,7 +24,7 @@ from utils.configparser import DemoConfigParser
 from utils.repeatimer import repeatTimer
 
 from utils.HeatMap import HeatMap
-from utils.imageLoader import ImageLoader
+from utils.imageLoader import ImageLoader, ImageLoader1
 
 
 class Scene31(QWidget):
@@ -149,12 +149,12 @@ class Scene31(QWidget):
 
     def _initImageLoad(self):
         # -------------------------------------- Scenario_0 --------------------------------------
-        self.service_step1 = ImageLoader(parent=self, geo=[320, 450, 530, 100],
+        self.service_step1 = ImageLoader1(parent=self, geo=[320, 450, 530, 100],
                                          image_url='./images_test3/server_addressing_step1.png',
                                          img_scale_w=530,
                                          img_scale_h=75,
                                          direction="l2r",
-                                         interval=3, title='1.首包', tag_geo=[230, 32, 100, 20])
+                                         interval=3, title='1.服务寻址请求', tag_geo=[180, 32, 150, 20])
         self.service_step2 = ImageLoader(parent=self, geo=[896, 449, 443, 100],
                                          image_url='./images_test3/server_addressing_step2.png',
                                          img_scale_w=443,

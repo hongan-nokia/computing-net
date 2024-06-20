@@ -397,12 +397,13 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         elif k == QtCore.Qt.Key_W:
             self.scene3.scene32.reset()
             # self.scene3.scene32.service_step1.label.setVisible(True)
-            self.scene3.scene32.step1_label1.setVisible(True)
+            # self.scene3.scene32.step1_label1.setVisible(True)
             self.scene3.scene32.step1_label2.setVisible(True)
             self.scene3.scene32.service_step1.start("sp1")
         elif k == QtCore.Qt.Key_E:
             self.scene3.scene33.reset()
             # self.scene3.scene33.service_step1.label.setVisible(True)
+            self.scene3.scene33.step1_label2.setVisible(True)
             self.scene3.scene33.service_step1.start("sp1")
         elif k == QtCore.Qt.Key_N:
             self.cfn_manager.send_command("c_node1", "task", "surveillance up")
