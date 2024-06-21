@@ -81,20 +81,31 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
         start_pos = str(args).split('_', -1)[1]
         # if int(start_pos) == 0:
         if start_pos == '0':
-            client_host = node_obj.demo_conf.get_node("client")['node_ip']
-            client_port = 12354
-            client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            # client_host = node_obj.demo_conf.get_node("client")['node_ip']
+            # client_port = 12354
+            # client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            # message = "RESPONSE FROM C-NODE1"
+            # try:
+            #     client_socket.connect((client_host, client_port))
+            # except Exception as exp:
+            #     print(f"*&&&&&&&&&&&&&&& {exp}")
+            # try:
+            #     client_socket.sendall(message.encode())
+            # except Exception as exp:
+            #     print(f"*-------------- {exp}")
+            # print("FirstPkg Message Sent")
+            # client_socket.close()
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             message = "RESPONSE FROM C-NODE1"
+            ip = "192.168.2.113"
+            port = 12313
             try:
-                client_socket.connect((client_host, client_port))
-            except Exception as exp:
-                print(f"*&&&&&&&&&&&&&&& {exp}")
-            try:
-                client_socket.sendall(message.encode())
-            except Exception as exp:
-                print(f"*-------------- {exp}")
-            print("FirstPkg Message Sent")
-            client_socket.close()
+                # 发送数据
+                print(f"Sending message: {message}")
+                sock.sendto(message.encode(), (ip, port))
+            finally:
+                # 关闭套接字
+                sock.close()
         addr, port = node_obj.demo_conf.get_node("client")['node_ip'], "1234"
         p = Process(target=vlc_streaming, args=(taskname, args, addr, port, file_path, start_pos, task_cmd_q, task_cancel, node_obj.terminate_event))
         node_obj.tasks[f'{taskname}'] = -1

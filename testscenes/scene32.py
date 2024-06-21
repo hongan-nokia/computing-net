@@ -24,7 +24,7 @@ from utils.configparser import DemoConfigParser
 from utils.repeatimer import repeatTimer
 
 from utils.HeatMap import HeatMap
-from utils.imageLoader import ImageLoader, ImageLoader1
+from utils.imageLoader import ImageLoader
 
 
 class Scene32(QWidget):
@@ -95,7 +95,7 @@ class Scene32(QWidget):
         self.cloud1_hm_l3 = QtWidgets.QLabel(parent=self)
         self.cloud1_hm_l1.setText("0%")
         self.cloud1_hm_l2.setText("100%")
-        self.cloud1_hm_l3.setText("cpu")
+        self.cloud1_hm_l3.setText("CPU")
         self.cloud1_hm_l1.setGeometry(772, 427, 20, 10)
         self.cloud1_hm_l2.setGeometry(763, 359, 30, 10)
         self.cloud1_hm_l3.setGeometry(792, 436, 20, 20)
@@ -104,7 +104,7 @@ class Scene32(QWidget):
         self.cloud2_hm_l3 = QtWidgets.QLabel(parent=self)
         self.cloud2_hm_l1.setText("0%")
         self.cloud2_hm_l2.setText("100%")
-        self.cloud2_hm_l3.setText("cpu")
+        self.cloud2_hm_l3.setText("CPU")
         self.cloud2_hm_l1.setGeometry(1037, 582, 20, 10)
         self.cloud2_hm_l2.setGeometry(1027, 514, 30, 10)
         self.cloud2_hm_l3.setGeometry(1055, 592, 20, 20)
@@ -113,7 +113,7 @@ class Scene32(QWidget):
         self.cloud3_hm_l3 = QtWidgets.QLabel(parent=self)
         self.cloud3_hm_l1.setText("0%")
         self.cloud3_hm_l2.setText("100%")
-        self.cloud3_hm_l3.setText("cpu")
+        self.cloud3_hm_l3.setText("CPU")
         self.cloud3_hm_l1.setGeometry(965, 912, 20, 10)
         self.cloud3_hm_l2.setGeometry(955, 852, 30, 10)
         self.cloud3_hm_l3.setGeometry(985, 928, 20, 20)
@@ -142,7 +142,8 @@ class Scene32(QWidget):
         # self.view.scene().addWidget(self.step1_label1)
         # self.step1_label1.setVisible(False)
 
-        font2 = QtGui.QFont("Nokia Pure Text", 14)
+        # font2 = QtGui.QFont("Nokia Pure Text", 14)
+        font2 = QtGui.QFont("微软雅黑", 16)
         self.step1_label2 = QtWidgets.QLabel(parent=self)
         self.step1_label2.setText("寻址请求")
         self.step1_label2.setWordWrap(True)
@@ -169,12 +170,13 @@ class Scene32(QWidget):
 
     def _initImageLoad(self):
         # -------------------------------------- Scenario_0 --------------------------------------
-        self.service_step1 = ImageLoader1(parent=self, geo=[325, 450, 1040, 130],
+        self.service_step1 = ImageLoader(parent=self, geo=[325, 450, 1040, 130],
                                          image_url='./images_test3/computing_power_addressing_step1.png',
                                          img_scale_w=1040,
                                          img_scale_h=130,
                                          direction="l2r",
-                                         interval=3, title='1.算力寻址请求', tag_geo=[170, 10, 150, 20])
+                                         interval=3, title='1.算力寻址请求', tag_geo=[170, 10, 200, 20])
+        self.service_step1.tag_label.setStyleSheet("color: red;")
         self.service_step2 = ImageLoader(parent=self, geo=[1360, 375, 443, 150],
                                          image_url='./images_test3/computing_power_addressing_step2.png',
                                          img_scale_w=200,
@@ -235,9 +237,9 @@ class Scene32(QWidget):
                                           img_scale_h=400,
                                           direction="l2r",
                                           interval=3, title='5.业务数据流', tag_geo=[20, 35, 200, 30])
-        self.service_step51.tag_label.setStyleSheet("color: rgb(224,61,205);")
-        self.service_step52.tag_label.setStyleSheet("color: rgb(224,61,205);")
-        self.service_step53.tag_label.setStyleSheet("color: rgb(224,61,205);")
+        # self.service_step51.tag_label.setStyleSheet("color: rgb(224,61,205);")
+        # self.service_step52.tag_label.setStyleSheet("color: rgb(224,61,205);")
+        # self.service_step53.tag_label.setStyleSheet("color: rgb(224,61,205);")
 
     def initConnections(self):
         self.service_step1.QtSignals.anim_over.connect(self.service_provision_anim)

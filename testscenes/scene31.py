@@ -24,7 +24,7 @@ from utils.configparser import DemoConfigParser
 from utils.repeatimer import repeatTimer
 
 from utils.HeatMap import HeatMap
-from utils.imageLoader import ImageLoader, ImageLoader1
+from utils.imageLoader import ImageLoader
 
 
 class Scene31(QWidget):
@@ -93,7 +93,7 @@ class Scene31(QWidget):
         self.cloud1_hm_l3 = QtWidgets.QLabel(parent=self)
         self.cloud1_hm_l1.setText("0%")
         self.cloud1_hm_l2.setText("100%")
-        self.cloud1_hm_l3.setText("cpu")
+        self.cloud1_hm_l3.setText("CPU")
         self.cloud1_hm_l1.setGeometry(772, 467, 20, 10)
         self.cloud1_hm_l2.setGeometry(763, 399, 30, 10)
         self.cloud1_hm_l3.setGeometry(792, 476, 20, 20)
@@ -102,7 +102,7 @@ class Scene31(QWidget):
         self.cloud2_hm_l3 = QtWidgets.QLabel(parent=self)
         self.cloud2_hm_l1.setText("0%")
         self.cloud2_hm_l2.setText("100%")
-        self.cloud2_hm_l3.setText("cpu")
+        self.cloud2_hm_l3.setText("CPU")
         self.cloud2_hm_l1.setGeometry(1037, 582, 20, 10)
         self.cloud2_hm_l2.setGeometry(1027, 514, 30, 10)
         self.cloud2_hm_l3.setGeometry(1055, 592, 20, 20)
@@ -111,7 +111,7 @@ class Scene31(QWidget):
         self.cloud3_hm_l3 = QtWidgets.QLabel(parent=self)
         self.cloud3_hm_l1.setText("0%")
         self.cloud3_hm_l2.setText("100%")
-        self.cloud3_hm_l3.setText("cpu")
+        self.cloud3_hm_l3.setText("CPU")
         self.cloud3_hm_l1.setGeometry(965, 912, 20, 10)
         self.cloud3_hm_l2.setGeometry(955, 852, 30, 10)
         self.cloud3_hm_l3.setGeometry(985, 928, 20, 20)
@@ -149,12 +149,13 @@ class Scene31(QWidget):
 
     def _initImageLoad(self):
         # -------------------------------------- Scenario_0 --------------------------------------
-        self.service_step1 = ImageLoader1(parent=self, geo=[320, 450, 530, 100],
+        self.service_step1 = ImageLoader(parent=self, geo=[320, 450, 530, 100],
                                          image_url='./images_test3/server_addressing_step1.png',
                                          img_scale_w=530,
                                          img_scale_h=75,
                                          direction="l2r",
-                                         interval=3, title='1.服务寻址请求', tag_geo=[180, 32, 150, 20])
+                                         interval=3, title='1.服务寻址请求', tag_geo=[180, 32, 200, 20])
+        self.service_step1.tag_label.setStyleSheet("color: red;")
         self.service_step2 = ImageLoader(parent=self, geo=[896, 449, 443, 100],
                                          image_url='./images_test3/server_addressing_step2.png',
                                          img_scale_w=443,
@@ -191,21 +192,21 @@ class Scene31(QWidget):
                                           img_scale_h=120,
                                           direction="r2l",
                                           interval=3, title='5.视频传输数据', tag_geo=[20, 80, 200, 30])
-        self.service_step51.tag_label.setStyleSheet("color: rgb(224,61,205);")
+        # self.service_step51.tag_label.setStyleSheet("color: rgb(224,61,205);")
         self.service_step52 = ImageLoader(parent=self, geo=[340, 525, 800, 275],
                                           image_url='./images_test3/server_addressing_step52.png',
                                           img_scale_w=800,
                                           img_scale_h=275,
                                           direction="r2l",
                                           interval=3, title='5.视频传输数据', tag_geo=[20, 10, 200, 30])
-        self.service_step52.tag_label.setStyleSheet("color: rgb(224,61,205);")
+        # self.service_step52.tag_label.setStyleSheet("color: rgb(224,61,205);")
         self.service_step53 = ImageLoader(parent=self, geo=[340, 525, 750, 350],
                                           image_url='./images_test3/server_addressing_step53.png',
                                           img_scale_w=750,
                                           img_scale_h=350,
                                           direction="r2l",
                                           interval=3, title='5.视频传输数据', tag_geo=[20, 10, 200, 30])
-        self.service_step53.tag_label.setStyleSheet("color: rgb(224,61,205);")
+        # self.service_step53.tag_label.setStyleSheet("color: rgb(224,61,205);")
 
     def initConnections(self):
         self.cfn_manager.signal_emitter.QtSignals.serviceAddr_test.connect(self.serviceAddressWorkFlow)

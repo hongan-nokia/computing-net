@@ -238,9 +238,6 @@ class ClientCanvas(QWidget):
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setVisible(True)
 
-        server_thread = threading.Thread(target=self._initFirstPkgMonitorSocket)
-        server_thread.start()
-
     def _initTitle(self):
         self.title_box = QtWidgets.QGroupBox(self.groupBox)
         self.titleLayout = QtWidgets.QVBoxLayout(self.title_box)
@@ -439,9 +436,6 @@ class ClientCanvas(QWidget):
 
         self.horizontalLayout.addWidget(self.task2_box)
 
-
-
-
     def _initTaskFour(self):
         self.task4_box = QtWidgets.QGroupBox(self.view_box)
         self.task4_box.setStyleSheet("background: #ccc; border-radius: 50px;")
@@ -533,18 +527,39 @@ class ClientCanvas(QWidget):
         self.mainLayout.addLayout(self.nokia_logo_layout)
 
     def _initFirstPkgMonitorSocket(self):
-        server_host = self.client_mgn.demo_conf.get_node('client')['node_ip']
-        server_port = 12354
-        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server_socket.bind((server_host, server_port))
-        self.server_socket.listen(5)
-        while True:
-            self.conn, _ = self.server_socket.accept()
-            client_thread = threading.Thread(target=self.listenFirstPkg, args=(self.conn,))
-            client_thread.start()
+        # self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # self.server_socket.bind((server_host, server_port))
+        # self.server_socket.listen(5)
+        # while True:
+        #     self.conn, _ = self.server_socket.accept()
+        #     client_thread = threading.Thread(target=self.listenFirstPkg, args=(self.conn,))
+        #     client_thread.start()
+        # 创建一个UDP套接字
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        port = 12313
+        # 绑定到指定的端口
+        server_address = ('', port)
+        sock.bind(server_address)
+
+        print(f"Listening on port {port}...")
+
+        # 接收数据
+        data, address = sock.recvfrom(4096)
+        data = data.decode()
+        print(f"Received message: {data} from {address}")
+        if "RESPONSE" in data:
+            print(f"listenFirstPkg >>>>> {data}")
+            self.timeSpine2 = time.time()
+            print(f"timeSpine1: {self.timeSpine1}")
+            print(f"timeSpine2: {self.timeSpine2}")
+            latency = round((self.timeSpine2 - self.timeSpine1) * 1000, 1)
+            self.task1_text2.setText(str(latency))
+
 
     def _firstPkgRespLatency(self):
         print("This _firstPkgRespLatency func")
+        server_thread = threading.Thread(target=self._initFirstPkgMonitorSocket)
+        server_thread.start()
         self.client_mgn.conn_GUI.send(('cpn_test', 'firstPkgLat'))
         self.timeSpine1 = time.time()
 

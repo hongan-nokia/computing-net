@@ -20,7 +20,7 @@ from guiwidgets.fadingpic import BlinkingPic
 from nodemodels.cfndemomanager import CfnDemoManager
 from utils.HeatMap import HeatMap
 from utils.configparser import DemoConfigParser
-from utils.imageLoader import ImageLoader, ImageLoader1
+from utils.imageLoader import ImageLoader
 from utils.repeatimer import repeatTimer
 from utils.reversequeue import reverseQueue
 
@@ -121,7 +121,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.cloud1_hm_l3 = QtWidgets.QLabel(parent=self)
         self.cloud1_hm_l1.setText("0%")
         self.cloud1_hm_l2.setText("100%")
-        self.cloud1_hm_l3.setText("cpu")
+        self.cloud1_hm_l3.setText("CPU")
         self.cloud1_hm_l1.setGeometry(772, 467, 20, 10)
         self.cloud1_hm_l2.setGeometry(763, 399, 30, 10)
         self.cloud1_hm_l3.setGeometry(792, 476, 20, 20)
@@ -130,7 +130,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.cloud2_hm_l3 = QtWidgets.QLabel(parent=self)
         self.cloud2_hm_l1.setText("0%")
         self.cloud2_hm_l2.setText("100%")
-        self.cloud2_hm_l3.setText("cpu")
+        self.cloud2_hm_l3.setText("CPU")
         self.cloud2_hm_l1.setGeometry(1037, 582, 20, 10)
         self.cloud2_hm_l2.setGeometry(1027, 514, 30, 10)
         self.cloud2_hm_l3.setGeometry(1055, 592, 20, 20)
@@ -139,7 +139,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.cloud3_hm_l3 = QtWidgets.QLabel(parent=self)
         self.cloud3_hm_l1.setText("0%")
         self.cloud3_hm_l2.setText("100%")
-        self.cloud3_hm_l3.setText("cpu")
+        self.cloud3_hm_l3.setText("CPU")
         self.cloud3_hm_l1.setGeometry(965, 912, 20, 10)
         self.cloud3_hm_l2.setGeometry(955, 852, 30, 10)
         self.cloud3_hm_l3.setGeometry(985, 928, 20, 20)
@@ -156,12 +156,13 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         return scene
 
     def _initImageLoad(self):
-        self.user_first_pkg = ImageLoader1(parent=self, geo=[320, 450, 530, 100],
+        self.user_first_pkg = ImageLoader(parent=self, geo=[320, 450, 530, 100],
                                           image_url='./images_test3/server_addressing_step1.png',
                                           img_scale_w=530,
                                           img_scale_h=75,
                                           direction="l2r",
                                           interval=3, title='1.业务寻址', tag_geo=[200, 32, 150, 20])
+        self.user_first_pkg.tag_label.setStyleSheet("color: red;")
         self.addr_request = ImageLoader(parent=self, geo=[896, 449, 443, 100],
                                         image_url='./images_test3/server_addressing_step2.png',
                                         img_scale_w=443,
