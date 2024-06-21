@@ -30,6 +30,9 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         super().__init__()
         # ComputingPowerAwareAddressRouteWindow
         self.path = 1
+        self.switchVideo = 0
+        self.autoSwitch = 0
+        # self.value1 = 0
         geo = {
             'top': 0,
             'left': 0,
@@ -59,7 +62,8 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
 
     def _initHeapMap(self):
         self.cloud1_hm = HeatMap(parent=self, geo=[793, 405, 40, 80], interval=1000, data_q=self.monitor_q_cpu_hm_node1)
-        self.cloud2_hm = HeatMap(parent=self, geo=[1058, 520, 40, 80], interval=1000, data_q=self.monitor_q_cpu_hm_node2)
+        self.cloud2_hm = HeatMap(parent=self, geo=[1058, 520, 40, 80], interval=1000,
+                                 data_q=self.monitor_q_cpu_hm_node2)
         self.cloud3_hm = HeatMap(parent=self, geo=[986, 857, 40, 80], interval=1000, data_q=self.monitor_q_cpu_hm_node3)
         self.cloud1_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.cloud2_hm.setWindowFlags(Qt.WindowStaysOnTopHint)
@@ -231,25 +235,39 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
     def _initWarningBtn(self):
         warning_icon_img = QtGui.QPixmap("./images_test3/warning.svg").scaled(QSize(80, 80))
         self.warning_icon = BlinkingPic(parent=self, pixmap=warning_icon_img, auto_dim=True, dim_opacity=0.1,
-                                         blink_period=1200).pixmap_item
+                                        blink_period=1200).pixmap_item
         self.warning_icon.setPos(950, 350)
         self.warning_icon.start_blink()
         self.warning_icon.setVisible(False)
         self.view.scene().addItem(self.warning_icon)
 
-
         self.warning_btn = QPushButton()
-        self.warning_btn.setGeometry(950,350, 80, 80)
+        self.warning_btn.setGeometry(950, 350, 80, 80)
         self.warning_btn.setStyleSheet("background-color: rgba(240, 240, 240, 0);")
         self.warning_btn.clicked.connect(self.warning_event)
         self.warning_btn.raise_()
         self.warning_btn.setVisible(False)
         self.view.scene().addWidget(self.warning_btn)
 
+        auto_switch_btn_stylesheet = """
+                QPushButton {background-color: #031133;border-radius: 20px;border: 5px solid #2980b9;border-style:outset;
+                color: #fff;padding: 10px 20px; font-size: 20px;}
+                QPushButton:hover {color:red;border: 5px inset #2980b9;}"""
+
+        self.auto_switch_btn = QPushButton("自动切换")
+        self.auto_switch_btn.setGeometry(1500, 180, 175, 60)
+        self.auto_switch_btn.setStyleSheet(auto_switch_btn_stylesheet)
+        self.auto_switch_btn.clicked.connect(self.changeAutoSwitch)
+        self.view.scene().addWidget(self.auto_switch_btn)
+
     def warning_event(self):
         # self.warning_icon.setVisible(False)
         self.deployAITrainerOnCNode1()
         pass
+
+    def changeAutoSwitch(self):
+        self.autoSwitch = 1
+        # self.value1 = 70
 
     def listenNode1CPUUse(self):
         self.timer = QTimer(self)
@@ -258,9 +276,17 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
 
     def read_queue(self):
         value = self.cloud1_hm.index
+        # value = 70
+        # if self.value1 >= 65:
         if value >= 65:
             self.warning_icon.setVisible(True)
             self.warning_btn.setVisible(True)
+            # print(f'switchVideo:{self.switchVideo}')
+            # print(f'autoSwitch:{self.autoSwitch}')
+            if self.switchVideo == 0 and self.autoSwitch == 1:
+                # print("#######################switch")
+                self.switchVideo = 1
+                self.warning_event()
         else:
             self.warning_icon.setVisible(False)
             self.warning_btn.setVisible(False)
@@ -322,6 +348,8 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
             self.net_route_ctrl.start("sc1_sp4")
         elif destination == "sc1_sp4":
             # self.video_stream.label.setVisible(True)
+            # print("##################################value1=70")
+            # self.value1 = 70
             self.video_stream.start("")
         elif destination == "sc1_sp6":
             print("sc1_sp7 sc1_sp7 sc1_sp7")
@@ -487,5 +515,8 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.finalServiceProvideByNode2.label.setVisible(False)
         self.finalServiceProvideByNode3.label.setVisible(False)
 
-        self.stop_timer()
+        self.switchVideo = 0
+        self.autoSwitch = 0
+        # self.value1 = 0
 
+        self.stop_timer()
