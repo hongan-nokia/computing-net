@@ -109,25 +109,71 @@ class CpnAppWindow(QtWidgets.QMainWindow):
 
     def updateHeatMapIndex(self, data):
         # print("signal")
-        self.CPAARWidget.cloud1_hm.index = data[0]
-        self.CPAARWidget.cloud2_hm.index = data[1]
-        self.CPAARWidget.cloud3_hm.index = data[2]
+        self.CPAARWidget.cloud1_hm.avg_cpu.append(data[0])
+        self.CPAARWidget.cloud2_hm.avg_cpu.append(data[1])
+        self.CPAARWidget.cloud3_hm.avg_cpu.append(data[2])
+        self.CPAARWidget.cloud1_hm.index = sum(self.CPAARWidget.cloud1_hm.avg_cpu) / len(
+            self.CPAARWidget.cloud1_hm.avg_cpu)
+        self.CPAARWidget.cloud2_hm.index = sum(self.CPAARWidget.cloud2_hm.avg_cpu) / len(
+            self.CPAARWidget.cloud2_hm.avg_cpu)
+        self.CPAARWidget.cloud3_hm.index = sum(self.CPAARWidget.cloud3_hm.avg_cpu) / len(
+            self.CPAARWidget.cloud3_hm.avg_cpu)
 
-        self.SSRUWidget.s2cloud1_hm.index = data[0]
-        self.SSRUWidget.s2cloud2_hm.index = data[1]
-        self.SSRUWidget.s2cloud3_hm.index = data[2]
+        self.SSRUWidget.s2cloud1_hm.avg_cpu.append(data[0])
+        self.SSRUWidget.s2cloud2_hm.avg_cpu.append(data[1])
+        self.SSRUWidget.s2cloud3_hm.avg_cpu.append(data[2])
+        self.SSRUWidget.s2cloud1_hm.index = sum(self.SSRUWidget.s2cloud1_hm.avg_cpu) / len(
+            self.SSRUWidget.s2cloud1_hm.avg_cpu)
+        self.SSRUWidget.s2cloud2_hm.index = sum(self.SSRUWidget.s2cloud2_hm.avg_cpu) / len(
+            self.SSRUWidget.s2cloud2_hm.avg_cpu)
+        self.SSRUWidget.s2cloud3_hm.index = sum(self.SSRUWidget.s2cloud3_hm.avg_cpu) / len(
+            self.SSRUWidget.s2cloud3_hm.avg_cpu)
 
-        self.scene3.scene31.cloud1_hm.index = data[0]
-        self.scene3.scene31.cloud2_hm.index = data[1]
-        self.scene3.scene31.cloud3_hm.index = data[2]
+        self.scene3.scene31.cloud1_hm.avg_cpu.append(data[0])
+        self.scene3.scene31.cloud2_hm.avg_cpu.append(data[1])
+        self.scene3.scene31.cloud3_hm.avg_cpu.append(data[2])
+        self.scene3.scene31.cloud1_hm.index = sum(self.scene3.scene31.cloud1_hm.avg_cpu) / len(
+            self.scene3.scene31.cloud1_hm.avg_cpu)
+        self.scene3.scene31.cloud2_hm.index = sum(self.scene3.scene31.cloud2_hm.avg_cpu) / len(
+            self.scene3.scene31.cloud2_hm.avg_cpu)
+        self.scene3.scene31.cloud3_hm.index = sum(self.scene3.scene31.cloud3_hm.avg_cpu) / len(
+            self.scene3.scene31.cloud3_hm.avg_cpu)
 
-        self.scene3.scene32.cloud1_hm.index = data[0]
-        self.scene3.scene32.cloud2_hm.index = data[1]
-        self.scene3.scene32.cloud3_hm.index = data[2]
+        self.scene3.scene32.cloud1_hm.avg_cpu.append(data[0])
+        self.scene3.scene32.cloud2_hm.avg_cpu.append(data[1])
+        self.scene3.scene32.cloud3_hm.avg_cpu.append(data[2])
+        self.scene3.scene32.cloud1_hm.index = sum(self.scene3.scene32.cloud1_hm.avg_cpu) / len(
+            self.scene3.scene32.cloud1_hm.avg_cpu)
+        self.scene3.scene32.cloud2_hm.index = sum(self.scene3.scene32.cloud2_hm.avg_cpu) / len(
+            self.scene3.scene32.cloud2_hm.avg_cpu)
+        self.scene3.scene32.cloud3_hm.index = sum(self.scene3.scene32.cloud3_hm.avg_cpu) / len(
+            self.scene3.scene32.cloud3_hm.avg_cpu)
 
-        self.scene3.scene33.cloud1_hm.index = data[0]
-        self.scene3.scene33.cloud2_hm.index = data[1]
-        self.scene3.scene33.cloud3_hm.index = data[2]
+        self.scene3.scene33.cloud1_hm.avg_cpu.append(data[0])
+        self.scene3.scene33.cloud2_hm.avg_cpu.append(data[1])
+        self.scene3.scene33.cloud3_hm.avg_cpu.append(data[2])
+        self.scene3.scene33.cloud1_hm.index = sum(self.scene3.scene33.cloud1_hm.avg_cpu) / len(
+            self.scene3.scene33.cloud1_hm.avg_cpu)
+        self.scene3.scene33.cloud2_hm.index = sum(self.scene3.scene33.cloud2_hm.avg_cpu) / len(
+            self.scene3.scene33.cloud2_hm.avg_cpu)
+        self.scene3.scene33.cloud3_hm.index = sum(self.scene3.scene33.cloud3_hm.avg_cpu) / len(
+            self.scene3.scene33.cloud3_hm.avg_cpu)
+
+        # self.SSRUWidget.s2cloud1_hm.index = data[0]
+        # self.SSRUWidget.s2cloud2_hm.index = data[1]
+        # self.SSRUWidget.s2cloud3_hm.index = data[2]
+        #
+        # self.scene3.scene31.cloud1_hm.index = data[0]
+        # self.scene3.scene31.cloud2_hm.index = data[1]
+        # self.scene3.scene31.cloud3_hm.index = data[2]
+        #
+        # self.scene3.scene32.cloud1_hm.index = data[0]
+        # self.scene3.scene32.cloud2_hm.index = data[1]
+        # self.scene3.scene32.cloud3_hm.index = data[2]
+        #
+        # self.scene3.scene33.cloud1_hm.index = data[0]
+        # self.scene3.scene33.cloud2_hm.index = data[1]
+        # self.scene3.scene33.cloud3_hm.index = data[2]
 
     def _initView(self):
         self.setWindowTitle(" ")

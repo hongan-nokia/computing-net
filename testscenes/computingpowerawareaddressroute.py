@@ -267,6 +267,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
 
     def changeAutoSwitch(self):
         self.autoSwitch = 1
+        self.auto_switch_btn.setText("自动模式")
         # self.value1 = 70
 
     def listenNode1CPUUse(self):
@@ -278,7 +279,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         value = self.cloud1_hm.index
         # value = 70
         # if self.value1 >= 65:
-        if value >= 65:
+        if value >= 70:
             self.warning_icon.setVisible(True)
             self.warning_btn.setVisible(True)
             # print(f'switchVideo:{self.switchVideo}')
@@ -387,8 +388,8 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
     @pyqtSlot(int, str)
     def firstPkgLatWorkFlow(self, node_id, command_args):
         print("Here is firstPkgLatWorkFlow")
-        self.reset()
-        self.start_timer()
+        # self.reset()
+        # self.start_timer()
         self.user_first_pkg.start("sc1_sp1")
         self._sendFirstPkg2UE()
         # self.cfn_manager.send_command("c_node1", "task", "send_pkg2ue")
@@ -518,5 +519,6 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.switchVideo = 0
         self.autoSwitch = 0
         # self.value1 = 0
+        self.auto_switch_btn.setText("自动切换")
 
         self.stop_timer()

@@ -1,9 +1,11 @@
+import queue
 from time import sleep
 
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QWidget, QLabel
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import QTimer
+from collections import deque
 
 from utils.reversequeue import reverseQueue
 
@@ -46,6 +48,8 @@ class HeatMap(QWidget, QtCore.QObject):
         self.timer.timeout.connect(self._load_tagLabel)
 
         self.index = 0
+        self.avg_cpu = deque([0] * 5, maxlen=5)
+
 
     def _load_tagLabel(self):
         # index = 10

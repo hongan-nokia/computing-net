@@ -35,7 +35,7 @@
       "node_name": "client",
       "description": "Test Client",
       "node_ip": "192.168.2.113",
-      "node_port": 1235,
+      "node_port": 1234,
       "conn_type": "tcp_client"
     },
     {
