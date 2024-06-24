@@ -276,7 +276,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.timer.start(1000)  # 3000 milliseconds = 3 seconds
 
     def read_queue(self):
-        value = self.cloud1_hm.index
+        value = self.cloud1_hm.avg_cpu
         # value = 70
         # if self.value1 >= 65:
         if value >= 70:

@@ -48,7 +48,8 @@ class HeatMap(QWidget, QtCore.QObject):
         self.timer.timeout.connect(self._load_tagLabel)
 
         self.index = 0
-        self.avg_cpu = deque([0] * 5, maxlen=5)
+        self.avg_cpu = 0
+        self.queue_cpu = deque([0] * 5, maxlen=5)
 
 
     def _load_tagLabel(self):
