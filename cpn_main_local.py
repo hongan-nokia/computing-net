@@ -159,9 +159,9 @@ class CpnAppWindow(QtWidgets.QMainWindow):
         self.scene3.scene33.cloud3_hm.avg_cpu = sum(self.scene3.scene33.cloud3_hm.queue_cpu) / len(
             self.scene3.scene33.cloud3_hm.queue_cpu)
 
-        self.CPAARWidget.s2cloud1_hm.index = data[0]
-        self.CPAARWidget.s2cloud2_hm.index = data[1]
-        self.CPAARWidget.s2cloud3_hm.index = data[2]
+        self.CPAARWidget.cloud1_hm.index = data[0]
+        self.CPAARWidget.cloud2_hm.index = data[1]
+        self.CPAARWidget.cloud3_hm.index = data[2]
 
         self.SSRUWidget.s2cloud1_hm.index = data[0]
         self.SSRUWidget.s2cloud2_hm.index = data[1]
