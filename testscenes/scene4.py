@@ -268,7 +268,7 @@ class Scene4(QWidget):
         # main_layout = QVBoxLayout()
         # main_layout.addWidget(self.plot_widget)
 
-        self.plot_widget.setGeometry(900, 200, 500, 375)
+        self.plot_widget.setGeometry(900, 170, 500, 415)
 
         self.view.scene().addWidget(self.plot_widget)
 
