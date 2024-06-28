@@ -154,7 +154,7 @@ class Scene31(QWidget):
                                          img_scale_w=530,
                                          img_scale_h=75,
                                          direction="l2r",
-                                         interval=3, title='1.服务寻址请求', tag_geo=[180, 32, 200, 20])
+                                         interval=3, title='1.服务寻址请求', tag_geo=[180, 32, 300, 20])
         self.service_step1.tag_label.setStyleSheet("color: red;")
         self.service_step2 = ImageLoader(parent=self, geo=[896, 449, 443, 100],
                                          image_url='./images_test3/server_addressing_step2.png',

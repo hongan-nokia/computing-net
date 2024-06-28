@@ -1762,7 +1762,7 @@ class data_visualize(QWidget):
         self.history3 = DataVisualizationWindow(self.history_cpu_3, self.history_delay_3, "Node3")
         self.history3.setVisible(False)
 
-        self.history4 = DataVisualizationWindow(self.history_cpu_4, self.history_delay_4, "Node4")
+        self.history4 = DataVisualizationWindow(self.history_cpu_4, self.history_delay_4, "Average")
         self.history4.setVisible(False)
 
     def _initSpeedMeter(self):

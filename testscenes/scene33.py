@@ -153,7 +153,7 @@ class Scene33(QWidget):
                                          img_scale_w=1040,
                                          img_scale_h=130,
                                          direction="l2r",
-                                         interval=3, title='1.内容寻址请求', tag_geo=[170, 10, 200, 20])
+                                         interval=3, title='1.内容寻址请求', tag_geo=[170, 10, 300, 20])
         self.service_step1.tag_label.setStyleSheet("color: red;")
         self.service_step2 = ImageLoader(parent=self, geo=[1360, 390, 443, 150],
                                          image_url='./images_test3/content_power_addressing_step2.png',
@@ -168,17 +168,17 @@ class Scene33(QWidget):
                                          direction="r2l",
                                          interval=3, title='3.网络路径控制', tag_geo=[420, 75, 400, 20])
         self.service_step41 = ImageLoader(parent=self, geo=[350, 550, 530, 310],
-                                         image_url='./images_test3/content_addressing_step41.png',
-                                         img_scale_w=530,
-                                         img_scale_h=260,
-                                         direction="l2r",
-                                         interval=3, title='', tag_geo=[280, 20, 200, 30])
+                                          image_url='./images_test3/content_addressing_step41.png',
+                                          img_scale_w=530,
+                                          img_scale_h=260,
+                                          direction="l2r",
+                                          interval=3, title='', tag_geo=[280, 20, 200, 30])
         self.service_step42 = ImageLoader(parent=self, geo=[350, 480, 730, 400],
-                                         image_url='./images_test3/content_addressing_step42.png',
-                                         img_scale_w=730,
-                                         img_scale_h=400,
-                                         direction="r2l",
-                                         interval=3, title='', tag_geo=[280, 20, 200, 30])
+                                          image_url='./images_test3/content_addressing_step42.png',
+                                          img_scale_w=730,
+                                          img_scale_h=400,
+                                          direction="r2l",
+                                          interval=3, title='', tag_geo=[280, 20, 200, 30])
         self.service_step43 = ImageLoader(parent=self, geo=[340, 525, 830, 350],
                                           image_url='./images_test3/content_addressing_step43.png',
                                           img_scale_w=830,

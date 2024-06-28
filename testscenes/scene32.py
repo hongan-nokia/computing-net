@@ -175,7 +175,7 @@ class Scene32(QWidget):
                                          img_scale_w=1040,
                                          img_scale_h=130,
                                          direction="l2r",
-                                         interval=3, title='1.算力寻址请求', tag_geo=[170, 10, 200, 20])
+                                         interval=3, title='1.算力寻址请求', tag_geo=[170, 10, 300, 20])
         self.service_step1.tag_label.setStyleSheet("color: red;")
         self.service_step2 = ImageLoader(parent=self, geo=[1360, 375, 443, 150],
                                          image_url='./images_test3/computing_power_addressing_step2.png',
