@@ -23,7 +23,8 @@ from utils.configparser import DemoConfigParser
 
 from multiprocessing import Pipe, Queue
 
-#TCP
+
+# TCP
 # class SocketThread(QThread):
 #     message_received = pyqtSignal(str)
 #
@@ -507,8 +508,10 @@ class ClientCanvas(QWidget):
         self.task4_btn3 = QtWidgets.QPushButton(self.task4_box)
         self.task4_btn3.setText("寻址请求终止器")
         self.task4_btn3.setFont(self.task_font_size)
-        self.task4_btn3.setStyleSheet(self.btn_style)
+        # self.task4_btn3.setStyleSheet(self.btn_style)
+        self.task4_btn3.setStyleSheet("border: 10px solid #222; color: #222; padding: 30px; border-radius: 30px;")
         self.task4_btn3.clicked.connect(self._stopServiceAddress)
+        self.task4_btn3.setEnabled(False)
 
         self.task4_btn3_layout.addWidget(self.task4_btn3)
         self.task4_layout.addWidget(self.task4_btn3_box)
@@ -555,7 +558,6 @@ class ClientCanvas(QWidget):
             latency = round((self.timeSpine2 - self.timeSpine1) * 1000, 1)
             self.task1_text2.setText(str(latency))
 
-
     def _firstPkgRespLatency(self):
         print("This _firstPkgRespLatency func")
         server_thread = threading.Thread(target=self._initFirstPkgMonitorSocket)
@@ -594,6 +596,11 @@ class ClientCanvas(QWidget):
         nodes = [{"ip": "127.0.0.1", "port": 12345}]
         self.flagToSendMessage = True
 
+        self.task4_btn2.setEnabled(False)
+        self.task4_btn3.setEnabled(True)
+        self.task4_btn2.setStyleSheet("border: 10px solid #222; color: #222; padding: 30px; border-radius: 30px;")
+        self.task4_btn3.setStyleSheet(self.btn_style)
+
         probabilitie_value_QLineEdit = self.task4_inputbtn.text()
         try:
             probabilitie_value_QLineEdit = float(probabilitie_value_QLineEdit)  # 尝试将文本转换为浮点数
@@ -614,6 +621,10 @@ class ClientCanvas(QWidget):
 
     def _stopServiceAddress(self):
         print("stopServiceAddress")
+        self.task4_btn2.setEnabled(True)
+        self.task4_btn3.setEnabled(False)
+        self.task4_btn2.setStyleSheet(self.btn_style)
+        self.task4_btn3.setStyleSheet("border: 10px solid #222; color: #222; padding: 30px; border-radius: 30px;")
         for send_thread in self.threads:
             send_thread.stop()
 

@@ -138,17 +138,16 @@ class ServerThread(threading.Thread):
         self.total_packet_count = 0
         self.packet_count = 0
         self.running = True
-        print(f"Server started at {self.ip}:{self.port}")
-
         self.rate = 0
+        self.lock = threading.Lock()
 
-        # configuration = DemoConfigParser("cpn_config-test-only-cpu.json")
-        # inter_process_resource_NodeMan = [(i['node_name'], Pipe()) for i in configuration.nodes]
-        # resource_NodeMan = dict(inter_process_resource_NodeMan)
-        # self.nodes_name = list(resource_NodeMan.keys())
-        self.nodes_name = []
-        for i in range(10000):
-            self.nodes_name.append(f"node{i}")
+        self.index = 0
+
+        # 使用集合来存储节点名称
+        self.nodes_name_set = set(f"node{i}" for i in range(10000))
+
+        self.nodes_name_list = list(f"node{i}" for i in range(10000))
+        print(f"Server started at {self.ip}:{self.port}")
 
     def run(self):
         packet_counter_thread = threading.Thread(target=self.count_packets)
@@ -157,18 +156,22 @@ class ServerThread(threading.Thread):
         while self.running:
             data, addr = self.server_socket.recvfrom(1024)
             message = data.decode('utf-8')
-            check_node = message in self.nodes_name
-            # print(f"{message}:{check_node}")
-            self.packet_count += 1
-            self.total_packet_count += 1
+            if self.index == 0:
+                check_node = message in self.nodes_name_list
+            elif self.index == 1:
+                check_node = message in self.nodes_name_set  # 集合查询，时间复杂度为 O(1)
+
+            with self.lock:
+                self.packet_count += 1
+                self.total_packet_count += 1
 
     def count_packets(self):
         while self.running:
             time.sleep(1)
-            print(f"Packets received in the last second: {self.packet_count}")
-            self.rate = self.packet_count
-            self.packet_count = 0
-            # print(self.total_packet_count)
+            with self.lock:
+                print(f"Packets received in the last second: {self.packet_count}")
+                self.rate = self.packet_count
+                self.packet_count = 0
 
     def stop(self):
         self.running = False
@@ -324,10 +327,48 @@ class Scene4(QWidget):
         self.timer_count_lable.setInterval(1000)  # 更新间隔为1000毫秒，即1秒
         self.timer_count_lable.timeout.connect(self.updateLabel)
 
+        self.btnStyleSheet = """
+                QPushButton {background-color: #031133;border-radius: 20px;border: 5px solid #2980b9;border-style:outset;
+                color: #fff;padding: 10px 20px; font-size: 20px;}
+                QPushButton:hover {color:red;border: 5px inset #2980b9;}"""
+        self.btnSelectedStyleSheet = """
+                QPushButton {background-color: #031133;padding: 10px 20px;color: red;border: 5px inset #2980b9;border-radius: 20px;  font-size: 20px;}"""
+
+        self.listBtn = QtWidgets.QPushButton(parent=self)
+        self.listBtn.setText("List查询")
+        self.listBtn.setGeometry(450, 400, 150, 60)
+        self.listBtn.setStyleSheet(self.btnSelectedStyleSheet)
+        self.listBtn.setEnabled(False)
+        self.listBtn.clicked.connect(self.list_search)
+
+        self.hashBtn = QtWidgets.QPushButton(parent=self)
+        self.hashBtn.setText("Hash查询")
+        self.hashBtn.setGeometry(620, 400, 150, 60)
+        self.hashBtn.setStyleSheet(self.btnStyleSheet)
+        self.hashBtn.clicked.connect(self.hash_search)
+
+    def list_search(self):
+        self.listBtn.setStyleSheet(self.btnSelectedStyleSheet)
+        self.hashBtn.setStyleSheet(self.btnStyleSheet)
+        self.listBtn.setEnabled(False)
+        self.hashBtn.setEnabled(True)
+        self.server_thread.index = 0
+
+    def hash_search(self):
+        self.listBtn.setStyleSheet(self.btnStyleSheet)
+        self.hashBtn.setStyleSheet(self.btnSelectedStyleSheet)
+        self.listBtn.setEnabled(True)
+        self.hashBtn.setEnabled(False)
+        self.server_thread.index = 1
+
     def updateLabel(self):
         self.addrRequestCountLable.setText(str(self.server_thread.total_packet_count))
 
     def reset(self):
+        self.listBtn.setStyleSheet(self.btnSelectedStyleSheet)
+        self.hashBtn.setStyleSheet(self.btnStyleSheet)
+        self.listBtn.setEnabled(False)
+        self.hashBtn.setEnabled(True)
         self.timer.stop()
         self.timer_count_lable.stop()
         if self.server_thread != None:

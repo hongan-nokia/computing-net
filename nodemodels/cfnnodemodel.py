@@ -114,7 +114,7 @@ def start_node_task(taskname: str, args: str, node_obj: 'CfnNodeModel'):
     elif taskname == 'vlcc':  # vlc作为server将文件stream到指定的client
         file_path = './' + str(args).split('_', -1)[0]  # 所要播放的文件路径
         start_pos = str(args).split('_', -1)[1]
-        addr, port = node_obj.demo_conf.get_node("client")['node_ip'], "1235"
+        addr, port = node_obj.demo_conf.get_node("client")['node_ip'], "1234"
         p = Process(target=vlcc_streaming, args=(addr, port, file_path, start_pos, task_cmd_q, task_cancel, node_obj.terminate_event))
         node_obj.tasks[f'{taskname}'] = -1
         p.start()
