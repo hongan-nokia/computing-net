@@ -352,12 +352,15 @@ class Scene32(QWidget):
             if self.path == 1:
                 self.service_step41.start("sp4")
                 self.c_node1_heart_rate.setVisible(True)
+                self.c_node1_heart_rate.start_blink()
             elif self.path == 2:
                 self.service_step42.start("sp4")
                 self.c_node2_heart_rate.setVisible(True)
+                self.c_node2_heart_rate.start_blink()
             elif self.path == 3:
                 self.service_step43.start("sp4")
                 self.c_node3_heart_rate.setVisible(True)
+                self.c_node3_heart_rate.start_blink()
         elif destination == "sp4":
             if self.path == 1:
                 self.cfn_manager.send_command(f'c_node{self.path}', 'task', 'cam_health camera_1')
@@ -427,6 +430,9 @@ class Scene32(QWidget):
         self.c_node1_heart_rate.setVisible(False)
         self.c_node2_heart_rate.setVisible(False)
         self.c_node3_heart_rate.setVisible(False)
+        self.c_node1_heart_rate.stop_blink()
+        self.c_node2_heart_rate.stop_blink()
+        self.c_node3_heart_rate.stop_blink()
 
         # self.step1_label1.setVisible(False)
         self.step1_label2.setVisible(False)

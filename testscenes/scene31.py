@@ -310,4 +310,8 @@ class Scene31(QWidget):
         self.service_step52.label.setVisible(False)
         self.service_step53.label.setVisible(False)
 
+        self.c_node1_video.stop_blink()
+        self.c_node2_video.stop_blink()
+        self.c_node3_video.stop_blink()
+
         self.stop_timer()
