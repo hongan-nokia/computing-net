@@ -1882,7 +1882,7 @@ class data_visualize(QWidget):
 
     def setText(self):
         self.node1_label.setText("C-Node1")
-        self.node1_wl_label.setText("Workload")
+        self.node1_wl_label.setText("Utilization")
         self.node1_cpu_label.setText("CPU")
         self.node1_cpu_num.setText("0.0%")
         self.node1_mem_label.setText("MEM")
@@ -1901,7 +1901,7 @@ class data_visualize(QWidget):
         self.node1_disk_write_v.setText("2M")
 
         self.node2_label.setText("C-Node2")
-        self.node2_wl_label.setText("Workload")
+        self.node2_wl_label.setText("Utilization")
         self.node2_cpu_label.setText("CPU")
         self.node2_cpu_num.setText("0.0%")
         self.node2_mem_label.setText("MEM")
@@ -1920,7 +1920,7 @@ class data_visualize(QWidget):
         self.node2_disk_write_v.setText("2M")
 
         self.node3_label.setText("C-Node3")
-        self.node3_wl_label.setText("Workload")
+        self.node3_wl_label.setText("Utilization")
         self.node3_cpu_label.setText("CPU")
         self.node3_cpu_num.setText("0.0%")
         self.node3_mem_label.setText("MEM")
@@ -1939,7 +1939,7 @@ class data_visualize(QWidget):
         self.node3_disk_write_v.setText("2M")
 
         self.node4_label.setText("Average")
-        self.node4_wl_label.setText("Workload")
+        self.node4_wl_label.setText("Utilization")
         self.node4_cpu_label.setText("CPU")
         self.node4_cpu_num.setText("0.0%")
         self.node4_mem_label.setText("MEM")
