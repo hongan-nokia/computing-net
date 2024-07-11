@@ -242,13 +242,13 @@ class Scene33(QWidget):
             if self.path == 1:
                 self.service_step41.start("sp4")
             elif self.path == 2:
-                if self.video_name == "足球":
+                if self.video_name == "football":
                     video_totaltime = 6776
                     ratio = int(self.video_startTime) / video_totaltime
                     self.commomd = f"vlc fake1-WorldCup.mp4_{ratio}"
                     self.cfn_manager.send_command('c_node3', 'task', self.commomd)
                     self.service_step42.start("")
-                elif self.video_name == "游戏":
+                elif self.video_name == "game":
                     video_totaltime = 2096
                     ratio = int(self.video_startTime) / video_totaltime
                     self.commomd = f"vlc fake3-game.mp4_{ratio}"

@@ -404,7 +404,7 @@ class ClientCanvas(QWidget):
         self.task2_btn5_edit1.setFont(self.task_font_size1)
         self.task2_btn5_edit1.setStyleSheet("background: #fff;border-radius:12px;padding:5px;")
         self.task2_btn5_edit1.setMaximumWidth(80)
-        self.task2_btn5_edit1.setText("足球")
+        self.task2_btn5_edit1.setText("football")
         self.task2_label_layout.addWidget(self.task2_btn5_edit1)
 
         self.task2_btn5_label1 = QtWidgets.QLabel("第")
