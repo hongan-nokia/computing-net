@@ -161,12 +161,18 @@ class Scene33(QWidget):
                                          img_scale_h=1,
                                          direction="l2r",
                                          interval=3, title='2.寻址内容，最优路径计算', tag_geo=[35, 0, 303, 120])
-        self.service_step3 = ImageLoader(parent=self, geo=[720, 530, 650, 240],
-                                         image_url='./images_test3/content_addressing_step3.png',
+        self.service_step31 = ImageLoader(parent=self, geo=[720, 530, 650, 240],
+                                         image_url='./images_test3/content_addressing_step31.png',
                                          img_scale_w=650,
                                          img_scale_h=240,
                                          direction="r2l",
                                          interval=3, title='3.网络路径控制', tag_geo=[420, 75, 400, 20])
+        self.service_step32 = ImageLoader(parent=self, geo=[890, 530, 470, 240],
+                                          image_url='./images_test3/content_addressing_step32.png',
+                                          img_scale_w=480,
+                                          img_scale_h=240,
+                                          direction="r2l",
+                                          interval=3, title='3.网络路径控制', tag_geo=[250, 75, 400, 20])
         self.service_step41 = ImageLoader(parent=self, geo=[350, 550, 530, 310],
                                           image_url='./images_test3/content_addressing_step41.png',
                                           img_scale_w=530,
@@ -197,7 +203,8 @@ class Scene33(QWidget):
         self.cfn_manager.signal_emitter.QtSignals.contentAddr_test_video.connect(self.contentAddressVideoWorkFlow)
         self.service_step1.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step2.QtSignals.anim_over.connect(self.service_provision_anim)
-        self.service_step3.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.service_step31.QtSignals.anim_over.connect(self.service_provision_anim)
+        self.service_step32.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step41.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step42.QtSignals.anim_over.connect(self.service_provision_anim)
         self.service_step5.QtSignals.anim_over.connect(self.service_provision_anim)
@@ -238,7 +245,10 @@ class Scene33(QWidget):
             self.service_step2.start("sp2")
         elif destination == "sp2":
             # self.service_step3.label.setVisible(True)
-            self.service_step3.start("sp3")
+            if self.path == 1:
+                self.service_step31.start("sp3")
+            else:
+                self.service_step32.start("sp3")
         elif destination == "sp3":
             # self.service_step4.label.setVisible(True)
             if self.path == 1:
@@ -279,7 +289,8 @@ class Scene33(QWidget):
     def reset(self):
         self.service_step1.tag_label.setVisible(False)
         self.service_step2.tag_label.setVisible(False)
-        self.service_step3.tag_label.setVisible(False)
+        self.service_step31.tag_label.setVisible(False)
+        self.service_step32.tag_label.setVisible(False)
         self.service_step41.tag_label.setVisible(False)
         self.service_step42.tag_label.setVisible(False)
         self.service_step43.tag_label.setVisible(False)
@@ -287,7 +298,8 @@ class Scene33(QWidget):
 
         self.service_step1.label.setVisible(False)
         self.service_step2.label.setVisible(False)
-        self.service_step3.label.setVisible(False)
+        self.service_step31.label.setVisible(False)
+        self.service_step32.label.setVisible(False)
         self.service_step41.label.setVisible(False)
         self.service_step42.label.setVisible(False)
         self.service_step43.label.setVisible(False)

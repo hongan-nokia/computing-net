@@ -539,7 +539,7 @@ class SystemSyntheticResUtilize(QWidget):
         self.cfn_manager.send_command('c_node2', 'task', 'AI_trainer2 up')
 
         self.cfn_manager.send_command('c_node3', 'task', 'AI_trainer3 up')
-        self.cfn_manager.send_command('c_node3', 'task', 'vlcc fake2-WorldCup.mp4_0')
+        self.cfn_manager.send_command('c_node3', 'task', 'vlc fake4-game.mp4_0')
 
     def unsetAllTasks(self):
         self.cfn_manager.send_command('c_node1', 'stop_task', 'AI_trainer1 up')  # AI 训练
@@ -547,7 +547,7 @@ class SystemSyntheticResUtilize(QWidget):
         self.cfn_manager.send_command('c_node1', 'stop_task', 'vlcc fake1-WorldCup.mp4_0')  # 视频点播
         self.cfn_manager.send_command('c_node1', 'stop_task', 'vlcc fake1-WorldCup.mp4_0')
         self.cfn_manager.send_command('c_node1', 'stop_task', 'cam_health camera_1')
-        self.cfn_manager.send_command('c_node3', 'stop_task', 'vlcc fake2-WorldCup.mp4_0')
+        self.cfn_manager.send_command('c_node3', 'stop_task', 'vlc fake4-game.mp4_0')
         self.cfn_manager.send_command('c_node2', 'stop_task', 'AI_trainer1 up')
         sleep(0.8)
         self.cfn_manager.send_command('c_node2', 'stop_task', 'AI_trainer2 up')
