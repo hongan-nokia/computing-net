@@ -144,9 +144,9 @@ class ServerThread(threading.Thread):
         self.index = 0
 
         # 使用集合来存储节点名称
-        self.nodes_name_set = set(f"node{i}" for i in range(10000))
+        self.nodes_name_set = set(f"node{i}" for i in range(8000))
 
-        self.nodes_name_list = list(f"node{i}" for i in range(10000))
+        self.nodes_name_list = list(f"node{i}" for i in range(8000))
         print(f"Server started at {self.ip}:{self.port}")
 
     def run(self):
@@ -234,6 +234,7 @@ class Scene4(QWidget):
 
     def addrRequest(self):
         server_ip = "127.0.0.1"
+        # server_ip = "192.168.2.122"
         server_port = 12345
 
         if self.server_thread and self.server_thread.is_alive():

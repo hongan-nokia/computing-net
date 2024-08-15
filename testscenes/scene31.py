@@ -179,7 +179,7 @@ class Scene31(QWidget):
                                           img_scale_w=340,
                                           img_scale_h=180,
                                           direction="r2l",
-                                          interval=3, title='4.网络路径控制', tag_geo=[160, 120, 200, 30])
+                                          interval=3, title='4.网络路径控制', tag_geo=[160, 90, 200, 30])
         self.service_step43 = ImageLoader(parent=self, geo=[1050, 615, 340, 180],
                                           image_url='./images_test3/server_addressing_step43.png',
                                           img_scale_w=340,

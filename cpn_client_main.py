@@ -125,7 +125,7 @@ class SendPacketsThread(QThread):
         self.nodes_name = []
         self.random_node_id = 1
 
-        for i in range(10000):
+        for i in range(8000):
             self.nodes_name.append(f"node{i}")
 
     def run(self):
@@ -592,7 +592,8 @@ class ClientCanvas(QWidget):
         server_ip = self.client_mgn.demo_conf.gui_controller_host_ip  # 本地IP地址
         base_server_port = self.client_mgn.demo_conf.gui_controller_host_port  # 基础端口，后续端口依次递增
         thread_count = 1  # 直接在代码中设置线程数量
-        num_packets = 1000000  # 每个线程发送的包数量
+        num_packets = 10000000  # 每个线程发送的包数量
+        # nodes = [{"ip": "192.168.2.113", "port": 12345}]
         nodes = [{"ip": "127.0.0.1", "port": 12345}]
         self.flagToSendMessage = True
 

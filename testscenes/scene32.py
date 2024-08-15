@@ -212,7 +212,7 @@ class Scene32(QWidget):
                                           img_scale_w=350,
                                           img_scale_h=180,
                                           direction="r2l",
-                                          interval=3, title='4.网络路径控制', tag_geo=[160, 120, 200, 30])
+                                          interval=3, title='4.网络路径控制', tag_geo=[160, 90, 200, 30])
         self.service_step43 = ImageLoader(parent=self, geo=[1040, 615, 350, 180],
                                           image_url='./images_test3/computing_power_addressing_step43.png',
                                           img_scale_w=350,
@@ -338,7 +338,6 @@ class Scene32(QWidget):
             # print(f"------------------------------------------------------------------------------\n"
             #       f">>>> Computing Addressing self.queueFlag is: {self.queueFlag}, CPU utilization's are: {temps} "
             #       f"------------------------------------------------------------------------------\n")
-
             if self.path == 1:
                 self.service_step31.start("sp3")
                 self.service_step31.QtSignals.anim_over.connect(self.on_animation_over)
