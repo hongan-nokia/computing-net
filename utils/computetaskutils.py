@@ -462,6 +462,21 @@ def vlc_streaming(task_name: str, task_args: str, addr: str, port: int, file_pat
             media_player.play()
             media_player.set_position(float(start_pos))
             sleep(1)
+    elif 'fake4' in file_path:
+        # ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "10046" + "},dst=display}"
+        ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + "1235" + "},dst=display}"
+        params = [ad, "sout-all", "sout-keep", "repeat"]
+        inst = vlc.Instance()
+        media = inst.media_new('./game.mp4', *params)
+        media_player = media.player_new_from_media()
+        print("------vlc_s start_pos:" + str(start_pos))
+        media_player.play()
+        media_player.set_position(float(start_pos))  # 从所设定的位置开始播放
+        sleep(2)
+        while not media_player.is_playing():
+            media_player.play()
+            media_player.set_position(float(start_pos))
+            sleep(1)
     else:
         ad = "sout=#duplicate{dst=udp{mux=ts,dst=" + addr + ":" + str(port) + "},dst=display}"
         params = [ad, "sout-all", "sout-keep", "repeat"]

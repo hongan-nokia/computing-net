@@ -172,8 +172,10 @@ class Surveillance(QWidget):
         elif action == 'down':
             while True:
                 if self.vlc_streamer.video_streamer.is_playing() or self.vlc_player.media_player.is_playing():
-                    self.vlc_streamer.video_streamer.pause()
-                    self.vlc_player.media_player.pause()
+                    self.vlc_streamer.stopStream()
+                    self.vlc_player.stopPlayer()
+                    # self.vlc_streamer.video_streamer.pause()
+                    # self.vlc_player.media_player.pause()
                 else:
                     break
 

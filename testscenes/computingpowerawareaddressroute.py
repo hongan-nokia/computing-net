@@ -254,7 +254,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
                 color: #fff;padding: 10px 20px; font-size: 20px;}
                 QPushButton:hover {color:red;border: 5px inset #2980b9;}"""
 
-        self.auto_switch_btn = QPushButton("自动切换")
+        self.auto_switch_btn = QPushButton("手动切换")
         self.auto_switch_btn.setGeometry(1500, 180, 175, 60)
         self.auto_switch_btn.setStyleSheet(auto_switch_btn_stylesheet)
         self.auto_switch_btn.clicked.connect(self.changeAutoSwitch)
@@ -267,7 +267,7 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
 
     def changeAutoSwitch(self):
         self.autoSwitch = 1
-        self.auto_switch_btn.setText("自动模式")
+        self.auto_switch_btn.setText("自动切换")
         # self.value1 = 70
 
     def listenNode1CPUUse(self):
@@ -519,6 +519,6 @@ class ComputingPowerAwareAddressRouteWindow(QWidget):
         self.switchVideo = 0
         self.autoSwitch = 0
         # self.value1 = 0
-        self.auto_switch_btn.setText("自动切换")
+        self.auto_switch_btn.setText("手动切换")
 
         self.stop_timer()

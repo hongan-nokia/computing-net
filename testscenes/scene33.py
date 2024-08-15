@@ -227,6 +227,8 @@ class Scene33(QWidget):
     @pyqtSlot(str)
     def service_provision_anim(self, destination: str):
         if destination == "sp1":
+            if self.path == 1:
+                self.cfn_manager.send_command('monitor_client', 'task', 'surveillance up')
             # if self.path == 1:
             #     self.step1_label1.setText("房间1的监控")
             # elif self.path == 2:
@@ -255,7 +257,7 @@ class Scene33(QWidget):
                     self.cfn_manager.send_command('c_node2', 'task', self.commomd)
                     self.service_step43.start("")
         elif destination == "sp4":
-            self.cfn_manager.send_command('monitor_client', 'task', 'surveillance up')
+            # self.cfn_manager.send_command('monitor_client', 'task', 'surveillance up')
             self.service_step5.start("")
         else:
             pass
